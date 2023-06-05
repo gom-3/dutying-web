@@ -1,12 +1,11 @@
-import App from 'App';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import './index.css';
+import initMocks from './mocks';
+import router from 'router';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-  },
-]);
+initMocks();
 
-createRoot(document.getElementById('root') as HTMLElement).render(<RouterProvider router={router} />);
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <RouterProvider router={router} />
+);

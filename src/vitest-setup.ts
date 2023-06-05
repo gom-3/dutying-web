@@ -1,4 +1,4 @@
-import { server } from './src/mocks/server';
+import { server } from './mocks/server';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
 // Start server before all tests
