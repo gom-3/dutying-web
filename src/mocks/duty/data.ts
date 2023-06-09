@@ -1,4 +1,4 @@
-export const ShiftKindList: Shift[] = [
+export const shiftKindList: Shift[] = [
   {
     id: 0,
     fullname: 'Off',
@@ -295,8 +295,8 @@ export const duty: Duty = {
       user: { id: 1, name: '조나현' },
       carry: -1,
       lastShiftList: [
-        { day: 28, dayKind: 'sunday', shiftId: 2 },
-        { day: 29, dayKind: 'workday', shiftId: 2 },
+        { day: 28, dayKind: 'sunday', shiftId: 1 },
+        { day: 29, dayKind: 'workday', shiftId: 1 },
         { day: 30, dayKind: 'workday', shiftId: 0 },
         { day: 31, dayKind: 'workday', shiftId: 0 },
       ],
@@ -338,9 +338,9 @@ export const duty: Duty = {
       user: { id: 1, name: '박혜림' },
       carry: 0,
       lastShiftList: [
-        { day: 28, dayKind: 'sunday', shiftId: 2 },
-        { day: 29, dayKind: 'workday', shiftId: 2 },
-        { day: 30, dayKind: 'workday', shiftId: 0 },
+        { day: 28, dayKind: 'sunday', shiftId: 0 },
+        { day: 29, dayKind: 'workday', shiftId: 1 },
+        { day: 30, dayKind: 'workday', shiftId: 1 },
         { day: 31, dayKind: 'workday', shiftId: 0 },
       ],
       shiftList: [

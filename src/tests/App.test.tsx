@@ -1,4 +1,4 @@
-import { render } from '@libs/utils/test-utils';
+import { render } from '@libs/util/test-utils';
 import App from 'App';
 
 describe('앱 렌더링 테스트', () => {
