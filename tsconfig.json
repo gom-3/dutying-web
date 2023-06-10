@@ -35,12 +35,6 @@
       "@components": [
         "components"
       ],
-      "@containers/*": [
-        "containers/*"
-      ],
-      "@containers": [
-        "containers"
-      ],
       "@constants/*": [
         "constants/*"
       ],
@@ -58,6 +52,18 @@
       ],
       "@mocks": [
         "mocks"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
+      "@types": [
+        "types"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@pages": [
+        "pages"
       ],
     }
   },

@@ -67,3 +67,9 @@ mutation
 ### 코드
 
 개발 하면서 정하기
+
+
+## VSCode Extensions
+- prettier
+- eslint
+- scss formatter

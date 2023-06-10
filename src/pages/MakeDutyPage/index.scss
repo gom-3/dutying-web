@@ -1,0 +1,254 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .center {
+    display: flex;
+  }
+
+  .countDutyByUser {
+    .header {
+      height: 60px;
+      padding-right: 16px;
+      background-color: #c1cff5;
+
+      display: flex;
+      align-items: center;
+
+      .title {
+        flex-shrink: 0;
+        width: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+      }
+    }
+
+    .row {
+      height: 50px;
+      border-bottom: 1px solid rgb(224, 224, 224);
+      display: flex;
+
+      .cell {
+        width: 40px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.toolbar {
+  width: calc(100% - 32px);
+  padding: 0 16px;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+
+  display: flex;
+  gap: 16px;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .shift {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .help {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .actions {
+    display: flex;
+
+    button {
+      width: 100px;
+      height: 40px;
+      margin: 10px 0;
+      border: 1px solid #333;
+      border-radius: 5px;
+      background-color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+    }
+  }
+}
+
+.calendar {
+  width: 1198px;
+
+  .header {
+    height: 60px;
+    padding: 0 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    background-color: #c1cff5;
+    .name,
+    .carry {
+      flex-shrink: 0;
+      width: 40px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+    }
+
+    .title {
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      text-align: center;
+      .month {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+      .days {
+        display: flex;
+      }
+      .day {
+        width: 30px;
+
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+
+        &.saturday {
+          color: #00f;
+        }
+
+        &.holyday {
+          color: #f00;
+        }
+      }
+    }
+  }
+
+  .schedule {
+    height: 50px;
+    border-bottom: 1px solid rgb(224, 224, 224);
+    padding: 0 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    .name,
+    .carry {
+      flex-shrink: 0;
+      width: 40px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+    }
+  }
+
+  .duty,
+  .lastDuty {
+    display: flex;
+  }
+
+  .cell {
+    width: 26px;
+    height: 26px;
+    margin: 2px;
+
+    background-color: #e2e1e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &.Day {
+      background-color: #ffcd95;
+    }
+    &.Evening {
+      background-color: #e0e8f3;
+    }
+    &.Night {
+      background-color: #ebdeff;
+    }
+    &.Off {
+      background-color: #cbcbcb;
+    }
+  }
+}
+
+.bottom {
+  width: 1414px;
+
+  .countDutyByDay {
+    width: 1198px;
+
+    .row {
+      height: 50px;
+      border-bottom: 1px solid rgb(224, 224, 224);
+      padding: 0 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title,
+    .des {
+      width: 40px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+    }
+
+    .duty,
+    .lastDuty {
+      display: flex;
+    }
+
+    .cell {
+      width: 26px;
+      height: 26px;
+      margin: 2px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

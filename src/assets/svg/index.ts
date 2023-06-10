@@ -1,1 +1,1 @@
-export { default as Vite } from './Vite';
+export { default as ViteIcon } from './ViteIcon';
