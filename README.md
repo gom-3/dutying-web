@@ -31,6 +31,10 @@ mutation
 ### Linting Tools
 
 - ESlint: https://eslint.org/docs/user-guide/getting-started
+  - eslint-plugin-react: https://github.com/jsx-eslint/eslint-plugin-react
+  - eslint-plugin-react-refresh: https://github.com/ArnaudBarre/eslint-plugin-react-refresh
+  - eslint-plugin-prettier: https://github.com/prettier/eslint-plugin-prettier
+  - eslint-plugin-react-hooks: https://www.npmjs.com/package/eslint-plugin-react-hooks
 - prettier: https://prettier.io/docs/en/index.html
 - lint-staged: https://github.com/okonet/lint-staged
 
