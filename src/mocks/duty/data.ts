@@ -1,4 +1,4 @@
-export const shiftKindList: Shift[] = [
+export const shiftKindList: ShiftKind[] = [
   {
     id: 0,
     fullname: 'Off',

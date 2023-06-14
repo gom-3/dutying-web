@@ -24,17 +24,17 @@ type DutyRow = {
    * Off: 0, Day: 1, Evening: 2, Night: 3 일 때
    * DDEN은 [1, 1, 2, 3]이다.
    */
-  lastShiftList: Shift['id'][];
+  lastShiftList: ShiftKind['id'][];
   /** 이번달 근무 정보
    * @example
    * Off: 0, Day: 1, Evening: 2, Night: 3 일 때
    * DDEN은 [1, 1, 2, 3]이다.
    */
-  shiftList: Shift['id'][];
+  shiftList: ShiftKind['id'][];
 };
 
 /** 근무 형태 타입 */
-type Shift = {
+type ShiftKind = {
   /** 근무 형태를 id로 구분한다 */
   id: number;
   /** 근무 형태의 이름이다. @example Day */
