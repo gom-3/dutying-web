@@ -1,8 +1,8 @@
-import React from 'react';
 import 'index.css';
 import { useUserAction, useUserLoggedIn } from 'stores/userStore';
 
 const LoginPage = () => {
+  // @ts-ignore
   const userAction = useUserAction();
   const isLoggedIn = useUserLoggedIn();
 
