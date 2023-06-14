@@ -72,4 +72,7 @@ mutation
 ## VSCode Extensions
 - prettier
 - eslint
-- scss formatter
+- PostCSS Language Support
+- Tailwind CSS IntelliSense
+- Tailwind Fold
+  - ctrl+alt+a로 펴고 접을 수 있음

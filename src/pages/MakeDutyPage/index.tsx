@@ -1,64 +1,66 @@
-import { getDaysInMonth } from '@libs/util/date';
-import './index.scss';
 import { shiftKindList, duty } from '@mocks/duty/data';
+import './index.css';
 
 const DutyCalendar = () => {
   return (
-    <div className="calendar">
-      <div className="header">
-        <div className="name">이름</div>
-        <div className="carry">이월</div>
-        <div className="title">
-          <div className="month">{duty.month - 1}월</div>
-          <div className="days">
-            {getDaysInMonth(duty.month - 1)
-              .slice(getDaysInMonth(duty.month - 1).length - 4)
-              .map((date, i) => (
+    <div className="w-[1198px]">
+      <div className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
+        <div className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
+          이름
+        </div>
+        <div className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
+          이월
+        </div>
+        {[duty.lastDays, duty.days].map((days, i) => (
+          <div className=" h-full flex-col justify-evenly text-center">
+            <div className="text-xl">{duty.month - 1 + i}월</div>
+            <div className="flex justify-center">
+              {days.map((item, j) => (
                 <div
-                  key={i}
-                  className={`day${date.getDay() == 0 ? ' holyday' : ''}${
-                    date.getDay() == 6 ? ' saturday' : ''
+                  key={j}
+                  className={`flex w-[30px] items-center justify-center text-xs font-bold  ${
+                    item.dayKind === 'workday'
+                      ? 'text-[#333]'
+                      : item.dayKind === 'saturday'
+                      ? 'text-[#00f]'
+                      : 'text-[#f00]'
                   }`}
                 >
-                  {duty.month - 1}/{date.getDate()}
+                  {duty.month - 1 + i}/{item.day}
                 </div>
               ))}
+            </div>
           </div>
-        </div>
-        <div className="title">
-          <div className="month">{duty.month}월</div>
-          <div className="days">
-            {getDaysInMonth(duty.month).map((date, i) => (
-              <div
-                key={i}
-                className={`day${date.getDay() == 0 ? ' holyday' : ''}${
-                  date.getDay() == 6 ? ' saturday' : ''
-                }`}
-              >
-                {duty.month}/{i + 1}
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
-      {duty.schdule.map((item) => (
-        <div className="schedule">
-          <div className="name">{item.user.name}</div>
-          <div className="carry">{item.carry}</div>
-          <div className="lastDuty">
-            {item.lastShiftList.map((schedule, i) => (
-              <div key={i} className={`cell ${shiftKindList[schedule.shiftId].fullname}`}>
-                {shiftKindList[schedule.shiftId].name}
-              </div>
-            ))}
-          </div>
-          <div className="duty">
-            {item.shiftList.map((schedule, i) => (
-              <div key={i} className={`cell ${shiftKindList[schedule.shiftId].fullname}`}>
-                {shiftKindList[schedule.shiftId].name}
-              </div>
-            ))}
-          </div>
+
+      {duty.dutyRows.map((row) => (
+        <div className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4">
+          {[row.user.name, row.carry].map((item, i) => (
+            <p className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333]">
+              {item}
+            </p>
+          ))}
+          {[row.lastShiftList, row.shiftList].map((shiftList) => (
+            <div className="flex">
+              {shiftList.map((shiftId, i) => (
+                <div
+                  key={i}
+                  className={`m-[2px] flex h-[26px] w-[26px] cursor-pointer items-center justify-center bg-[#E2E1E1] ${
+                    shiftKindList[shiftId].name === 'D'
+                      ? 'bg-[#ffcd95]'
+                      : shiftKindList[shiftId].name === 'E'
+                      ? 'bg-[#e0e8f3]'
+                      : shiftKindList[shiftId].name === 'N'
+                      ? 'bg-[#ebdeff]'
+                      : 'bg-[#cbcbcb]'
+                  }`}
+                >
+                  {shiftKindList[shiftId].name}
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       ))}
     </div>
@@ -67,77 +69,99 @@ const DutyCalendar = () => {
 
 const MakeDutyPage = () => {
   return (
-    <div className="wrapper">
-      <div className="toolbar">
-        <div className="logo">로고</div>
-        <div className="shift">근무수</div>
-        <div className="help">
+    <div className="w-full flex-col items-center">
+      <div className="w-[calc(100% - 32px)] flex h-[60px] gap-4 border-b-[1px] border-[#e0e0e0] bg-[#FFF] px-4 ">
+        <div className="flex h-[60px] items-center justify-center text-xl font-bold text-[#333]">
+          근무수
+        </div>
+        <div className="flex flex-1 items-center">
           <p>도움말</p>
         </div>
-        <div className="actions">
-          <button>Auto Fill</button>
-          <button>완료</button>
+        <div className="flex gap-4">
+          <button className="my-[10px] h-[40px] w-[100px] cursor-pointer rounded  bg-[#fcd4fc] text-sm font-bold text-[#333]">
+            Auto Fill
+          </button>
+          <button className="my-[10px] h-[40px] w-[100px] cursor-pointer rounded  bg-[#c6dbf0] text-sm font-bold text-[#333]">
+            완료
+          </button>
         </div>
       </div>
-      <div className="center">
+      <div className="flex">
         <DutyCalendar />
-        <div className="countDutyByUser">
-          <div className="header">
-            <div className="title">D</div>
-            <div className="title">E</div>
-            <div className="title">N</div>
-            <div className="title">O</div>
-            <div className="title">WO</div>
+        <div>
+          <div className="flex h-[60px] items-center bg-[#C1CFF5] pr-4">
+            <div className="text-[#333} w-[40px]  flex-shrink-0 text-center text-base font-bold">
+              D
+            </div>
+            <div className="text-[#333} w-[40px]  flex-shrink-0 text-center text-base font-bold">
+              E
+            </div>
+            <div className="text-[#333} w-[40px]  flex-shrink-0 text-center text-base font-bold">
+              N
+            </div>
+            <div className="text-[#333} w-[40px]  flex-shrink-0 text-center text-base font-bold">
+              O
+            </div>
+            <div className="text-[#333} w-[40px]  flex-shrink-0 text-center text-base font-bold">
+              WO
+            </div>
           </div>
-          {duty.schdule.map((row) => (
-            <div className="row">
-              <div className="cell">
-                {row.shiftList.filter((item) => item.shiftId === 1).length}
+          {duty.dutyRows.map((row) => (
+            <div className="flex h-[50px] border-b-[1px] border-[#E0E0E0]">
+              <div className="flex h-full w-[40px] items-center justify-center">
+                {row.shiftList.filter((shiftId) => shiftId === 1).length}
               </div>
-              <div className="cell">
-                {row.shiftList.filter((item) => item.shiftId === 2).length}
+              <div className="flex h-full w-[40px] items-center justify-center">
+                {row.shiftList.filter((shiftId) => shiftId === 2).length}
               </div>
-              <div className="cell">
-                {row.shiftList.filter((item) => item.shiftId === 3).length}
+              <div className="flex h-full w-[40px] items-center justify-center">
+                {row.shiftList.filter((shiftId) => shiftId === 3).length}
               </div>
-              <div className="cell">
-                {row.shiftList.filter((item) => item.shiftId === 0).length}
+              <div className="flex h-full w-[40px] items-center justify-center">
+                {row.shiftList.filter((shiftId) => shiftId === 0).length}
               </div>
-              <div className="cell">
+              <div className="flex h-full w-[40px] items-center justify-center">
                 {
-                  row.shiftList.filter((item) => item.shiftId === 0 && item.dayKind != 'workday')
-                    .length
+                  row.shiftList.filter(
+                    (shiftId, i) =>
+                      shiftId === 0 && duty.days.find((x) => x.day === i + 1)?.dayKind != 'workday'
+                  ).length
                 }
               </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="bottom">
-        <div className="countDutyByDay">
+      <div className="w-[1414px]">
+        <div className="w-[1198px]">
           {shiftKindList
             .filter((shift) => shift.name != '/')
             .map((shift) => (
-              <div className="row">
-                <div className="title">{shift.fullname}</div>
-                <div className="des"></div>
-                <div className="lastDuty">
-                  {getDaysInMonth(duty.month - 1)
-                    .slice(getDaysInMonth(duty.month - 1).length - 4)
-                    .map((date, i) => (
-                      <div key={i} className="cell">
-                        {
-                          duty.schdule.filter((item) => item.lastShiftList[i].shiftId === shift.id)
-                            .length
-                        }
-                      </div>
-                    ))}
+              <div className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#E0E0E0] px-4">
+                <div className="text-[#333} w-[40px] text-center text-sm font-bold">
+                  {shift.fullname}
                 </div>
-                <div className="duty">
-                  {getDaysInMonth(duty.month).map((date, i) => (
-                    <div key={i} className="cell">
-                      {duty.schdule.filter((item) => item.shiftList[i].shiftId === shift.id).length}
-                    </div>
+                <div className="text-[#333} w-[40px] text-center text-sm font-bold">
+                  {shift.name}
+                </div>
+                <div className="flex">
+                  {duty.lastDays.map((_date, i) => (
+                    <p
+                      key={i}
+                      className="m-[2px] flex h-[26px] w-[26px] items-center justify-center text-center text-sm font-bold"
+                    >
+                      {duty.dutyRows.filter((item) => item.shiftList[i] === shift.id).length}
+                    </p>
+                  ))}
+                </div>
+                <div className="flex">
+                  {duty.days.map((_date, i) => (
+                    <p
+                      key={i}
+                      className="m-[2px] flex h-[26px] w-[26px] items-center justify-center text-center text-sm font-bold"
+                    >
+                      {duty.dutyRows.filter((item) => item.shiftList[i] === shift.id).length}
+                    </p>
                   ))}
                 </div>
               </div>
