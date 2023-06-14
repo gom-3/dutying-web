@@ -7,7 +7,7 @@ type Duty = {
 /** 개인의 근무 데이터 */
 type Schedule = {
   month: number;
-  user: User;
+  user: Nurse;
   carry: number;
   lastShiftList: DayDuty[];
   shiftList: DayDuty[];
@@ -30,4 +30,6 @@ type Shift = {
   name: string;
   startTime: string;
   endTime: string;
+  hotKey: string;
+  color: string;
 };
