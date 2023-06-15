@@ -1,8 +1,11 @@
-import React from "react";
-import "index.css";
+import React from 'react';
+import 'index.css';
+import EditNurseTab from './components/EditNurseTab';
 
 const RegistMemberPage = () => {
-  return <div />
+  return <div>
+    <EditNurseTab />
+  </div>;
 };
 
 export default RegistMemberPage;
