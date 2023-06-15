@@ -47,9 +47,34 @@ type ShiftKind = {
   endTime: string;
 };
 
-type Focus = {
-  day: number | null;
-  row: number | null;
+/** 근무 제약조건 타입 */
+type DutyConstraint = {
+  /** 교대 수 @example 2, 3, 4 */
+  rotation: number;
+  /** 연속 근무 수 @example 4 */
+  straight: number;
+  /** 나이트 간격 @example 7 */
+  nightInterval: number;
+  /** 기준 근무 수
+   * @example
+   * {
+   *    workday: [4, 3, 3]
+   *    holyday: [3, 3, 3]
+   * }
+   */
+  dutyStandard: {
+    /** 평일 기준 근무 수 */
+    workday: number[];
+    /** 휴일 기준 근무 수 */
+    holyday: number[];
+  };
+  /** 근무 신청 제한
+   * @example
+   * none: 근무 신청을 받지 않음
+   * off: 휴가 신청만 받음
+   * all: 휴가, 근무 신청 모두 받음
+   */
+  requestDutyType: 'none' | 'off' | 'all';
 };
 
 // @TODO 간호사 개인이 보는 근무표에 대한 데이터 타입은 따로 정의가 필요하다.
