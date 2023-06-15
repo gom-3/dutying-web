@@ -5,6 +5,8 @@ export const shiftKindList: ShiftKind[] = [
     name: '/',
     startTime: '00:00',
     endTime: '00:00',
+    hotKey: '/',
+    color: 'gray',
   },
   {
     id: 1,
@@ -12,6 +14,8 @@ export const shiftKindList: ShiftKind[] = [
     name: 'D',
     startTime: '07:00',
     endTime: '15:00',
+    hotKey: 'D',
+    color: 'red',
   },
   {
     id: 2,
@@ -19,6 +23,8 @@ export const shiftKindList: ShiftKind[] = [
     name: 'E',
     startTime: '15:00',
     endTime: '23:00',
+    hotKey: 'E',
+    color: 'blue',
   },
   {
     id: 3,
@@ -26,6 +32,8 @@ export const shiftKindList: ShiftKind[] = [
     name: 'N',
     startTime: '23:00',
     endTime: '07:00',
+    hotKey: 'N',
+    color: 'brown',
   },
 ];
 
@@ -71,7 +79,18 @@ export const duty: Duty = {
   ],
   dutyRows: [
     {
-      user: { id: 1, name: '노주영' },
+      user: {
+        id: 1,
+        name: '노주영',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -79,7 +98,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 2, name: '오지현' },
+      user: {
+        id: 2,
+        name: '오지현',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [0, 1, 2, 2],
       shiftList: [
@@ -87,7 +117,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 3, name: '유가영' },
+      user: {
+        id: 3,
+        name: '유가영',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [0, 0, 1, 1],
       shiftList: [
@@ -95,7 +136,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 4, name: '윤정은' },
+      user: {
+        id: 4,
+        name: '윤정은',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [3, 3, 0, 0],
       shiftList: [
@@ -103,7 +155,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 5, name: '유미현' },
+      user: {
+        id: 5,
+        name: '유미현',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [1, 0, 0, 0],
       shiftList: [
@@ -111,7 +174,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 6, name: '고선미' },
+      user: {
+        id: 6,
+        name: '고선미',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [0, 1, 3, 3],
       shiftList: [
@@ -119,7 +193,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 7, name: '조나현' },
+      user: {
+        id: 7,
+        name: '조나현',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -127,7 +212,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 8, name: '박혜림' },
+      user: {
+        id: 8,
+        name: '박혜림',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -135,7 +231,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 9, name: '이수진' },
+      user: {
+        id: 9,
+        name: '이수진',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -143,7 +250,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 10, name: '이지은' },
+      user: {
+        id: 10,
+        name: '이지은',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -151,7 +269,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 11, name: '이성희' },
+      user: {
+        id: 11,
+        name: '이성희',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -159,7 +288,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 12, name: '박보람' },
+      user: {
+        id: 12,
+        name: '박보람',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -167,7 +307,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 13, name: '이지영' },
+      user: {
+        id: 13,
+        name: '이지영',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -175,7 +326,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 14, name: '김현아' },
+      user: {
+        id: 14,
+        name: '김현아',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -183,7 +345,18 @@ export const duty: Duty = {
       ],
     },
     {
-      user: { id: 15, name: '김예림' },
+      user: {
+        id: 15,
+        name: '김예림',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -192,7 +365,18 @@ export const duty: Duty = {
     },
 
     {
-      user: { id: 16, name: '양가연' },
+      user: {
+        id: 16,
+        name: '양가연',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -201,7 +385,18 @@ export const duty: Duty = {
     },
 
     {
-      user: { id: 17, name: '박초빈' },
+      user: {
+        id: 17,
+        name: '박초빈',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -210,7 +405,18 @@ export const duty: Duty = {
     },
 
     {
-      user: { id: 18, name: '유아영' },
+      user: {
+        id: 18,
+        name: '유아영',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
@@ -219,7 +425,18 @@ export const duty: Duty = {
     },
 
     {
-      user: { id: 19, name: '오종욱' },
+      user: {
+        id: 19,
+        name: '오종욱',
+        proficiency: 3,
+        phone: '01012341234',
+        isConnected: false,
+        workAvailable: [shiftKindList[0], shiftKindList[1], shiftKindList[2], shiftKindList[3]],
+        workPrefer: [shiftKindList[1]],
+        workRequest: [],
+        trait: [],
+        accWeekendOff: 0,
+      },
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
