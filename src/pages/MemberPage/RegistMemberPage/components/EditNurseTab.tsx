@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChangeEvent, useState } from 'react';
 import 'index.css';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   nurse?: Nurse;
 };
 
-const defaultProps: Props = {
+const defaultProps = {
   isEdit: false,
   isAdd: false,
   nurse: {
@@ -24,15 +24,38 @@ const defaultProps: Props = {
   },
 };
 
-const EditNurseTab: React.FC<Props> = ({
+const EditNurseTab = ({
   isEdit = defaultProps.isEdit,
   isAdd = defaultProps.isAdd,
   nurse = defaultProps.nurse,
-}) => {
-  console.log(nurse, isEdit, isAdd);
+}: Props) => {
+  const [form, setForm] = useState(nurse);
+  console.log(isEdit, isAdd, setForm);
+  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
   return (
     <div>
-      <div>123</div>
+      <input type="text" onChange={inputHandler} value={form.name} id="name" placeholder="이름" />
+      <input
+        type="tel"
+        onChange={inputHandler}
+        value={form.phone}
+        id="phone"
+        placeholder="전화번호"
+      />
+      <input
+        type="number"
+        onChange={inputHandler}
+        value={form.proficiency}
+        id="proficiency"
+        placeholder="숙련도"
+      />
     </div>
   );
 };
