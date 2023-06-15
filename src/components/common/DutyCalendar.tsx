@@ -2,54 +2,81 @@ interface Props {
   duty: Duty;
   shiftKindList: ShiftKind[];
   isEditable?: boolean;
+  focus?: Focus;
+  onFocusChange?: ({ day, row }: { day: number; row: number }) => void;
 }
 
-export default function DutyCalendar({ duty, shiftKindList }: Props) {
+export default function DutyCalendar({
+  duty,
+  shiftKindList,
+  isEditable,
+  focus,
+  onFocusChange,
+}: Props) {
   return (
-    <div className="w-[1198px]">
-      <div className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
-        <div className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-          이름
-        </div>
-        <div className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-          이월
-        </div>
-        {[duty.lastDays, duty.days].map((days, i) => (
-          <div className=" h-full flex-col justify-evenly text-center">
-            <div className="text-xl">{duty.month - 1 + i}월</div>
-            <div className="flex justify-center">
-              {days.map((item, j) => (
-                <div
-                  key={j}
-                  className={`flex w-[30px] items-center justify-center text-xs font-bold  ${
-                    item.dayKind === 'workday'
-                      ? 'text-[#333]'
-                      : item.dayKind === 'saturday'
-                      ? 'text-[#00f]'
-                      : 'text-[#f00]'
-                  }`}
-                >
-                  {duty.month - 1 + i}/{item.day}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {duty.dutyRows.map((row) => (
-        <div className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4">
-          {[row.user.name, row.carry].map((item) => (
-            <p className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333]">
-              {item}
-            </p>
+    <table>
+      <thead>
+        <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
+          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
+            이름
+          </th>
+          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
+            이월
+          </th>
+          {[duty.lastDays, duty.days].map((days, i) => (
+            <th key={i} className="flex h-full flex-col justify-evenly text-center">
+              <div className="text-xl">{duty.month - 1 + i}월</div>
+              <div className="flex justify-center">
+                {days.map((item, j) => (
+                  <div
+                    key={j}
+                    className={`flex w-[30px] items-center justify-center text-xs font-bold  ${
+                      item.dayKind === 'workday'
+                        ? 'text-[#333]'
+                        : item.dayKind === 'saturday'
+                        ? 'text-[#00f]'
+                        : 'text-[#f00]'
+                    }`}
+                  >
+                    {duty.month - 1 + i}/{item.day}
+                  </div>
+                ))}
+              </div>
+            </th>
           ))}
-          {[row.lastShiftList, row.shiftList].map((shiftList) => (
-            <div className="flex">
-              {shiftList.map((shiftId, i) => (
-                <div
-                  key={i}
-                  className={`m-[2px] flex h-[26px] w-[26px] cursor-pointer items-center justify-center bg-[#E2E1E1] ${
+        </tr>
+      </thead>
+      <tbody>
+        {duty.dutyRows.map((row, rowIndex) => (
+          <tr
+            key={rowIndex}
+            className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4"
+          >
+            {[row.user.name, row.carry].map((item, i) => (
+              <td
+                key={i}
+                className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333]"
+              >
+                {item}
+              </td>
+            ))}
+            {[row.lastShiftList, row.shiftList].map((shiftList, i) => (
+              <td key={i} className="flex">
+                {shiftList.map((shiftId, j) => (
+                  <p
+                    key={j}
+                    onClick={() => {
+                      i == 1 && onFocusChange!({ day: j, row: rowIndex });
+                    }}
+                    className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
+                  ${
+                    isEditable &&
+                    i == 1 &&
+                    focus!.day === j &&
+                    focus!.row === rowIndex &&
+                    'outline outline-2 outline-[#333]'
+                  }
+                  ${
                     shiftKindList[shiftId].name === 'D'
                       ? 'bg-[#ffcd95]'
                       : shiftKindList[shiftId].name === 'E'
@@ -58,14 +85,15 @@ export default function DutyCalendar({ duty, shiftKindList }: Props) {
                       ? 'bg-[#ebdeff]'
                       : 'bg-[#cbcbcb]'
                   }`}
-                >
-                  {shiftKindList[shiftId].name}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+                  >
+                    {shiftKindList[shiftId].name}
+                  </p>
+                ))}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

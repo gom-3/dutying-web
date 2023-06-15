@@ -47,4 +47,9 @@ type ShiftKind = {
   endTime: string;
 };
 
+type Focus = {
+  day: number | null;
+  row: number | null;
+};
+
 // @TODO 간호사 개인이 보는 근무표에 대한 데이터 타입은 따로 정의가 필요하다.
