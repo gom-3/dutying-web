@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import MakeDutyPage from './MakeDutyPage';
 import LoginPage from './LoginPage';
+import RegistMemberPage from './MemberPage/RegistMemberPage';
 
 export const Router = () => {
   return (
@@ -8,6 +9,9 @@ export const Router = () => {
       <Route path="/">
         <Route index />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/members">
+          <Route path="/members/regist" element={<RegistMemberPage />} />
+        </Route>
         <Route path="/duty">
           <Route path="/duty/:id" />
           <Route path="/duty/setup" />

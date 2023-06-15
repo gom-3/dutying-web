@@ -16,7 +16,7 @@ type Day = { day: number; dayKind: 'saturday' | 'sunday' | 'holyday' | 'workday'
 /** 간호사의 근무 데이터 */
 type DutyRow = {
   /** 간호사 정보 */
-  user: User;
+  user: Nurse;
   /** 이월 @example 1 */
   carry: number;
   /** 전달 근무 정보
@@ -45,6 +45,8 @@ type ShiftKind = {
   startTime: string;
   /** 근무 종료 시간 @example 15:00 */
   endTime: string;
+  hotKey: string;
+  color: string;
 };
 
 // @TODO 간호사 개인이 보는 근무표에 대한 데이터 타입은 따로 정의가 필요하다.
