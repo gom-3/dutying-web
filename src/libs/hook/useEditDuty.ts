@@ -1,11 +1,28 @@
-import { useEffect, useState } from 'react';
-import { shiftKindList, duty as dummyDuty } from '@mocks/duty/data';
+import { RefObject, useEffect, useState } from 'react';
+import { shiftKindList, duty as dummyDuty, dutyConstraint } from '@mocks/duty/data';
+
+export type Focus = {
+  day: number;
+  row: number;
+};
+
+export type DayInfo = {
+  /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
+  shiftList: { count: number; standard: number }[];
+  month: number;
+  day: number;
+  nurse: Nurse;
+};
 
 const useEditDuty = () => {
   const [duty, setDuty] = useState(dummyDuty);
-  const [focus, setFocus] = useState<Focus>({ day: null, row: null });
+  const [focus, setFocus] = useState<Focus | null>(null);
+  const [focusedDayInfo, setFocusedDayDuty] = useState<DayInfo | null>(null);
 
+  // Focus된 셀의 근무를 ShiftId를 통해 변경
   const handleFocusedDutyChange = (shiftId: number) => {
+    if (focus === null) return;
+
     setDuty((duty) => ({
       ...duty,
       dutyRows: duty.dutyRows.map((dutyRow, index) =>
@@ -21,11 +38,20 @@ const useEditDuty = () => {
     }));
   };
 
+  const handleFocusChange = (ref: RefObject<HTMLElement>, focus: Focus | null) => {
+    ref.current?.focus();
+    setFocus(focus);
+  };
+
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+      e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+    }
+
+    if (focus === null) return;
+
     const { day, row } = focus;
     let newDay, newRow;
-
-    if (day === null || row === null) return;
 
     switch (e.key) {
       case 'ArrowLeft':
@@ -77,16 +103,19 @@ const useEditDuty = () => {
       case '1':
       case 'D':
       case 'd':
+      case 'ㅇ':
         handleFocusedDutyChange(1);
         break;
       case '2':
       case 'E':
       case 'e':
+      case 'ㄷ':
         handleFocusedDutyChange(2);
         break;
       case '3':
       case 'N':
       case 'n':
+      case 'ㅜ':
         handleFocusedDutyChange(3);
         break;
       default:
@@ -96,12 +125,27 @@ const useEditDuty = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
+    focus
+      ? setFocusedDayDuty({
+          month: duty.month,
+          day: focus.day ?? 0,
+          shiftList: shiftKindList.map((_, shiftIndex) => ({
+            count: duty.dutyRows.filter((dutyRow) => dutyRow.shiftList[focus.day] === shiftIndex)
+              .length,
+            standard:
+              duty.days[focus.day].dayKind === 'workday'
+                ? dutyConstraint.dutyStandard.workday[shiftIndex]
+                : dutyConstraint.dutyStandard.weekend[shiftIndex],
+          })),
+          nurse: duty.dutyRows.find((_, index) => index === focus.row)?.user!,
+        })
+      : setFocusedDayDuty(null);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focus]);
+  }, [focus, duty]);
 
-  return { duty, focus, setFocus, shiftKindList };
+  return { duty, focus, shiftKindList, focusedDayInfo, handleFocusChange, handleFocusedDutyChange };
 };
 
 export default useEditDuty;

@@ -1,7 +1,9 @@
 export const dutyConstraint: DutyConstraint = {
   dutyStandard: {
-    workday: [5, 4, 4],
-    holyday: [4, 4, 4],
+    /** 기준 OFF = 간호사 수 - 다른 근무 수 총합 */
+    workday: [6, 5, 4, 4],
+    /** 기준 OFF = 간호사 수 - 다른 근무 수 총합 */
+    weekend: [7, 4, 4, 4],
   },
   nightInterval: 7,
   requestDutyType: 'all',

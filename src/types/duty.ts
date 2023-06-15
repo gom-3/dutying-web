@@ -68,7 +68,7 @@ type DutyConstraint = {
     /** 평일 기준 근무 수 */
     workday: number[];
     /** 휴일 기준 근무 수 */
-    holyday: number[];
+    weekend: number[];
   };
   /** 근무 신청 제한
    * @example

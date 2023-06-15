@@ -1,9 +1,13 @@
+import { Focus } from '@libs/hook/useEditDuty';
+import { MutableRefObject, useRef } from 'react';
+import useOnclickOutside from 'react-cool-onclickoutside';
+
 interface Props {
   duty: Duty;
   shiftKindList: ShiftKind[];
   isEditable?: boolean;
-  focus?: Focus;
-  onFocusChange?: ({ day, row }: { day: number; row: number }) => void;
+  focus?: Focus | null;
+  handleFocusChange?: (ref: MutableRefObject<null>, focus: Focus | null) => void;
 }
 
 export default function DutyCalendar({
@@ -11,10 +15,13 @@ export default function DutyCalendar({
   shiftKindList,
   isEditable,
   focus,
-  onFocusChange,
+  handleFocusChange,
 }: Props) {
+  const focusRef = useRef(null);
+  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange!(focusRef, null));
+
   return (
-    <table>
+    <table ref={clickAwayRef}>
       <thead>
         <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
           <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
@@ -64,16 +71,18 @@ export default function DutyCalendar({
               <td key={i} className="flex">
                 {shiftList.map((shiftId, j) => (
                   <p
+                    ref={focusRef}
                     key={j}
                     onClick={() => {
-                      i == 1 && onFocusChange!({ day: j, row: rowIndex });
+                      i == 1 && handleFocusChange!(focusRef, { day: j, row: rowIndex });
                     }}
                     className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
                   ${
                     isEditable &&
                     i == 1 &&
-                    focus!.day === j &&
-                    focus!.row === rowIndex &&
+                    focus &&
+                    focus.day === j &&
+                    focus.row === rowIndex &&
                     'outline outline-2 outline-[#333]'
                   }
                   ${
