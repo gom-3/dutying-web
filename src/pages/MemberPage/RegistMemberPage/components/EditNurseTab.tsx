@@ -1,10 +1,17 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import useOnclickOutside from 'react-cool-onclickoutside';
 import 'index.css';
+import { useShiftKind } from 'stores/shiftStore';
 
 type Props = {
   isEdit?: boolean;
   isAdd?: boolean;
   nurse?: Nurse;
+  closeTab: () => void;
+};
+
+type CheckState = {
+  [key: string]: boolean;
 };
 
 const defaultProps = {
@@ -28,10 +35,45 @@ const EditNurseTab = ({
   isEdit = defaultProps.isEdit,
   isAdd = defaultProps.isAdd,
   nurse = defaultProps.nurse,
+  closeTab,
 }: Props) => {
   const [form, setForm] = useState(nurse);
-  console.log(isEdit, isAdd, setForm);
-  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const [availChecked, setAvailChecked] = useState<CheckState>({});
+  const [preferChecked, setPreferChecked] = useState<CheckState>({});
+  const ref = useOnclickOutside(() => closeTab());
+
+  console.log(isEdit, isAdd);
+
+  const shiftKind = useShiftKind();
+
+  useEffect(() => {
+    let temp = {};
+    shiftKind.forEach((shift) => {
+      temp = { ...temp, [shift.id]: false };
+    });
+    setAvailChecked(temp);
+    setPreferChecked(temp);
+  }, [shiftKind]);
+
+  const handleAvailCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+
+    setAvailChecked((prev) => ({
+      ...prev,
+      [id]: checked,
+    }));
+  };
+
+  const handlePreferCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+
+    setPreferChecked((prev) => ({
+      ...prev,
+      [id]: checked,
+    }));
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -39,23 +81,56 @@ const EditNurseTab = ({
     }));
   };
 
+  const makeShiftCheckBoxes = (
+    checkState: CheckState,
+    change: (e: ChangeEvent<HTMLInputElement>) => void
+  ) => {
+    const checkBoxes = shiftKind.map((shift) => {
+      return (
+        <input
+          type="checkbox"
+          checked={checkState[shift.id] || false}
+          id={`${shift.id}`}
+          onChange={change}
+        />
+      );
+    });
+    return checkBoxes;
+  };
+
+  const availShiftCheckBoxes = makeShiftCheckBoxes(availChecked, handleAvailCheckboxChange);
+  const preferShiftCheckBoxes = makeShiftCheckBoxes(preferChecked, handlePreferCheckboxChange);
+
   return (
-    <div>
-      <input type="text" onChange={inputHandler} value={form.name} id="name" placeholder="이름" />
+    <div ref={ref} className="absolute right-0 h-screen w-96 bg-white shadow-md">
+      <label htmlFor="name">이름</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        value={form.name}
+        id="name"
+        placeholder="이름"
+      />
+      <label htmlFor="phone">전화번호</label>
       <input
         type="tel"
-        onChange={inputHandler}
+        onChange={handleInputChange}
         value={form.phone}
         id="phone"
         placeholder="전화번호"
       />
+      <label htmlFor="proficiency">숙련도</label>
       <input
         type="number"
-        onChange={inputHandler}
+        max={4}
+        onChange={handleInputChange}
         value={form.proficiency}
         id="proficiency"
         placeholder="숙련도"
       />
+      {availShiftCheckBoxes}
+      {preferShiftCheckBoxes}
+      <div onClick={closeTab}>닫기</div>
     </div>
   );
 };
