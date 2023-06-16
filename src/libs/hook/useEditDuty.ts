@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { shiftKindList, duty as dummyDuty, dutyConstraint } from '@mocks/duty/data';
 
 export type Focus = {
@@ -15,9 +15,10 @@ export type DayInfo = {
 };
 
 const useEditDuty = () => {
-  const [duty, setDuty] = useState(dummyDuty);
+  const [duty, setDuty] = useState<Duty>(dummyDuty);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayDuty] = useState<DayInfo | null>(null);
+  const focusedCellRef = useRef<HTMLElement>(null);
 
   // Focus된 셀의 근무를 ShiftId를 통해 변경
   const handleFocusedDutyChange = (shiftId: number) => {
@@ -38,13 +39,8 @@ const useEditDuty = () => {
     }));
   };
 
-  const handleFocusChange = (ref: RefObject<HTMLElement>, focus: Focus | null) => {
-    ref.current?.focus();
-    setFocus(focus);
-  };
-
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+    if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
       e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
     }
 
@@ -59,7 +55,7 @@ const useEditDuty = () => {
           newDay = duty.days.length - 1;
           newRow = row - 1;
         } else {
-          newDay = Math.max(0, day - 1);
+          newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
           newRow = row;
         }
         setFocus({ day: newDay, row: newRow });
@@ -69,7 +65,8 @@ const useEditDuty = () => {
           newDay = 0;
           newRow = row + 1;
         } else {
-          newDay = Math.min(duty.days.length - 1, day + 1);
+          newDay =
+            e.ctrlKey || e.metaKey ? duty.days.length - 1 : Math.min(duty.days.length - 1, day + 1);
           newRow = row;
         }
         setFocus({ day: newDay, row: newRow });
@@ -80,7 +77,7 @@ const useEditDuty = () => {
           newRow = duty.dutyRows.length - 1;
         } else {
           newDay = day;
-          newRow = row - 1;
+          newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
         }
         setFocus({ day: newDay, row: newRow });
         break;
@@ -90,7 +87,7 @@ const useEditDuty = () => {
           newRow = 0;
         } else {
           newDay = day;
-          newRow = row + 1;
+          newRow = e.ctrlKey || e.metaKey ? duty.dutyRows.length - 1 : row + 1;
         }
         setFocus({ day: newDay, row: newRow });
         break;
@@ -125,27 +122,58 @@ const useEditDuty = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    focus
-      ? setFocusedDayDuty({
-          month: duty.month,
-          day: focus.day ?? 0,
-          shiftList: shiftKindList.map((_, shiftIndex) => ({
-            count: duty.dutyRows.filter((dutyRow) => dutyRow.shiftList[focus.day] === shiftIndex)
-              .length,
-            standard:
-              duty.days[focus.day].dayKind === 'workday'
-                ? dutyConstraint.dutyStandard.workday[shiftIndex]
-                : dutyConstraint.dutyStandard.weekend[shiftIndex],
-          })),
-          nurse: duty.dutyRows.find((_, index) => index === focus.row)?.user!,
-        })
-      : setFocusedDayDuty(null);
+    if (focus) {
+      const rect = focusedCellRef?.current!.getBoundingClientRect();
+      console.log(rect);
+      // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
+      if (rect.x > window.innerWidth - rect.width)
+        window.scroll({ left: rect.left + window.scrollX });
+      // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
+      if (rect.x < 0) window.scroll({ left: 0 });
+      if (rect.y > window.innerHeight - 150 - rect.height)
+        // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
+        window.scroll({ top: rect.top + window.scrollY });
+      // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
+      if (rect.y < 120) window.scroll({ top: rect.top + window.scrollY - 132 });
+
+      setFocusedDayDuty({
+        month: duty.month,
+        day: focus.day ?? 0,
+        shiftList: shiftKindList.map((_, shiftIndex) => ({
+          count: duty.dutyRows.filter((dutyRow) => dutyRow.shiftList[focus.day] === shiftIndex)
+            .length,
+          standard:
+            duty.days[focus.day].dayKind === 'workday'
+              ? dutyConstraint.dutyStandard.workday[shiftIndex]
+              : dutyConstraint.dutyStandard.weekend[shiftIndex],
+        })),
+        nurse: duty.dutyRows.find((_, index) => index === focus.row)?.user!,
+      });
+    } else {
+      setFocusedDayDuty(null);
+    }
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [focus, duty]);
 
-  return { duty, focus, shiftKindList, focusedDayInfo, handleFocusChange, handleFocusedDutyChange };
+  return {
+    /** 근무표 데이터 */
+    duty,
+    /** 현재 선택한 근무 셀 */
+    focus,
+    /** 현재 선택한 근무 셀의 정보 */
+    focusedDayInfo,
+    /** 선택 대상의 셀의 ref */
+    focusedCellRef,
+    /** 근무 유형 */
+    shiftKindList,
+    /** 근무 셀 선택 */
+    setFocus,
+    /** 현재 선택한 근무의 값 변경 */
+    handleFocusedDutyChange,
+  };
 };
 
 export default useEditDuty;

@@ -65,9 +65,15 @@ type DutyConstraint = {
    * }
    */
   dutyStandard: {
-    /** 평일 기준 근무 수 */
+    /** 평일 기준 근무 수
+     *
+     *  기준 OFF = 간호사 수 - 다른 근무 수 총합
+     */
     workday: number[];
-    /** 휴일 기준 근무 수 */
+    /** 휴일 기준 근무 수
+     *
+     *  기준 OFF = 간호사 수 - 다른 근무 수 총합
+     */
     weekend: number[];
   };
   /** 근무 신청 제한

@@ -1,5 +1,5 @@
 import { Focus } from '@libs/hook/useEditDuty';
-import { MutableRefObject, useRef } from 'react';
+import { RefObject } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 
 interface Props {
@@ -7,7 +7,8 @@ interface Props {
   shiftKindList: ShiftKind[];
   isEditable?: boolean;
   focus?: Focus | null;
-  handleFocusChange?: (ref: MutableRefObject<null>, focus: Focus | null) => void;
+  focusedCellRef: RefObject<any>;
+  handleFocusChange?: (focus: Focus | null) => void;
 }
 
 export default function DutyCalendar({
@@ -15,14 +16,14 @@ export default function DutyCalendar({
   shiftKindList,
   isEditable,
   focus,
+  focusedCellRef,
   handleFocusChange,
 }: Props) {
-  const focusRef = useRef(null);
-  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange!(focusRef, null));
+  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange!(null));
 
   return (
     <table ref={clickAwayRef}>
-      <thead>
+      <thead className="sticky top-[60px]">
         <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
           <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
             이름
@@ -69,22 +70,17 @@ export default function DutyCalendar({
             ))}
             {[row.lastShiftList, row.shiftList].map((shiftList, i) => (
               <td key={i} className="flex">
-                {shiftList.map((shiftId, j) => (
-                  <p
-                    ref={focusRef}
-                    key={j}
-                    onClick={() => {
-                      i == 1 && handleFocusChange!(focusRef, { day: j, row: rowIndex });
-                    }}
-                    className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
-                  ${
-                    isEditable &&
-                    i == 1 &&
-                    focus &&
-                    focus.day === j &&
-                    focus.row === rowIndex &&
-                    'outline outline-2 outline-[#333]'
-                  }
+                {shiftList.map((shiftId, j) => {
+                  const isFocued = i == 1 && focus && focus.day === j && focus.row === rowIndex;
+                  return (
+                    <p
+                      ref={isFocued ? focusedCellRef : null}
+                      key={j}
+                      onClick={() => {
+                        i == 1 && handleFocusChange!({ day: j, row: rowIndex });
+                      }}
+                      className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
+                  ${isFocued && 'outline outline-2 outline-[#333]'}
                   ${
                     shiftKindList[shiftId].name === 'D'
                       ? 'bg-[#ffcd95]'
@@ -94,10 +90,11 @@ export default function DutyCalendar({
                       ? 'bg-[#ebdeff]'
                       : 'bg-[#cbcbcb]'
                   }`}
-                  >
-                    {shiftKindList[shiftId].name}
-                  </p>
-                ))}
+                    >
+                      {shiftKindList[shiftId].name}
+                    </p>
+                  );
+                })}
               </td>
             ))}
           </tr>

@@ -8,7 +8,7 @@ interface Props {
 
 function Toolbar({ shiftKindList, focusedDayInfo, handleFocusedDutyChange }: Props) {
   return (
-    <div className="w-[calc(100% - 32px)] flex h-[60px] gap-4 border-b-[1px] border-[#e0e0e0] bg-[#FFF] px-4 ">
+    <div className="w-[calc(100% - 32px)] sticky top-0 flex h-[60px] gap-4 border-b-[1px] border-[#e0e0e0] bg-[#FFF] px-4 ">
       {focusedDayInfo && (
         <div className="flex h-[60px] flex-col items-center justify-center">
           <p className="font-bold">
