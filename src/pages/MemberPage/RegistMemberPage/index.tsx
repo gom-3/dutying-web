@@ -1,29 +1,10 @@
-import { useState } from 'react';
 import 'index.css';
 import EditNurseTab from './components/EditNurseTab';
-import { nurses } from '@mocks/members/data';
 import NurseCard from './components/NurseCard';
-
-export type EditTabState = {
-  isOpen: boolean;
-  isEdit: boolean;
-  isAdd: boolean;
-  nurse: Nurse | undefined;
-};
-
-const editTabDefaultState = {
-  isOpen: false,
-  isEdit: false,
-  isAdd: false,
-  nurse: undefined,
-};
+import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
 
 const RegistMemberPage = () => {
-  const [editTabState, setEditTabState] = useState<EditTabState>(editTabDefaultState);
-
-  const closeTab = () => {
-    setEditTabState(editTabDefaultState);
-  };
+  const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } = useRegistNurse();
 
   return (
     <div>
@@ -33,11 +14,14 @@ const RegistMemberPage = () => {
           isEdit={editTabState.isEdit}
           nurse={editTabState.nurse}
           closeTab={closeTab}
+          updateNurse={updateNurse}
+          addNurse={addNurse}
         />
       )}
       {nurses.map((nurse) => (
-        <NurseCard nurse={nurse} openTab={setEditTabState} />
+        <NurseCard nurse={nurse} openTab={openEdit} />
       ))}
+      <button type="button" onClick={openAdd}>추가하기</button>
     </div>
   );
 };

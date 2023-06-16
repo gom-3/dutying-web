@@ -1,17 +1,14 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import useOnclickOutside from 'react-cool-onclickoutside';
+import { ChangeEvent } from 'react';
 import 'index.css';
-import { useShiftKind } from 'stores/shiftStore';
+import useEditNurseTab, { CheckState } from './useEditNurseTab';
 
 type Props = {
   isEdit?: boolean;
   isAdd?: boolean;
   nurse?: Nurse;
   closeTab: () => void;
-};
-
-type CheckState = {
-  [key: string]: boolean;
+  updateNurse: (id: number, updatedNurse: Nurse) => void;
+  addNurse: (newNurse: Nurse) => void;
 };
 
 const defaultProps = {
@@ -36,50 +33,26 @@ const EditNurseTab = ({
   isAdd = defaultProps.isAdd,
   nurse = defaultProps.nurse,
   closeTab,
+  updateNurse,
+  addNurse,
 }: Props) => {
-  const [form, setForm] = useState(nurse);
-  const [availChecked, setAvailChecked] = useState<CheckState>({});
-  const [preferChecked, setPreferChecked] = useState<CheckState>({});
-  const ref = useOnclickOutside(() => closeTab());
+  const { formState, shiftKind, ref, hanlders } = useEditNurseTab(
+    nurse,
+    closeTab,
+    isAdd,
+    isEdit,
+    updateNurse,
+    addNurse
+  );
 
-  console.log(isEdit, isAdd);
+  const { form, availChecked, preferChecked } = formState;
 
-  const shiftKind = useShiftKind();
-
-  useEffect(() => {
-    let temp = {};
-    shiftKind.forEach((shift) => {
-      temp = { ...temp, [shift.id]: false };
-    });
-    setAvailChecked(temp);
-    setPreferChecked(temp);
-  }, [shiftKind]);
-
-  const handleAvailCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.target;
-
-    setAvailChecked((prev) => ({
-      ...prev,
-      [id]: checked,
-    }));
-  };
-
-  const handlePreferCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.target;
-
-    setPreferChecked((prev) => ({
-      ...prev,
-      [id]: checked,
-    }));
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  const {
+    handleInputChange,
+    handleAvailCheckboxChange,
+    handlePreferCheckboxChange,
+    handleSaveButton,
+  } = hanlders;
 
   const makeShiftCheckBoxes = (
     checkState: CheckState,
@@ -123,6 +96,7 @@ const EditNurseTab = ({
       <input
         type="number"
         max={4}
+        min={1}
         onChange={handleInputChange}
         value={form.proficiency}
         id="proficiency"
@@ -130,6 +104,9 @@ const EditNurseTab = ({
       />
       {availShiftCheckBoxes}
       {preferShiftCheckBoxes}
+      <button type="button" onClick={handleSaveButton}>
+        저장
+      </button>
       <div onClick={closeTab}>닫기</div>
     </div>
   );
