@@ -16,7 +16,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
       <div>{nurse.name}</div>
       <div>
         {nurse.workAvailable.map((shift) => (
-          <div>{shift.fullname}</div>
+          <div>{shift.name}</div>
         ))}
       </div>
       <div>
