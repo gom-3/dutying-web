@@ -36,7 +36,7 @@ const EditNurseTab = ({
   updateNurse,
   addNurse,
 }: Props) => {
-  const { formState, shiftKind, ref, hanlders } = useEditNurseTab(
+  const { formState, shiftKind, ref, handlers } = useEditNurseTab(
     nurse,
     closeTab,
     isAdd,
@@ -52,7 +52,7 @@ const EditNurseTab = ({
     handleAvailCheckboxChange,
     handlePreferCheckboxChange,
     handleSaveButton,
-  } = hanlders;
+  } = handlers;
 
   const makeShiftCheckBoxes = (
     checkState: CheckState,
