@@ -1,33 +1,27 @@
 import 'index.css';
-import { EditTabState } from '..';
 
 type Props = {
   nurse: Nurse;
-  openTab: (state: EditTabState) => void;
+  openTab: (nurse: Nurse) => void;
 };
 
 const NurseCard = ({ nurse, openTab }: Props) => {
   const handleEditNurseClick = () => {
-    openTab({
-      isOpen: true,
-      isAdd: false,
-      isEdit: true,
-      nurse: nurse,
-    });
+    openTab(nurse);
   };
 
   return (
-    <div className="flex items-center border border-gray-150 justify-evenly w-3/4 h-16 bg-slate-50">
+    <div className="border-gray-150 flex h-16 w-3/4 items-center justify-evenly border bg-slate-50">
       <div>{nurse.proficiency}</div>
       <div>{nurse.name}</div>
-      <div>
+      <div className='flex'>
         {nurse.workAvailable.map((shift) => (
-          <div>{shift.fullname}</div>
+          <div>{shift.name}</div>
         ))}
       </div>
       <div>
         {nurse.workPrefer.map((shift) => (
-          <div>{shift.fullname}</div>
+          <div>{shift.name}</div>
         ))}
       </div>
       <div>
