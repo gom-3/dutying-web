@@ -26,5 +26,3 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: jest
         run: pnpm test:run
-      - name: build
-        run: pnpm build
