@@ -7,13 +7,11 @@ function CountDutyByNurse({ duty }: Props) {
     <table>
       <thead>
         <tr className="flex h-[60px] items-center bg-[#C1CFF5] pr-4">
-          <th className="w-[40px] flex-shrink-0  text-center text-base font-bold text-[#333]">D</th>
-          <th className="w-[40px] flex-shrink-0  text-center text-base font-bold text-[#333]">E</th>
-          <th className="w-[40px] flex-shrink-0  text-center text-base font-bold text-[#333]">N</th>
-          <th className="w-[40px] flex-shrink-0  text-center text-base font-bold text-[#333]">O</th>
-          <th className="w-[40px] flex-shrink-0  text-center text-base font-bold text-[#333]">
-            WO
-          </th>
+          <th className="w-[40px] shrink-0  text-center text-base font-bold text-[#333]">D</th>
+          <th className="w-[40px] shrink-0  text-center text-base font-bold text-[#333]">E</th>
+          <th className="w-[40px] shrink-0  text-center text-base font-bold text-[#333]">N</th>
+          <th className="w-[40px] shrink-0  text-center text-base font-bold text-[#333]">O</th>
+          <th className="w-[40px] shrink-0  text-center text-base font-bold text-[#333]">WO</th>
         </tr>
       </thead>
       <tbody>

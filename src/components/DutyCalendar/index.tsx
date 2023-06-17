@@ -7,7 +7,7 @@ interface Props {
   shiftKindList: ShiftKind[];
   isEditable?: boolean;
   focus?: Focus | null;
-  focusedCellRef: RefObject<any>;
+  focusedCellRef: RefObject<HTMLElement>;
   handleFocusChange?: (focus: Focus | null) => void;
 }
 
@@ -19,18 +19,14 @@ export default function DutyCalendar({
   focusedCellRef,
   handleFocusChange,
 }: Props) {
-  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange!(null));
+  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
   return (
     <table ref={clickAwayRef}>
       <thead className="sticky top-[60px]">
         <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
-          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-            이름
-          </th>
-          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-            이월
-          </th>
+          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이름</th>
+          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이월</th>
           {[duty.lastDays, duty.days].map((days, i) => (
             <th key={i} className="flex h-full flex-col justify-evenly text-center">
               <div className="text-xl">{duty.month - 1 + i}월</div>
@@ -61,10 +57,7 @@ export default function DutyCalendar({
             className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4"
           >
             {[row.user.name, row.carry].map((item, i) => (
-              <td
-                key={i}
-                className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333]"
-              >
+              <td key={i} className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333]">
                 {item}
               </td>
             ))}
@@ -74,10 +67,14 @@ export default function DutyCalendar({
                   const isFocued = i == 1 && focus && focus.day === j && focus.row === rowIndex;
                   return (
                     <p
-                      ref={isFocued ? focusedCellRef : null}
+                      ref={
+                        isFocued
+                          ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                          : null
+                      }
                       key={j}
                       onClick={() => {
-                        i == 1 && handleFocusChange!({ day: j, row: rowIndex });
+                        i == 1 && handleFocusChange?.({ day: j, row: rowIndex });
                       }}
                       className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
                   ${isFocued && 'outline outline-2 outline-[#333]'}

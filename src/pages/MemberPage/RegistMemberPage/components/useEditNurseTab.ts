@@ -35,7 +35,7 @@ const useEditNurseTab = (
       nurse.workPrefer.forEach((shift) => (tempPrefer[shift.id] = true));
     }
     if (isAdd) {
-      for (let key in tempAvail) tempAvail[key] = true;
+      for (const key in tempAvail) tempAvail[key] = true;
     }
 
     setAvailChecked(tempAvail);
@@ -47,7 +47,7 @@ const useEditNurseTab = (
     const updatedWorkAvailable: ShiftKind[] = [];
     const updatedWorkPrefer: ShiftKind[] = [];
 
-    for (let key in availChecked) {
+    for (const key in availChecked) {
       if (availChecked[key] === true) {
         const item = shiftKind.find((item) => item.id === +key);
         if (item) updatedWorkAvailable.push(item);
