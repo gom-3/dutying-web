@@ -2,12 +2,14 @@ import 'index.css';
 import EditNurseTab from './components/EditNurseTab';
 import NurseCard from './components/NurseCard';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
+import NavigationBar from '@components/common/NavigationBar';
 
 const RegistMemberPage = () => {
   const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } = useRegistNurse();
 
   return (
     <div>
+      <NavigationBar />
       {editTabState.isOpen && (
         <EditNurseTab
           isAdd={editTabState.isAdd}
