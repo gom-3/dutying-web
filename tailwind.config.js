@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      scale: {
+        '-1': '-1',
+      },
       colors: {
         'main-1': '#844AFF',
         'main-2': '#B08BFF',
