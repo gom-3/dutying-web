@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from 'App';
 import { worker } from '@mocks/browser';
-import NavigationBar from '@components/common/NavigationBar';
+import NavigationBar from '@components/common/NavigationBar/NavigationBar';
 
 if (import.meta.env.DEV) {
   await worker.start();

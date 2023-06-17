@@ -9,33 +9,10 @@ import {
   SettingIcon,
 } from '@assets/svg';
 import 'index.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-
-interface Props {
-  path: string;
-  mt: number;
-  SelectedIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  text?: string;
-}
-
-const NavigationBarItem = ({ path, mt, SelectedIcon, Icon, text }: Props) => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const isSelected = path === pathname;
-
-  return (
-    <div
-      className={`mt-[${mt}px] flex w-full cursor-pointer flex-col items-center`}
-      onClick={() => navigate(path)}
-    >
-      {isSelected ? <SelectedIcon /> : <Icon />}
-      {<div className={`${isSelected && 'text-main-1'}`}>{text}</div>}
-      {isSelected && <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />}
-    </div>
-  );
-};
+import NavigationBarItem from './NavigationBarItem';
+import { DUTY, HOME, MEMBER, SETTING } from '@libs/constant/path';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -61,41 +38,41 @@ const NavigationBar = () => {
         onClick={() => navigate('/')}
         className="mt-[74px] flex h-[70px] w-full cursor-pointer items-center justify-center"
       >
-        {pathname === '/' ? <FullLogo /> : <FullLogoTransparent />}
-        {pathname === '/' && (
+        {pathname === HOME ? <FullLogo /> : <FullLogoTransparent />}
+        {pathname === HOME && (
           <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />
         )}
       </div>
       <NavigationBarItem
-        path="/members/regist"
+        path={MEMBER.REGIST}
         Icon={NurseIcon}
         SelectedIcon={NurseIconSelected}
         text="간호사 관리"
         mt={34}
       />
       <NavigationBarItem
-        path="/duty/settings"
+        path={DUTY.SETTING}
         Icon={NurseIcon}
         SelectedIcon={NurseIconSelected}
         text="근무 설정"
         mt={50}
       />
       <NavigationBarItem
-        path="/members/request"
+        path={MEMBER.REQUEST}
         Icon={RequestIcon}
         SelectedIcon={RequestIcon}
         text="휴가 신청 관리"
         mt={50}
       />
       <NavigationBarItem
-        path="/duty/make"
+        path={DUTY.MAKE}
         Icon={DutyIcon}
         SelectedIcon={DutyIcon}
-        text="휴가 신청 관리"
+        text="근무표 만들기"
         mt={50}
       />
       <NavigationBarItem
-        path="/settings"
+        path={SETTING}
         Icon={SettingIcon}
         SelectedIcon={SettingIcon}
         text="설정"
