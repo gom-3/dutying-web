@@ -99,7 +99,7 @@ const useEditNurseTab = (
     formState: { form, availChecked, preferChecked },
     shiftKind,
     ref,
-    hanlders: {
+    handlers: {
       handleAvailCheckboxChange,
       handlePreferCheckboxChange,
       handleInputChange,
