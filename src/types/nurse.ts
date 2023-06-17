@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 type DayDuty = {
   /** 날짜 */
   day: Day;

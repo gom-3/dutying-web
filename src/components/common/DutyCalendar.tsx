@@ -7,7 +7,7 @@ interface Props {
   shiftKindList: ShiftKind[];
   isEditable?: boolean;
   focus?: Focus | null;
-  focusedCellRef: RefObject<any>;
+  focusedCellRef: RefObject<HTMLElement>;
   handleFocusChange?: (focus: Focus | null) => void;
 }
 
@@ -19,7 +19,7 @@ export default function DutyCalendar({
   focusedCellRef,
   handleFocusChange,
 }: Props) {
-  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange!(null));
+  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
   return (
     <table ref={clickAwayRef}>
@@ -74,10 +74,14 @@ export default function DutyCalendar({
                   const isFocued = i == 1 && focus && focus.day === j && focus.row === rowIndex;
                   return (
                     <p
-                      ref={isFocued ? focusedCellRef : null}
+                      ref={
+                        isFocued
+                          ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                          : null
+                      }
                       key={j}
                       onClick={() => {
-                        i == 1 && handleFocusChange!({ day: j, row: rowIndex });
+                        i == 1 && handleFocusChange?.({ day: j, row: rowIndex });
                       }}
                       className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
                   ${isFocued && 'outline outline-2 outline-[#333]'}

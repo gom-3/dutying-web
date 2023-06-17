@@ -7,7 +7,7 @@ import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
 export const Router = () => {
   return (
     <Routes>
-      <Route path={HOME} >
+      <Route path={HOME}>
         <Route index />
         <Route path={LOGIN} element={<LoginPage />} />
         <Route path={MEMBER.ROOT}>

@@ -27,13 +27,15 @@ const NavigationBar = () => {
    */
   return (
     <div
-      className={`z-10 ${!isFold ? 'sticky' : 'fixed'} top-0 duration-500 ease-in-out ${!isFold ? '' : 'translate-x-[-140px]'
-        } left-0 flex h-screen w-[162px] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3 hover:translate-x-0`}
+      className={`z-10 ${!isFold ? 'sticky' : 'fixed'} top-0 duration-500 ease-in-out ${
+        !isFold ? '' : 'translate-x-[-140px]'
+      } left-0 flex h-screen w-[162px] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3 hover:translate-x-0`}
     >
       <div onClick={() => setIsFold(!isFold)}>
         <FoldIcon
-          className={`${isFold && 'scale-x-[-1]'
-            } absolute right-[14px] top-[13px] cursor-pointer duration-300`}
+          className={`${
+            isFold && 'scale-x-[-1]'
+          } absolute right-[14px] top-[13px] cursor-pointer duration-300`}
         />
       </div>
       <div

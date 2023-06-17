@@ -12,7 +12,7 @@ if (import.meta.env.DEV) {
 const container = document.getElementById('root') as HTMLElement;
 const element = (
   <BrowserRouter>
-    <div className='flex'>
+    <div className="flex">
       <NavigationBar />
       <App />
     </div>

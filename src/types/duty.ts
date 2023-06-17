@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /** 근무표 타입 */
 type Duty = {
   /** 근무표의 월 */
