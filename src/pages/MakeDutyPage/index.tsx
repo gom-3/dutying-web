@@ -1,4 +1,4 @@
-import DutyCalendar from '@components/common/DutyCalendar';
+import DutyCalendar from '@components/DutyCalendar';
 import Toolbar from './components/Toolbar';
 import CountDutyByDay from './components/CountDutyByDay';
 import CountDutyByNurse from './components/CountDutyByNurse';

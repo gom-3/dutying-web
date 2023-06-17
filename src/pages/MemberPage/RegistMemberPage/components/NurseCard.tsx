@@ -11,7 +11,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
   };
 
   return (
-    <div className="border-gray-150 flex h-16 w-3/4 items-center justify-evenly border bg-slate-50">
+    <div className="flex h-16 w-3/4 items-center justify-evenly border border-gray-100 bg-slate-50">
       <div>{nurse.proficiency}</div>
       <div>{nurse.name}</div>
       <div className="flex">

@@ -25,12 +25,8 @@ export default function DutyCalendar({
     <table ref={clickAwayRef}>
       <thead className="sticky top-[60px]">
         <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
-          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-            이름
-          </th>
-          <th className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333] ">
-            이월
-          </th>
+          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이름</th>
+          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이월</th>
           {[duty.lastDays, duty.days].map((days, i) => (
             <th key={i} className="flex h-full flex-col justify-evenly text-center">
               <div className="text-xl">{duty.month - 1 + i}월</div>
@@ -61,10 +57,7 @@ export default function DutyCalendar({
             className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4"
           >
             {[row.user.name, row.carry].map((item, i) => (
-              <td
-                key={i}
-                className="w-[40px] flex-shrink-0 text-center text-sm font-bold text-[#333]"
-              >
+              <td key={i} className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333]">
                 {item}
               </td>
             ))}

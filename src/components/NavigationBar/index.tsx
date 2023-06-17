@@ -19,12 +19,6 @@ const NavigationBar = () => {
   const [isFold, setIsFold] = useState(false);
   const { pathname } = useLocation();
 
-  /** 경로들은 나중에 상수 값으로 관리할 것
-   * @example
-   * const MEMBER_PATH  = {
-   *  REGIST: '/members/regist',
-   * }
-   */
   return (
     <div
       className={`z-10 ${!isFold ? 'sticky' : 'fixed'} top-0 duration-500 ease-in-out ${
