@@ -26,7 +26,7 @@ const NavigationBar = () => {
    * }
    */
   return (
-    <div className="absolute left-0 flex h-screen w-[162px] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3">
+    <div className="sticky left-0 flex h-screen w-[162px] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3">
       <div onClick={() => setIsFold(!isFold)}>
         {isFold ? (
           <FoldIcon className="absolute right-[14px] top-[13px] cursor-pointer" />

@@ -12,9 +12,10 @@ if (import.meta.env.DEV) {
 const container = document.getElementById('root') as HTMLElement;
 const element = (
   <BrowserRouter>
-    <NavigationBar />
-
-    <App />
+    <div className='flex'>
+      <NavigationBar />
+      <App />
+    </div>
   </BrowserRouter>
 );
 createRoot(container).render(element);
