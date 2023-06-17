@@ -13,6 +13,10 @@ export default {
         'sub-3': '#ABABB4',
         'sub-4': '#D6D6D3',
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        apple: ['Apple-SDG', 'sans-serif'],
+      },
     },
   },
   plugins: [],

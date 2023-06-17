@@ -1,14 +1,6 @@
-import * as React from 'react';
 import type { SVGProps } from 'react';
 const SvgNurseIconSelected = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="46"
-    height="46"
-    fill="none"
-    viewBox="0 0 46 46"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={46} height={46} fill="none" {...props}>
     <g
       strokeLinecap="round"
       strokeLinejoin="round"

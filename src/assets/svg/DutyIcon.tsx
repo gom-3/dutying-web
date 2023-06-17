@@ -1,13 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgDutyIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="46"
-    height="46"
-    fill="none"
-    viewBox="0 0 46 46"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={46} height={46} fill="none" {...props}>
     <g
       stroke="#ABABB4"
       strokeLinecap="round"

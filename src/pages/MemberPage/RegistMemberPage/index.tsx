@@ -9,7 +9,6 @@ const RegistMemberPage = () => {
 
   return (
     <div>
-      <NavigationBar />
       {editTabState.isOpen && (
         <EditNurseTab
           isAdd={editTabState.isAdd}

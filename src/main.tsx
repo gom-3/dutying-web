@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from 'App';
 import { worker } from '@mocks/browser';
+import NavigationBar from '@components/common/NavigationBar';
 
 if (import.meta.env.DEV) {
   await worker.start();
@@ -11,6 +12,8 @@ if (import.meta.env.DEV) {
 const container = document.getElementById('root') as HTMLElement;
 const element = (
   <BrowserRouter>
+    <NavigationBar />
+
     <App />
   </BrowserRouter>
 );

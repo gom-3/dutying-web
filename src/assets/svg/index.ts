@@ -1,5 +1,7 @@
 export { default as DutyIcon } from './DutyIcon';
+export { default as FoldIcon } from './FoldIcon';
 export { default as FullLogo } from './FullLogo';
+export { default as FullLogoTransparent } from './FullLogoTransparent';
 export { default as NurseIcon } from './NurseIcon';
 export { default as NurseIconSelected } from './NurseIconSelected';
 export { default as RequestIcon } from './RequestIcon';
