@@ -169,10 +169,12 @@ const useEditDuty = () => {
     focusedCellRef,
     /** 근무 유형 */
     shiftKindList,
-    /** 근무 셀 선택 */
-    setFocus,
-    /** 현재 선택한 근무의 값 변경 */
-    handleFocusedDutyChange,
+    handlers: {
+      /** 근무 셀 선택 */
+      handleFocusChange: setFocus,
+      /** 현재 선택한 근무의 값 변경 */
+      handleFocusedDutyChange,
+    },
   };
 };
 

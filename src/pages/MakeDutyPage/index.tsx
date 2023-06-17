@@ -5,22 +5,14 @@ import CountDutyByNurse from './components/CountDutyByNurse';
 import useEditDuty from '@libs/hook/useEditDuty';
 
 const MakeDutyPage = () => {
-  const {
-    duty,
-    focus,
-    focusedDayInfo,
-    shiftKindList,
-    focusedCellRef,
-    setFocus,
-    handleFocusedDutyChange,
-  } = useEditDuty();
+  const { duty, focus, focusedDayInfo, shiftKindList, focusedCellRef, handlers } = useEditDuty();
 
   return (
     <div className="w-full flex-col items-center">
       <Toolbar
         shiftKindList={shiftKindList}
         focusedDayInfo={focusedDayInfo}
-        handleFocusedDutyChange={handleFocusedDutyChange}
+        handleFocusedDutyChange={handlers.handleFocusedDutyChange}
       />
       <div className="flex">
         <DutyCalendar
@@ -29,7 +21,7 @@ const MakeDutyPage = () => {
           isEditable
           focus={focus}
           focusedCellRef={focusedCellRef}
-          handleFocusChange={setFocus}
+          handleFocusChange={handlers.handleFocusChange}
         />
         <CountDutyByNurse duty={duty} />
       </div>
