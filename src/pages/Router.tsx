@@ -8,8 +8,8 @@ import HomePage from './HomePage';
 export const Router = () => {
   return (
     <Routes>
-      <Route path={HOME} element={<HomePage />}>
-        <Route index />
+      <Route path={HOME}>
+        <Route index element={<HomePage />} />
         <Route path={LOGIN} element={<LoginPage />} />
         <Route path={MEMBER.ROOT}>
           <Route path={MEMBER.REGIST} element={<RegistMemberPage />} />

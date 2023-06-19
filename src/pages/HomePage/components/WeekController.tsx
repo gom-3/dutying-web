@@ -1,3 +1,4 @@
+import { NextIcon, PrevIcon } from '@assets/svg';
 import 'index.css';
 
 interface Props {
@@ -8,10 +9,15 @@ interface Props {
 
 const WeekController = ({ date, onClickPrev, onClickNext }: Props) => {
   return (
-    <div>
-      <div>{date}</div>
-      <div onClick={onClickPrev}>-</div>
-      <div onClick={onClickNext}>+</div>
+    <div className="flex w-[400px] select-none items-center justify-between">
+      <div className="flex font-poppins text-[32px] font-medium text-main-1">
+        {date.slice(0, 4)}
+        <div className="ml-[20px]">{date.slice(4)}</div>
+      </div>
+      <div className="flex">
+        <PrevIcon className="cursor-pointer" onClick={onClickPrev} />
+        <NextIcon className="ml-[30px] cursor-pointer" onClick={onClickNext} />
+      </div>
     </div>
   );
 };

@@ -6,12 +6,16 @@ import useWeekCalendar from './components/useWeekCalendar';
 
 const HomePage = () => {
   const { date, week, toPrevWeek, toNextWeek } = useWeekCalendar();
-  console.log(week);
   return (
-    <div>
-      <MonthlyCalendar />
+    <div className="p-12">
+      <div className="mb-[30px] flex font-apple text-[36px] font-normal">
+        안녕하세요, <div className=" ml-2 font-medium">{'곰세마리'}님</div>
+      </div>
       <WeekController date={week.string} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
-      <WeeklyGroupCalednar />
+      <div>
+        <WeeklyGroupCalednar />
+        <MonthlyCalendar />
+      </div>
     </div>
   );
 };
