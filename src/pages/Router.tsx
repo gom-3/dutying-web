@@ -3,11 +3,12 @@ import MakeDutyPage from './MakeDutyPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
 import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
+import HomePage from './HomePage';
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path={HOME}>
+      <Route path={HOME} element={<HomePage />}>
         <Route index />
         <Route path={LOGIN} element={<LoginPage />} />
         <Route path={MEMBER.ROOT}>

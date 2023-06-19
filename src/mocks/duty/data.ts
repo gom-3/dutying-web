@@ -456,3 +456,14 @@ export const duty: Duty = {
     },
   ],
 };
+
+const dutyByDate = [];
+
+for (let i = 0; i < 30; i++) {
+  dutyByDate.push({
+    day: ['오종욱', '김찬규', '조성연'],
+    evening: ['황인서', '김범진', '류원경'],
+    night: ['강명구', '안재홍', '김범진'],
+  });
+}
+export { dutyByDate };

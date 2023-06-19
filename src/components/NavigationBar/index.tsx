@@ -1,18 +1,9 @@
-import {
-  DutyIcon,
-  FoldIcon,
-  FullLogo,
-  FullLogoTransparent,
-  NurseIcon,
-  NurseIconSelected,
-  RequestIcon,
-  SettingIcon,
-} from '@assets/svg';
+import { FoldIcon, FullLogo, FullLogoTransparent } from '@assets/svg';
 import 'index.css';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import NavigationBarItem from './NavigationBarItem';
-import { DUTY, HOME, MEMBER, SETTING } from '@libs/constant/path';
+import { HOME } from '@libs/constant/path';
+import NavigationBarItemGroups from './NavigationBarItemGroup';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -41,41 +32,7 @@ const NavigationBar = () => {
           <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />
         )}
       </div>
-      <NavigationBarItem
-        path={MEMBER.REGIST}
-        Icon={NurseIcon}
-        SelectedIcon={NurseIconSelected}
-        text="간호사 관리"
-        mt={34}
-      />
-      <NavigationBarItem
-        path={DUTY.SETTING}
-        Icon={NurseIcon}
-        SelectedIcon={NurseIconSelected}
-        text="근무 설정"
-        mt={50}
-      />
-      <NavigationBarItem
-        path={MEMBER.REQUEST}
-        Icon={RequestIcon}
-        SelectedIcon={RequestIcon}
-        text="휴가 신청 관리"
-        mt={50}
-      />
-      <NavigationBarItem
-        path={DUTY.MAKE}
-        Icon={DutyIcon}
-        SelectedIcon={DutyIcon}
-        text="근무표 만들기"
-        mt={50}
-      />
-      <NavigationBarItem
-        path={SETTING}
-        Icon={SettingIcon}
-        SelectedIcon={SettingIcon}
-        text="설정"
-        mt={50}
-      />
+      <NavigationBarItemGroups />
       <div className="absolute bottom-[30px] mt-[50px] flex cursor-pointer flex-col items-center">
         <img
           className="h-[50px] w-[50px] rounded-full object-cover"
