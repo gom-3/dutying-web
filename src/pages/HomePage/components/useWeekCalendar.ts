@@ -44,7 +44,12 @@ const useWeekCalendar = () => {
     setDate(nextDate);
   };
 
-  return { date, week, toPrevWeek, toNextWeek };
+  const dateArray = [];
+  for (let d = new Date(week.start); d <= week.end; d.setDate(d.getDate() + 1)) {
+    dateArray.push(new Date(d));
+  }
+
+  return { date, week, toPrevWeek, toNextWeek, dateArray };
 };
 
 export default useWeekCalendar;

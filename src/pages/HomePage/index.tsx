@@ -5,7 +5,7 @@ import WeekController from './components/WeekController';
 import useWeekCalendar from './components/useWeekCalendar';
 
 const HomePage = () => {
-  const { date, week, toPrevWeek, toNextWeek } = useWeekCalendar();
+  const { date, week, toPrevWeek, toNextWeek, dateArray } = useWeekCalendar();
   return (
     <div className="p-12">
       <div className="mb-[30px] flex font-apple text-[36px] font-normal">
@@ -13,7 +13,7 @@ const HomePage = () => {
       </div>
       <WeekController date={week.string} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
       <div>
-        <WeeklyGroupCalednar />
+        <WeeklyGroupCalednar dateArray={dateArray} startDate={week.start} endDate={week.end} />
         <MonthlyCalendar />
       </div>
     </div>

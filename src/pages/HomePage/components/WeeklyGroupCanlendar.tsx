@@ -1,22 +1,70 @@
 import 'index.css';
 import { dutyByDate } from '@mocks/duty/data';
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
+import WeeklyCalendarCell from './WeeklyCalendarCell';
 
-const WeeklyGroupCalednar = () => {
+interface Props {
+  dateArray: Date[];
+  startDate: Date;
+  endDate: Date;
+}
+
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+const WeeklyGroupCalednar = ({ dateArray, startDate, endDate }: Props) => {
+  const today = new Date();
+  const tableRef = useRef(null);
+
+  const areSameDate = (today: Date, date: Date) =>
+    today.getFullYear() === date.getFullYear() &&
+    today.getMonth() === date.getMonth() &&
+    today.getDate() === date.getDate();
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>1</th>
-          <th>2</th>
-          <th>3</th>
-          <th>4</th>
-          <th>5</th>
-          <th>6</th>
-          <th>7</th>
-        </tr>
-      </thead>
-    </table>
+    <div className="relative mt-[26px]">
+      <div className="absolute right-0 top-[-45px] font-poppins text-[16px] font-light text-sub-3">
+        Weekly • Group
+      </div>
+      <table
+        className="border-collapse rounded-[20px] border-hidden shadow-shadow-1"
+        ref={tableRef}
+      >
+        <thead className="rounded-[20px] bg-sub-5">
+          <tr className="rounded-[20px]">
+            {dateArray.map((date, i) => (
+              <th
+                className={`h-[143px] w-[170px] border-[0.5px] border-sub-4 font-poppins text-[40px] font-normal first:rounded-tl-[20px] last:rounded-tr-[20px] ${
+                  areSameDate(today, date) ? 'text-sub-1' : 'text-sub-3'
+                }`}
+              >
+                <div>{date.getDate()}</div>
+                <div className="text-[16px] font-extralight">{days[i]}</div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <WeeklyCalendarCell
+            dutyKind="day"
+            today={today}
+            dateArray={dateArray}
+            areSameDate={areSameDate}
+          />
+          <WeeklyCalendarCell
+            dutyKind="evening"
+            today={today}
+            dateArray={dateArray}
+            areSameDate={areSameDate}
+          />
+          <WeeklyCalendarCell
+            dutyKind="night"
+            today={today}
+            dateArray={dateArray}
+            areSameDate={areSameDate}
+          />
+        </tbody>
+      </table>
+    </div>
   );
 };
 
