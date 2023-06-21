@@ -17,7 +17,7 @@ function Contents({ currentRotation, setCurrentRotation }: ContentsProps) {
           return (
             <button
               key={rotation}
-              className={`h-[100px] flex-1 rounded-[15px] font-apple text-[36px]
+              className={`h-[100px] flex-1 rounded-[15px] font-apple text-[36px] font-medium
               ${isActive ? 'bg-main-1 text-white' : 'bg-[#E7E7EF] text-[#93939D]'}`}
               onClick={() => setCurrentRotation(rotation)}
             >
