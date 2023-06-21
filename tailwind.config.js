@@ -20,6 +20,7 @@ export default {
         day: '#D7EB2A',
         evening: '#EB39E8',
         night: '#5534E0',
+        off: '#271F3E',
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],

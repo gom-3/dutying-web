@@ -1,7 +1,7 @@
 import 'index.css';
 import { dutyByDate } from '@mocks/duty/data';
 import { useRef } from 'react';
-import WeeklyCalendarCell from './WeeklyCalendarCell';
+import WeeklyCalendarRow from './WeeklyCalendarRow';
 
 interface Props {
   dateArray: Date[];
@@ -11,7 +11,7 @@ interface Props {
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const WeeklyGroupCalednar = ({ dateArray, startDate, endDate }: Props) => {
+const WeeklyCalendar = ({ dateArray, startDate, endDate }: Props) => {
   const today = new Date();
   const tableRef = useRef(null);
 
@@ -44,19 +44,19 @@ const WeeklyGroupCalednar = ({ dateArray, startDate, endDate }: Props) => {
           </tr>
         </thead>
         <tbody>
-          <WeeklyCalendarCell
+          <WeeklyCalendarRow
             dutyKind="day"
             today={today}
             dateArray={dateArray}
             areSameDate={areSameDate}
           />
-          <WeeklyCalendarCell
+          <WeeklyCalendarRow
             dutyKind="evening"
             today={today}
             dateArray={dateArray}
             areSameDate={areSameDate}
           />
-          <WeeklyCalendarCell
+          <WeeklyCalendarRow
             dutyKind="night"
             today={today}
             dateArray={dateArray}
@@ -68,4 +68,4 @@ const WeeklyGroupCalednar = ({ dateArray, startDate, endDate }: Props) => {
   );
 };
 
-export default WeeklyGroupCalednar;
+export default WeeklyCalendar;

@@ -15,7 +15,7 @@ interface Color {
 const color: Color = { day: 'bg-day', evening: 'bg-evening', night: 'bg-night' };
 const bgColor: Color = { day: 'bg-day/10', evening: 'bg-evening/10', night: 'bg-night/10' };
 
-const WeeklyCalendarCell = ({ dutyKind, today, dateArray, areSameDate }: Props) => {
+const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) => {
   const ref = useRef(null);
   return (
     <tr ref={ref}>
@@ -41,4 +41,4 @@ const WeeklyCalendarCell = ({ dutyKind, today, dateArray, areSameDate }: Props) 
   );
 };
 
-export default WeeklyCalendarCell;
+export default WeeklyCalendarRow;

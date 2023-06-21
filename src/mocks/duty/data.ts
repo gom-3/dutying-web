@@ -17,7 +17,7 @@ export const shiftKindList: ShiftKind[] = [
     startTime: '00:00',
     endTime: '00:00',
     hotKey: '/',
-    color: 'gray',
+    color: 'bg-off',
   },
   {
     id: 1,
@@ -26,7 +26,7 @@ export const shiftKindList: ShiftKind[] = [
     startTime: '07:00',
     endTime: '15:00',
     hotKey: 'D',
-    color: 'red',
+    color: 'bg-day',
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ export const shiftKindList: ShiftKind[] = [
     startTime: '15:00',
     endTime: '23:00',
     hotKey: 'E',
-    color: 'blue',
+    color: 'bg-evening',
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ export const shiftKindList: ShiftKind[] = [
     startTime: '23:00',
     endTime: '07:00',
     hotKey: 'N',
-    color: 'brown',
+    color: 'bg-night',
   },
 ];
 
@@ -105,7 +105,7 @@ export const duty: Duty = {
       carry: 0,
       lastShiftList: [2, 2, 0, 0],
       shiftList: [
-        3, 3, 3, 0, 0, 1, 1, 1, 2, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 2, 0, 0,
+        3, 3, 3, 0, 0, 1, 1, 1, 2, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 2, 0, 0, 1,
       ],
     },
     {
