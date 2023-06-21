@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, ChangeEvent } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { useShiftKind } from 'stores/shiftStore';

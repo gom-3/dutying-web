@@ -3,6 +3,7 @@ import MakeDutyPage from './MakeDutyPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
 import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
+import SetupDutyPage from './SetupDutyPage';
 
 export const Router = () => {
   return (
@@ -15,7 +16,7 @@ export const Router = () => {
         </Route>
         <Route path={DUTY.ROOT}>
           <Route path={DUTY.ID} />
-          <Route path={DUTY.SETTING} />
+          <Route path={DUTY.SETTING} element={<SetupDutyPage />} />
           <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
         </Route>
       </Route>
