@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Public Sans';
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@font-face {
+  font-family: 'Apple-SDG';
+  font-style: normal;
+  src: url('./assets/fonts/AppleSDGothicNeoR.ttf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Apple-SDG';
+  font-style: normal;
+  src: url('./assets/fonts/AppleSDGothicNeoL.ttf');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Apple-SDG';
+  font-style: normal;
+  src: url('./assets/fonts/AppleSDGothicNeoB.ttf');
+  font-weight: 500;
+}

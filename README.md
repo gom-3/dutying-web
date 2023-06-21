@@ -1,12 +1,6 @@
-<p align='center'>듀팅</p>
+<p align='center'>Dutying 간호사 근무표 솔루션</p>
 
-<p align='center'>
-  <img src='https://img.shields.io/github/package-json/v/gom-3/duting-web'>
-  <a href="https://github.com/gom-3/duting-web/issues"><img src='https://img.shields.io/github/issues/gom-3/duting-web'></a>
-  <a href="https://github.com/gom-3/duting-web/pulls"><img src='https://img.shields.io/github/issues-pr/gom-3/duting-web'></a>
-  <a href="https://github.com/gom-3/duting-web/graphs/contributors"><img src='https://img.shields.io/github/contributors/gom-3/duting-web'></a>
-  <a href='https://github.com/gom-3/duting-web/blob/main/LICENSE'><img src='https://img.shields.io/github/license/gom-3/duting-web'></a>
-</p>
+## Team
 
 ## 프로젝트 사양
 
@@ -72,8 +66,11 @@ mutation
 
 개발 하면서 정하기
 
-
 ## VSCode Extensions
+
 - prettier
 - eslint
-- scss formatter
+- PostCSS Language Support
+- Tailwind CSS IntelliSense
+- Tailwind Fold
+  - ctrl+alt+a로 펴고 접을 수 있음
