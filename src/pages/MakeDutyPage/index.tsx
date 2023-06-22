@@ -27,7 +27,7 @@ const MakeDutyPage = () => {
       </div>
       <div className="sticky bottom-0 flex bg-white">
         <CountDutyByDay duty={duty} shiftList={shiftList} />
-        <div className="w-[216px]"></div>
+        <div className="w-[13.5rem]"></div>
       </div>
     </div>
   );

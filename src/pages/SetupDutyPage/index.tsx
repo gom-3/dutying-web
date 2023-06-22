@@ -6,16 +6,10 @@ function SetupDutyPage() {
   const { step, currentStep, setCurrentStep } = useSetupDuty();
 
   return (
-    <div className="flex h-full w-full flex-col items-center bg-[#FDFCFE] pt-[92px]">
+    <div className="flex h-full w-full flex-col items-center bg-[#FDFCFE] pt-[5.75rem]">
       <Stepper step={step} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-      <div className="mt-[50px] h-[352px] w-[76%] rounded-[20px] bg-white shadow-[0px_4px_34px_#EDE9F5]">
-        {step[currentStep].contents}
-      </div>
-      {step[currentStep].description && (
-        <div className="mt-[30px] h-[194px] w-[76%] rounded-[20px] bg-[#EDE4FF] shadow-[0px_4px_34px_#EDE9F5]">
-          {step[currentStep].description}
-        </div>
-      )}
+      {step[currentStep].contents}
+      {step[currentStep].description}
       <Actions step={step} currentStep={currentStep} setCurrentStep={setCurrentStep} />
     </div>
   );

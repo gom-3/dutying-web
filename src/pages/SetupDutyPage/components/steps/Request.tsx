@@ -1,31 +1,37 @@
 /* eslint-disable react-refresh/only-export-components */
 interface ContentsProps {
-  currentRotation: number;
-  setCurrentRotation: (rotation: number) => void;
+  requestDutyType: DutyConstraint['requestDutyType'];
+  setRequestDutyType: (requestDutyType: DutyConstraint['requestDutyType']) => void;
 }
 
-function Contents({ currentRotation, setCurrentRotation }: ContentsProps) {
+function Contents({ requestDutyType, setRequestDutyType }: ContentsProps) {
   return (
-    <div className="mx-auto h-full w-[80%] pt-[70px]">
-      <p className="font-apple text-[24px] text-sub-2">
-        교대 근무 형태를 <span className="text-[28px] font-medium">{currentRotation}교대</span>로
-        지정합니다.
-      </p>
-      <div className="mt-[30px] flex gap-[10%]">
-        {[2, 3, 4].map((rotation) => {
-          const isActive = currentRotation === rotation;
-          return (
-            <button
-              key={rotation}
-              className={`h-[100px] flex-1 rounded-[15px] font-apple text-[36px] font-medium
-              ${isActive ? 'bg-main-1 text-white' : 'bg-[#E7E7EF] text-[#93939D]'}`}
-              onClick={() => setCurrentRotation(rotation)}
-            >
-              {rotation}교대
-            </button>
-          );
-        })}
-      </div>
+    <div className="mt-[3.125rem] h-[22rem] w-[76%] rounded-[1.25rem] bg-white shadow-[0rem_.25rem_2.125rem_#EDE9F5]">
+      <div className="mx-auto h-full w-[80%] pt-[4.375rem]">
+        <p className="font-apple text-[1.5rem] text-sub-2">
+          근무 신청은{' '}
+          <span className="text-[1.75rem] font-medium">
+            {requestDutyType === 'off' ? 'OFF만 ' : '모두 '}
+          </span>
+          가능합니다.
+        </p>
+        <div className="mt-[1.875rem] flex gap-[10%]">
+          <button
+            className={`h-[6.25rem] flex-1 rounded-[.9375rem] font-apple text-[2.25rem] font-medium
+              ${requestDutyType === 'off' ? 'bg-main-1 text-white' : 'bg-sub-4.5 text-sub-2.5'}`}
+            onClick={() => setRequestDutyType('off')}
+          >
+            OFF만 신청
+          </button>
+          <button
+            className={`h-[6.25rem] flex-1 rounded-[.9375rem] font-apple text-[2.25rem] font-medium
+              ${requestDutyType === 'all' ? 'bg-main-1 text-white' : 'bg-sub-4.5 text-sub-2.5'}`}
+            onClick={() => setRequestDutyType('all')}
+          >
+            모두 신청
+          </button>
+        </div>
+      </div>{' '}
     </div>
   );
 }

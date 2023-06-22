@@ -8,9 +8,9 @@ interface Props {
 
 function Toolbar({ shiftList, focusedDayInfo, handleFocusedDutyChange }: Props) {
   return (
-    <div className="sticky top-0 flex h-[60px] w-full gap-4 border-b-[1px] border-[#e0e0e0] bg-[#FFF] px-4 ">
+    <div className="sticky top-0 flex h-[3.75rem] w-full gap-4 border-b-[.0625rem] border-[#e0e0e0] bg-[#FFF] px-4 ">
       {focusedDayInfo && (
-        <div className="flex h-[60px] flex-col items-center justify-center">
+        <div className="flex h-[3.75rem] flex-col items-center justify-center">
           <p className="font-bold">
             {focusedDayInfo.month}월 {focusedDayInfo.day + 1}일
           </p>
@@ -22,7 +22,7 @@ function Toolbar({ shiftList, focusedDayInfo, handleFocusedDutyChange }: Props) 
           <div key={i} className="flex items-center gap-1">
             <div
               onClick={() => handleFocusedDutyChange(i)}
-              className={`ignore-onclickoutside flex h-[30px] w-[30px] cursor-pointer items-center justify-center text-lg font-bold text-[#333]
+              className={`ignore-onclickoutside flex h-[1.875rem] w-[1.875rem] cursor-pointer items-center justify-center text-lg font-bold text-[#333]
             ${
               shiftList[i].name === 'D'
                 ? 'bg-[#ffcd95]'
@@ -45,10 +45,10 @@ function Toolbar({ shiftList, focusedDayInfo, handleFocusedDutyChange }: Props) 
 
       <div className="flex flex-1 items-center">{/* <p>도움말</p> */}</div>
       <div className="flex gap-4">
-        <button className="my-[10px] h-[40px] w-[100px] cursor-pointer rounded  bg-[#fcd4fc] text-sm font-bold text-[#333]">
+        <button className="my-[.625rem] h-[2.5rem] w-[6.25rem] cursor-pointer rounded  bg-[#fcd4fc] text-sm font-bold text-[#333]">
           Auto Fill
         </button>
-        <button className="my-[10px] h-[40px] w-[100px] cursor-pointer rounded  bg-[#c6dbf0] text-sm font-bold text-[#333]">
+        <button className="my-[.625rem] h-[2.5rem] w-[6.25rem] cursor-pointer rounded  bg-[#c6dbf0] text-sm font-bold text-[#333]">
           완료
         </button>
       </div>

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import Rotation from './steps/Rotation';
 import Request from './steps/Request';
 import Straight from './steps/Straight';
-import Interval from './steps/Interval';
+import NightInterval from './steps/NightInterval';
 import Standard from './steps/Standard';
 import Shift from './steps/Shift';
-import { dutyConstraint as mockDutyConstraint, shiftList } from '@mocks/duty/data';
+import { dutyConstraint as mockDutyConstraint, shiftList as mockShiftList } from '@mocks/duty/data';
 
 export type Step = {
   name: string;
@@ -17,6 +17,7 @@ const useSetupDuty = () => {
   const [currentStep, setCurrentStep] = useState(0);
   // 추후 server state로 변경
   const [dutyConstraint, setDutyConstraint] = useState<DutyConstraint>(mockDutyConstraint);
+  const [shiftList, setShiftList] = useState<ShiftList>(mockShiftList);
 
   const step: Step[] = [
     {
@@ -43,9 +44,11 @@ const useSetupDuty = () => {
     {
       name: '나이트 간격',
       contents: (
-        <Interval.Contents
-          currentRotation={dutyConstraint.rotation}
-          setCurrentRotation={(rotation) => setDutyConstraint({ ...dutyConstraint, rotation })}
+        <NightInterval.Contents
+          nightInterval={dutyConstraint.nightInterval}
+          setNightInterval={(nightInterval) =>
+            setDutyConstraint({ ...dutyConstraint, nightInterval })
+          }
         />
       ),
       description: null,
@@ -64,8 +67,8 @@ const useSetupDuty = () => {
       name: '근무 형태',
       contents: (
         <Shift.Contents
-          currentRotation={dutyConstraint.rotation}
-          setCurrentRotation={(rotation) => setDutyConstraint({ ...dutyConstraint, rotation })}
+          shiftList={shiftList}
+          setShiftList={(shiftList) => setShiftList(shiftList)}
         />
       ),
       description: null,
@@ -74,8 +77,10 @@ const useSetupDuty = () => {
       name: '근무신청 제한',
       contents: (
         <Request.Contents
-          currentRotation={dutyConstraint.rotation}
-          setCurrentRotation={(rotation) => setDutyConstraint({ ...dutyConstraint, rotation })}
+          requestDutyType={dutyConstraint.requestDutyType}
+          setRequestDutyType={(requestDutyType) =>
+            setDutyConstraint({ ...dutyConstraint, requestDutyType })
+          }
         />
       ),
       description: null,

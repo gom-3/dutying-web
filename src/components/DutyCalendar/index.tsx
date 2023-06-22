@@ -23,10 +23,10 @@ export default function DutyCalendar({
 
   return (
     <table ref={clickAwayRef}>
-      <thead className="sticky top-[60px]">
-        <tr className="flex h-[60px] items-center justify-center gap-3 bg-[#c1cff5] px-4">
-          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이름</th>
-          <th className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333] ">이월</th>
+      <thead className="sticky top-[3.75rem]">
+        <tr className="flex h-[3.75rem] items-center justify-center gap-3 bg-[#c1cff5] px-4">
+          <th className="w-[2.5rem] shrink-0 text-center text-sm font-bold text-[#333] ">이름</th>
+          <th className="w-[2.5rem] shrink-0 text-center text-sm font-bold text-[#333] ">이월</th>
           {[duty.lastDays, duty.days].map((days, i) => (
             <th key={i} className="flex h-full flex-col justify-evenly text-center">
               <div className="text-xl">{duty.month - 1 + i}월</div>
@@ -34,7 +34,7 @@ export default function DutyCalendar({
                 {days.map((item, j) => (
                   <div
                     key={j}
-                    className={`flex w-[30px] items-center justify-center text-xs font-bold  ${
+                    className={`flex w-[1.875rem] items-center justify-center text-xs font-bold  ${
                       item.dayKind === 'workday'
                         ? 'text-[#333]'
                         : item.dayKind === 'saturday'
@@ -54,10 +54,10 @@ export default function DutyCalendar({
         {duty.dutyRows.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="flex h-[50px] items-center justify-center gap-3 border-b-[1px] border-[#e0e0e0] px-4"
+            className="flex h-[3.125rem] items-center justify-center gap-3 border-b-[.0625rem] border-[#e0e0e0] px-4"
           >
             {[row.user.name, row.carry].map((item, i) => (
-              <td key={i} className="w-[40px] shrink-0 text-center text-sm font-bold text-[#333]">
+              <td key={i} className="w-[2.5rem] shrink-0 text-center text-sm font-bold text-[#333]">
                 {item}
               </td>
             ))}
@@ -76,7 +76,7 @@ export default function DutyCalendar({
                       onClick={() => {
                         index == 1 && handleFocusChange?.({ day: j, row: rowIndex });
                       }}
-                      className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
+                      className={`m-[.125rem] h-[1.625rem] w-[1.625rem] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[1.875rem]
                   ${isFocued && 'outline outline-2 outline-[#333]'}
                   ${
                     shiftList[shiftIndex].name === 'D'
