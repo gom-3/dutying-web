@@ -13,8 +13,10 @@ export default {
         'main-4': '#EDE4FF',
         'sub-1': '#242428',
         'sub-2': '#595961',
+        'sub-2.5': '#93939D',
         'sub-3': '#ABABB4',
         'sub-4': '#D6D6D3',
+        'sub-5': '#F2F2F7',
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],

@@ -2,6 +2,7 @@ import 'index.css';
 import EditNurseTab from './components/EditNurseTab';
 import NurseCard from './components/NurseCard';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
+import NurseTable from './components/NurseTable';
 
 const RegistMemberPage = () => {
   const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } =
@@ -22,6 +23,7 @@ const RegistMemberPage = () => {
       {nurses.map((nurse) => (
         <NurseCard nurse={nurse} openTab={openEdit} />
       ))}
+      <NurseTable />
       <button type="button" onClick={openAdd}>
         추가하기
       </button>
