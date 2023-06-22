@@ -15,6 +15,18 @@ body {
   flex-direction: column;
 }
 
+@media screen and (max-width: 1440px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  html {
+    font-size: 10px;
+  }
+}
+
 //100 Thin
 @font-face {
   font-family: 'Apple-SDG';
