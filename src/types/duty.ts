@@ -89,7 +89,7 @@ type DutyConstraint = {
    * off: 휴가 신청만 받음
    * all: 휴가, 근무 신청 모두 받음
    */
-  requestDutyType: 'none' | 'off' | 'all';
+  requestDutyType: 'off' | 'all';
 };
 
 // @TODO 간호사 개인이 보는 근무표에 대한 데이터 타입은 따로 정의가 필요하다.

@@ -6,7 +6,7 @@ export const dutyConstraint: DutyConstraint = {
     weekend: [7, 3, 3, 3],
   },
   straight: [3, 4, 4, 3],
-  requestDutyType: 'all',
+  requestDutyType: 'off',
 };
 
 export const shiftList: ShiftList = [
@@ -16,7 +16,7 @@ export const shiftList: ShiftList = [
     startTime: '00:00',
     endTime: '00:00',
     hotKey: '/',
-    color: 'gray',
+    color: '#5534E0',
   },
   {
     fullname: '데이',
@@ -24,7 +24,7 @@ export const shiftList: ShiftList = [
     startTime: '07:00',
     endTime: '15:00',
     hotKey: 'D',
-    color: 'red',
+    color: '#D7EB2A',
   },
   {
     fullname: '이브닝',
@@ -32,7 +32,7 @@ export const shiftList: ShiftList = [
     startTime: '15:00',
     endTime: '23:00',
     hotKey: 'E',
-    color: 'blue',
+    color: '#EB39E8',
   },
   {
     fullname: '나이트',
@@ -40,7 +40,7 @@ export const shiftList: ShiftList = [
     startTime: '23:00',
     endTime: '07:00',
     hotKey: 'N',
-    color: 'brown',
+    color: '#271F3E',
   },
 ];
 
