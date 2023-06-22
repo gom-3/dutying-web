@@ -1,7 +1,6 @@
-import TextField from '@components/TextField';
-import { CirclePicker } from 'react-color';
-
 /* eslint-disable react-refresh/only-export-components */
+import TextField from '@components/TextField';
+
 interface ContentsProps {
   shiftList: ShiftList;
   setShiftList: (shiftList: ShiftList) => void;
