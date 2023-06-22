@@ -42,13 +42,12 @@ const NavigationBar = () => {
           )}')`,
         }}
       >
-        ㅁ
+        &nbsp;
         {pathname === HOME && (
           <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
         )}
       </div>
       <NavigationBarItem
-        clasName="mt-[2.125rem]"
         path={MEMBER.REGIST}
         Icon={NurseIcon}
         SelectedIcon={NurseIconSelected}

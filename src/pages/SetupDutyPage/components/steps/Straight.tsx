@@ -11,14 +11,11 @@ function Contents({ shiftList, straight, setStraight }: ContentsProps) {
   return (
     <div className="mt-[3.125rem] h-[22rem] w-[76%] rounded-[1.25rem] bg-white shadow-[0rem_.25rem_2.125rem_#EDE9F5]">
       <div className="flex h-full w-full justify-evenly">
-        <div className="relative flex flex-[7] items-center border-r-[.0625rem] border-sub-4 px-10">
-          <p
-            className="fo nt-apple absolute
-        top-[2.375rem] text-[1.5rem] text-sub-3"
-          >
+        <div className="relative flex flex-[7] items-center border-r-[.0625rem] border-sub-4 px-[4.6875rem]">
+          <p className="fo nt-apple absolute top-[2.375rem] text-[1.5rem] text-sub-3">
             연속 일반 근무
           </p>
-          <div className="flex flex-1 gap-[4.375rem]">
+          <div className="flex w-full justify-between">
             {shiftList.slice(1).map((shift, index) => {
               return (
                 <div key={index} className="flex items-center gap-[1.25rem]">
@@ -45,7 +42,7 @@ function Contents({ shiftList, straight, setStraight }: ContentsProps) {
             })}
           </div>
         </div>
-        <div className="relative flex flex-[3] flex-col justify-center px-10">
+        <div className="relative flex flex-[3] flex-col justify-center px-[4.6875rem]">
           <p className="absolute top-[2.375rem] font-apple text-[1.5rem] text-sub-3">연속 오프</p>
           <div className="flex items-center gap-[1.25rem]">
             <p className="font-apple text-[2.25rem] font-semibold text-sub-2.5">

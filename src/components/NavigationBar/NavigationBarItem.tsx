@@ -5,17 +5,16 @@ interface Props {
   SelectedIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   text?: string;
-  clasName?: string;
 }
 
-const NavigationBarItem = ({ path, SelectedIcon, Icon, text, clasName }: Props) => {
+const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const isSelected = path === pathname;
 
   return (
     <div
-      className={`mt-[3.125rem] flex w-[10.0625rem] cursor-pointer flex-col items-center ${clasName}`}
+      className="mt-[2.9375rem] flex w-[10.0625rem] cursor-pointer flex-col items-center"
       onClick={() => navigate(path)}
     >
       {isSelected ? <SelectedIcon /> : <Icon />}

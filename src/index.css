@@ -15,13 +15,13 @@ body {
   flex-direction: column;
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1680px) {
   html {
     font-size: 12px;
   }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1440px) {
   html {
     font-size: 10px;
   }
