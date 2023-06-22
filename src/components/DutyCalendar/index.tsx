@@ -4,7 +4,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 
 interface Props {
   duty: Duty;
-  shiftKindList: ShiftKind[];
+  shiftList: ShiftList;
   isEditable?: boolean;
   focus?: Focus | null;
   focusedCellRef: RefObject<HTMLElement>;
@@ -13,7 +13,7 @@ interface Props {
 
 export default function DutyCalendar({
   duty,
-  shiftKindList,
+  shiftList,
   isEditable,
   focus,
   focusedCellRef,
@@ -61,10 +61,10 @@ export default function DutyCalendar({
                 {item}
               </td>
             ))}
-            {[row.lastShiftList, row.shiftList].map((shiftList, i) => (
-              <td key={i} className="flex">
-                {shiftList.map((shiftId, j) => {
-                  const isFocued = i == 1 && focus && focus.day === j && focus.row === rowIndex;
+            {[row.lastShiftIndexList, row.shiftIndexList].map((shiftIndexList, index) => (
+              <td key={index} className="flex">
+                {shiftIndexList.map((shiftIndex, j) => {
+                  const isFocued = index == 1 && focus && focus.day === j && focus.row === rowIndex;
                   return (
                     <p
                       ref={
@@ -74,21 +74,21 @@ export default function DutyCalendar({
                       }
                       key={j}
                       onClick={() => {
-                        i == 1 && handleFocusChange?.({ day: j, row: rowIndex });
+                        index == 1 && handleFocusChange?.({ day: j, row: rowIndex });
                       }}
                       className={`m-[2px] h-[26px] w-[26px] cursor-pointer bg-[#E2E1E1] text-center text-base leading-[30px]
                   ${isFocued && 'outline outline-2 outline-[#333]'}
                   ${
-                    shiftKindList[shiftId].name === 'D'
+                    shiftList[shiftIndex].name === 'D'
                       ? 'bg-[#ffcd95]'
-                      : shiftKindList[shiftId].name === 'E'
+                      : shiftList[shiftIndex].name === 'E'
                       ? 'bg-[#e0e8f3]'
-                      : shiftKindList[shiftId].name === 'N'
+                      : shiftList[shiftIndex].name === 'N'
                       ? 'bg-[#ebdeff]'
                       : 'bg-[#cbcbcb]'
                   }`}
                     >
-                      {shiftKindList[shiftId].name}
+                      {shiftList[shiftIndex].name}
                     </p>
                   );
                 })}

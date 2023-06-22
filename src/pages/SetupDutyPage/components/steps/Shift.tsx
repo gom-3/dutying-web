@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 interface ContentsProps {
-  currentRotation: DutyConstraint['rotation'];
-  setCurrentRotation: (rotation: DutyConstraint['rotation']) => void;
+  currentRotation: number;
+  setCurrentRotation: (rotation: number) => void;
 }
 
 function Contents({ currentRotation, setCurrentRotation }: ContentsProps) {
@@ -33,12 +33,7 @@ function Contents({ currentRotation, setCurrentRotation }: ContentsProps) {
 function Description() {
   return (
     <div className="mx-auto flex h-full w-[80%] flex-col justify-center gap-3">
-      <p className="font-apple text-[24px] text-sub-2">
-        2교대: 데이(D), 나이트(N)로 근무표를 작성합니다.
-      </p>
-      <p className="font-apple text-[24px] text-sub-2">
-        3교대: 데이(D), 이브닝(E), 나이트(N)로 근무표를 작성합니다.
-      </p>
+      <p className="font-apple text-[24px]">나이트는 최소 2일 이상 연속 배정이 가능합니다.</p>
     </div>
   );
 }

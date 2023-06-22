@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, ChangeEvent } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { useShiftKind } from 'stores/shiftStore';
+import { useShiftList } from 'stores/shiftStore';
 
 export type CheckState = {
   [key: string]: boolean;
@@ -19,21 +19,21 @@ const useEditNurseTab = (
   const [availChecked, setAvailChecked] = useState<CheckState>({});
   const [preferChecked, setPreferChecked] = useState<CheckState>({});
   const ref = useOnclickOutside(() => closeTab());
-  const shiftKind = useShiftKind();
+  const shiftList = useShiftList();
 
   useEffect(() => {
     let tempAvail: CheckState = {};
-    shiftKind.forEach((shift) => {
-      tempAvail = { ...tempAvail, [shift.id]: false };
+    shiftList.forEach((_, index) => {
+      tempAvail = { ...tempAvail, [index]: false };
     });
     let tempPrefer: CheckState = {};
-    shiftKind.forEach((shift) => {
-      tempPrefer = { ...tempPrefer, [shift.id]: false };
+    shiftList.forEach((_, index) => {
+      tempPrefer = { ...tempPrefer, [index]: false };
     });
 
     if (isEdit) {
-      nurse.workAvailable.forEach((shift) => (tempAvail[shift.id] = true));
-      nurse.workPrefer.forEach((shift) => (tempPrefer[shift.id] = true));
+      nurse.workAvailable.forEach((_, index) => (tempAvail[index] = true));
+      nurse.workPrefer.forEach((_, index) => (tempPrefer[index] = true));
     }
     if (isAdd) {
       for (const key in tempAvail) tempAvail[key] = true;
@@ -41,20 +41,20 @@ const useEditNurseTab = (
 
     setAvailChecked(tempAvail);
     setPreferChecked(tempPrefer);
-  }, [shiftKind]);
+  }, [shiftList]);
 
   /** 가능 근무, 선호 근무 체크리스트 업데이트 */
   useEffect(() => {
-    const updatedWorkAvailable: ShiftKind[] = [];
-    const updatedWorkPrefer: ShiftKind[] = [];
+    const updatedWorkAvailable: Shift[] = [];
+    const updatedWorkPrefer: Shift[] = [];
 
     for (const key in availChecked) {
       if (availChecked[key] === true) {
-        const item = shiftKind.find((item) => item.id === +key);
+        const item = shiftList.find((_, index) => index === +key);
         if (item) updatedWorkAvailable.push(item);
       }
       if (preferChecked[key] === true) {
-        const item = shiftKind.find((item) => item.id === +key);
+        const item = shiftList.find((_, index) => index === +key);
         if (item) updatedWorkPrefer.push(item);
       }
     }
@@ -98,7 +98,7 @@ const useEditNurseTab = (
 
   return {
     formState: { form, availChecked, preferChecked },
-    shiftKind,
+    shiftList,
     ref,
     handlers: {
       handleAvailCheckboxChange,

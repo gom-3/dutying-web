@@ -1,12 +1,12 @@
 import { DayInfo } from '@libs/hook/useEditDuty';
 
 interface Props {
-  shiftKindList: ShiftKind[];
+  shiftList: ShiftList;
   focusedDayInfo: DayInfo | null;
   handleFocusedDutyChange: (shiftId: number) => void;
 }
 
-function Toolbar({ shiftKindList, focusedDayInfo, handleFocusedDutyChange }: Props) {
+function Toolbar({ shiftList, focusedDayInfo, handleFocusedDutyChange }: Props) {
   return (
     <div className="sticky top-0 flex h-[60px] w-full gap-4 border-b-[1px] border-[#e0e0e0] bg-[#FFF] px-4 ">
       {focusedDayInfo && (
@@ -18,17 +18,17 @@ function Toolbar({ shiftKindList, focusedDayInfo, handleFocusedDutyChange }: Pro
         </div>
       )}
       {focusedDayInfo &&
-        shiftKindList.map((shiftKine, i) => (
+        shiftList.map((shiftKine, i) => (
           <div key={i} className="flex items-center gap-1">
             <div
               onClick={() => handleFocusedDutyChange(i)}
               className={`ignore-onclickoutside flex h-[30px] w-[30px] cursor-pointer items-center justify-center text-lg font-bold text-[#333]
             ${
-              shiftKindList[i].name === 'D'
+              shiftList[i].name === 'D'
                 ? 'bg-[#ffcd95]'
-                : shiftKindList[i].name === 'E'
+                : shiftList[i].name === 'E'
                 ? 'bg-[#e0e8f3]'
-                : shiftKindList[i].name === 'N'
+                : shiftList[i].name === 'N'
                 ? 'bg-[#ebdeff]'
                 : 'bg-[#cbcbcb]'
             }
@@ -37,7 +37,8 @@ function Toolbar({ shiftKindList, focusedDayInfo, handleFocusedDutyChange }: Pro
               {shiftKine.name}
             </div>
             <p className="text-base text-[#333]">
-              {focusedDayInfo?.shiftList[i].count}/{focusedDayInfo?.shiftList[i].standard}
+              {focusedDayInfo?.countByShiftList[i].count}/
+              {focusedDayInfo?.countByShiftList[i].standard}
             </p>
           </div>
         ))}

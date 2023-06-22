@@ -11,9 +11,11 @@ function SetupDutyPage() {
       <div className="mt-[50px] h-[352px] w-[76%] rounded-[20px] bg-white shadow-[0px_4px_34px_#EDE9F5]">
         {step[currentStep].contents}
       </div>
-      <div className="mb-[55px] mt-[30px] h-[194px] w-[76%] rounded-[20px] bg-[#EDE4FF] shadow-[0px_4px_34px_#EDE9F5]">
-        {step[currentStep].description}
-      </div>
+      {step[currentStep].description && (
+        <div className="mt-[30px] h-[194px] w-[76%] rounded-[20px] bg-[#EDE4FF] shadow-[0px_4px_34px_#EDE9F5]">
+          {step[currentStep].description}
+        </div>
+      )}
       <Actions step={step} currentStep={currentStep} setCurrentStep={setCurrentStep} />
     </div>
   );

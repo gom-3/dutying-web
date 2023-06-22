@@ -1,16 +1,16 @@
-import { shiftKindList } from '@mocks/duty/data';
+import { shiftList } from '@mocks/duty/data';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 /** Shift의 종류를 전역상태로 관리 */
 interface ShiftState {
   rotation: number;
-  shifts: ShiftKind[];
+  shiftList: ShiftList;
   action: {
     /**기존의 근무 유형 수정 */
-    changeShift: (id: number, newShift: ShiftKind) => void;
+    changeShift: (id: number, newShift: Shift) => void;
     /**새로운 근무 유형 추가 */
-    addShift: (shift: ShiftKind) => void;
+    addShift: (shift: Shift) => void;
     /**기존의 근무 유형 삭제 */
     deleteShift: (id: number) => void;
   };
@@ -21,18 +21,18 @@ const useShiftStore = create<ShiftState>()(
     persist(
       (set) => ({
         rotation: 3,
-        shifts: shiftKindList,
+        shiftList: shiftList,
         action: {
-          changeShift: (id, newShift) =>
+          changeShift: (index, newShift) =>
             set((state) => ({
               ...state,
-              shifts: state.shifts.map((shift) => (shift.id === id ? newShift : shift)),
+              shiftList: state.shiftList.map((shift, i) => (i === index ? newShift : shift)),
             })),
-          addShift: (shift) => set((state) => ({ shifts: [...state.shifts, shift] })),
-          deleteShift: (id) =>
+          addShift: (shift) => set((state) => ({ shiftList: [...state.shiftList, shift] })),
+          deleteShift: (index) =>
             set((state) => ({
               ...state,
-              shifts: state.shifts.filter((shift) => shift.id !== id),
+              shiftList: state.shiftList.filter((_, i) => i !== index),
             })),
         },
       }),
@@ -44,5 +44,5 @@ const useShiftStore = create<ShiftState>()(
 );
 
 export const useShiftRotation = () => useShiftStore((state) => state.rotation);
-export const useShiftKind = () => useShiftStore((state) => state.shifts);
+export const useShiftList = () => useShiftStore((state) => state.shiftList);
 export const useShiftAction = () => useShiftStore((state) => state.action);

@@ -1,3 +1,4 @@
+import Button from '@components/Button';
 import { Step } from './useSetupDuty';
 
 interface Props {
@@ -8,22 +9,23 @@ interface Props {
 
 function Actions({ step, currentStep, setCurrentStep }: Props) {
   return (
-    <div className="flex w-[76%] justify-end gap-4">
+    <div className="mt-[3.4375rem] flex w-[76%] justify-end gap-4">
       {currentStep !== 0 && (
-        <button
-          className="h-[80px] w-[183px] rounded-[50px] border-2 border-main-1 font-apple text-[36px] font-semibold text-main-1"
+        <Button
+          type="outline"
+          className="h-[5rem] w-[11.4375rem] "
           onClick={() => setCurrentStep(currentStep - 1)}
         >
           이전
-        </button>
+        </Button>
       )}
       {currentStep !== step.length - 1 && (
-        <button
-          className="h-[80px] w-[183px] rounded-[50px]  bg-main-1 font-apple text-[36px] font-semibold text-white"
+        <Button
+          className="h-[5rem] w-[11.4375rem] bg-main-3"
           onClick={() => setCurrentStep(currentStep + 1)}
         >
           다음
-        </button>
+        </Button>
       )}
     </div>
   );
