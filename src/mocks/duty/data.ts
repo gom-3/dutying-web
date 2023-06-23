@@ -452,3 +452,26 @@ export const duty: Duty = {
     },
   ],
 };
+
+/**날짜 별 주요 근무(3교대) */
+type DutyDate = {
+  day: string[];
+  evening: string[];
+  night: string[];
+};
+
+const dutyByDate: DutyDate[] = [];
+const temp = [
+  ['오종욱', '김찬규', '조성연', '황영희'],
+  ['황인서', '김범진', '류원경', '김은숙'],
+  ['강명구', '안재홍', '김범진', '정경화'],
+];
+
+for (let i = 0; i < 100; i++) {
+  dutyByDate.push({
+    day: temp[i % 3],
+    evening: temp[(i + 1) % 3],
+    night: temp[(i + 2) % 3],
+  });
+}
+export { dutyByDate };

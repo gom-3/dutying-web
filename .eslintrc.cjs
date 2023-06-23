@@ -16,6 +16,12 @@ module.exports = {
   },
   plugins: ['react-refresh'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'react-refresh/only-export-components': 'warn',
     'tailwindcss/no-custom-classname': 'off',
   },
