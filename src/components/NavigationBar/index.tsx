@@ -2,7 +2,7 @@ import { FoldIcon, FullLogo, FullLogoTransparent, MenuIcon } from '@assets/svg';
 import 'index.css';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { DUTY, HOME, MEMBER, SETTING } from '@libs/constant/path';
+import { HOME } from '@libs/constant/path';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
 
 const NavigationBar = () => {

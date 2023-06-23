@@ -6,6 +6,8 @@ import useWeekCalendar from './components/WeeklyCalendar/useWeekCalendar';
 
 const HomePage = () => {
   const { date, week, toPrevWeek, toNextWeek, dateArray } = useWeekCalendar();
+
+  console.log(date);
   return (
     <div className="flex p-12">
       <div>
@@ -14,7 +16,7 @@ const HomePage = () => {
         </div>
         <WeekController date={week.string} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
         <div className="flex">
-          <WeeklyGroupCaledndar dateArray={dateArray} startDate={week.start} endDate={week.end} />
+          <WeeklyGroupCaledndar dateArray={dateArray} />
           <MonthlyCalendar />
         </div>
       </div>

@@ -1,17 +1,14 @@
 import 'index.css';
-import { dutyByDate } from '@mocks/duty/data';
 import { useRef } from 'react';
 import WeeklyCalendarRow from './WeeklyCalendarRow';
 
 interface Props {
   dateArray: Date[];
-  startDate: Date;
-  endDate: Date;
 }
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const WeeklyCalendar = ({ dateArray, startDate, endDate }: Props) => {
+const WeeklyCalendar = ({ dateArray }: Props) => {
   const today = new Date();
   const tableRef = useRef(null);
 
