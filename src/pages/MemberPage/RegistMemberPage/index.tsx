@@ -2,14 +2,15 @@ import 'index.css';
 import EditNurseTab from './components/EditNurseTab';
 import NurseCard from './components/NurseCard';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
-import NavigationBar from '@components/common/NavigationBar';
+
+import NurseTable from './components/NurseTable';
 
 const RegistMemberPage = () => {
-  const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } = useRegistNurse();
+  const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } =
+    useRegistNurse();
 
   return (
-    <div>
-      <NavigationBar />
+    <div className="w-full">
       {editTabState.isOpen && (
         <EditNurseTab
           isAdd={editTabState.isAdd}
@@ -23,7 +24,11 @@ const RegistMemberPage = () => {
       {nurses.map((nurse) => (
         <NurseCard nurse={nurse} openTab={openEdit} />
       ))}
-      <button type="button" onClick={openAdd}>추가하기</button>
+
+      <NurseTable />
+      <button type="button" onClick={openAdd}>
+        추가하기
+      </button>
     </div>
   );
 };

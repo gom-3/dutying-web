@@ -2,20 +2,21 @@ import { Route, Routes } from 'react-router-dom';
 import MakeDutyPage from './MakeDutyPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
+import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path="/">
+      <Route path={HOME}>
         <Route index />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/members">
-          <Route path="/members/regist" element={<RegistMemberPage />} />
+        <Route path={LOGIN} element={<LoginPage />} />
+        <Route path={MEMBER.ROOT}>
+          <Route path={MEMBER.REGIST} element={<RegistMemberPage />} />
         </Route>
-        <Route path="/duty">
-          <Route path="/duty/:id" />
-          <Route path="/duty/setup" />
-          <Route path="/duty/make" element={<MakeDutyPage />} />
+        <Route path={DUTY.ROOT}>
+          <Route path={DUTY.ID} />
+          <Route path={DUTY.SETTING} />
+          <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
         </Route>
       </Route>
     </Routes>
