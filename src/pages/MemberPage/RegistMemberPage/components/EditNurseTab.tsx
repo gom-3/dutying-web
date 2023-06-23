@@ -75,7 +75,7 @@ const EditNurseTab = ({
   const preferShiftCheckBoxes = makeShiftCheckBoxes(preferChecked, handlePreferCheckboxChange);
 
   return (
-    <div ref={ref} className="absolute right-0 h-screen w-96 bg-white shadow-md">
+    <div ref={ref} className="h-[737px] w-[448px] rounded-[20px] bg-white shadow-shadow-1">
       <label htmlFor="name">이름</label>
       <input
         type="text"

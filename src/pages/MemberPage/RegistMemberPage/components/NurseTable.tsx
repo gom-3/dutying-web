@@ -32,166 +32,133 @@ const NurseTable = () => {
             </div>
           </div>
         </div>
-        <tbody className="block h-[200px] w-[1163px] overflow-y-auto overflow-x-hidden">
+        <tbody className="block h-[737px] w-[1163px] overflow-y-auto overflow-x-hidden">
           <td
-            rowSpan={2}
-            className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal"
+            rowSpan={3}
+            className="h-[56px] w-[140px] border border-sub-4 text-[20px] font-normal"
           >
-            1
+            4
           </td>
-          <NurseCard nurse={nurses[0]} openTab={() => {}} />
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
+          <NurseCard
+            nurse={nurses[0]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[1]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <td
+            rowSpan={3}
+            className="h-[56px] w-[140px] border border-sub-4 text-[20px] font-normal"
+          >
+            3
+          </td>
+          <NurseCard
+            nurse={nurses[2]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[2]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <td
+            rowSpan={5}
+            className="h-[56px] w-[140px] border border-sub-4 text-[20px] font-normal"
+          >
+            2
+          </td>
+          <NurseCard
+            nurse={nurses[3]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <td
+            rowSpan={5}
+            className="h-[56px] w-[140px] border border-sub-4 text-[20px] font-normal"
+          >
+            2
+          </td>
+          <NurseCard
+            nurse={nurses[3]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <td
+            rowSpan={5}
+            className="h-[56px] w-[140px] border border-sub-4 text-[20px] font-normal"
+          >
+            2
+          </td>
+          <NurseCard
+            nurse={nurses[3]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
+          <NurseCard
+            nurse={nurses[4]}
+            openTab={() => {
+              console.log('1');
+            }}
+          />
         </tbody>
       </table>
     </div>

@@ -17,10 +17,17 @@ export default {
         'sub-3': '#ABABB4',
         'sub-4': '#D6D6D3',
         'sub-5': '#F2F2F7',
+        day: '#D7EB2A',
+        evening: '#EB39E8',
+        night: '#5534E0',
+        off: '#271F3E',
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
         apple: ['Apple-SDG', 'sans-serif'],
+      },
+      boxShadow: {
+        'shadow-1': '0px 4px 34px #EDE9F5',
       },
     },
   },

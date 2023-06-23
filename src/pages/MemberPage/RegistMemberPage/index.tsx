@@ -10,25 +10,23 @@ const RegistMemberPage = () => {
     useRegistNurse();
 
   return (
-    <div className="w-full">
-      {editTabState.isOpen && (
-        <EditNurseTab
-          isAdd={editTabState.isAdd}
-          isEdit={editTabState.isEdit}
-          nurse={editTabState.nurse}
-          closeTab={closeTab}
-          updateNurse={updateNurse}
-          addNurse={addNurse}
-        />
-      )}
-      {nurses.map((nurse) => (
+    <div className="flex w-full">
+      {/* {nurses.map((nurse) => (
         <NurseCard nurse={nurse} openTab={openEdit} />
-      ))}
+      ))} */}
 
       <NurseTable />
-      <button type="button" onClick={openAdd}>
+      <EditNurseTab
+        isAdd={editTabState.isAdd}
+        isEdit={editTabState.isEdit}
+        nurse={editTabState.nurse}
+        closeTab={closeTab}
+        updateNurse={updateNurse}
+        addNurse={addNurse}
+      />
+      {/* <button type="button" onClick={openAdd}>
         추가하기
-      </button>
+      </button> */}
     </div>
   );
 };
