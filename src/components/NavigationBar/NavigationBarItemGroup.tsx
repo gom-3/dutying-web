@@ -1,7 +1,18 @@
 import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
 import { DUTY, MEMBER, SETTING } from '@libs/constant/path';
-import { DutyIcon, NurseIcon, NurseIconSelected, RequestIcon, SettingIcon } from '@assets/svg';
+import {
+  DutyIcon,
+  DutyIconSelected,
+  InjectorIcon,
+  InjectorIconSelected,
+  NurseIcon,
+  NurseIconSelected,
+  RequestIcon,
+  RequestIconSelected,
+  SettingIcon,
+  SettingIconSelected,
+} from '@assets/svg';
 
 const items = [
   {
@@ -13,29 +24,29 @@ const items = [
   },
   {
     path: DUTY.SETTING,
-    icon: NurseIcon,
-    selectedIcon: NurseIconSelected,
+    icon: InjectorIcon,
+    selectedIcon: InjectorIconSelected,
     text: '근무 설정',
     mt: 50,
   },
   {
     path: MEMBER.REQUEST,
     icon: RequestIcon,
-    selectedIcon: RequestIcon,
+    selectedIcon: RequestIconSelected,
     text: '휴가 신청 관리',
     mt: 50,
   },
   {
     path: DUTY.MAKE,
     icon: DutyIcon,
-    selectedIcon: DutyIcon,
+    selectedIcon: DutyIconSelected,
     text: '근무표 만들기',
     mt: 50,
   },
   {
     path: SETTING,
     icon: SettingIcon,
-    selectedIcon: SettingIcon,
+    selectedIcon: SettingIconSelected,
     text: '설정',
     mt: 50,
   },
