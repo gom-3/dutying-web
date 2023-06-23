@@ -22,13 +22,13 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
       {dateArray.map((date) => {
         return (
           <td
-            className={`relative border-[0.5px] ${
+            className={`relative border-[.0313rem] ${
               areSameDate(today, date) ? `${bgColor[dutyKind]} text-sub-1` : 'text-sub-2.5'
-            } border-sub-4 p-[20px] text-center font-apple text-[20px] font-normal `}
+            } border-sub-4 p-[1.25rem] text-center font-apple text-[1.25rem] font-normal `}
           >
             {ref.current && areSameDate(today, date) && (
               <div
-                className={`${color[dutyKind]} absolute left-0 top-0 h-full w-[6px] translate-x-[-50%] rounded-2xl`}
+                className={`${color[dutyKind]} absolute left-0 top-0 h-full w-[.375rem] translate-x-[-50%] rounded-2xl`}
               />
             )}
             {dutyByDate[date.getDate()][dutyKind].map((n) => (

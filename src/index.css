@@ -27,63 +27,63 @@ body {
   }
 }
 
-//100 Thin
+/* 100 Thin */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoT.ttf');
   font-weight: 100;
 }
-//200 Ulta Light
+/* 200 Ulta Light */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoUL.ttf');
   font-weight: 200;
 }
-//300 Light
+/* 300 Light */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoL.ttf');
   font-weight: 300;
 }
-//400 Regular
+/* 400 Regular */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoR.ttf');
   font-weight: 400;
 }
-//500 Medium
+/* 500 Medium */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoM.ttf');
   font-weight: 500;
 }
-//600 Semi Bold
+/* 600 Semi Bold */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoSB.ttf');
   font-weight: 600;
 }
-//700 Bold
+/* 700 Bold */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoB.ttf');
   font-weight: 700;
 }
-//800 Extra Bold
+/* 800 Extra Bold */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;
   src: url('./assets/fonts/AppleSDGothicNeoEB.ttf');
   font-weight: 800;
 }
-//900 Heavy
+/* 900 Heavy */
 @font-face {
   font-family: 'Apple-SDG';
   font-style: normal;

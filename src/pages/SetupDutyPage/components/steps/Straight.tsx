@@ -63,7 +63,7 @@ function Contents({ shiftList, straight, setStraight }: ContentsProps) {
             />
           </div>
         </div>
-      </div>{' '}
+      </div>
     </div>
   );
 }

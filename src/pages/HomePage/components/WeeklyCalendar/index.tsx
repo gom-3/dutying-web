@@ -18,24 +18,24 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
     today.getDate() === date.getDate();
 
   return (
-    <div className="relative mt-[26px]">
-      <div className="absolute right-0 top-[-45px] font-poppins text-[16px] font-light text-sub-3">
+    <div className="relative mt-[1.625rem]">
+      <div className="absolute right-0 top-[-2.8125rem] font-poppins text-[1rem] font-light text-sub-3">
         Weekly • Group
       </div>
       <table
-        className="border-collapse rounded-[20px] border-hidden shadow-shadow-1"
+        className="border-collapse rounded-[1.25rem] border-hidden shadow-shadow-1"
         ref={tableRef}
       >
-        <thead className="rounded-[20px] bg-sub-5">
-          <tr className="rounded-[20px]">
+        <thead className="rounded-[1.25rem] bg-sub-5">
+          <tr className="rounded-[1.25rem]">
             {dateArray.map((date, i) => (
               <th
-                className={`h-[143px] w-[170px] border-[0.5px] border-sub-4 font-poppins text-[40px] font-normal first:rounded-tl-[20px] last:rounded-tr-[20px] ${
+                className={`h-[8.9375rem] w-[10.625rem] border-[.0313rem] border-sub-4 font-poppins text-[2.5rem] font-normal first:rounded-tl-[1.25rem] last:rounded-tr-[1.25rem] ${
                   areSameDate(today, date) ? 'text-sub-1' : 'text-sub-3'
                 }`}
               >
                 <div>{date.getDate()}</div>
-                <div className="text-[16px] font-extralight">{days[i]}</div>
+                <div className="text-[1rem] font-extralight">{days[i]}</div>
               </th>
             ))}
           </tr>
