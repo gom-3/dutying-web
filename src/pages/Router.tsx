@@ -5,11 +5,12 @@ import RegistMemberPage from './MemberPage/RegistMemberPage';
 import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
 import SetupDutyPage from './SetupDutyPage';
 import HomePage from './HomePage';
+import MainLayout from '@components/MainLayout/indes';
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path={HOME}>
+      <Route path={HOME} element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path={LOGIN} element={<LoginPage />} />
         <Route path={MEMBER.ROOT}>

@@ -6,17 +6,16 @@ interface Props {
   isCurrent: boolean;
 }
 
-const ShiftCircle = ({ id, isCurrent }: Props) => {
+const ShiftCircle = ({ id }: Props) => {
   const shiftKind = useShiftList();
-  console.log(isCurrent);
-
-  return (
+  return shiftKind[id] ? (
     <div
-      className={`absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] ${shiftKind[id].color} flex h-[1.875rem] w-[1.875rem] items-center justify-center rounded-full font-poppins text-[.9375rem] text-white`}
+      className={`absolute left-1/2 top-1/2 flex h-[1.875rem] w-[1.875rem] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full font-poppins text-[.9375rem] text-white`}
+      style={{ backgroundColor: shiftKind[id].color }}
     >
       {shiftKind[id].name}
     </div>
-  );
+  ) : null;
 };
 
 export default ShiftCircle;

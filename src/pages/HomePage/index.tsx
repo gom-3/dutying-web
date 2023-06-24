@@ -5,9 +5,8 @@ import WeekController from './components/WeeklyCalendar/WeekController';
 import useWeekCalendar from './components/WeeklyCalendar/useWeekCalendar';
 
 const HomePage = () => {
-  const { date, week, toPrevWeek, toNextWeek, dateArray } = useWeekCalendar();
+  const { week, toPrevWeek, toNextWeek, dateArray } = useWeekCalendar();
 
-  console.log(date);
   return (
     <div className="flex p-12">
       <div>

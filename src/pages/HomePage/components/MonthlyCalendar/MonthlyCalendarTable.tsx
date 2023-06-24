@@ -10,7 +10,6 @@ const MonthlyCalendarTable = () => {
   const prevLast = new Date(2023, 5, 0).getDate();
   const calendar = [];
   const shiftIndexList = duty.dutyRows[0].shiftIndexList;
-  console.log(shiftIndexList.length);
 
   for (let i = first.getDay() - 1; i >= 0; i--) {
     calendar.push(prevLast - i);
@@ -37,22 +36,18 @@ const MonthlyCalendarTable = () => {
         </tr>
       </thead>
       <tbody>
-        {weeks.map((week) => {
-          return (
-            <tr>
-              {week.map((day) => {
-                return (
-                  <td className="relative h-[4.125rem] w-[3.4375rem] border-t border-sub-4">
-                    <div className="absolute left-[.375rem] top-[.3125rem] font-poppins text-[.5625rem] font-light text-sub-3">
-                      {day}
-                    </div>
-                    <ShiftCircle isCurrent={true} id={shiftIndexList[day - 1]} />
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
+        {weeks.map((week) => (
+          <tr>
+            {week.map((day) => (
+              <td className="relative h-[4.125rem] w-[3.4375rem] border-t border-sub-4">
+                <div className="absolute left-[.375rem] top-[.3125rem] font-poppins text-[.5625rem] font-light text-sub-3">
+                  {day}
+                </div>
+                <ShiftCircle isCurrent={true} id={shiftIndexList[day - 1]} />
+              </td>
+            ))}
+          </tr>
+        ))}
       </tbody>
     </table>
   );
