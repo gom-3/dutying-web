@@ -9,8 +9,7 @@ const MonthlyCalendarTable = () => {
   const last = new Date(2023, 6, 0);
   const prevLast = new Date(2023, 5, 0).getDate();
   const calendar = [];
-  const shiftList = duty.dutyRows[0].shiftList;
-  console.log(shiftList.length);
+  const shiftIndexList = duty.dutyRows[0].shiftIndexList;
 
   for (let i = first.getDay() - 1; i >= 0; i--) {
     calendar.push(prevLast - i);
@@ -26,33 +25,29 @@ const MonthlyCalendarTable = () => {
   while (calendar.length > 0) weeks.push(calendar.splice(0, 7));
 
   return (
-    <table className="h-[390px] w-full">
+    <table className="h-[24.375rem] w-full">
       <thead>
         <tr>
           {days.map((day) => (
-            <th className="h-[28px] w-[55px] font-poppins text-[10px] font-normal text-main-2">
+            <th className="h-[1.75rem] w-[3.4375rem] font-poppins text-[.625rem] font-normal text-main-2">
               {day}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {weeks.map((week) => {
-          return (
-            <tr>
-              {week.map((day) => {
-                return (
-                  <td className="relative h-[66px] w-[55px] border-t border-sub-4">
-                    <div className="absolute left-[6px] top-[5px] font-poppins text-[9px] font-light text-sub-3">
-                      {day}
-                    </div>
-                    <ShiftCircle isCurrent={true} id={shiftList[day - 1]} />
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
+        {weeks.map((week) => (
+          <tr>
+            {week.map((day) => (
+              <td className="relative h-[4.125rem] w-[3.4375rem] border-t border-sub-4">
+                <div className="absolute left-[.375rem] top-[.3125rem] font-poppins text-[.5625rem] font-light text-sub-3">
+                  {day}
+                </div>
+                <ShiftCircle isCurrent={true} id={shiftIndexList[day - 1]} />
+              </td>
+            ))}
+          </tr>
+        ))}
       </tbody>
     </table>
   );

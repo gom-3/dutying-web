@@ -1,4 +1,5 @@
 export { default as CheckedIcon } from './CheckedIcon';
+export { default as ArrowDownIcon } from './ArrowDownIcon';
 export { default as DutyIcon } from './DutyIcon';
 export { default as DutyIconSelected } from './DutyIconSelected';
 export { default as FoldIcon } from './FoldIcon';

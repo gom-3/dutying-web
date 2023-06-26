@@ -26,21 +26,21 @@ type Nurse = {
   /** 가능한 근무 리스트
    * @example
    * {...
-   * workAvailable: [shiftKindList[1], shiftKindList[3]],
+   * workAvailable: [shiftList[1], shiftList[3]],
    * ...
    * }
-   * shiftKindList: ShiftKind[] 근무 유형 배열
+   * shiftList: Shift[] 근무 유형 배열
    */
-  workAvailable: ShiftKind[];
+  workAvailable: Shift[];
   /** 가능한 근무 리스트
    * @example
    * {...
-   * workPrefer: [shiftKindList[1], shiftKindList[3]],
+   * workPrefer: [shiftList[1], shiftList[3]],
    * ...
    * }
-   * shiftKindList: ShiftKind[] 근무 유형 배열
+   * shiftList: ShiftList 근무 유형 배열
    */
-  workPrefer: ShiftKind[];
+  workPrefer: Shift[];
   /** 신청 근무 날짜 및 근무 유형 리스트*/
   workRequest: DayDuty[];
   /** 간호사 특성

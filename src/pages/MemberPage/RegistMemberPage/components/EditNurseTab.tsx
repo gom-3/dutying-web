@@ -36,7 +36,7 @@ const EditNurseTab = ({
   updateNurse,
   addNurse,
 }: Props) => {
-  const { formState, shiftKind, ref, handlers } = useEditNurseTab(
+  const { formState, shiftList, ref, handlers } = useEditNurseTab(
     nurse,
     closeTab,
     isAdd,
@@ -58,12 +58,12 @@ const EditNurseTab = ({
     checkState: CheckState,
     change: (e: ChangeEvent<HTMLInputElement>) => void
   ) => {
-    const checkBoxes = shiftKind.map((shift) => {
+    const checkBoxes = shiftList.map((_, index) => {
       return (
         <input
           type="checkbox"
-          checked={checkState[shift.id] || false}
-          id={`${shift.id}`}
+          checked={checkState[index] || false}
+          id={`${index}`}
           onChange={change}
         />
       );
