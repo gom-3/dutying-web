@@ -1,9 +1,11 @@
 import AvailCheckBox from '@components/AvailCheckBox';
 import LinkState from '@components/LinkState';
 import 'index.css';
+import { useEffect, useState } from 'react';
 
 type Props = {
   nurse: Nurse;
+  updateNurse: (id: number, updatedNurse: Nurse) => void;
   edit: (nurse: Nurse) => void;
   add: () => void;
   selectNurse: (id: number) => void;
@@ -12,10 +14,32 @@ type Props = {
   rowspan?: number;
 };
 
-const NurseCard = ({ nurse, selectNurse, edit, add, isFirst, isSelected, rowspan }: Props) => {
+const NurseCard = ({
+  nurse,
+  selectNurse,
+  updateNurse,
+  edit,
+  // add,
+  isFirst,
+  isSelected,
+  rowspan,
+}: Props) => {
+  const [isChecked, setIsChecked] = useState(nurse.shiftOption);
+
   const handleNameClick = () => {
     selectNurse(nurse.id);
     edit(nurse);
+  };
+
+  const handleBoxClick = (i: number) => {
+    const temp = [...isChecked];
+    temp[i].avail = !temp[i].avail;
+    const updatedNurse: Nurse = {
+      ...nurse,
+      shiftOption: temp,
+    };
+    updateNurse(nurse.id, updatedNurse);
+    setIsChecked(temp);
   };
 
   return (
@@ -36,37 +60,26 @@ const NurseCard = ({ nurse, selectNurse, edit, add, isFirst, isSelected, rowspan
       >
         {nurse.name}
       </td>
-      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
-        <AvailCheckBox
-          isChecked
-          onClick={() => {
-            console.log('1');
-          }}
-        />
+      <td
+        onClick={() => handleBoxClick(0)}
+        className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
+      >
+        <AvailCheckBox isChecked={isChecked[0].avail} />
+      </td>
+      <td
+        onClick={() => handleBoxClick(1)}
+        className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
+      >
+        <AvailCheckBox isChecked={isChecked[1].avail} />
+      </td>
+      <td
+        onClick={() => handleBoxClick(2)}
+        className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
+      >
+        <AvailCheckBox isChecked={isChecked[2].avail} />
       </td>
       <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
-        <AvailCheckBox
-          isChecked
-          onClick={() => {
-            console.log('1');
-          }}
-        />
-      </td>
-      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
-        <AvailCheckBox
-          isChecked
-          onClick={() => {
-            console.log('1');
-          }}
-        />
-      </td>
-      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
-        <AvailCheckBox
-          isChecked
-          onClick={() => {
-            console.log('1');
-          }}
-        />
+        <AvailCheckBox isChecked />
       </td>
       <td className="h-14 w-[10.8rem] border border-b-0 border-r-0 border-sub-4 text-[1.25rem] font-normal">
         <LinkState isLinked={false} />

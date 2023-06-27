@@ -9,7 +9,7 @@ interface Props {
   proficiency: number;
 }
 
-const SingleSelectBox = ({ id, nurse, updateNurse, devide, proficiency }: Props) => {
+const ProficiencySelectBox = ({ id, nurse, updateNurse, devide, proficiency }: Props) => {
   const [currentProficiency, setCurrentProficiency] = useState(proficiency);
   const width = ['', '', 'w-[12.1875rem]', 'w-[16.875rem]', 'w-[21.5625rem]'];
 
@@ -46,4 +46,4 @@ const SingleSelectBox = ({ id, nurse, updateNurse, devide, proficiency }: Props)
   );
 };
 
-export default SingleSelectBox;
+export default ProficiencySelectBox;

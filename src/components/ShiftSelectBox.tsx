@@ -1,16 +1,27 @@
 import 'index.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
-  options: boolean[];
+  nurse: Nurse;
+  mode: 'prefer' | 'avail';
+  updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 
-const ShiftSelectBox = ({ options }: Props) => {
-  const [isSelected, setIsSelected] = useState(options);
+const ShiftSelectBox = ({ nurse, updateNurse, mode }: Props) => {
+  const [isSelected, setIsSelected] = useState(nurse.shiftOption);
+
+  useEffect(()=>{
+    setIsSelected(nurse.shiftOption);
+  }, [nurse]);
 
   const handleOnClick = (i: number) => {
     const temp = [...isSelected];
-    temp[i] = !temp[i];
+    temp[i][mode] = !temp[i][mode];
+    const updatedNurse: Nurse = {
+      ...nurse,
+      shiftOption: temp,
+    };
+    updateNurse(nurse.id, updatedNurse);
     setIsSelected(temp);
   };
 
@@ -19,7 +30,7 @@ const ShiftSelectBox = ({ options }: Props) => {
       <div
         onClick={() => handleOnClick(0)}
         className={`mr-[1.25rem] flex h-[2.8125rem] w-[5.875rem] cursor-pointer items-center justify-center rounded-[.3125rem] ${
-          isSelected[0] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
+          isSelected[0][mode] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
         } `}
       >
         데이
@@ -27,7 +38,7 @@ const ShiftSelectBox = ({ options }: Props) => {
       <div
         onClick={() => handleOnClick(1)}
         className={`mr-[1.25rem] flex h-[2.8125rem] w-[5.875rem] cursor-pointer items-center justify-center rounded-[.3125rem] ${
-          isSelected[1] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
+          isSelected[1][mode] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
         } `}
       >
         이브닝
@@ -35,7 +46,7 @@ const ShiftSelectBox = ({ options }: Props) => {
       <div
         onClick={() => handleOnClick(2)}
         className={`flex h-[2.8125rem] w-[5.875rem] cursor-pointer items-center justify-center rounded-[.3125rem] ${
-          isSelected[2] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
+          isSelected[2][mode] ? 'bg-main-2 text-white' : 'border border-sub-3 text-sub-3'
         } `}
       >
         나이트

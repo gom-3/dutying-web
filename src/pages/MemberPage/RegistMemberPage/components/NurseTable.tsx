@@ -7,9 +7,10 @@ interface Props {
   nurses: Nurse[];
   edit: (nurse: Nurse) => void;
   add: () => void;
+  updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 
-const NurseTable = ({ edit, add, nurses }: Props) => {
+const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
   const [selectedNurse, setSelectedNurse] = useState(nurses[0].id);
 
   const selectNurse = (id: number) => {
@@ -21,6 +22,7 @@ const NurseTable = ({ edit, add, nurses }: Props) => {
     const temp = nurses.filter((nurse) => nurse.proficiency === p);
     return temp.map((nurse, i) => (
       <NurseCard
+        updateNurse={updateNurse}
         edit={edit}
         add={add}
         isSelected={nurse.id === selectedNurse}
