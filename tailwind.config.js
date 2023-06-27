@@ -7,6 +7,7 @@ export default {
         '-1': '-1',
       },
       colors: {
+        'text-1': '#150B3C',
         'main-1': '#844AFF',
         'main-2': '#B08BFF',
         'main-3': '#CEB6FF',

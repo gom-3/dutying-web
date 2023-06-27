@@ -1,10 +1,41 @@
 import 'index.css';
-import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import NurseCard from './NurseCard';
-import { nurses } from '@mocks/members/data';
+import { useState } from 'react';
 
-const NurseTable = () => {
+interface Props {
+  nurses: Nurse[];
+  edit: (nurse: Nurse) => void;
+  add: () => void;
+}
+
+const NurseTable = ({ edit, add, nurses }: Props) => {
+  const [selectedNurse, setSelectedNurse] = useState(nurses[0].id);
+
+  const selectNurse = (id: number) => {
+    setSelectedNurse(id);
+  };
+
+  console.log(1);
+  const proficiencyFilter = (p: number) => {
+    const temp = nurses.filter((nurse) => nurse.proficiency === p);
+    return temp.map((nurse, i) => (
+      <NurseCard
+        edit={edit}
+        add={add}
+        isSelected={nurse.id === selectedNurse}
+        isFirst={i === 0}
+        rowspan={temp.length}
+        nurse={nurse}
+        selectNurse={selectNurse}
+      />
+    ));
+  };
+
+  const group1 = proficiencyFilter(3);
+  const group2 = proficiencyFilter(2);
+  const group3 = proficiencyFilter(1);
+
   return (
     <div className="mt-[3.875rem]">
       <table className="border-collapse rounded-[1.25rem] border-hidden text-center shadow-shadow-1">
@@ -33,40 +64,11 @@ const NurseTable = () => {
             </th>
           </tr>
         </thead>
-        {/* <SimpleBar autoHide={false} style={{ maxHeight: 540 }}> */}
         <tbody className="scroll block max-h-[34.0625rem] w-[72.6875rem] border-collapse overflow-x-hidden overflow-y-scroll rounded-b-[20px]">
-          {nurses[0].map((nurse, i) => (
-            <NurseCard
-              isFirst={i === 0}
-              rowspan={nurses[0].length}
-              nurse={nurse}
-              openTab={() => {
-                console.log('1');
-              }}
-            />
-          ))}
-          {nurses[1].map((nurse, i) => (
-            <NurseCard
-              isFirst={i === 0}
-              rowspan={nurses[1].length}
-              nurse={nurse}
-              openTab={() => {
-                console.log('1');
-              }}
-            />
-          ))}
-          {nurses[2].map((nurse, i) => (
-            <NurseCard
-              isFirst={i === 0}
-              rowspan={nurses[2].length}
-              nurse={nurse}
-              openTab={() => {
-                console.log('1');
-              }}
-            />
-          ))}
+          {group1}
+          {group2}
+          {group3}
         </tbody>
-        {/* </SimpleBar> */}
       </table>
     </div>
   );

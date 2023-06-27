@@ -31,6 +31,11 @@ type Nurse = {
    * }
    * shiftList: Shift[] 근무 유형 배열
    */
+  shiftOption: {
+    shift: Shift;
+    avail: boolean;
+    prefer: boolean;
+  }[];
   workAvailable: Shift[];
   /** 가능한 근무 리스트
    * @example
