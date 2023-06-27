@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgRequestIconSelected = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} fill="none" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 46 45" {...props}>
     <g clipPath="url(#request_icon_selected_svg__a)">
       <path fill="#844AFF" d="M38.408 38c-3.978-7.043-9.374-11-15-11-5.626 0-11.021 3.957-15 11" />
       <path

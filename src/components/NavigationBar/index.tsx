@@ -31,7 +31,6 @@ const NavigationBar = () => {
       {isFold && (
         <div className="fixed z-10 ml-[15px] mt-[10px] flex items-center bg-white font-apple text-[16px] font-medium">
           <MenuIcon className="cursor-pointer" />
-          {/* <div className=" translate-y-[2px]">{currentTab}</div> */}
         </div>
       )}
       <div
@@ -43,7 +42,7 @@ const NavigationBar = () => {
       >
         <div onClick={() => setIsFold(!isFold)}>
           <FoldIcon
-            className={`${
+            className={`h-[1.875rem] w-[1.875rem] ${
               isFold && 'left-[15px] scale-x-[-1]'
             } absolute right-[14px] top-[13px] cursor-pointer duration-300`}
           />
@@ -52,7 +51,7 @@ const NavigationBar = () => {
           onClick={() => navigate('/')}
           className="mt-[74px] flex h-[70px] w-full cursor-pointer items-center justify-center"
         >
-          {pathname === HOME ? <FullLogo /> : <FullLogoTransparent />}
+          {pathname === HOME ? <FullLogo className="w-[5.5rem]" /> : <FullLogoTransparent />}
           {pathname === HOME && (
             <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />
           )}
@@ -66,7 +65,6 @@ const NavigationBar = () => {
           />
           <div className="mt-2 ">{'곰세마리'}님</div>
         </div>
-        d
       </div>
     </div>
   );
