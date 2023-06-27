@@ -5,20 +5,30 @@ import 'index.css';
 type Props = {
   nurse: Nurse;
   openTab: (nurse: Nurse) => void;
+  isFirst: boolean;
+  rowspan?: number;
 };
 
-const NurseCard = ({ nurse, openTab }: Props) => {
+const NurseCard = ({ nurse, openTab, isFirst, rowspan }: Props) => {
   const handleEditNurseClick = () => {
     openTab(nurse);
   };
 
   return (
-    <tr className="border">
+    <tr>
+      {isFirst && (
+        <td
+          rowSpan={rowspan}
+          className="h-[3.5rem] w-[8.75rem] border border-b-0 border-l-0 border-sub-4 text-[1.25rem] font-normal"
+        >
+          3
+        </td>
+      )}
       {/* <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">1</td> */}
-      <td className="h-[56px] w-[186px] border border-sub-4 font-apple text-[20px] font-normal text-sub-1">
+      <td className="h-14 w-[11.625rem] border border-b-0 border-sub-4 font-apple text-[1.25rem] font-normal text-sub-1">
         {nurse.name}
       </td>
-      <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">
+      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
         <AvailCheckBox
           isChecked
           onClick={() => {
@@ -26,7 +36,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
           }}
         />
       </td>
-      <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">
+      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
         <AvailCheckBox
           isChecked
           onClick={() => {
@@ -34,7 +44,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
           }}
         />
       </td>
-      <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">
+      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
         <AvailCheckBox
           isChecked
           onClick={() => {
@@ -42,7 +52,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
           }}
         />
       </td>
-      <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">
+      <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
         <AvailCheckBox
           isChecked
           onClick={() => {
@@ -50,7 +60,7 @@ const NurseCard = ({ nurse, openTab }: Props) => {
           }}
         />
       </td>
-      <td className="h-[56px] w-[163px] border border-sub-4 text-[20px] font-normal">
+      <td className="h-14 w-[10.8rem] border border-b-0 border-r-0 border-sub-4 text-[1.25rem] font-normal">
         <LinkState isLinked={false} />
       </td>
     </tr>

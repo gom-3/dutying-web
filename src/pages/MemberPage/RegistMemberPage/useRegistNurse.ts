@@ -17,26 +17,26 @@ const editTabDefaultState = {
 
 const useRegistNurse = () => {
   const [editTabState, setEditTabState] = useState<EditTabState>(editTabDefaultState);
-  const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
+  const [nurses, setNurses] = useState<Nurse[][]>(tempNurse);
 
   const closeTab = () => {
     setEditTabState(editTabDefaultState);
   };
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
-    setNurses((prevNurses) => {
-      const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
-      nurseArray.sort((a, b) => a.proficiency - b.proficiency);
-      return nurseArray;
-    });
+    // setNurses((prevNurses) => {
+    //   const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
+    //   nurseArray.sort((a, b) => a.proficiency - b.proficiency);
+    //   return nurseArray;
+    // });
   };
 
   const addNurse = (newNurse: Nurse) => {
-    setNurses((prevNurses) => {
-      const nurseArray = [...prevNurses, newNurse];
-      nurseArray.sort((a, b) => a.proficiency - b.proficiency);
-      return nurseArray;
-    });
+    // setNurses((prevNurses) => {
+    //   const nurseArray = [...prevNurses, newNurse];
+    //   nurseArray.sort((a, b) => a.proficiency - b.proficiency);
+    //   return nurseArray;
+    // });
   };
 
   const openEdit = (nurse: Nurse) => {

@@ -29,6 +29,7 @@ export default {
       },
       boxShadow: {
         'shadow-1': '0px 4px 34px #EDE9F5',
+        'shadow-2': '3px 4px 20px 0px #D2C7E7',
       },
     },
   },
