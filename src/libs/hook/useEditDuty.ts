@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftKindList, duty as dummyDuty, dutyConstraint } from '@mocks/duty/data';
+import { shiftList, duty as mockDuty, dutyConstraint } from '@mocks/duty/data';
 
 export type Focus = {
   day: number;
@@ -8,21 +8,21 @@ export type Focus = {
 
 export type DayInfo = {
   /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
-  shiftList: { count: number; standard: number }[];
+  countByShiftList: { count: number; standard: number }[];
   month: number;
   day: number;
   nurse: Nurse;
 };
 
 const useEditDuty = () => {
-  const [duty, setDuty] = useState<Duty>(dummyDuty);
+  const [duty, setDuty] = useState<Duty>(mockDuty);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayDuty] = useState<DayInfo | null>(null);
   const focusedCellRef = useRef<HTMLElement>(null);
 
-  // Focus된 셀의 근무를 ShiftId를 통해 변경
+  // Focus된 셀의 근무를 ShiftIndex를 통해 변경
   const handleFocusedDutyChange = useCallback(
-    (shiftId: number) => {
+    (newShiftIndex: number) => {
       if (focus === null) return;
 
       setDuty((duty) => ({
@@ -31,8 +31,8 @@ const useEditDuty = () => {
           focus.row === index
             ? {
                 ...dutyRow,
-                shiftList: dutyRow.shiftList.map((shift, day) =>
-                  day === focus.day ? shiftId : shift
+                shiftIndexList: dutyRow.shiftIndexList.map((shiftIndex, day) =>
+                  day === focus.day ? newShiftIndex : shiftIndex
                 ),
               }
             : dutyRow
@@ -150,8 +150,8 @@ const useEditDuty = () => {
       setFocusedDayDuty({
         month: duty.month,
         day: focus.day ?? 0,
-        shiftList: shiftKindList.map((_, shiftIndex) => ({
-          count: duty.dutyRows.filter((dutyRow) => dutyRow.shiftList[focus.day] === shiftIndex)
+        countByShiftList: shiftList.map((_, shiftIndex) => ({
+          count: duty.dutyRows.filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex)
             .length,
           standard:
             duty.days[focus.day].dayKind === 'workday'
@@ -180,7 +180,7 @@ const useEditDuty = () => {
     /** 선택 대상의 셀의 ref */
     focusedCellRef,
     /** 근무 유형 */
-    shiftKindList,
+    shiftList,
     handlers: {
       /** 근무 셀 선택 */
       handleFocusChange: setFocus,

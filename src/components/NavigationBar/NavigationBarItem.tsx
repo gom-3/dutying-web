@@ -23,7 +23,9 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
         <Icon className="h-[45px] w-[45px]" />
       )}
       {<div className={`${isSelected && 'text-main-1'}`}>{text}</div>}
-      {isSelected && <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />}
+      {isSelected && (
+        <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
+      )}
     </div>
   );
 };

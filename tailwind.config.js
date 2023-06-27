@@ -16,6 +16,7 @@ export default {
         'sub-2.5': '#93939D',
         'sub-3': '#ABABB4',
         'sub-4': '#D6D6D3',
+        'sub-4.5': '#E7E7EF',
         'sub-5': '#F2F2F7',
         day: '#D7EB2A',
         evening: '#EB39E8',

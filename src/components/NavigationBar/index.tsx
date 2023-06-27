@@ -18,18 +18,10 @@ const NavigationBar = () => {
     }, 500);
   }, [isFold]);
 
-  // let currentTab: any;
-  // if (pathname === HOME) currentTab = <FullLogo />;
-  // else if (pathname === MEMBER.REGIST) currentTab = '간호사 관리';
-  // else if (pathname === DUTY.SETTING) currentTab = '근무 설정';
-  // else if (pathname === MEMBER.REQUEST) currentTab = '휴가 신청 관리';
-  // else if (pathname === DUTY.MAKE) currentTab = '근무표 만들기';
-  // else if (pathname === SETTING) currentTab = '설정';
-
   return (
     <div className="group">
       {isFold && (
-        <div className="fixed z-10 ml-[15px] mt-[10px] flex items-center bg-white font-apple text-[16px] font-medium">
+        <div className="fixed z-10 ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium">
           <MenuIcon className="cursor-pointer" />
         </div>
       )}
@@ -37,8 +29,8 @@ const NavigationBar = () => {
         className={`z-10 ${canHover && 'group-hover:translate-x-0'} ${
           !isFold ? 'sticky' : 'fixed'
         } top-0 duration-500 ease-in-out ${
-          !isFold ? '' : 'translate-x-[-161px]'
-        } left-0 flex h-screen w-[162px] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3`}
+          !isFold ? '' : 'translate-x-[-10.0625rem]'
+        } left-0 flex h-screen w-[10.125rem] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3`}
       >
         <div onClick={() => setIsFold(!isFold)}>
           <FoldIcon
@@ -49,17 +41,17 @@ const NavigationBar = () => {
         </div>
         <div
           onClick={() => navigate('/')}
-          className="mt-[74px] flex h-[70px] w-full cursor-pointer items-center justify-center"
+          className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
           {pathname === HOME ? <FullLogo className="w-[5.5rem]" /> : <FullLogoTransparent />}
           {pathname === HOME && (
-            <div className="absolute right-0 h-[72px] w-[7px] rounded-3xl bg-main-1" />
+            <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
           )}
         </div>
         <NavigationBarItemGroups />
-        <div className="absolute bottom-[30px] mt-[50px] flex cursor-pointer flex-col items-center">
+        <div className="absolute bottom-[1.875rem] mt-[3.125rem] flex cursor-pointer flex-col items-center">
           <img
-            className="h-[50px] w-[50px] rounded-full object-cover"
+            className="h-[3.125rem] w-[3.125rem] rounded-full object-cover"
             src="https://i.namu.wiki/i/GYWTca0tsaAfzBFcTsqoCt8wB_mrCGoSIoivXhaukvxQBil3JtX-BOXyEqqJRJJA7qTb-dpjv9YGfE7izuZ00Q.webp"
             alt="user-profile"
           />
