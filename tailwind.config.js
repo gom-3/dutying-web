@@ -7,6 +7,7 @@ export default {
         '-1': '-1',
       },
       colors: {
+        'text-1': '#150B3C',
         'main-1': '#844AFF',
         'main-2': '#B08BFF',
         'main-3': '#CEB6FF',
@@ -29,6 +30,7 @@ export default {
       },
       boxShadow: {
         'shadow-1': '0px 4px 34px #EDE9F5',
+        'shadow-2': '3px 4px 20px 0px #D2C7E7',
       },
     },
   },

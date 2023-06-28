@@ -22,25 +22,25 @@ const useEditNurseTab = (
   const shiftList = useShiftList();
 
   useEffect(() => {
-    let tempAvail: CheckState = {};
-    shiftList.forEach((_, index) => {
-      tempAvail = { ...tempAvail, [index]: false };
-    });
-    let tempPrefer: CheckState = {};
-    shiftList.forEach((_, index) => {
-      tempPrefer = { ...tempPrefer, [index]: false };
-    });
+    // let tempAvail: CheckState = {};
+    // shiftList.forEach((_, index) => {
+    //   tempAvail = { ...tempAvail, [index]: false };
+    // });
+    // let tempPrefer: CheckState = {};
+    // shiftList.forEach((_, index) => {
+    //   tempPrefer = { ...tempPrefer, [index]: false };
+    // });
 
-    if (isEdit) {
-      nurse.workAvailable.forEach((_, index) => (tempAvail[index] = true));
-      nurse.workPrefer.forEach((_, index) => (tempPrefer[index] = true));
-    }
-    if (isAdd) {
-      for (const key in tempAvail) tempAvail[key] = true;
-    }
+    // if (isEdit) {
+    //   nurse.workAvailable.forEach((_, index) => (tempAvail[index] = true));
+    //   nurse.workPrefer.forEach((_, index) => (tempPrefer[index] = true));
+    // }
+    // if (isAdd) {
+    //   for (const key in tempAvail) tempAvail[key] = true;
+    // }
 
-    setAvailChecked(tempAvail);
-    setPreferChecked(tempPrefer);
+    // setAvailChecked(tempAvail);
+    // setPreferChecked(tempPrefer);
   }, [shiftList]);
 
   /** 가능 근무, 선호 근무 체크리스트 업데이트 */

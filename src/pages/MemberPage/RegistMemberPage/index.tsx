@@ -1,30 +1,20 @@
 import 'index.css';
 import EditNurseTab from './components/EditNurseTab';
-import NurseCard from './components/NurseCard';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
 
+import NurseTable from './components/NurseTable';
+import NurseCount from './components/NurseCount';
+
 const RegistMemberPage = () => {
-  const { editTabState, openEdit, openAdd, nurses, closeTab, updateNurse, addNurse } =
-    useRegistNurse();
+  const { editTabState, openEdit, openAdd, nurses, updateNurse } = useRegistNurse();
 
   return (
-    <div className="w-full">
-      {editTabState.isOpen && (
-        <EditNurseTab
-          isAdd={editTabState.isAdd}
-          isEdit={editTabState.isEdit}
-          nurse={editTabState.nurse}
-          closeTab={closeTab}
-          updateNurse={updateNurse}
-          addNurse={addNurse}
-        />
-      )}
-      {nurses.map((nurse) => (
-        <NurseCard nurse={nurse} openTab={openEdit} />
-      ))}
-      <button type="button" onClick={openAdd}>
-        추가하기
-      </button>
+    <div className="p-[3.125rem] pt-[2rem]">
+      <NurseCount nurses={nurses} proficiency={3} />
+      <div className="flex items-start">
+        <NurseTable nurses={nurses} edit={openEdit} add={openAdd} updateNurse={updateNurse} />
+        <EditNurseTab nurse={editTabState.nurse} updateNurse={updateNurse} />
+      </div>
     </div>
   );
 };
