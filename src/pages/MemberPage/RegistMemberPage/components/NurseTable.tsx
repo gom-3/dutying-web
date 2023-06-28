@@ -1,5 +1,4 @@
 import 'index.css';
-import 'simplebar-react/dist/simplebar.min.css';
 import NurseCard from './NurseCard';
 import { useState } from 'react';
 
