@@ -13,7 +13,7 @@ const HomePage = () => {
         <div className="mb-[1.875rem] flex font-apple text-[2.25rem] font-normal">
           안녕하세요, <div className=" ml-2 font-medium">{'곰세마리'}님</div>
         </div>
-        <WeekController date={week.string} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
+        <WeekController week={week} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
         <div className="flex">
           <WeeklyGroupCaledndar dateArray={dateArray} />
           <MonthlyCalendar />

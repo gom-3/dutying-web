@@ -562,11 +562,19 @@ const temp = [
   ['강명구', '안재홍', '김범진', '정경화'],
 ];
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 31; i++) {
   dutyByDate.push({
     day: temp[i % 3],
     evening: temp[(i + 1) % 3],
     night: temp[(i + 2) % 3],
   });
 }
-export { dutyByDate };
+
+type DutyMonth = {
+  month: number;
+  duty: DutyDate[];
+};
+
+const dutyByMonth: DutyMonth[] = [];
+for (let i = 1; i <= 12; i++) dutyByMonth.push({ month: i, duty: dutyByDate });
+export { dutyByDate, dutyByMonth };

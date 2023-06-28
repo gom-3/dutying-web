@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-interface Week {
+export interface Week {
   start: Date;
   end: Date;
   string: string;
@@ -8,24 +8,30 @@ interface Week {
 
 const useWeekCalendar = () => {
   const [date, setDate] = useState(new Date());
-  const [week, setWeek] = useState<Week>({ start: new Date(), end: new Date(), string: '' });
+  const [week, setWeek] = useState<Week>({
+    start: new Date(),
+    end: new Date(),
+    string: '',
+  });
   const getCurrentWeek = (date: Date) => {
     const day = date.getDay();
     const diff = date.getDate() - day;
 
-    const startOfWeek = new Date(date.getFullYear(), date.getMonth(), diff);
-    const monthOfStart = startOfWeek.getMonth();
-    const endOfWeek = new Date(date.getFullYear(), date.getMonth(), diff + 6);
-    const monthOfEnd = endOfWeek.getMonth();
-    let rangeString = '';
-    if (monthOfStart === monthOfEnd) {
-      rangeString =
-        startOfWeek.toDateString().slice(4, 10) + ' - ' + endOfWeek.toDateString().slice(8, 10);
+    const start = new Date(date.getFullYear(), date.getMonth(), diff);
+    const startDate = start.getDate();
+    const startMonth = start.getMonth();
+    const end = new Date(date.getFullYear(), date.getMonth(), diff + 6);
+    const endDate = end.getDate();
+    const endMonth = end.getMonth();
+
+    let range = '';
+    if (startMonth === endMonth) {
+      range = startMonth + 1 + '월 ' + start.getDate() + '일' + ' - ' + end.getDate() + '일';
     } else {
-      rangeString =
-        startOfWeek.toDateString().slice(4, 10) + ' - ' + endOfWeek.toDateString().slice(4, 10);
+      range =
+        startMonth + 1 + '월 ' + startDate + '일' + ' - ' + (endMonth + 1) + '월 ' + endDate + '일';
     }
-    setWeek({ start: startOfWeek, end: endOfWeek, string: rangeString });
+    setWeek({ start, end, string: range });
   };
 
   useEffect(() => {
