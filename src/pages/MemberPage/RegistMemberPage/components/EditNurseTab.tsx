@@ -1,113 +1,72 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import 'index.css';
-import useEditNurseTab, { CheckState } from './useEditNurseTab';
+import ProficiencySelectBox from '@components/SingleSelectBox';
+import ShiftSelectBox from '@components/ShiftSelectBox';
 
 type Props = {
-  isEdit?: boolean;
-  isAdd?: boolean;
-  nurse?: Nurse;
-  closeTab: () => void;
+  nurse: Nurse;
   updateNurse: (id: number, updatedNurse: Nurse) => void;
-  addNurse: (newNurse: Nurse) => void;
 };
 
-const defaultProps = {
-  isEdit: false,
-  isAdd: false,
-  nurse: {
-    id: 0,
-    name: '',
-    phone: '',
-    proficiency: 1, // 숙련도
-    isConnected: false, // 연동
-    workAvailable: [],
-    workPrefer: [],
-    workRequest: [], // 신청 오프
-    trait: [],
-    accWeekendOff: 0,
-  },
-};
+const EditNurseTab = ({ nurse, updateNurse }: Props) => {
+  const [name, setName] = useState(nurse.name);
 
-const EditNurseTab = ({
-  isEdit = defaultProps.isEdit,
-  isAdd = defaultProps.isAdd,
-  nurse = defaultProps.nurse,
-  closeTab,
-  updateNurse,
-  addNurse,
-}: Props) => {
-  const { formState, shiftList, ref, handlers } = useEditNurseTab(
-    nurse,
-    closeTab,
-    isAdd,
-    isEdit,
-    updateNurse,
-    addNurse
-  );
+  useEffect(() => {
+    setName(nurse.name);
+  }, [nurse]);
 
-  const { form, availChecked, preferChecked } = formState;
-
-  const {
-    handleInputChange,
-    handleAvailCheckboxChange,
-    handlePreferCheckboxChange,
-    handleSaveButton,
-  } = handlers;
-
-  const makeShiftCheckBoxes = (
-    checkState: CheckState,
-    change: (e: ChangeEvent<HTMLInputElement>) => void
-  ) => {
-    const checkBoxes = shiftList.map((_, index) => {
-      return (
-        <input
-          type="checkbox"
-          checked={checkState[index] || false}
-          id={`${index}`}
-          onChange={change}
-        />
-      );
-    });
-    return checkBoxes;
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
 
-  const availShiftCheckBoxes = makeShiftCheckBoxes(availChecked, handleAvailCheckboxChange);
-  const preferShiftCheckBoxes = makeShiftCheckBoxes(preferChecked, handlePreferCheckboxChange);
-
   return (
-    <div ref={ref} className="absolute right-0 h-screen w-96 bg-white shadow-md">
-      <label htmlFor="name">이름</label>
-      <input
-        type="text"
-        onChange={handleInputChange}
-        value={form.name}
-        id="name"
-        placeholder="이름"
-      />
-      <label htmlFor="phone">전화번호</label>
-      <input
-        type="tel"
-        onChange={handleInputChange}
-        value={form.phone}
-        id="phone"
-        placeholder="전화번호"
-      />
-      <label htmlFor="proficiency">숙련도</label>
-      <input
-        type="number"
-        max={4}
-        min={1}
-        onChange={handleInputChange}
-        value={form.proficiency}
-        id="proficiency"
-        placeholder="숙련도"
-      />
-      {availShiftCheckBoxes}
-      {preferShiftCheckBoxes}
-      <button type="button" onClick={handleSaveButton}>
-        저장
-      </button>
-      <div onClick={closeTab}>닫기</div>
+    <div
+      style={{ height: 'calc(100vh - 19.5rem' }}
+      className="ml-[1.875rem] mt-[2.875rem] flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1"
+    >
+      <div className="m-[1.875rem] flex justify-start">
+        <div className="mr-[1.375rem] h-[3.625rem] w-[3.625rem] rounded-full bg-sub-3" />
+        <input
+          className="w-1/2 text-[2rem] font-semibold text-text-1"
+          type="text"
+          onChange={handleInputChange}
+          value={name}
+          placeholder="이름"
+        />
+      </div>
+      <div className="h-[.3125rem] w-full bg-sub-5" />
+      <div className="relative flex h-[7.875rem] w-full items-center justify-center">
+        <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
+          숙련도
+        </div>
+        <ProficiencySelectBox
+          id={nurse.id}
+          nurse={nurse}
+          updateNurse={updateNurse}
+          devide={3}
+          proficiency={nurse.proficiency}
+        />
+      </div>
+      <div className="h-[.3125rem] w-full bg-sub-5" />
+      <div className="relative flex h-[7.875rem] w-full items-center justify-center">
+        <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
+          가능 근무
+        </div>
+        <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
+          가능 근무를 모두 선택해주세요
+        </div>
+        <ShiftSelectBox nurse={nurse} mode="avail" updateNurse={updateNurse} />
+      </div>
+      <div className="h-[.3125rem] w-full bg-sub-5" />
+      <div className="relative flex h-[7.875rem] w-full items-center justify-center">
+        <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
+          선호 근무
+        </div>
+        <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
+          선호도에 따라 듀티표에 추천될 예정입니다
+        </div>
+        <ShiftSelectBox nurse={nurse} mode="prefer" updateNurse={updateNurse} />
+      </div>
     </div>
   );
 };
