@@ -6,13 +6,20 @@ import NurseTable from './components/NurseTable';
 import NurseCount from './components/NurseCount';
 
 const RegistMemberPage = () => {
-  const { nurse, openEdit, openAdd, nurses, updateNurse } = useRegistNurse();
+  const { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse } = useRegistNurse();
 
   return (
     <div className="p-[3.125rem] pt-[2rem]">
       <NurseCount nurses={nurses} proficiency={3} />
       <div className="flex items-start">
-        <NurseTable nurses={nurses} edit={openEdit} add={openAdd} updateNurse={updateNurse} />
+        <NurseTable
+          nurse={nurse}
+          nurses={nurses}
+          deleteNurse={deleteNurse}
+          edit={selectNurse}
+          addNurse={addNurse}
+          updateNurse={updateNurse}
+        />
         <EditNurseTab nurse={nurse} updateNurse={updateNurse} />
       </div>
     </div>

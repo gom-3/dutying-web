@@ -13,8 +13,6 @@ const useRegistNurse = () => {
   }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
-    console.log(id);
-    console.log(updatedNurse);
     setNurses((prevNurses) => {
       const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
       nurseArray.sort((a, b) => a.proficiency - b.proficiency);
@@ -22,14 +20,14 @@ const useRegistNurse = () => {
     });
   };
 
-  const openEdit = (nurse: Nurse) => {
+  const selectNurse = (nurse: Nurse) => {
     setNurse(nurse);
   };
 
-  const openAdd = () => {
+  const addNurse = () => {
     const temp = [...nurses].sort((a, b) => a.id - b.id);
     const newNurse: Nurse = {
-      id: temp[temp.length].id + 1,
+      id: temp[temp.length-1].id + 1,
       name: '간호사',
       proficiency: 1,
       phone: '01012341234',
@@ -45,10 +43,17 @@ const useRegistNurse = () => {
       trait: [],
       accWeekendOff: 0,
     };
+    temp.push(newNurse);
     setNurse(newNurse);
+    setNurses(temp);
   };
 
-  return { nurse, openEdit, openAdd, nurses, updateNurse };
+  const deleteNurse = (id: number) => {
+    const temp = [...nurses].filter((nurse) => nurse.id !== id);
+    setNurses(temp);
+  };
+
+  return { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse };
 };
 
 export default useRegistNurse;
