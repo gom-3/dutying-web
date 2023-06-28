@@ -1,7 +1,7 @@
 import AvailCheckBox from '@components/AvailCheckBox';
 import LinkState from '@components/LinkState';
 import 'index.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   nurse: Nurse;
