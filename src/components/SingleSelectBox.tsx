@@ -2,24 +2,23 @@ import { useEffect, useState } from 'react';
 import 'index.css';
 
 interface Props {
-  id: number;
   nurse: Nurse;
   updateNurse: (id: number, updatedNurse: Nurse) => void;
   devide: number;
-  proficiency: number;
 }
 
-const ProficiencySelectBox = ({ id, nurse, updateNurse, devide, proficiency }: Props) => {
-  const [currentProficiency, setCurrentProficiency] = useState(proficiency);
+const ProficiencySelectBox = ({ nurse, updateNurse, devide }: Props) => {
+  const [currentProficiency, setCurrentProficiency] = useState(nurse.proficiency);
   const width = ['', '', 'w-[12.1875rem]', 'w-[16.875rem]', 'w-[21.5625rem]'];
 
   useEffect(() => {
-    setCurrentProficiency(proficiency);
-  }, [proficiency]);
+    setCurrentProficiency(nurse.proficiency);
+  }, [nurse]);
 
   useEffect(() => {
     const updatedNurse = { ...nurse, proficiency: currentProficiency };
-    updateNurse(id, updatedNurse);
+    updateNurse(nurse.id, updatedNurse);
+
   }, [currentProficiency]);
 
   const handleOnClick = (i: number) => {

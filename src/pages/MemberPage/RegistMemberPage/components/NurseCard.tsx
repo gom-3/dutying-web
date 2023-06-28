@@ -1,7 +1,7 @@
 import AvailCheckBox from '@components/AvailCheckBox';
 import LinkState from '@components/LinkState';
 import 'index.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   nurse: Nurse;
@@ -19,12 +19,15 @@ const NurseCard = ({
   selectNurse,
   updateNurse,
   edit,
-  // add,
   isFirst,
   isSelected,
   rowspan,
 }: Props) => {
   const [isChecked, setIsChecked] = useState(nurse.shiftOption);
+
+  useEffect(() => {
+    setIsChecked(nurse.shiftOption);
+  }, [nurse]);
 
   const handleNameClick = () => {
     selectNurse(nurse.id);
