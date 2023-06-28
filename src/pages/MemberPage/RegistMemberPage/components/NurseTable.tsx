@@ -42,7 +42,6 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
 
   const proficiencyFilter = (p: number) => {
     const temp = nurses.filter((nurse) => nurse.proficiency === p);
-
     return temp.map((nurse, i) => (
       <NurseCard
         updateNurse={updateNurse}

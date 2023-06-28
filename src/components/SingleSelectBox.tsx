@@ -18,6 +18,7 @@ const ProficiencySelectBox = ({ nurse, updateNurse, devide }: Props) => {
   useEffect(() => {
     const updatedNurse = { ...nurse, proficiency: currentProficiency };
     updateNurse(nurse.id, updatedNurse);
+
   }, [currentProficiency]);
 
   const handleOnClick = (i: number) => {
