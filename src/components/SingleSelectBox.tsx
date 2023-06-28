@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'index.css';
 
 interface Props {
@@ -28,7 +28,7 @@ const ProficiencySelectBox = ({ id, nurse, updateNurse, devide, proficiency }: P
 
   return (
     <div className={`flex ${width[devide - 1]} mt-4 justify-between`}>
-      {Array.from({ length: devide }).map((option, i) => {
+      {Array.from({ length: devide }).map((_option, i) => {
         return (
           <div
             className={`flex h-[2.8125rem] w-[2.8125rem] cursor-pointer items-center justify-center rounded-[0.3125rem] font-poppins text-[1.25rem] ${

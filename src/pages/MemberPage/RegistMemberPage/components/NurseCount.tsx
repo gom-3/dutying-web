@@ -28,7 +28,7 @@ const NurseCount = ({ nurses, proficiency }: Props) => {
       <div className="ml-[1.25rem] flex flex-col items-center">
         <div className="mb-[1rem] font-apple text-[1rem] font-medium text-sub-2">숙련도별</div>
         <div className="flex h-[8.125rem] w-[22rem] items-center rounded-[1.25rem] bg-main-2 font-poppins text-[2.5rem] font-medium text-white shadow-shadow-2">
-          {Array.from({ length: proficiency }).map((group, i) => {
+          {Array.from({ length: proficiency }).map((_group, i) => {
             return (
               <div className="relative flex h-[6.125rem] w-[7.3rem] flex-col items-center justify-center border-r-[0.5px] last:border-r-0">
                 <div className={`absolute top-[0.1875rem] flex ${width[i]} justify-between`}>

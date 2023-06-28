@@ -20,7 +20,10 @@ const EditNurseTab = ({ nurse, updateNurse }: Props) => {
   };
 
   return (
-    <div className="ml-[1.875rem] flex h-[46.0625rem] w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1">
+    <div
+      style={{ height: 'calc(100vh - 19.5rem' }}
+      className="ml-[1.875rem] mt-[2.875rem] flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1"
+    >
       <div className="m-[1.875rem] flex justify-start">
         <div className="mr-[1.375rem] h-[3.625rem] w-[3.625rem] rounded-full bg-sub-3" />
         <input

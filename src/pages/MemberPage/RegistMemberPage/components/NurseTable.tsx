@@ -17,7 +17,6 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
     setSelectedNurse(id);
   };
 
-  console.log(1);
   const proficiencyFilter = (p: number) => {
     const temp = nurses.filter((nurse) => nurse.proficiency === p);
     return temp.map((nurse, i) => (
@@ -39,7 +38,7 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
   const group3 = proficiencyFilter(1);
 
   return (
-    <div className="mt-[3.875rem]">
+    <div className="mt-[2.875rem]">
       <table className="border-collapse rounded-[1.25rem] border-hidden text-center shadow-shadow-1">
         <thead className="block h-[3.5rem] w-[72.6875rem] rounded-[20px]">
           <tr className="rounded-[20px] bg-sub-5 font-apple font-normal text-sub-2.5">
@@ -66,7 +65,10 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
             </th>
           </tr>
         </thead>
-        <tbody className="scroll block max-h-[34.0625rem] w-[72.6875rem] border-collapse overflow-x-hidden overflow-y-scroll rounded-b-[20px]">
+        <tbody
+          style={{ maxHeight: 'calc(100vh - 23rem' }}
+          className="scroll block w-[72.6875rem] border-collapse overflow-x-hidden overflow-y-scroll rounded-b-[20px]"
+        >
           {group1}
           {group2}
           {group3}
