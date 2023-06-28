@@ -30,7 +30,6 @@ const useEditNurseTab = (
     // shiftList.forEach((_, index) => {
     //   tempPrefer = { ...tempPrefer, [index]: false };
     // });
-
     // if (isEdit) {
     //   nurse.workAvailable.forEach((_, index) => (tempAvail[index] = true));
     //   nurse.workPrefer.forEach((_, index) => (tempPrefer[index] = true));
@@ -38,7 +37,6 @@ const useEditNurseTab = (
     // if (isAdd) {
     //   for (const key in tempAvail) tempAvail[key] = true;
     // }
-
     // setAvailChecked(tempAvail);
     // setPreferChecked(tempPrefer);
   }, [shiftList]);
