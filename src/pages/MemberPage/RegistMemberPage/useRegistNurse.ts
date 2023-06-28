@@ -1,34 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { nurses as tempNurse } from '@mocks/members/data';
 import { shiftList } from '@mocks/duty/data';
 
-export type EditTabState = {
-  isOpen: boolean;
-  isEdit: boolean;
-  isAdd: boolean;
-  nurse: Nurse;
-};
-
-// const defaultNurse: Nurse = {
-//   id:
-// };
-
-const editTabDefaultState = {
-  isOpen: false,
-  isEdit: false,
-  isAdd: false,
-  nurse: tempNurse[0],
-};
-
 const useRegistNurse = () => {
-  const [editTabState, setEditTabState] = useState<EditTabState>(editTabDefaultState);
+  const [nurse, setNurse] = useState(tempNurse[0]);
   const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
 
-  const closeTab = () => {
-    setEditTabState(editTabDefaultState);
-  };
+  useEffect(() => {
+    const id = nurse.id;
+    const temp = nurses.find((n) => n.id === id);
+    setNurse(temp || nurses[0]);
+  }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
+    console.log(id);
+    console.log(updatedNurse);
     setNurses((prevNurses) => {
       const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
       nurseArray.sort((a, b) => a.proficiency - b.proficiency);
@@ -37,13 +23,9 @@ const useRegistNurse = () => {
   };
 
   const openEdit = (nurse: Nurse) => {
-    setEditTabState({
-      isOpen: true,
-      isEdit: true,
-      isAdd: false,
-      nurse: nurse,
-    });
+    setNurse(nurse);
   };
+
   const openAdd = () => {
     const temp = [...nurses].sort((a, b) => a.id - b.id);
     const newNurse: Nurse = {
@@ -63,15 +45,10 @@ const useRegistNurse = () => {
       trait: [],
       accWeekendOff: 0,
     };
-    setEditTabState({
-      isOpen: true,
-      isEdit: false,
-      isAdd: true,
-      nurse: newNurse,
-    });
+    setNurse(newNurse);
   };
 
-  return { editTabState, openEdit, openAdd, closeTab, nurses, updateNurse };
+  return { nurse, openEdit, openAdd, nurses, updateNurse };
 };
 
 export default useRegistNurse;

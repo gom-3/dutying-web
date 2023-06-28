@@ -14,9 +14,12 @@ const ShiftSelectBox = ({ nurse, updateNurse, mode }: Props) => {
     setIsSelected(nurse.shiftOption);
   }, [nurse]);
 
+  console.log(nurse, nurse.id);
+
   const handleOnClick = (i: number) => {
     const temp = [...isSelected];
     temp[i][mode] = !temp[i][mode];
+    console.log(nurse);
     const updatedNurse: Nurse = {
       ...nurse,
       shiftOption: temp,

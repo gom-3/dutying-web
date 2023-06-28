@@ -36,8 +36,21 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
   const group2 = proficiencyFilter(2);
   const group3 = proficiencyFilter(1);
 
+  console.log(nurses);
+  
   return (
-    <div className="mt-[2.875rem]">
+    <div className="mt-[1.875rem]">
+      <div className="mb-[.9375rem] flex w-full justify-between font-apple text-sub-3">
+        <div>간호사 전체 명단</div>
+        <div className="flex">
+          <div className="cursor-pointer mr-[.625rem] flex w-[3.25rem] items-center justify-center rounded-[2rem] border border-main-2 bg-white font-apple text-main-2">
+            추가
+          </div>
+          <div className="cursor-pointer mr-[.5rem] flex w-[3.25rem] items-center justify-center rounded-[2rem] border border-main-2 bg-white font-apple text-main-2">
+            삭제
+          </div>
+        </div>
+      </div>
       <table className="border-collapse rounded-[1.25rem] border-hidden text-center shadow-shadow-1">
         <thead className="block h-[3.5rem] w-[72.6875rem] rounded-[20px]">
           <tr className="rounded-[20px] bg-sub-5 font-apple font-normal text-sub-2.5">
