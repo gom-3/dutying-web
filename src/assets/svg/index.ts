@@ -19,6 +19,7 @@ export { default as PrevIcon2 } from './PrevIcon2';
 export { default as PrevIcon } from './PrevIcon';
 export { default as RequestIcon } from './RequestIcon';
 export { default as RequestIconSelected } from './RequestIconSelected';
+export { default as SelectboxArrowIcon } from './SelectboxArrowIcon';
 export { default as SettingIcon } from './SettingIcon';
 export { default as SettingIconSelected } from './SettingIconSelected';
 export { default as UnlinkedIcon } from './UnlinkedIcon';

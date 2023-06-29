@@ -2,12 +2,16 @@ import 'index.css';
 import { duty } from '@mocks/duty/data';
 import ShiftCircle from '@components/ShiftCircle';
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const days = ['일', '월', '화', '수', '목', '금', '토'];
 
-const MonthlyCalendarTable = () => {
-  const first = new Date(2023, 5, 1);
-  const last = new Date(2023, 6, 0);
-  const prevLast = new Date(2023, 5, 0).getDate();
+interface Props {
+  month: number;
+}
+
+const MonthlyCalendarTable = ({ month }: Props) => {
+  const first = new Date(2023, month, 1);
+  const last = new Date(2023, month + 1, 0);
+  const prevLast = new Date(2023, month, 0).getDate();
   const calendar = [];
   const shiftIndexList = duty.dutyRows[0].shiftIndexList;
 
@@ -29,7 +33,7 @@ const MonthlyCalendarTable = () => {
       <thead>
         <tr>
           {days.map((day) => (
-            <th className="h-[1.75rem] w-[3.4375rem] font-poppins text-[.625rem] font-normal text-main-2">
+            <th className="h-[1.75rem] w-[3.4375rem] font-apple text-[.75rem] font-normal text-main-2">
               {day}
             </th>
           ))}
