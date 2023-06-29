@@ -1,32 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { nurses as tempNurse } from '@mocks/members/data';
 import { shiftList } from '@mocks/duty/data';
 
-export type EditTabState = {
-  isOpen: boolean;
-  isEdit: boolean;
-  isAdd: boolean;
-  nurse: Nurse;
-};
-
-// const defaultNurse: Nurse = {
-//   id:
-// };
-
-const editTabDefaultState = {
-  isOpen: false,
-  isEdit: false,
-  isAdd: false,
-  nurse: tempNurse[0],
-};
-
 const useRegistNurse = () => {
-  const [editTabState, setEditTabState] = useState<EditTabState>(editTabDefaultState);
+  const [nurse, setNurse] = useState(tempNurse[0]);
   const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
 
-  const closeTab = () => {
-    setEditTabState(editTabDefaultState);
-  };
+  useEffect(() => {
+    const id = nurse.id;
+    const temp = nurses.find((n) => n.id === id);
+    setNurse(temp || nurses[0]);
+  }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
     setNurses((prevNurses) => {
@@ -36,18 +20,14 @@ const useRegistNurse = () => {
     });
   };
 
-  const openEdit = (nurse: Nurse) => {
-    setEditTabState({
-      isOpen: true,
-      isEdit: true,
-      isAdd: false,
-      nurse: nurse,
-    });
+  const selectNurse = (nurse: Nurse) => {
+    setNurse(nurse);
   };
-  const openAdd = () => {
+
+  const addNurse = () => {
     const temp = [...nurses].sort((a, b) => a.id - b.id);
     const newNurse: Nurse = {
-      id: temp[temp.length].id + 1,
+      id: temp[temp.length-1].id + 1,
       name: '간호사',
       proficiency: 1,
       phone: '01012341234',
@@ -63,15 +43,17 @@ const useRegistNurse = () => {
       trait: [],
       accWeekendOff: 0,
     };
-    setEditTabState({
-      isOpen: true,
-      isEdit: false,
-      isAdd: true,
-      nurse: newNurse,
-    });
+    temp.push(newNurse);
+    setNurse(newNurse);
+    setNurses(temp);
   };
 
-  return { editTabState, openEdit, openAdd, closeTab, nurses, updateNurse };
+  const deleteNurse = (id: number) => {
+    const temp = [...nurses].filter((nurse) => nurse.id !== id);
+    setNurses(temp);
+  };
+
+  return { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse };
 };
 
 export default useRegistNurse;

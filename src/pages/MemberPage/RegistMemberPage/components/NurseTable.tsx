@@ -1,20 +1,44 @@
 import 'index.css';
 import NurseCard from './NurseCard';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   nurses: Nurse[];
+  nurse: Nurse;
   edit: (nurse: Nurse) => void;
-  add: () => void;
+  addNurse: () => void;
+  deleteNurse: (id: number) => void;
   updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 
-const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
-  const [selectedNurse, setSelectedNurse] = useState(nurses[0].id);
+const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }: Props) => {
+  const [selectedNurse, setSelectedNurse] = useState(nurse.id);
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
+  const ref = useRef<HTMLTableSectionElement>(null);
+
+  const handleOnClickAddNurse = () => {
+    addNurse();
+    setShouldScrollToBottom(true);
+  };
+
+  const handleOnClickDeleteNurse = () => {
+    deleteNurse(nurse.id);
+  };
+
+  useEffect(() => {
+    if (shouldScrollToBottom && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+      setShouldScrollToBottom(false);
+    }
+  }, [nurses, shouldScrollToBottom]);
 
   const selectNurse = (id: number) => {
     setSelectedNurse(id);
   };
+
+  useEffect(() => {
+    setSelectedNurse(nurse.id);
+  }, [nurse]);
 
   const proficiencyFilter = (p: number) => {
     const temp = nurses.filter((nurse) => nurse.proficiency === p);
@@ -22,7 +46,7 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
       <NurseCard
         updateNurse={updateNurse}
         edit={edit}
-        add={add}
+        add={addNurse}
         isSelected={nurse.id === selectedNurse}
         isFirst={i === 0}
         rowspan={temp.length}
@@ -37,7 +61,24 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
   const group3 = proficiencyFilter(1);
 
   return (
-    <div className="mt-[2.875rem]">
+    <div className="mt-[1.875rem]">
+      <div className="mb-[.9375rem] flex w-full justify-between font-apple text-sub-3">
+        <div>간호사 전체 명단</div>
+        <div className="flex">
+          <div
+            onClick={handleOnClickAddNurse}
+            className="mr-[.625rem] flex w-[3.25rem] cursor-pointer items-center justify-center rounded-[2rem] border border-main-2 bg-white font-apple text-main-2"
+          >
+            추가
+          </div>
+          <div
+            onClick={handleOnClickDeleteNurse}
+            className="mr-[.5rem] flex w-[3.25rem] cursor-pointer items-center justify-center rounded-[2rem] border border-main-2 bg-white font-apple text-main-2"
+          >
+            삭제
+          </div>
+        </div>
+      </div>
       <table className="border-collapse rounded-[1.25rem] border-hidden text-center shadow-shadow-1">
         <thead className="block h-[3.5rem] w-[72.6875rem] rounded-[20px]">
           <tr className="rounded-[20px] bg-sub-5 font-apple font-normal text-sub-2.5">
@@ -71,6 +112,7 @@ const NurseTable = ({ edit, add, nurses, updateNurse }: Props) => {
           {group1}
           {group2}
           {group3}
+          <div ref={ref} />
         </tbody>
       </table>
     </div>
