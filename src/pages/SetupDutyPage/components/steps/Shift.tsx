@@ -32,7 +32,12 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
               className="h-[4rem] w-[4rem] text-center"
               value={shift.shortName}
               onChange={(e) =>
-                handleChangeShift(shift, index, 'name', e.target.value.slice(0, 1).toUpperCase())
+                handleChangeShift(
+                  shift,
+                  index,
+                  'shortName',
+                  e.target.value.slice(0, 1).toUpperCase()
+                )
               }
             />
           </div>

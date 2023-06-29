@@ -4,16 +4,8 @@ import useEditDuty from '@pages/MakeDutyPage/components/useEditDuty';
 import DutyCalendar from './components/DutyCalendar';
 
 const MakeDutyPage = () => {
-  const {
-    duty,
-    focus,
-    focusedDayInfo,
-    rowContainerRef,
-    foldedProficiency,
-    shiftList,
-    focusedCellRef,
-    handlers,
-  } = useEditDuty();
+  const { duty, focus, rowContainerRef, foldedProficiency, shiftList, focusedCellRef, handlers } =
+    useEditDuty();
 
   return (
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">

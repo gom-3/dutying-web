@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { shiftList, duty as mockDuty, dutyConstraint } from '@mocks/duty/data';
 
 export type Focus = {
@@ -197,7 +197,7 @@ const useEditDuty = () => {
               ? dutyConstraint.dutyStandard.workday[shiftIndex]
               : dutyConstraint.dutyStandard.weekend[shiftIndex],
         })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: duty.dutyRows.find((_, index) => index === focus.row)?.user!,
       });
     } else {
