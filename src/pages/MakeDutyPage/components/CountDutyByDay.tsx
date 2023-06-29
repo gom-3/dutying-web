@@ -44,7 +44,14 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
                   focus?.day === i && 'bg-main-4'
                 }`}
               >
-                {duty.dutyRows.filter((item) => item.shiftIndexList[i] === index + 1).length}
+                {
+                  duty.dutyRowsByProficiency
+                    .reduce(
+                      (accumulator, value) => accumulator.concat(...value.dutyRows),
+                      [] as DutyRow[]
+                    )
+                    .filter((item) => item.shiftIndexList[i] === index + 1).length
+                }
               </p>
             ))}
           </div>

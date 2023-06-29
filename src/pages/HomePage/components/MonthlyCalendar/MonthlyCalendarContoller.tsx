@@ -13,9 +13,9 @@ interface Props {
 const MonthlyCalendarController = ({ nurse, month, toNextMonth, toPrevMonth }: Props) => {
   return (
     <div className="flex w-full justify-between">
-      <div className="items-center flex">
+      <div className="flex items-center">
         <PrevIcon2 onClick={toPrevMonth} className="cursor-pointer" />
-        <div className="ml-[.9375rem] mr-[.9375rem] items-center font-poppins text-[1.5rem] font-medium text-main-1">
+        <div className="mx-[.9375rem] items-center font-poppins text-[1.5rem] font-medium text-main-1">
           {month + 1}월
         </div>
         <NextIcon2 onClick={toNextMonth} className="cursor-pointer" />

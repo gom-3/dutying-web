@@ -9,12 +9,9 @@ interface Props {
 }
 
 const WeekController = ({ week, onClickPrev, onClickNext }: Props) => {
-
   return (
     <div className="flex w-[28rem] select-none items-center justify-between">
-      <div className="flex font-poppins text-[2rem] font-medium text-main-1">
-        {week.string}
-      </div>
+      <div className="flex font-poppins text-[2rem] font-medium text-main-1">{week.string}</div>
       <div className="flex">
         <PrevIcon className="cursor-pointer" onClick={onClickPrev} />
         <NextIcon className="ml-[1.875rem] cursor-pointer" onClick={onClickNext} />

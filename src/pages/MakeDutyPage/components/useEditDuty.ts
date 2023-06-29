@@ -6,14 +6,18 @@ export type Focus = {
   proficiency: Nurse['proficiency'];
   day: number;
   row: number;
+  openTooltip: boolean;
 };
 
 export type DayInfo = {
   /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
-  countByShiftList: { count: number; standard: number }[];
+  countByShiftList: { count: number; standard: number; shift: Shift }[];
   month: number;
   day: number;
   nurse: Nurse;
+  message: string;
+  tooltipLeft: number;
+  tooltipTop: number;
 };
 
 const useEditDuty = () => {
@@ -101,7 +105,12 @@ const useEditDuty = () => {
           newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
           newRow = row;
         }
-        setFocus({ proficiency: newProficiency! || proficiency, day: newDay, row: newRow });
+        setFocus({
+          proficiency: newProficiency! || proficiency,
+          day: newDay,
+          row: newRow,
+          openTooltip: false,
+        });
       }
       if (e.key === 'ArrowRight') {
         if (day === duty.days.length - 1) {
@@ -119,7 +128,7 @@ const useEditDuty = () => {
             e.ctrlKey || e.metaKey ? duty.days.length - 1 : Math.min(duty.days.length - 1, day + 1);
           newRow = row;
         }
-        setFocus({ proficiency: newProficiency, day: newDay, row: newRow });
+        setFocus({ proficiency: newProficiency, day: newDay, row: newRow, openTooltip: false });
       }
 
       if (e.key === 'ArrowUp') {
@@ -133,7 +142,7 @@ const useEditDuty = () => {
           newDay = day;
           newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
         }
-        setFocus({ proficiency: newProficiency, day: newDay, row: newRow });
+        setFocus({ proficiency: newProficiency, day: newDay, row: newRow, openTooltip: false });
       }
 
       if (e.key === 'ArrowDown') {
@@ -152,7 +161,11 @@ const useEditDuty = () => {
                   .length - 1
               : row + 1;
         }
-        setFocus({ proficiency: newProficiency, day: newDay, row: newRow });
+        setFocus({ proficiency: newProficiency, day: newDay, row: newRow, openTooltip: false });
+      }
+
+      if (e.key === 'Space' || e.key === ' ') {
+        setFocus({ ...focus, openTooltip: !focus.openTooltip });
       }
       shiftList.forEach((shift, index) => {
         if (shift.hotKey.includes(e.key)) {
@@ -168,23 +181,23 @@ const useEditDuty = () => {
     if (focus) {
       const focusRect = focusedCellRef?.current?.getBoundingClientRect();
       const container = rowContainerRef.current;
-      if (focusRect && container) {
-        // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
-        if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
-          container.scroll({
-            left: focusRect.left + container.scrollLeft,
-          });
-        // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
-        if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
-        // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
-        if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
-          container.scroll({
-            top: focusRect.top + container.scrollTop,
-          });
-        // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
-        if (focusRect.y - container.offsetTop < 0)
-          container.scroll({ top: focusRect.top + window.scrollY - 132 });
-      }
+      if (!focusRect || !container) return;
+
+      // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
+      if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
+        container.scroll({
+          left: focusRect.left + container.scrollLeft,
+        });
+      // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
+      if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
+      // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
+      if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
+        container.scroll({
+          top: focusRect.top + container.scrollTop,
+        });
+      // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
+      if (focusRect.y - container.offsetTop < 0)
+        container.scroll({ top: focusRect.top + window.scrollY - 132 });
 
       setFocusedDayInfo({
         month: duty.month,
@@ -196,9 +209,13 @@ const useEditDuty = () => {
             duty.days[focus.day].dayKind === 'workday'
               ? dutyConstraint.dutyStandard.workday[shiftIndex]
               : dutyConstraint.dutyStandard.weekend[shiftIndex],
+          shift: shiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: duty.dutyRows.find((_, index) => index === focus.row)?.user!,
+        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
+        tooltipLeft: focusRect.x + focusRect.width / 2,
+        tooltipTop: focusRect.y + focusRect.height,
       });
     } else {
       setFocusedDayInfo(null);

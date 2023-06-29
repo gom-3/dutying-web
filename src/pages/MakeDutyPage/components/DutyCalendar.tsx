@@ -127,17 +127,22 @@ export default function DutyCalendar({
                             className={`flex h-full flex-1 items-center px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
-                            ref={
-                              isFocued
-                                ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
-                                : null
-                            }
                           >
                             <ShiftBadge
                               key={j}
                               onClick={() => {
-                                handleFocusChange?.({ proficiency, day: j, row: rowIndex });
+                                handleFocusChange?.({
+                                  proficiency,
+                                  day: j,
+                                  row: rowIndex,
+                                  openTooltip: true,
+                                });
                               }}
+                              forwardRef={
+                                isFocued
+                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                                  : null
+                              }
                               shift={shiftList[shiftIndex]}
                               className={`cursor-pointer ${
                                 isFocued && 'outline outline-[.0625rem] outline-main-1'
@@ -158,7 +163,7 @@ export default function DutyCalendar({
                         key={index}
                         className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                       >
-                        {row.shiftIndexList.filter((shiftIndex) => shiftIndex === index).length}
+                        {row.shiftIndexList.filter((shiftIndex) => shiftIndex === index + 1).length}
                       </div>
                     ))}
                     <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
