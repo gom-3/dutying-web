@@ -1,5 +1,5 @@
-export { default as CheckedIcon } from './CheckedIcon';
 export { default as ArrowDownIcon } from './ArrowDownIcon';
+export { default as CheckedIcon } from './CheckedIcon';
 export { default as DutyIcon } from './DutyIcon';
 export { default as DutyIconSelected } from './DutyIconSelected';
 export { default as FoldIcon } from './FoldIcon';
@@ -18,6 +18,7 @@ export { default as PrevIcon2 } from './PrevIcon2';
 export { default as PrevIcon } from './PrevIcon';
 export { default as RequestIcon } from './RequestIcon';
 export { default as RequestIconSelected } from './RequestIconSelected';
+export { default as SelectboxArrowIcon } from './SelectboxArrowIcon';
 export { default as SettingIcon } from './SettingIcon';
 export { default as SettingIconSelected } from './SettingIconSelected';
 export { default as UnlinkedIcon } from './UnlinkedIcon';
