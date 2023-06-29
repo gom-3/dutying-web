@@ -6,7 +6,6 @@ interface Props
     'type'
   > {
   type?: 'outline' | 'fill';
-  className?: string;
 }
 
 function Button({ type = 'fill', children, className, ...props }: Props) {

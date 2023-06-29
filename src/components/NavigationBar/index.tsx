@@ -43,7 +43,11 @@ const NavigationBar = () => {
           onClick={() => navigate('/')}
           className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
-          {pathname === HOME ? <FullLogo className="w-[5.5rem]" /> : <FullLogoTransparent />}
+          {pathname === HOME ? (
+            <FullLogo className="w-[5.625rem]" />
+          ) : (
+            <FullLogoTransparent className="w-[5.625rem]" />
+          )}
           {pathname === HOME && (
             <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
           )}
