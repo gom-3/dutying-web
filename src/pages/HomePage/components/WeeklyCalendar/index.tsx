@@ -19,8 +19,8 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
 
   return (
     <div className="relative mt-[1.625rem]">
-      <div className="absolute right-0 top-[-2.8125rem] font-poppins text-[1rem] font-light text-sub-3">
-        Weekly • Group
+      <div className="absolute right-[0.5rem] top-[-2.8125rem] font-poppins text-[1rem] font-light text-sub-3">
+        주간 달력 • 전체
       </div>
       <table
         className="border-collapse rounded-[1.25rem] border-hidden shadow-shadow-1"
