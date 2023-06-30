@@ -1,7 +1,6 @@
 import 'index.css';
 import { duty } from '@mocks/duty/data';
 import ShiftCircle from '@components/ShiftCircle';
-import { useState } from 'react';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -11,33 +10,11 @@ interface Props {
 }
 
 const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
   let currentMonth: number;
   if (weeks.length > 0) {
     currentMonth = weeks[2][2].getMonth();
   }
-
-  console.log(weeks);
-  // const first = new Date(2023, month, 1);
-  // const last = new Date(2023, month + 1, 0);
-  // const prevLast = new Date(2023, month, 0).getDate();
-  // const calendar = [];
   const shiftIndexList = duty.dutyRows[0].shiftIndexList;
-
-  // for (let i = first.getDay() - 1; i >= 0; i--) {
-  //   calendar.push(prevLast - i);
-  // }
-  // for (let i = 1; i <= last.getDate(); i++) {
-  //   calendar.push(i);
-  // }
-  // for (let i = last.getDay(); i < 6; i++) {
-  //   calendar.push(6 - i);
-  // }
-
-  // const weeks = [];
-  // while (calendar.length > 0) weeks.push(calendar.splice(0, 7));
-
-  console.log(selectedWeek);
 
   return (
     <table className="h-[24.375rem] w-full">

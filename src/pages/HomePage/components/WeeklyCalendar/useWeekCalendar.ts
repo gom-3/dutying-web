@@ -7,7 +7,6 @@ export interface Week {
 
 const useWeekCalendar = () => {
   const [date, setDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [weeks, setWeeks] = useState<Date[][]>([]);
   const [week, setWeek] = useState<Week>({
     dates: [],
@@ -17,10 +16,6 @@ const useWeekCalendar = () => {
   useEffect(() => {
     getCurrentMonth(date);
   }, [date]);
-
-  // useEffect(() => {
-  //   findCurrentWeek(date, weeks);
-  // }, [date, weeks]);
 
   /** 이번 주차를 찾는 함수. 미리 계산된 weeks에서 어떤 배열이 이번 주인지 찾는다 */
   const findCurrentWeek = (date: Date, weeks: Date[][]) => {
@@ -71,27 +66,6 @@ const useWeekCalendar = () => {
     findCurrentWeek(date, weeks);
   };
 
-  // const getCurrentWeek = (date: Date) => {
-  //   const day = date.getDay();
-  //   const diff = date.getDate() - day;
-
-  //   const start = new Date(date.getFullYear(), date.getMonth(), diff);
-  //   const startDate = start.getDate();
-  //   const startMonth = start.getMonth();
-  //   const end = new Date(date.getFullYear(), date.getMonth(), diff + 6);
-  //   const endDate = end.getDate();
-  //   const endMonth = end.getMonth();
-
-  //   let range = '';
-  //   if (startMonth === endMonth) {
-  //     range = startMonth + 1 + '월 ' + start.getDate() + '일' + ' - ' + end.getDate() + '일';
-  //   } else {
-  //     range =
-  //       startMonth + 1 + '월 ' + startDate + '일' + ' - ' + (endMonth + 1) + '월 ' + endDate + '일';
-  //   }
-  //   setWeek({ start, end, string: range });
-  // };
-
   const toPrevWeek = () => {
     const diff = date.getDate() - 7;
     const prevDate = new Date(date.getFullYear(), date.getMonth(), diff);
@@ -123,7 +97,6 @@ const useWeekCalendar = () => {
     date,
     week,
     weeks,
-    selectedDate,
     toPrevWeek,
     toNextWeek,
     toNextMonth,
