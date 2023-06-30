@@ -34,7 +34,7 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
               />
             )}
             {dutyByDate[date.getDate()][dutyKind].map((n) => (
-              <div key={n} className=" mb-1">{n}</div>
+              <div key={n} className="cursor-pointer mb-1 hover:text-main-1 hover:font-medium">{n}</div>
             ))}
           </td>
         );

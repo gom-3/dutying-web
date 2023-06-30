@@ -19,6 +19,7 @@ const HomePage = () => {
           <WeeklyGroupCaledndar dateArray={dateArray} />
           <MonthlyCalendar
             date={date}
+            week={dateArray}
             weeks={weeks}
             onClickPrev={toPrevMonth}
             onClickNext={toNextMonth}

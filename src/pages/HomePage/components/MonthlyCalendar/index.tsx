@@ -6,24 +6,14 @@ import { nurses } from '@mocks/members/data';
 
 interface Props {
   date: Date;
+  week: Date[];
   weeks: Date[][];
   onClickNext: () => void;
   onClickPrev: () => void;
 }
 
-const MonthlyCalendar = ({ date, onClickNext, onClickPrev, weeks }: Props) => {
-  const [month, setMonth] = useState(new Date().getMonth());
+const MonthlyCalendar = ({ date, onClickNext, onClickPrev, weeks, week }: Props) => {
   const [nurse, setNurse] = useState(nurses[0]);
-
-  const toNextMonth = () => {
-    if (month >= 11) setMonth(0);
-    else setMonth(month + 1);
-  };
-
-  const toPrevMonth = () => {
-    if (month <= 0) setMonth(11);
-    else setMonth(month - 1);
-  };
 
   const handleChangeNurse = (nurse: Nurse) => {
     setNurse(nurse);
@@ -41,7 +31,7 @@ const MonthlyCalendar = ({ date, onClickNext, onClickPrev, weeks }: Props) => {
         toNextMonth={onClickNext}
         toPrevMonth={onClickPrev}
       />
-      <MonthlyCalendarTable weeks={weeks} />
+      <MonthlyCalendarTable weeks={weeks} selectedWeek={week} />
     </div>
   );
 };
