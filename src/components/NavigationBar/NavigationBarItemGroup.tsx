@@ -1,6 +1,6 @@
 import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
-import { DUTY, MEMBER, SETTING } from '@libs/constant/path';
+import { DUTY, MEMBER } from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
@@ -10,8 +10,6 @@ import {
   NurseIconSelected,
   RequestIcon,
   RequestIconSelected,
-  SettingIcon,
-  SettingIconSelected,
 } from '@assets/svg';
 
 const items = [
