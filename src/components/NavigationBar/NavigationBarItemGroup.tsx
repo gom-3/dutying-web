@@ -52,6 +52,7 @@ const NavigationBarItemGroups = () => {
     <>
       {items.map((item) => (
         <NavigationBarItem
+          key={item.text}
           path={item.path}
           Icon={item.icon}
           SelectedIcon={item.selectedIcon}

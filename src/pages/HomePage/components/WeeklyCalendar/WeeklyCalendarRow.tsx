@@ -17,11 +17,13 @@ const bgColor: Color = { day: 'bg-day/10', evening: 'bg-evening/10', night: 'bg-
 
 const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) => {
   const ref = useRef(null);
+
   return (
     <tr ref={ref}>
       {dateArray.map((date) => {
         return (
           <td
+            key={date.getDate()}
             className={`relative border-[.0313rem] ${
               areSameDate(today, date) ? `${bgColor[dutyKind]} text-sub-1` : 'text-sub-2.5'
             } border-sub-4 p-[1.25rem] text-center font-apple text-[1.25rem] font-normal `}
@@ -32,7 +34,7 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
               />
             )}
             {dutyByDate[date.getDate()][dutyKind].map((n) => (
-              <div className=" mb-1">{n}</div>
+              <div key={n} className=" mb-1">{n}</div>
             ))}
           </td>
         );

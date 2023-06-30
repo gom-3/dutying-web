@@ -30,6 +30,7 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
           <tr className="rounded-[1.25rem]">
             {dateArray.map((date, i) => (
               <th
+                key={date.getDate()}
                 className={`h-[8.9375rem] w-[10.625rem] border-[.0313rem] border-sub-4 font-poppins text-[2.5rem] font-normal first:rounded-tl-[1.25rem] last:rounded-tr-[1.25rem] ${
                   areSameDate(today, date) ? 'text-sub-1' : 'text-sub-3'
                 }`}

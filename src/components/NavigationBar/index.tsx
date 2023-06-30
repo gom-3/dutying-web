@@ -23,7 +23,6 @@ const NavigationBar = () => {
       {isFold && (
         <div className="fixed z-10 ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium">
           <MenuIcon className="cursor-pointer" />
-          {/* <div className=" translate-y-[.125rem]">{currentTab}</div> */}
         </div>
       )}
       <div
