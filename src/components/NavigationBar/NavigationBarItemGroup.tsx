@@ -39,12 +39,12 @@ const items = [
     selectedIcon: DutyIconSelected,
     text: '근무표 만들기',
   },
-  {
-    path: SETTING,
-    icon: SettingIcon,
-    selectedIcon: SettingIconSelected,
-    text: '설정',
-  },
+  // {
+  //   path: SETTING,
+  //   icon: SettingIcon,
+  //   selectedIcon: SettingIconSelected,
+  //   text: '설정',
+  // },
 ];
 
 const NavigationBarItemGroups = () => {
