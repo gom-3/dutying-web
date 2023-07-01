@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react';
-const SvgPrevIcon = (props: SVGProps<SVGSVGElement>) => (
+const PrevIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} fill="none" {...props}>
     <circle cx={19.933} cy={19.933} r={19.433} stroke="#CEB6FF" />
     <path
@@ -11,4 +11,4 @@ const SvgPrevIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default SvgPrevIcon;
+export default PrevIcon;

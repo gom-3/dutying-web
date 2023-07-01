@@ -562,7 +562,7 @@ const temp = [
   ['강명구', '안재홍', '김범진', '정경화'],
 ];
 
-for (let i = 0; i < 31; i++) {
+for (let i = 1; i <= 32; i++) {
   dutyByDate.push({
     day: temp[i % 3],
     evening: temp[(i + 1) % 3],
