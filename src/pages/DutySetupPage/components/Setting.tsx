@@ -6,10 +6,10 @@ interface Props {
   value: string;
   onEdit: () => void;
   isFolded: boolean;
-  foldedInfo?: JSX.Element;
+  foldedContext?: JSX.Element;
 }
 
-const Setting = ({ name, value, onEdit, isFolded, foldedInfo }: Props) => {
+const Setting = ({ name, value, onEdit, isFolded, foldedContext }: Props) => {
   return (
     <div className="mb-[1.5625rem] flex justify-between items-center rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex">
