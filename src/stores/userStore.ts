@@ -10,7 +10,7 @@ interface Hospital {
 interface User {
   id: number;
   name: string;
-  hospitalInfo: Hospital;
+  hospital: Hospital;
 }
 
 interface UserState {
@@ -30,7 +30,7 @@ const useUserStore = create<UserState>()(
         user: {
           id: 0,
           name: '',
-          hospitalInfo: {
+          hospital: {
             hospital: '',
             ward: '',
             code: '',
@@ -39,7 +39,7 @@ const useUserStore = create<UserState>()(
         action: {
           loginUser: (user) => set(() => ({ isLoggedIn: true, user: user })),
           setHospital: (hospital) =>
-            set((state) => ({ user: { ...state.user, hospitalInfo: hospital } })),
+            set((state) => ({ user: { ...state.user, hospital: hospital } })),
         },
       }),
       {

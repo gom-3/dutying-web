@@ -3,9 +3,9 @@ import MakeDutyPage from './MakeDutyPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
 import { DUTY, HOME, LOGIN, MEMBER } from '@libs/constant/path';
-import SetupDutyPage from './SetupDutyPage';
 import HomePage from './HomePage';
 import MainLayout from '@components/MainLayout/indes';
+import DutySetupPage from './DutySetupPage';
 
 export const Router = () => {
   return (
@@ -18,7 +18,7 @@ export const Router = () => {
         </Route>
         <Route path={DUTY.ROOT}>
           <Route path={DUTY.ID} />
-          <Route path={DUTY.SETTING} element={<SetupDutyPage />} />
+          <Route path={DUTY.SETTING} element={<DutySetupPage />} />
           <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
         </Route>
       </Route>
