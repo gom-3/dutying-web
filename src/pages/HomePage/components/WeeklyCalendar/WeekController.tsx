@@ -19,6 +19,7 @@ const WeekController = ({ week, onClickPrev, onClickNext }: Props) => {
         {week.string}
       </div>
       <NextIcon className=" h-[2rem] w-[2rem] cursor-pointer" onClick={onClickNext} />
+
     </div>
   );
 };
