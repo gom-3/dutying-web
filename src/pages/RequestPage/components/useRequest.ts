@@ -10,17 +10,11 @@ export type Focus = {
 };
 
 export type DayInfo = {
-  /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
-  countByShiftList: { count: number; standard: number; shift: Shift }[];
   month: number;
   day: number;
-  nurse: Nurse;
-  message: string;
-  tooltipLeft: number;
-  tooltipTop: number;
 };
 
-const useEditDuty = () => {
+const useRequest = () => {
   const [duty, setDuty] = useState(mockDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
     Array.from({ length: dutyConstraint.levelDivision }).map(() => false)
@@ -54,10 +48,10 @@ const useEditDuty = () => {
 
       setDuty((duty) => ({
         ...duty,
-        dutyRowsByLevel: duty.dutyRowsByLevel.map((dutyRowsByProficiency) => ({
-          ...dutyRowsByProficiency,
-          dutyRows: dutyRowsByProficiency.dutyRows.map((dutyRow, index) =>
-            focus.row === index && focus.level === dutyRowsByProficiency.level
+        dutyRowsByLevel: duty.dutyRowsByLevel.map((dutyRows) => ({
+          ...dutyRows,
+          dutyRows: dutyRows.dutyRows.map((dutyRow, index) =>
+            focus.row === index && focus.level === dutyRows.level
               ? {
                   ...dutyRow,
                   shiftIndexList: dutyRow.shiftIndexList.map((shiftIndex, day) =>
@@ -82,8 +76,8 @@ const useEditDuty = () => {
 
       if (focus === null) return;
 
-      const { level, day, row } = focus;
-      const rows = duty.dutyRowsByLevel[dutyConstraint.levelDivision - level].dutyRows;
+      const { level: level, day, row } = focus;
+      const rows = duty.dutyRowsByLevel[4 - level].dutyRows;
       let newProficiency = level;
       let newDay = day;
       let newRow = row;
@@ -194,23 +188,6 @@ const useEditDuty = () => {
       setFocusedDayInfo({
         month: duty.month,
         day: focus.day ?? 0,
-        countByShiftList: shiftList.map((_, shiftIndex) => ({
-          count: duty.dutyRowsByLevel
-            .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
-            .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
-          standard:
-            duty.days[focus.day].dayKind === 'workday'
-              ? dutyConstraint.dutyStandard.workday[shiftIndex]
-              : dutyConstraint.dutyStandard.weekend[shiftIndex],
-          shift: shiftList[shiftIndex],
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: duty.dutyRowsByLevel
-          .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
-          .find((_, index) => index === focus.row)?.user!,
-        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
-        tooltipLeft: focusRect.x + focusRect.width / 2,
-        tooltipTop: focusRect.y + focusRect.height,
       });
     } else {
       setFocusedDayInfo(null);
@@ -245,4 +222,4 @@ const useEditDuty = () => {
   };
 };
 
-export default useEditDuty;
+export default useRequest;

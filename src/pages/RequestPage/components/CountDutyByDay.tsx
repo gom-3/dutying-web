@@ -1,5 +1,5 @@
 import { dutyConstraint } from '@mocks/duty/data';
-import { Focus } from './useEditDuty';
+import { Focus } from './useRequest';
 
 interface Props {
   focus: Focus | null;

@@ -1,7 +1,7 @@
 import { Focus } from '@pages/MakeDutyPage/components/useEditDuty';
 import { RefObject } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { FoldDutyIcon } from '@assets/svg';
+import { UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 
 interface Props {
@@ -11,21 +11,17 @@ interface Props {
   focus?: Focus | null;
   focusedCellRef: RefObject<HTMLElement>;
   rowContainerRef: RefObject<HTMLDivElement>;
-  foldedProficiency: boolean[];
   handleFocusChange?: (focus: Focus | null) => void;
-  handleFold: (level: number) => void;
 }
 
 export default function DutyCalendar({
   duty,
-  foldedProficiency,
   shiftList,
   isEditable,
   focus,
   focusedCellRef,
   rowContainerRef,
   handleFocusChange,
-  handleFold,
 }: Props) {
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
@@ -40,7 +36,7 @@ export default function DutyCalendar({
             이름
           </div>
           <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            이월
+            연동
           </div>
           <div className="w-[5.625rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             전달 근무
@@ -74,25 +70,12 @@ export default function DutyCalendar({
         ref={rowContainerRef}
       >
         {duty.dutyRowsByLevel.map(({ level, dutyRows }, _) => {
-          return foldedProficiency[4 - level] ? (
-            <div
-              key={_}
-              className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
-              onClick={() => handleFold(level)}
-            >
-              <p className="font-poppins text-base text-sub-2.5">{level}</p>
-              <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
-            </div>
-          ) : (
+          return (
             <div key={_} className="flex gap-[1.25rem]">
               <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
                   {level}
                 </div>
-                <FoldDutyIcon
-                  className="absolute left-[1.875rem] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
-                  onClick={() => handleFold(level)}
-                />
                 {dutyRows.map((row, rowIndex) => (
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
@@ -100,7 +83,7 @@ export default function DutyCalendar({
                       {row.user.name}
                     </div>
                     <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
-                      {row.carry}
+                      <UnlinkedIcon />
                     </div>
                     <div className="flex w-[5.625rem] gap-[.125rem]">
                       {row.lastShiftIndexList.map((shiftIndex, j) => (

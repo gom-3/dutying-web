@@ -42,24 +42,9 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
           </tr>
         </thead>
         <tbody>
-          <Row
-            dutyKind="day"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
-          <Row
-            dutyKind="evening"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
-          <Row
-            dutyKind="night"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
+          <Row dutyKind="day" today={today} dateArray={dateArray} areSameDate={areSameDate} />
+          <Row dutyKind="evening" today={today} dateArray={dateArray} areSameDate={areSameDate} />
+          <Row dutyKind="night" today={today} dateArray={dateArray} areSameDate={areSameDate} />
         </tbody>
       </table>
     </div>

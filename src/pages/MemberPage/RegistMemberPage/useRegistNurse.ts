@@ -16,7 +16,7 @@ const useRegistNurse = () => {
   const updateNurse = (id: number, updatedNurse: Nurse) => {
     setNurses((prevNurses) => {
       const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
-      nurseArray.sort((a, b) => a.proficiency - b.proficiency);
+      nurseArray.sort((a, b) => a.level - b.level);
       return nurseArray;
     });
   };
@@ -30,7 +30,7 @@ const useRegistNurse = () => {
     const newNurse: Nurse = {
       id: temp[temp.length - 1].id + 1,
       name: '간호사',
-      proficiency: 1,
+      level: 1,
       phone: '01012341234',
       isConnected: false,
       shiftOption: [

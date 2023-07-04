@@ -14,15 +14,7 @@ type Props = {
   rowspan?: number;
 };
 
-const Row = ({
-  nurse,
-  selectNurse,
-  updateNurse,
-  edit,
-  isFirst,
-  isSelected,
-  rowspan,
-}: Props) => {
+const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowspan }: Props) => {
   const [isChecked, setIsChecked] = useState(nurse.shiftOption);
 
   useEffect(() => {
@@ -52,7 +44,7 @@ const Row = ({
           rowSpan={rowspan}
           className="h-[3.5rem] w-[8.75rem] border border-b-0 border-l-0 border-sub-4 text-[1.25rem] font-normal"
         >
-          {nurse.proficiency}
+          {nurse.level}
         </td>
       )}
       <td
@@ -85,7 +77,7 @@ const Row = ({
         <CheckBox isChecked checkedText="가능" uncheckedText="불가능" />
       </td>
       <td className="h-14 w-[10.8rem] border border-b-0 border-r-0 border-sub-4 text-[1.25rem] font-normal">
-        <ConnectState isConnected={false} textVisible/>
+        <ConnectState isConnected={false} textVisible />
       </td>
     </tr>
   );
