@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #FDFCFE;
+  background-color: #fdfcfe;
   font-family: 'Public Sans';
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -38,7 +38,7 @@ body {
 .simplebar-scrollbar::before {
   background-color: rgb(255, 255, 255) !important;
   opacity: 1 !important;
-  box-shadow: 0px 1px 4px 0px #ABABB4;
+  box-shadow: 0px 1px 4px 0px #ababb4;
 }
 
 .simplebar-track .simplebar-scrollbar::before {
@@ -198,4 +198,3 @@ body {
   src: url('./assets/fonts/Poppins-Bold.ttf');
   font-weight: 900;
 }
-

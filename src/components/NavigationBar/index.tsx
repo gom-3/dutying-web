@@ -34,16 +34,20 @@ const NavigationBar = () => {
       >
         <div onClick={() => setIsFold(!isFold)}>
           <FoldIcon
-            className={`${
-              isFold && 'left-[.9375rem] scale-x-[-1]'
-            } absolute right-[.875rem] top-[.8125rem] cursor-pointer duration-300`}
+            className={`h-[1.875rem] w-[1.875rem] ${
+              isFold && 'left-[15px] scale-x-[-1]'
+            } absolute right-[14px] top-[13px] cursor-pointer duration-300`}
           />
         </div>
         <div
           onClick={() => navigate('/')}
           className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
-          {pathname === HOME ? <FullLogo /> : <FullLogoTransparent />}
+          {pathname === HOME ? (
+            <FullLogo className="w-[5.625rem]" />
+          ) : (
+            <FullLogoTransparent className="w-[5.625rem]" />
+          )}
           {pathname === HOME && (
             <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
           )}

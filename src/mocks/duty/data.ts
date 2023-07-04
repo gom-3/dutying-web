@@ -2,44 +2,45 @@ export const dutyConstraint: DutyConstraint = {
   rotation: 3,
   nightInterval: 7,
   dutyStandard: {
-    workday: [7, 3, 3, 3],
+    workday: [7, 4, 3, 3],
     weekend: [7, 3, 3, 3],
   },
   straight: [3, 4, 4, 3],
   requestDutyType: 'off',
+  proficiencyDivision: 4,
 };
 
 export const shiftList: ShiftList = [
   {
     fullname: '오프',
-    name: '/',
+    shortName: 'O',
     startTime: '00:00',
     endTime: '00:00',
-    hotKey: '/',
+    hotKey: ['/', 'o', 'O', '0'],
     color: '#5534E0',
   },
   {
     fullname: '데이',
-    name: 'D',
+    shortName: 'D',
     startTime: '07:00',
     endTime: '15:00',
-    hotKey: 'D',
+    hotKey: ['D', 'd', 'ㅇ', '1'],
     color: '#D7EB2A',
   },
   {
     fullname: '이브닝',
-    name: 'E',
+    shortName: 'E',
     startTime: '15:00',
     endTime: '23:00',
-    hotKey: 'E',
+    hotKey: ['E', 'e', 'ㄷ', '2'],
     color: '#EB39E8',
   },
   {
     fullname: '나이트',
-    name: 'N',
+    shortName: 'N',
     startTime: '23:00',
     endTime: '07:00',
-    hotKey: 'N',
+    hotKey: ['N', 'n', 'ㅜ', '3'],
     color: '#271F3E',
   },
 ];
@@ -89,7 +90,7 @@ export const duty: Duty = {
       user: {
         id: 1,
         name: '노주영',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -113,7 +114,7 @@ export const duty: Duty = {
       user: {
         id: 2,
         name: '오지현',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -137,7 +138,7 @@ export const duty: Duty = {
       user: {
         id: 3,
         name: '유가영',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -161,7 +162,7 @@ export const duty: Duty = {
       user: {
         id: 4,
         name: '윤정은',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -185,7 +186,7 @@ export const duty: Duty = {
       user: {
         id: 5,
         name: '유미현',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -209,7 +210,7 @@ export const duty: Duty = {
       user: {
         id: 6,
         name: '고선미',
-        proficiency: 3,
+        proficiency: 4,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -353,7 +354,7 @@ export const duty: Duty = {
       user: {
         id: 12,
         name: '박보람',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -377,7 +378,7 @@ export const duty: Duty = {
       user: {
         id: 13,
         name: '이지영',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -401,7 +402,7 @@ export const duty: Duty = {
       user: {
         id: 14,
         name: '김현아',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -425,7 +426,7 @@ export const duty: Duty = {
       user: {
         id: 15,
         name: '김예림',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -450,7 +451,7 @@ export const duty: Duty = {
       user: {
         id: 16,
         name: '양가연',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -475,7 +476,7 @@ export const duty: Duty = {
       user: {
         id: 17,
         name: '박초빈',
-        proficiency: 3,
+        proficiency: 2,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -500,7 +501,7 @@ export const duty: Duty = {
       user: {
         id: 18,
         name: '유아영',
-        proficiency: 3,
+        proficiency: 1,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -525,7 +526,7 @@ export const duty: Duty = {
       user: {
         id: 19,
         name: '오종욱',
-        proficiency: 3,
+        proficiency: 1,
         phone: '01012341234',
         isConnected: false,
         shiftOption: [
@@ -543,6 +544,506 @@ export const duty: Duty = {
       lastShiftIndexList: [0, 1, 1, 1],
       shiftIndexList: [
         1, 0, 0, 3, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 3, 3, 0, 0, 0, 1, 1, 2, 2, 0,
+      ],
+    },
+  ],
+  dutyRowsByProficiency: [
+    {
+      proficiency: 4,
+      dutyRows: [
+        {
+          user: {
+            id: 1,
+            name: '노주영',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            3, 3, 3, 0, 0, 1, 1, 1, 2, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 2, 0,
+            0,
+          ],
+        },
+        {
+          user: {
+            id: 2,
+            name: '오지현',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [0, 1, 2, 2],
+          shiftIndexList: [
+            2, 0, 3, 3, 3, 0, 0, 0, 2, 2, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 3, 3, 0,
+            0,
+          ],
+        },
+        {
+          user: {
+            id: 3,
+            name: '유가영',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [0, 0, 1, 1],
+          shiftIndexList: [
+            2, 2, 0, 2, 2, 3, 3, 0, 0, 1, 1, 0, 3, 3, 0, 0, 1, 1, 1, 2, 0, 0, 3, 3, 0, 0, 1, 1, 1,
+            2,
+          ],
+        },
+        {
+          user: {
+            id: 4,
+            name: '윤정은',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [3, 3, 0, 0],
+          shiftIndexList: [
+            1, 2, 2, 2, 0, 0, 2, 3, 3, 0, 0, 1, 1, 1, 2, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 3, 0,
+            0,
+          ],
+        },
+        {
+          user: {
+            id: 5,
+            name: '유미현',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [1, 0, 0, 0],
+          shiftIndexList: [
+            3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 1, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 3, 3, 0, 0, 1, 1, 1, 2,
+            0,
+          ],
+        },
+        {
+          user: {
+            id: 6,
+            name: '고선미',
+            proficiency: 4,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [0, 1, 3, 3],
+          shiftIndexList: [
+            3, 0, 0, 1, 1, 2, 2, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 3, 3, 0,
+            0,
+          ],
+        },
+      ],
+    },
+    {
+      proficiency: 3,
+      dutyRows: [
+        {
+          user: {
+            id: 7,
+            name: '조나현',
+            proficiency: 3,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [1, 1, 1, 0],
+          shiftIndexList: [
+            0, 3, 3, 0, 0, 1, 2, 2, 3, 3, 0, 0, 1, 2, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 2,
+            2,
+          ],
+        },
+        {
+          user: {
+            id: 8,
+            name: '박혜림',
+            proficiency: 3,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            3, 0, 0, 1, 1, 2, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 3, 3, 0, 0, 1,
+            1,
+          ],
+        },
+        {
+          user: {
+            id: 9,
+            name: '이수진',
+            proficiency: 3,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [3, 0, 0, 1],
+          shiftIndexList: [
+            1, 1, 1, 0, 1, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1,
+            1,
+          ],
+        },
+        {
+          user: {
+            id: 10,
+            name: '이지은',
+            proficiency: 3,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            2, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 3, 3, 0, 0, 1, 1, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 1,
+            1,
+          ],
+        },
+        {
+          user: {
+            id: 11,
+            name: '이성희',
+            proficiency: 3,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [1, 3, 3, 3],
+          shiftIndexList: [
+            0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 3, 3, 0, 0, 2, 2, 2,
+            0,
+          ],
+        },
+      ],
+    },
+    {
+      proficiency: 2,
+      dutyRows: [
+        {
+          user: {
+            id: 12,
+            name: '박보람',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            0, 1, 1, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1,
+            1,
+          ],
+        },
+        {
+          user: {
+            id: 13,
+            name: '이지영',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [0, 3, 3, 0],
+          shiftIndexList: [
+            0, 1, 2, 2, 2, 0, 1, 1, 1, 3, 3, 0, 0, 1, 1, 2, 3, 3, 0, 0, 1, 1, 1, 0, 0, 3, 3, 0, 0,
+            2,
+          ],
+        },
+        {
+          user: {
+            id: 14,
+            name: '김현아',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            2, 2, 0, 0, 0, 2, 3, 3, 0, 0, 1, 1, 1, 2, 0, 3, 3, 0, 0, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2,
+            2,
+          ],
+        },
+        {
+          user: {
+            id: 15,
+            name: '김예림',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [3, 0, 0, 2],
+          shiftIndexList: [
+            2, 2, 2, 0, 0, 1, 1, 2, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 3, 3, 0, 0, 1, 1, 1, 1, 0, 3,
+            3,
+          ],
+        },
+
+        {
+          user: {
+            id: 16,
+            name: '양가연',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 2, 0],
+          shiftIndexList: [
+            0, 0, 1, 1, 2, 2, 0, 0, 1, 2, 3, 3, 0, 0, 1, 1, 2, 2, 0, 0, 1, 3, 3, 0, 0, 0, 2, 3, 3,
+            3,
+          ],
+        },
+
+        {
+          user: {
+            id: 17,
+            name: '박초빈',
+            proficiency: 2,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            0, 0, 1, 2, 2, 3, 3, 0, 0, 1, 1, 2, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 2, 2, 2, 0, 0, 3,
+            3,
+          ],
+        },
+      ],
+    },
+    {
+      proficiency: 1,
+      dutyRows: [
+        {
+          user: {
+            id: 18,
+            name: '유아영',
+            proficiency: 1,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [2, 2, 0, 0],
+          shiftIndexList: [
+            1, 1, 2, 3, 3, 0, 0, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 2, 3,
+            3,
+          ],
+        },
+
+        {
+          user: {
+            id: 19,
+            name: '오종욱',
+            proficiency: 1,
+            phone: '01012341234',
+            isConnected: false,
+            shiftOption: [
+              { shift: shiftList[0], prefer: true, avail: true },
+              { shift: shiftList[1], prefer: false, avail: true },
+              { shift: shiftList[2], prefer: true, avail: true },
+            ],
+            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
+            workPrefer: [shiftList[1]],
+            workRequest: [],
+            trait: [],
+            accWeekendOff: 0,
+          },
+          carry: 0,
+          lastShiftIndexList: [0, 1, 1, 1],
+          shiftIndexList: [
+            1, 0, 0, 3, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 3, 3, 0, 0, 0, 1, 1, 2, 2,
+            0,
+          ],
+        },
       ],
     },
   ],

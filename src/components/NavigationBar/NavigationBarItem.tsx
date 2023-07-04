@@ -14,10 +14,14 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
 
   return (
     <div
-      className="mt-[2.9375rem] flex w-[10.0625rem] cursor-pointer flex-col items-center"
+      className={`mt-[3.125rem] flex w-[10.0625rem] cursor-pointer flex-col items-center`}
       onClick={() => navigate(path)}
     >
-      {isSelected ? <SelectedIcon /> : <Icon />}
+      {isSelected ? (
+        <SelectedIcon className="h-[45px] w-[45px]" />
+      ) : (
+        <Icon className="h-[45px] w-[45px]" />
+      )}
       {<div className={`${isSelected && 'text-main-1'}`}>{text}</div>}
       {isSelected && (
         <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
