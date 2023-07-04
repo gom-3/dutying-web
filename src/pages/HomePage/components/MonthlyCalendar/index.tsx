@@ -4,19 +4,16 @@ import MonthlyCalendarController from './MonthlyCalendarContoller';
 import { useState } from 'react';
 import { nurses } from '@mocks/members/data';
 
-const MonthlyCalendar = () => {
-  const [month, setMonth] = useState(new Date().getMonth());
+interface Props {
+  date: Date;
+  week: Date[];
+  weeks: Date[][];
+  onClickNext: () => void;
+  onClickPrev: () => void;
+}
+
+const MonthlyCalendar = ({ date, onClickNext, onClickPrev, weeks, week }: Props) => {
   const [nurse, setNurse] = useState(nurses[0]);
-
-  const toNextMonth = () => {
-    if (month >= 11) setMonth(0);
-    else setMonth(month + 1);
-  };
-
-  const toPrevMonth = () => {
-    if (month <= 0) setMonth(11);
-    else setMonth(month - 1);
-  };
 
   const handleChangeNurse = (nurse: Nurse) => {
     setNurse(nurse);
@@ -28,13 +25,13 @@ const MonthlyCalendar = () => {
         월간 달력 • 개인
       </div>
       <MonthlyCalendarController
-        month={month}
+        date={date}
         nurse={nurse}
         changeNurse={handleChangeNurse}
-        toNextMonth={toNextMonth}
-        toPrevMonth={toPrevMonth}
+        toNextMonth={onClickNext}
+        toPrevMonth={onClickPrev}
       />
-      <MonthlyCalendarTable month={month} />
+      <MonthlyCalendarTable weeks={weeks} selectedWeek={week} />
     </div>
   );
 };
