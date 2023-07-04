@@ -30,9 +30,14 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
           <div className="flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
             <TextField
               className="h-[4rem] w-[4rem] text-center"
-              value={shift.name}
+              value={shift.shortName}
               onChange={(e) =>
-                handleChangeShift(shift, index, 'name', e.target.value.slice(0, 1).toUpperCase())
+                handleChangeShift(
+                  shift,
+                  index,
+                  'shortName',
+                  e.target.value.slice(0, 1).toUpperCase()
+                )
               }
             />
           </div>

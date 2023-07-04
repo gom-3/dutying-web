@@ -10,6 +10,7 @@ const useRegistNurse = () => {
     const id = nurse.id;
     const temp = nurses.find((n) => n.id === id);
     setNurse(temp || nurses[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
@@ -27,7 +28,7 @@ const useRegistNurse = () => {
   const addNurse = () => {
     const temp = [...nurses].sort((a, b) => a.id - b.id);
     const newNurse: Nurse = {
-      id: temp[temp.length-1].id + 1,
+      id: temp[temp.length - 1].id + 1,
       name: '간호사',
       proficiency: 1,
       phone: '01012341234',

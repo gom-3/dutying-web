@@ -13,7 +13,7 @@ function MainLayout() {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex bg-[#FDFCFE]">
       <NavigationBar />
       <Outlet />
     </div>

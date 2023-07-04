@@ -1,12 +1,12 @@
 import 'index.css';
 import MonthlyCalendar from './components/MonthlyCalendar/index';
-import WeeklyGroupCaledndar from './components/WeeklyCalendar/index';
-import WeekController from './components/WeeklyCalendar/WeekController';
-import useWeekCalendar from './components/WeeklyCalendar/useWeekCalendar';
+import WeeklyCalendar from './components/WeeklyCalendar/index';
+import WeekController from './components/WeeklyCalendar/Controller';
+import useCalendar from './useCalendar';
 
 const HomePage = () => {
   const { date, week, weeks, toPrevWeek, toNextWeek, toNextMonth, toPrevMonth, dateArray } =
-    useWeekCalendar();
+    useCalendar();
 
   return (
     <div className="flex p-12">
@@ -16,7 +16,7 @@ const HomePage = () => {
         </div>
         <WeekController week={week} onClickPrev={toPrevWeek} onClickNext={toNextWeek} />
         <div className="flex">
-          <WeeklyGroupCaledndar dateArray={dateArray} />
+          <WeeklyCalendar dateArray={dateArray} />
           <MonthlyCalendar
             date={date}
             week={dateArray}

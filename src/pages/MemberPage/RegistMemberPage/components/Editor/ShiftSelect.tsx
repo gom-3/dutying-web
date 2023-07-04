@@ -7,10 +7,10 @@ interface Props {
   updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 
-const ShiftSelectBox = ({ nurse, updateNurse, mode }: Props) => {
+const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
   const [isSelected, setIsSelected] = useState(nurse.shiftOption);
 
-  useEffect(()=>{
+  useEffect(() => {
     setIsSelected(nurse.shiftOption);
   }, [nurse]);
 
@@ -55,4 +55,4 @@ const ShiftSelectBox = ({ nurse, updateNurse, mode }: Props) => {
   );
 };
 
-export default ShiftSelectBox;
+export default ShiftSelect;

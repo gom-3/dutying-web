@@ -14,11 +14,11 @@ const MonthlyCalendarController = ({ nurse, date, toNextMonth, toPrevMonth }: Pr
   return (
     <div className="flex w-full justify-between">
       <div className="flex items-center">
-        <PrevIcon2 onClick={toPrevMonth} className="cursor-pointer" />
-        <div className="ml-[.9375rem] mr-[.9375rem] items-center font-poppins text-[1.5rem] font-medium text-main-1">
+        <PrevIcon2 onClick={toPrevMonth} className="h-[1.3125rem] w-[1.3125rem] cursor-pointer" />
+        <div className="mx-[.9375rem] items-center font-poppins text-[1.5rem] font-medium text-main-1">
           {date.getMonth() + 1}월
         </div>
-        <NextIcon2 onClick={toNextMonth} className="cursor-pointer" />
+        <NextIcon2 onClick={toNextMonth} className="h-[1.3125rem] w-[1.3125rem] cursor-pointer" />
       </div>
       <div className="relative">
         <select

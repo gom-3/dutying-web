@@ -7,7 +7,7 @@ interface Props {
   devide: number;
 }
 
-const ProficiencySelectBox = ({ nurse, updateNurse, devide }: Props) => {
+const LevelSelect = ({ nurse, updateNurse, devide }: Props) => {
   const [currentProficiency, setCurrentProficiency] = useState(nurse.proficiency);
   const width = ['', '', 'w-[12.1875rem]', 'w-[16.875rem]', 'w-[21.5625rem]'];
 
@@ -18,7 +18,7 @@ const ProficiencySelectBox = ({ nurse, updateNurse, devide }: Props) => {
   useEffect(() => {
     const updatedNurse = { ...nurse, proficiency: currentProficiency };
     updateNurse(nurse.id, updatedNurse);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentProficiency]);
 
   const handleOnClick = (i: number) => {
@@ -45,4 +45,4 @@ const ProficiencySelectBox = ({ nurse, updateNurse, devide }: Props) => {
   );
 };
 
-export default ProficiencySelectBox;
+export default LevelSelect;

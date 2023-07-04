@@ -1,6 +1,6 @@
 import 'index.css';
 import { useRef } from 'react';
-import WeeklyCalendarRow from './WeeklyCalendarRow';
+import Row from './Row';
 
 interface Props {
   dateArray: Date[];
@@ -42,19 +42,19 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
           </tr>
         </thead>
         <tbody>
-          <WeeklyCalendarRow
+          <Row
             dutyKind="day"
             today={today}
             dateArray={dateArray}
             areSameDate={areSameDate}
           />
-          <WeeklyCalendarRow
+          <Row
             dutyKind="evening"
             today={today}
             dateArray={dateArray}
             areSameDate={areSameDate}
           />
-          <WeeklyCalendarRow
+          <Row
             dutyKind="night"
             today={today}
             dateArray={dateArray}

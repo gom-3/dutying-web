@@ -1,6 +1,13 @@
 import type { SVGProps } from 'react';
 const PrevIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} fill="none" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={40}
+    height={40}
+    viewBox="0 0 40 40"
+    fill="none"
+    {...props}
+  >
     <circle cx={19.933} cy={19.933} r={19.433} stroke="#CEB6FF" />
     <path
       stroke="#CEB6FF"

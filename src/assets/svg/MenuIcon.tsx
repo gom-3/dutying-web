@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgMenuIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={31} height={30} fill="none" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 31 30" {...props}>
     <g
       stroke="#ABABB4"
       strokeLinecap="round"
