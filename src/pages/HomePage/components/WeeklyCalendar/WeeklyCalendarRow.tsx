@@ -21,6 +21,15 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
   return (
     <tr ref={ref}>
       {dateArray.map((date) => {
+        const nurses = dutyByDate[date.getDate()] ? (
+          dutyByDate[date.getDate()][dutyKind].map((n) => (
+            <div key={n} className="mb-1 cursor-pointer hover:font-medium hover:text-main-1">
+              {n}
+            </div>
+          ))
+        ) : (
+          <div>-</div>
+        );
         return (
           <td
             key={date.getDate()}
@@ -33,9 +42,7 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
                 className={`${color[dutyKind]} absolute left-0 top-0 h-full w-[.375rem] translate-x-[-50%] rounded-2xl`}
               />
             )}
-            {dutyByDate[date.getDate()][dutyKind].map((n) => (
-              <div key={n} className="cursor-pointer mb-1 hover:text-main-1 hover:font-medium">{n}</div>
-            ))}
+            {nurses}
           </td>
         );
       })}
