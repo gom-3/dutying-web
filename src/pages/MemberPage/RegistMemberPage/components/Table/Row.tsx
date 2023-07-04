@@ -58,7 +58,7 @@ const Row = ({
       <td
         onClick={handleNameClick}
         className={`${
-          isSelected ? 'border-2 border-b-2 border-main-2 bg-main-2/10' : ''
+          isSelected ? 'border-2 border-main-2 bg-main-2/10' : ''
         } h-14 w-[11.625rem] cursor-pointer border border-b-0 border-sub-4 font-apple text-[1.25rem] font-normal text-sub-1`}
       >
         {nurse.name}

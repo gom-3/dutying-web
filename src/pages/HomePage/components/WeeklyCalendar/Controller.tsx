@@ -15,11 +15,10 @@ const WeekController = ({ week, onClickPrev, onClickNext }: Props) => {
         {week.dates[0] ? week.dates[0].getFullYear() : 2023}
       </div>
       <PrevIcon className="ml-[2.8125rem] h-[2rem] w-[2rem] cursor-pointer" onClick={onClickPrev} />
-      <div className="ml-[1.25rem] mr-[1.25rem] flex font-poppins text-[2rem] font-medium text-main-1">
+      <div className="mx-[1.25rem] flex font-poppins text-[2rem] font-medium text-main-1">
         {week.string}
       </div>
       <NextIcon className=" h-[2rem] w-[2rem] cursor-pointer" onClick={onClickNext} />
-
     </div>
   );
 };

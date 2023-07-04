@@ -6,7 +6,6 @@ interface Props
     HTMLSelectElement
   > {
   options?: { value: string | number; label: React.ReactNode }[];
-  className?: string;
 }
 
 function Select({ value, onChange, options, className, ...props }: Props) {

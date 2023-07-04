@@ -1,13 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgNextIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={41}
-    height={40}
-    viewBox="0 0 41 40"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 41 40" {...props}>
     <circle cx={20.799} cy={19.933} r={19.433} stroke="#CEB6FF" />
     <g clipPath="url(#next_icon_svg__a)">
       <path

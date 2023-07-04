@@ -2,6 +2,7 @@ export { default as ArrowDownIcon } from './ArrowDownIcon';
 export { default as CheckedIcon } from './CheckedIcon';
 export { default as DutyIcon } from './DutyIcon';
 export { default as DutyIconSelected } from './DutyIconSelected';
+export { default as FoldDutyIcon } from './FoldDutyIcon';
 export { default as FoldIcon } from './FoldIcon';
 export { default as FullLogo } from './FullLogo';
 export { default as FullLogoTransparent } from './FullLogoTransparent';

@@ -27,7 +27,6 @@ const Editor = ({ nurse, updateNurse }: Props) => {
         className="flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1"
       >
         <div className="m-[1.875rem] flex justify-start">
-          <div className="mr-[1.375rem] h-[3.625rem] w-[3.625rem] rounded-full bg-sub-3" />
           <input
             className="w-1/2 text-[2rem] font-semibold text-text-1"
             type="text"
@@ -41,11 +40,7 @@ const Editor = ({ nurse, updateNurse }: Props) => {
           <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
             숙련도
           </div>
-          <LevelSelect
-            nurse={nurse}
-            updateNurse={updateNurse}
-            devide={3}
-          />
+          <LevelSelect nurse={nurse} updateNurse={updateNurse} devide={3} />
         </div>
         <div className="h-[.3125rem] w-full bg-sub-5" />
         <div className="relative flex h-[7.875rem] w-full items-center justify-center">
