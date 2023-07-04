@@ -1,6 +1,6 @@
 import { NextIcon, PrevIcon } from '@assets/svg';
 import 'index.css';
-import { Week } from './useWeekCalendar';
+import { Week } from '../../useCalendar';
 
 interface Props {
   week: Week;
@@ -14,11 +14,11 @@ const WeekController = ({ week, onClickPrev, onClickNext }: Props) => {
       <div className="flex font-poppins text-[2rem] font-medium text-main-1">
         {week.dates[0] ? week.dates[0].getFullYear() : 2023}
       </div>
-      <PrevIcon className="ml-[2.8125rem] cursor-pointer" onClick={onClickPrev} />
+      <PrevIcon className="ml-[2.8125rem] h-[2rem] w-[2rem] cursor-pointer" onClick={onClickPrev} />
       <div className="mx-[1.25rem] flex font-poppins text-[2rem] font-medium text-main-1">
         {week.string}
       </div>
-      <NextIcon className="ml-[1.875rem] cursor-pointer" onClick={onClickNext} />
+      <NextIcon className=" h-[2rem] w-[2rem] cursor-pointer" onClick={onClickNext} />
     </div>
   );
 };

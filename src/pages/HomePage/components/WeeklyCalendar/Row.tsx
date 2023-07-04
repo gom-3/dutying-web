@@ -15,12 +15,21 @@ interface Color {
 const color: Color = { day: 'bg-day', evening: 'bg-evening', night: 'bg-night' };
 const bgColor: Color = { day: 'bg-day/10', evening: 'bg-evening/10', night: 'bg-night/10' };
 
-const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) => {
+const Row = ({ dutyKind, today, dateArray, areSameDate }: Props) => {
   const ref = useRef(null);
 
   return (
     <tr ref={ref}>
       {dateArray.map((date) => {
+        const nurses = dutyByDate[date.getDate()] ? (
+          dutyByDate[date.getDate()][dutyKind].map((n) => (
+            <div key={n} className="mb-1 cursor-pointer hover:font-medium hover:text-main-1">
+              {n}
+            </div>
+          ))
+        ) : (
+          <div>-</div>
+        );
         return (
           <td
             key={date.getDate()}
@@ -33,11 +42,7 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
                 className={`${color[dutyKind]} absolute left-0 top-0 h-full w-[.375rem] translate-x-[-50%] rounded-2xl`}
               />
             )}
-            {dutyByDate[date.getDate()][dutyKind].map((n) => (
-              <div key={n} className="mb-1 cursor-pointer hover:font-medium hover:text-main-1">
-                {n}
-              </div>
-            ))}
+            {nurses}
           </td>
         );
       })}
@@ -45,4 +50,4 @@ const WeeklyCalendarRow = ({ dutyKind, today, dateArray, areSameDate }: Props) =
   );
 };
 
-export default WeeklyCalendarRow;
+export default Row;

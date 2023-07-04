@@ -1,5 +1,5 @@
 import 'index.css';
-import NurseCard from './NurseCard';
+import Row from './Row';
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
@@ -43,7 +43,7 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
   const proficiencyFilter = (p: number) => {
     const temp = nurses.filter((nurse) => nurse.proficiency === p);
     return temp.map((nurse, i) => (
-      <NurseCard
+      <Row
         updateNurse={updateNurse}
         edit={edit}
         add={addNurse}

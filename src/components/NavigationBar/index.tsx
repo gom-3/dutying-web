@@ -22,7 +22,7 @@ const NavigationBar = () => {
     <div className="group">
       {isFold && (
         <div className="fixed z-10 ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium">
-          <MenuIcon className="cursor-pointer" />
+          <MenuIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
         </div>
       )}
       <div
@@ -34,9 +34,9 @@ const NavigationBar = () => {
       >
         <div onClick={() => setIsFold(!isFold)}>
           <FoldIcon
-            className={`h-[1.875rem] w-[1.875rem] ${
-              isFold && 'left-[15px] scale-x-[-1]'
-            } absolute right-[14px] top-[13px] cursor-pointer duration-300`}
+            className={`${
+              isFold && 'left-[.9375rem] scale-x-[-1]'
+            } absolute right-[.875rem] top-[.8125rem] h-[1.875rem] w-[1.875rem] cursor-pointer duration-300`}
           />
         </div>
         <div
@@ -44,9 +44,9 @@ const NavigationBar = () => {
           className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
           {pathname === HOME ? (
-            <FullLogo className="w-[5.625rem]" />
+            <FullLogo className="h-[1.5625rem] w-[5.6875rem]" />
           ) : (
-            <FullLogoTransparent className="w-[5.625rem]" />
+            <FullLogoTransparent className="h-[1.5625rem] w-[5.6875rem]" />
           )}
           {pathname === HOME && (
             <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />

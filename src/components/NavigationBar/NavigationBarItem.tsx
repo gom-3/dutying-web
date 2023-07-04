@@ -18,9 +18,9 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
       onClick={() => navigate(path)}
     >
       {isSelected ? (
-        <SelectedIcon className="h-[45px] w-[45px]" />
+        <SelectedIcon className="h-[2.8125rem] w-[2.8125rem]" />
       ) : (
-        <Icon className="h-[45px] w-[45px]" />
+        <Icon className="h-[2.8125rem] w-[2.8125rem]" />
       )}
       {<div className={`${isSelected && 'text-main-1'}`}>{text}</div>}
       {isSelected && (

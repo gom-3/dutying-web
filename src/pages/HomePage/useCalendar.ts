@@ -6,7 +6,7 @@ export interface Week {
   string: string;
 }
 
-const useWeekCalendar = () => {
+const useCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [weeks, setWeeks] = useState<Date[][]>([]);
   const [week, setWeek] = useState<Week>({
@@ -106,4 +106,4 @@ const useWeekCalendar = () => {
   };
 };
 
-export default useWeekCalendar;
+export default useCalendar;
