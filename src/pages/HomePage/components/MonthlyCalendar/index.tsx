@@ -1,6 +1,6 @@
 import 'index.css';
-import MonthlyCalendarTable from './MonthlyCalendarTable';
-import MonthlyCalendarController from './MonthlyCalendarContoller';
+import Calendar from './Calendar';
+import Controller from './Controller';
 import { useState } from 'react';
 import { nurses } from '@mocks/members/data';
 
@@ -24,14 +24,14 @@ const MonthlyCalendar = ({ date, onClickNext, onClickPrev, weeks, week }: Props)
       <div className="absolute right-[0.5rem] top-[-2.8125rem] font-poppins text-[1rem] font-light text-sub-3">
         월간 달력 • 개인
       </div>
-      <MonthlyCalendarController
+      <Controller
         date={date}
         nurse={nurse}
         changeNurse={handleChangeNurse}
         toNextMonth={onClickNext}
         toPrevMonth={onClickPrev}
       />
-      <MonthlyCalendarTable weeks={weeks} selectedWeek={week} />
+      <Calendar weeks={weeks} selectedWeek={week} />
     </div>
   );
 };

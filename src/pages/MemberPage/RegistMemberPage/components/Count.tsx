@@ -7,7 +7,7 @@ interface Props {
 
 const width = ['w-[0.375rem]', 'w-[0.9375rem]', 'w-[1.5rem]', 'w-[0.9375rem]'];
 
-const NurseCount = ({ nurses, proficiency }: Props) => {
+const Count = ({ nurses, proficiency }: Props) => {
   const countAll = nurses.length;
 
   const dots = (num: number) => {
@@ -47,4 +47,4 @@ const NurseCount = ({ nurses, proficiency }: Props) => {
   );
 };
 
-export default NurseCount;
+export default Count;

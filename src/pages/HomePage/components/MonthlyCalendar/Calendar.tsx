@@ -53,7 +53,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
                       {day.getDate()}
                     </div>
                     <ShiftCircle
-                      isCurrent={isCurrentMonth}
+                      translucent={!isCurrentMonth}
                       id={shiftIndexList[day.getDate() - 1]}
                     />
                   </td>

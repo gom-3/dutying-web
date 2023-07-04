@@ -1,6 +1,6 @@
 import { NextIcon, PrevIcon } from '@assets/svg';
 import 'index.css';
-import { Week } from './useWeekCalendar';
+import { Week } from '../../useCalendar';
 
 interface Props {
   week: Week;
