@@ -47,7 +47,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
                 return (
                   <td
                     key={day.getDate()}
-                    className="relative h-[4.125rem] w-[3.4375rem] border-t border-sub-4"
+                    className="relative h-[4.125rem] w-[3.4375rem] border-t border-sub-4 "
                   >
                     <div className="absolute left-[.375rem] top-[.3125rem] font-poppins text-[.5625rem] font-light text-sub-3">
                       {day.getDate()}

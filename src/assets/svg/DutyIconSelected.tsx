@@ -1,6 +1,13 @@
 import type { SVGProps } from 'react';
 const SvgDutyIconSelected = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} fill="none" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={45}
+    height={45}
+    viewBox="0 0 45 45"
+    fill="none"
+    {...props}
+  >
     <g
       stroke="#844AFF"
       strokeLinecap="round"

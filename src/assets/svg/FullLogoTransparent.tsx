@@ -5,6 +5,7 @@ const SvgFullLogoTransparent = (props: SVGProps<SVGSVGElement>) => (
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={92}
     height={26}
+    viewBox="0 0 92 26"
     fill="none"
     {...props}
   >
