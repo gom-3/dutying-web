@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, requestDuty as mockRequestDuty, dutyConstraint } from '@mocks/duty/data';
+import { shiftList, requestDuty as mockRequestDuty, mockDutyStandard } from '@mocks/duty/data';
+import { mockWard } from '@mocks/ward/data';
 
 export type Focus = {
   level: Nurse['level'];
@@ -23,7 +24,7 @@ export type DayInfo = {
 const useRequest = () => {
   const [requestDuty, setRequestDuty] = useState(mockRequestDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
-    Array.from({ length: dutyConstraint.levelDivision }).map(() => false)
+    Array.from({ length: mockWard.levelDivision }).map(() => false)
   );
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
@@ -35,12 +36,12 @@ const useRequest = () => {
       console.log(foldedProficiency);
       console.log(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.levelDivision - level ? !isFolded : isFolded
+          index === mockWard.levelDivision - level ? !isFolded : isFolded
         )
       );
       setFoldedProficiency(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.levelDivision - level ? !isFolded : isFolded
+          index === mockWard.levelDivision - level ? !isFolded : isFolded
         )
       );
     },
@@ -83,7 +84,7 @@ const useRequest = () => {
       if (focus === null) return;
 
       const { level, day, row } = focus;
-      const rows = requestDuty.requestRowsByLevel[dutyConstraint.levelDivision - level].dutyRows;
+      const rows = requestDuty.requestRowsByLevel[mockWard.levelDivision - level].dutyRows;
       let newProficiency = level;
       let newDay = day;
       let newRow = row;
@@ -91,7 +92,7 @@ const useRequest = () => {
       if (e.key === 'ArrowLeft') {
         if (day === 0) {
           if (row === 0) {
-            newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
+            newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
             newDay = requestDuty.days.length - 1;
             newRow =
               requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
@@ -114,7 +115,7 @@ const useRequest = () => {
       if (e.key === 'ArrowRight') {
         if (day === requestDuty.days.length - 1) {
           if (row === rows.length - 1) {
-            newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
+            newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
             newDay = 0;
             newRow = 0;
           } else {
@@ -133,7 +134,7 @@ const useRequest = () => {
 
       if (e.key === 'ArrowUp') {
         if (row === 0) {
-          newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
+          newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
           newDay = day;
           newRow =
             requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
@@ -150,7 +151,7 @@ const useRequest = () => {
           row ===
           requestDuty.requestRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1
         ) {
-          newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
+          newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
           newDay = day;
           newRow = 0;
         } else {
@@ -208,8 +209,8 @@ const useRequest = () => {
             .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
           standard:
             requestDuty.days[focus.day].dayKind === 'workday'
-              ? dutyConstraint.dutyStandard.workday[shiftIndex]
-              : dutyConstraint.dutyStandard.weekend[shiftIndex],
+              ? mockDutyStandard.workday[shiftIndex]
+              : mockDutyStandard.weekend[shiftIndex],
           shift: shiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
