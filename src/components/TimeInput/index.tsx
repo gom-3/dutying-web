@@ -55,7 +55,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
     return true;
   };
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     console.log({ lastValue: lastValue.current, value });
 
@@ -81,7 +81,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
   return (
     <input
       value={time}
-      onChange={onChangeHandler}
+      onChange={HandleChange}
       className={twMerge(
         'rounded-[.625rem] px-[1.5625rem] font-poppins text-[2.25rem] outline outline-1 outline-sub-4 focus:text-main-1 focus:outline-main-1',
         className
