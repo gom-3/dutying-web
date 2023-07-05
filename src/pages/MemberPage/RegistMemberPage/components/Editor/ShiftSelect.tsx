@@ -3,15 +3,17 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   nurse: Nurse;
-  mode: 'prefer' | 'avail';
+  mode: 'isPrefer' | 'isPossible';
   updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 
 const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
-  const [isSelected, setIsSelected] = useState(nurse.shiftOption);
+  const [isSelected, setIsSelected] = useState(nurse.nurseShiftTypes);
+
+  console.log(nurse, isSelected);
 
   useEffect(() => {
-    setIsSelected(nurse.shiftOption);
+    setIsSelected(nurse.nurseShiftTypes);
   }, [nurse]);
 
   const handleOnClick = (i: number) => {
@@ -19,9 +21,9 @@ const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
     temp[i][mode] = !temp[i][mode];
     const updatedNurse: Nurse = {
       ...nurse,
-      shiftOption: temp,
+      nurseShiftTypes: temp,
     };
-    updateNurse(nurse.id, updatedNurse);
+    updateNurse(nurse.nurseId, updatedNurse);
     setIsSelected(temp);
   };
 

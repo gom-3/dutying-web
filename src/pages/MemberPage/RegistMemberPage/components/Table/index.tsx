@@ -12,9 +12,11 @@ interface Props {
 }
 
 const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }: Props) => {
-  const [selectedNurse, setSelectedNurse] = useState(nurse.id);
+  const [selectedNurse, setSelectedNurse] = useState(nurse.nurseId);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
   const ref = useRef<HTMLTableSectionElement>(null);
+
+  console.log(nurses);
 
   const handleOnClickAddNurse = () => {
     addNurse();
@@ -22,7 +24,7 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
   };
 
   const handleOnClickDeleteNurse = () => {
-    deleteNurse(nurse.id);
+    deleteNurse(nurse.nurseId);
   };
 
   useEffect(() => {
@@ -37,17 +39,17 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
   };
 
   useEffect(() => {
-    setSelectedNurse(nurse.id);
+    setSelectedNurse(nurse.nurseId);
   }, [nurse]);
 
   const proficiencyFilter = (p: number) => {
-    const temp = nurses.filter((nurse) => nurse.proficiency === p);
+    const temp = nurses.filter((nurse) => nurse.level === p);
     return temp.map((nurse, i) => (
       <Row
         updateNurse={updateNurse}
         edit={edit}
         add={addNurse}
-        isSelected={nurse.id === selectedNurse}
+        isSelected={nurse.nurseId === selectedNurse}
         isFirst={i === 0}
         rowspan={temp.length}
         nurse={nurse}

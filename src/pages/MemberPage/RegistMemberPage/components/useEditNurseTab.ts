@@ -69,11 +69,6 @@ const useEditNurseTab = (
     }));
   };
 
-  const handleSaveButton = () => {
-    if (isAdd) addNurse(form);
-    if (isEdit) updateNurse(form.id, form);
-  };
-
   return {
     formState: { form, availChecked, preferChecked },
     shiftList,
@@ -82,7 +77,6 @@ const useEditNurseTab = (
       handleAvailCheckboxChange,
       handlePreferCheckboxChange,
       handleInputChange,
-      handleSaveButton,
     },
   };
 };

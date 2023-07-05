@@ -1,14 +1,15 @@
 import axios from 'axios';
+import { refreshToken } from './login';
 
-const client = axios.create({
-  baseURL: '?',
+const axiosInstance = axios.create({
+  baseURL: 'https://650c3613-c7e5-47e1-a0d9-9b96530e30bf.mock.pstmn.io',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 // 응답 인터셉터 처리
-client.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   // Data가 있으면 바로 반환하고 없으면 response를 반환
   (response) => {
     if (response && response.data) {
@@ -26,6 +27,8 @@ client.interceptors.response.use(
         };
       }
       if (error.response.status === 401) {
+        // 토큰 만료되었을 때 refreshToken으로 accessToken 재발급
+        refreshToken();
         return {
           code: '401',
           message: '401',
@@ -48,4 +51,4 @@ client.interceptors.response.use(
   }
 );
 
-export default client;
+export default axiosInstance;

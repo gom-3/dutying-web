@@ -8,11 +8,17 @@ type DayDuty = {
 
 type Nurse = {
   /** 간호사 id */
-  id: number;
+  nurseId: number;
+  /** 계정 id */
+  accountId: number | null;
+  /** 병동 id */
+  wardId: number;
+  /** 간호 조무사 */
+  isAssistant: boolean;
   /** 간호사 이름 */
   name: string;
   /** 간호사 전화번호 */
-  phone: string;
+  phoneNumber: string | null;
   /** 간호사 숙련도
    * @example
    * 숙련도 구분이 3일 때
@@ -20,9 +26,9 @@ type Nurse = {
    * 2 : 서브 차지 간호사(3-5년차)
    * 3 : 차지 간호사(5년 이상)
    * */
-  proficiency: number;
+  level: number;
   /** 간호사 연동 여부 */
-  isConnected: boolean;
+  connStatus: boolean;
   /** 가능한 근무 리스트
    * @example
    * {...
@@ -31,22 +37,13 @@ type Nurse = {
    * }
    * shiftList: Shift[] 근무 유형 배열
    */
-  shiftOption: {
-    shift: Shift;
-    avail: boolean;
-    prefer: boolean;
+  nurseShiftTypes: {
+    nurseShiftTypeId: number;
+    name: string;
+    abbr: string;
+    isPossible: boolean;
+    isPrefer: boolean;
   }[];
-  workAvailable: Shift[];
-  /** 가능한 근무 리스트
-   * @example
-   * {...
-   * workPrefer: [shiftList[1], shiftList[3]],
-   * ...
-   * }
-   * shiftList: ShiftList 근무 유형 배열
-   */
-  workPrefer: Shift[];
-  /** 신청 근무 날짜 및 근무 유형 리스트*/
   workRequest: DayDuty[];
   /** 간호사 특성
    * @example 임산부, 연차 사용 선호 등
