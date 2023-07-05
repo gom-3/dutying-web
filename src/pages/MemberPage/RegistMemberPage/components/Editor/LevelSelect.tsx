@@ -8,15 +8,15 @@ interface Props {
 }
 
 const LevelSelect = ({ nurse, updateNurse, devide }: Props) => {
-  const [currentProficiency, setCurrentProficiency] = useState(nurse.proficiency);
+  const [currentProficiency, setCurrentProficiency] = useState(nurse.level);
   const width = ['', '', 'w-[12.1875rem]', 'w-[16.875rem]', 'w-[21.5625rem]'];
 
   useEffect(() => {
-    setCurrentProficiency(nurse.proficiency);
+    setCurrentProficiency(nurse.level);
   }, [nurse]);
 
   useEffect(() => {
-    const updatedNurse = { ...nurse, proficiency: currentProficiency };
+    const updatedNurse: Nurse = { ...nurse, level: currentProficiency };
     updateNurse(nurse.id, updatedNurse);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentProficiency]);

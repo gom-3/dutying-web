@@ -9,7 +9,7 @@ const RegistMemberPage = () => {
 
   return (
     <div className="p-[3.125rem] pt-[2rem]">
-      <Count nurses={nurses} proficiency={3} />
+      <Count nurses={nurses} level={3} />
       <div className="flex items-start">
         <Table
           nurse={nurse}

@@ -4,7 +4,7 @@ export const nurses: Nurse[] = [
   {
     id: 1,
     name: '노주영',
-    proficiency: 3,
+    level: 3,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -21,7 +21,7 @@ export const nurses: Nurse[] = [
   {
     id: 2,
     name: '오지현',
-    proficiency: 3,
+    level: 3,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -38,7 +38,7 @@ export const nurses: Nurse[] = [
   {
     id: 3,
     name: '유가영',
-    proficiency: 3,
+    level: 3,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -55,7 +55,7 @@ export const nurses: Nurse[] = [
   {
     id: 4,
     name: '윤정은',
-    proficiency: 3,
+    level: 3,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -72,7 +72,7 @@ export const nurses: Nurse[] = [
   {
     id: 5,
     name: '김미향',
-    proficiency: 3,
+    level: 3,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -89,7 +89,7 @@ export const nurses: Nurse[] = [
   {
     id: 6,
     name: '문은식',
-    proficiency: 2,
+    level: 2,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -106,7 +106,7 @@ export const nurses: Nurse[] = [
   {
     id: 7,
     name: '김인우',
-    proficiency: 2,
+    level: 2,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -123,7 +123,7 @@ export const nurses: Nurse[] = [
   {
     id: 8,
     name: '김은숙',
-    proficiency: 2,
+    level: 2,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -140,7 +140,7 @@ export const nurses: Nurse[] = [
   {
     id: 9,
     name: '김찬규',
-    proficiency: 1,
+    level: 1,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -157,7 +157,7 @@ export const nurses: Nurse[] = [
   {
     id: 10,
     name: '황인서',
-    proficiency: 1,
+    level: 1,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -174,7 +174,7 @@ export const nurses: Nurse[] = [
   {
     id: 11,
     name: '박은미',
-    proficiency: 1,
+    level: 1,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
@@ -191,7 +191,7 @@ export const nurses: Nurse[] = [
   {
     id: 12,
     name: '강성현',
-    proficiency: 1,
+    level: 1,
     phone: '01012341234',
     isConnected: false,
     shiftOption: [
