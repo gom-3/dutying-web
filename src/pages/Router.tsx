@@ -7,6 +7,7 @@ import SetupDutyPage from './SetupDutyPage';
 import HomePage from './HomePage';
 import MainLayout from '@components/MainLayout/indes';
 import OnboardingPage from './OnboardingPage';
+import RequestPage from './RequestPage';
 
 export const Router = () => {
   return (
@@ -16,6 +17,7 @@ export const Router = () => {
         <Route path={LOGIN} element={<LoginPage />} />
         <Route path={MEMBER.ROOT}>
           <Route path={MEMBER.REGIST} element={<RegistMemberPage />} />
+          <Route path={MEMBER.REQUEST} element={<RequestPage />} />
         </Route>
         <Route path={DUTY.ROOT}>
           <Route path={DUTY.ID} />

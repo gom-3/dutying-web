@@ -44,7 +44,7 @@ const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowsp
           rowSpan={rowspan}
           className="h-[3.5rem] w-[8.75rem] border border-b-0 border-l-0 border-sub-4 text-[1.25rem] font-normal"
         >
-          {nurse.proficiency}
+          {nurse.level}
         </td>
       )}
       <td

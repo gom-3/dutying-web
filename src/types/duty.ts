@@ -11,7 +11,7 @@ type Shift = {
   /** 근무 종료 시간 @example 15:00 */
   endTime: string;
   /** 근무 입력 단축키 @example ['D', 'd', 'ㅇ', '1']*/
-  hotKey: string[];
+  hotKey: Array<string>;
   /** 근무 표시 색상 */
   color: string;
 };
@@ -29,13 +29,11 @@ type Duty = {
   /** 근무표의 월 */
   month: number;
   /** 지난달 근무표의 날짜들 */
-  lastDays: Day[];
+  lastDays: Array<Day>;
   /** 이번달 근무표의 날짜들 */
-  days: Day[];
-  /** 듀티표에서 간호사별(한 행) 근무 데이터 */
-  dutyRows: DutyRow[];
+  days: Array<Day>;
   /** 숙련도별 간호사 근무데이터 */
-  dutyRowsByProficiency: { proficiency: number; dutyRows: DutyRow[] }[];
+  dutyRowsByLevel: Array<{ level: number; dutyRows: Array<DutyRow> }>;
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */

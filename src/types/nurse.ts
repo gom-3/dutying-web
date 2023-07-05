@@ -20,7 +20,7 @@ type Nurse = {
    * 2 : 서브 차지 간호사(3-5년차)
    * 3 : 차지 간호사(5년 이상)
    * */
-  proficiency: number;
+  level: number;
   /** 간호사 연동 여부 */
   isConnected: boolean;
   /** 가능한 근무 리스트
@@ -54,4 +54,11 @@ type Nurse = {
   trait: string[];
   /** 주말 오프 누적 카운트 */
   accWeekendOff: number;
+};
+
+type RequestDuty = Omit<Duty, 'dutyRowsByLevel'> & {
+  requestRowsByLevel: Array<{
+    level: number;
+    dutyRows: Array<DutyRow>;
+  }>;
 };
