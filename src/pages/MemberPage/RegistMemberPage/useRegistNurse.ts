@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { nurses as tempNurse } from '@mocks/members/data';
+import { nurses as tempNurse } from '@mocks/nurse/data';
 import { shiftList } from '@mocks/duty/data';
 
 const useRegistNurse = () => {

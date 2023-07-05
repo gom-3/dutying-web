@@ -1,13 +1,9 @@
-export const dutyConstraint: DutyConstraint = {
-  rotation: 3,
-  nightInterval: 7,
-  dutyStandard: {
-    workday: [7, 4, 3, 3],
-    weekend: [7, 3, 3, 3],
-  },
-  straight: [3, 4, 4, 3],
-  requestDutyType: 'off',
-  levelDivision: 4,
+export const mockDutyStandard: {
+  workday: number[];
+  weekend: number[];
+} = {
+  workday: [4, 3, 3, 3],
+  weekend: [3, 3, 3, 3],
 };
 
 export const shiftList: ShiftList = [

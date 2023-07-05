@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import TextField from '@components/TextField';
+import TimeInput from '@components/TimeInput';
 
 interface ContentsProps {
   shiftList: ShiftList;
@@ -8,28 +9,25 @@ interface ContentsProps {
 
 function Contents({ shiftList, setShiftList }: ContentsProps) {
   const handleChangeShift = (shift: Shift, shiftIndex: number, key: keyof Shift, value: string) => {
-    setShiftList(shiftList.map((_, i) => (i === shiftIndex + 1 ? { ...shift, [key]: value } : _)));
+    setShiftList(shiftList.map((_, i) => (i === shiftIndex ? { ...shift, [key]: value } : _)));
   };
 
   return (
-    <div className="mt-[3.125rem] w-[76%]">
-      <div className="mb-[.6875rem] flex h-[3.125rem] items-center rounded-[3.875rem] bg-sub-4.5">
+    <div className="h-fit rounded-[1.25rem]">
+      <div className="mb-[.6875rem] flex h-[3.125rem] items-center rounded-t-[1.25rem] bg-sub-4.5">
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">근무 명</p>
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">약자</p>
-        <p className="flex-[3] text-center font-apple text-[1.5rem] text-sub-2.5">근무 시간</p>
+        <p className="flex-[2] text-center font-apple text-[1.5rem] text-sub-2.5">근무 시간</p>
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">색상</p>
       </div>
-      {shiftList.slice(1).map((shift, index) => (
-        <div
-          key={index}
-          className="mb-[1.25rem] flex h-[9.1875rem] items-center rounded-[1.25rem] bg-white shadow-[0rem_.25rem_2.125rem_#EDE9F5] last:mb-0"
-        >
-          <div className="flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+      {shiftList.map((shift, index) => (
+        <div key={index} className="flex h-[9.1875rem] items-center">
+          <div className="flex flex-1 items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
             {shift.fullname}
           </div>
-          <div className="flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+          <div className="flex flex-1 items-center justify-center">
             <TextField
-              className="h-[4rem] w-[4rem] text-center"
+              className="h-[4rem] w-[4rem] px-0 text-center font-poppins text-[2.25rem] font-normal text-sub-2.5"
               value={shift.shortName}
               onChange={(e) =>
                 handleChangeShift(
@@ -41,19 +39,17 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
               }
             />
           </div>
-          <div className="flex flex-[3] items-center justify-center gap-[1.125rem] font-apple text-[2.25rem] font-semibold text-sub-2.5">
-            <TextField
-              className="h-[4rem] w-[15rem] pl-2"
-              value={shift.startTime}
-              type="time"
-              onChange={(e) => handleChangeShift(shift, index, 'startTime', e.target.value)}
+          <div className="flex flex-[2] items-center justify-center gap-[1.125rem] text-sub-2.5">
+            <TimeInput
+              className="h-[4rem] w-[9.375rem] text-center"
+              initTime={shift.startTime}
+              onTimeChange={(value) => handleChangeShift(shift, index, 'startTime', value || '')}
             />
             <p>~</p>
-            <TextField
-              className="h-[4rem] w-[15rem] pl-2"
-              value={shift.endTime}
-              type="time"
-              onChange={(e) => handleChangeShift(shift, index, 'endTime', e.target.value)}
+            <TimeInput
+              className="h-[4rem] w-[9.375rem] text-center"
+              initTime={shift.endTime}
+              onTimeChange={(value) => handleChangeShift(shift, index, 'endTime', value || '')}
             />
           </div>
           <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">

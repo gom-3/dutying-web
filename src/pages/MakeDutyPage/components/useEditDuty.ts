@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, duty as mockDuty, dutyConstraint } from '@mocks/duty/data';
+import { shiftList, duty as mockDuty, mockDutyStandard } from '@mocks/duty/data';
+import { mockWard } from '@mocks/ward/data';
 
 export type Focus = {
   level: Nurse['level'];
@@ -23,7 +24,7 @@ export type DayInfo = {
 const useEditDuty = () => {
   const [duty, setDuty] = useState(mockDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
-    Array.from({ length: dutyConstraint.levelDivision }).map(() => false)
+    Array.from({ length: mockWard.levelDivision }).map(() => false)
   );
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
@@ -35,12 +36,12 @@ const useEditDuty = () => {
       console.log(foldedProficiency);
       console.log(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.levelDivision - level ? !isFolded : isFolded
+          index === mockWard.levelDivision - level ? !isFolded : isFolded
         )
       );
       setFoldedProficiency(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.levelDivision - level ? !isFolded : isFolded
+          index === mockWard.levelDivision - level ? !isFolded : isFolded
         )
       );
     },
@@ -83,7 +84,7 @@ const useEditDuty = () => {
       if (focus === null) return;
 
       const { level, day, row } = focus;
-      const rows = duty.dutyRowsByLevel[dutyConstraint.levelDivision - level].dutyRows;
+      const rows = duty.dutyRowsByLevel[mockWard.levelDivision - level].dutyRows;
       let newProficiency = level;
       let newDay = day;
       let newRow = row;
@@ -91,7 +92,7 @@ const useEditDuty = () => {
       if (e.key === 'ArrowLeft') {
         if (day === 0) {
           if (row === 0) {
-            newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
+            newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
             newDay = duty.days.length - 1;
             newRow =
               duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
@@ -113,7 +114,7 @@ const useEditDuty = () => {
       if (e.key === 'ArrowRight') {
         if (day === duty.days.length - 1) {
           if (row === rows.length - 1) {
-            newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
+            newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
             newDay = 0;
             newRow = 0;
           } else {
@@ -130,7 +131,7 @@ const useEditDuty = () => {
 
       if (e.key === 'ArrowUp') {
         if (row === 0) {
-          newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
+          newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
           newDay = day;
           newRow =
             duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
@@ -143,7 +144,7 @@ const useEditDuty = () => {
 
       if (e.key === 'ArrowDown') {
         if (row === duty.dutyRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1) {
-          newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
+          newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
           newDay = day;
           newRow = 0;
         } else {
@@ -200,8 +201,8 @@ const useEditDuty = () => {
             .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
           standard:
             duty.days[focus.day].dayKind === 'workday'
-              ? dutyConstraint.dutyStandard.workday[shiftIndex]
-              : dutyConstraint.dutyStandard.weekend[shiftIndex],
+              ? mockDutyStandard.workday[shiftIndex]
+              : mockDutyStandard.weekend[shiftIndex],
           shift: shiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
