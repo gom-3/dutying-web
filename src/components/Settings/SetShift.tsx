@@ -13,7 +13,7 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
   };
 
   return (
-    <div className="rounded-[1.25rem]">
+    <div className="h-fit rounded-[1.25rem]">
       <div className="mb-[.6875rem] flex h-[3.125rem] items-center rounded-t-[1.25rem] bg-sub-4.5">
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">근무 명</p>
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">약자</p>

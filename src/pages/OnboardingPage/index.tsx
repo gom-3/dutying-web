@@ -13,7 +13,7 @@ function OnboardingPage() {
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>
       <Stepper steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-      <div className="mt-[1.875rem] min-h-[22rem] w-full rounded-[1.25rem] bg-white shadow-[0rem_.25rem_2.125rem_#EDE9F5]">
+      <div className="mt-[1.875rem] min-h-[22rem] w-full shrink-0 rounded-[1.25rem] bg-white shadow-[0rem_.25rem_2.125rem_#EDE9F5]">
         {steps[currentStep].contents}
       </div>
       <Actions steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />

@@ -15,6 +15,7 @@ function Stepper({ steps, currentStep, setCurrentStep }: Props) {
 
         return (
           <div
+            key={item.name}
             className={`flex h-[3.125rem] flex-1 items-center rounded-[.625rem] border-[.0938rem] px-[20px] py-[10px] font-apple text-[1.25rem] font-bold ${
               isActive
                 ? 'border-main-1 bg-main-1 text-white'
