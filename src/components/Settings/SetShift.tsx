@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
-import 'react-time-picker/dist/TimePicker.css';
 
 interface ContentsProps {
   shiftList: ShiftList;

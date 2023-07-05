@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import SetShift from './steps/SetShift';
-import SetWard from './steps/SetWard';
 import { shiftList as mockShiftList } from '@mocks/duty/data';
 import { mockWard } from '@mocks/ward/data';
-import SetDivision from './steps/SetDivision';
-import SetStraight from './steps/SetStraight';
+import { SetDivision, SetShift, SetStraight, SetWard } from '@components/Settings';
 
 export type Step = {
   name: string;
