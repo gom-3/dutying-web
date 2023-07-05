@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, duty as mockDuty, dutyConstraint } from '@mocks/duty/data';
+import { shiftList, duty as mockDuty, mockDutyStandard } from '@mocks/duty/data';
+import { mockWard } from '@mocks/ward/data';
 
 export type Focus = {
   proficiency: Nurse['proficiency'];
@@ -23,7 +24,7 @@ export type DayInfo = {
 const useEditDuty = () => {
   const [duty, setDuty] = useState(mockDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
-    Array.from({ length: dutyConstraint.proficiencyDivision }).map(() => false)
+    Array.from({ length: mockWard.levelDivision }).map(() => false)
   );
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
@@ -35,12 +36,12 @@ const useEditDuty = () => {
       console.log(foldedProficiency);
       console.log(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.proficiencyDivision - proficiency ? !isFolded : isFolded
+          index === mockWard.levelDivision - proficiency ? !isFolded : isFolded
         )
       );
       setFoldedProficiency(
         foldedProficiency.map((isFolded, index) =>
-          index === dutyConstraint.proficiencyDivision - proficiency ? !isFolded : isFolded
+          index === mockWard.levelDivision - proficiency ? !isFolded : isFolded
         )
       );
     },
@@ -91,8 +92,7 @@ const useEditDuty = () => {
       if (e.key === 'ArrowLeft') {
         if (day === 0) {
           if (row === 0) {
-            newProficiency =
-              proficiency === dutyConstraint.proficiencyDivision ? 1 : proficiency + 1;
+            newProficiency = proficiency === mockWard.levelDivision ? 1 : proficiency + 1;
             newDay = duty.days.length - 1;
             newRow =
               duty.dutyRowsByProficiency.find((x) => x.proficiency === newProficiency)!.dutyRows
@@ -115,8 +115,7 @@ const useEditDuty = () => {
       if (e.key === 'ArrowRight') {
         if (day === duty.days.length - 1) {
           if (row === rows.length - 1) {
-            newProficiency =
-              proficiency === 1 ? dutyConstraint.proficiencyDivision : proficiency - 1;
+            newProficiency = proficiency === 1 ? mockWard.levelDivision : proficiency - 1;
             newDay = 0;
             newRow = 0;
           } else {
@@ -133,7 +132,7 @@ const useEditDuty = () => {
 
       if (e.key === 'ArrowUp') {
         if (row === 0) {
-          newProficiency = proficiency === dutyConstraint.proficiencyDivision ? 1 : proficiency + 1;
+          newProficiency = proficiency === mockWard.levelDivision ? 1 : proficiency + 1;
           newDay = day;
           newRow =
             duty.dutyRowsByProficiency.find((x) => x.proficiency === newProficiency)!.dutyRows
@@ -150,7 +149,7 @@ const useEditDuty = () => {
           row ===
           duty.dutyRowsByProficiency.find((x) => x.proficiency === proficiency)!.dutyRows.length - 1
         ) {
-          newProficiency = proficiency === 1 ? dutyConstraint.proficiencyDivision : proficiency - 1;
+          newProficiency = proficiency === 1 ? mockWard.levelDivision : proficiency - 1;
           newDay = day;
           newRow = 0;
         } else {
@@ -207,8 +206,8 @@ const useEditDuty = () => {
             .length,
           standard:
             duty.days[focus.day].dayKind === 'workday'
-              ? dutyConstraint.dutyStandard.workday[shiftIndex]
-              : dutyConstraint.dutyStandard.weekend[shiftIndex],
+              ? mockDutyStandard.workday[shiftIndex]
+              : mockDutyStandard.weekend[shiftIndex],
           shift: shiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
