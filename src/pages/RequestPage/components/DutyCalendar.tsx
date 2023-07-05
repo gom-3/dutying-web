@@ -12,6 +12,7 @@ interface Props {
   focusedCellRef: RefObject<HTMLElement>;
   rowContainerRef: RefObject<HTMLDivElement>;
   handleFocusChange?: (focus: Focus | null) => void;
+  selectedNurse: Nurse | null;
 }
 
 export default function DutyCalendar({
@@ -22,6 +23,7 @@ export default function DutyCalendar({
   focusedCellRef,
   rowContainerRef,
   handleFocusChange,
+  selectedNurse,
 }: Props) {
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
@@ -67,7 +69,9 @@ export default function DutyCalendar({
                 {dutyRows.map((row, rowIndex) => (
                   <div
                     key={rowIndex}
-                    className="flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] hover:bg-main-4"
+                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] hover:bg-main-4 ${
+                      selectedNurse?.id === row.user.id && 'bg-main-4'
+                    }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div className="w-[3.375rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">

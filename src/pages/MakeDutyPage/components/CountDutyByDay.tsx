@@ -46,10 +46,7 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
               >
                 {
                   duty.dutyRowsByLevel
-                    .reduce(
-                      (accumulator, value) => accumulator.concat(...value.dutyRows),
-                      [] as DutyRow[]
-                    )
+                    .flatMap((row) => row.dutyRows)
                     .filter((item) => item.shiftIndexList[i] === index + 1).length
                 }
               </p>

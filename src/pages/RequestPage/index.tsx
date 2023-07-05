@@ -9,7 +9,11 @@ const RequestPage = () => {
 
   return (
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">
-      <Toolbar requestDuty={requestDuty} />
+      <Toolbar
+        requestDuty={requestDuty}
+        selectedNurse={selectedNurse}
+        setSelectedNurse={setSelectedNurse}
+      />
       <DutyCalendar
         duty={{ ...requestDuty, dutyRowsByLevel: requestDuty.requestRowsByLevel } as Duty}
         shiftList={shiftList}
@@ -18,6 +22,7 @@ const RequestPage = () => {
         focusedCellRef={focusedCellRef}
         rowContainerRef={rowContainerRef}
         handleFocusChange={handlers.handleFocusChange}
+        selectedNurse={selectedNurse}
       />
     </div>
   );

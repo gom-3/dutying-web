@@ -16,9 +16,12 @@ function Select({ value, onChange, options, className, ...props }: Props) {
       <select
         value={value}
         onChange={onChange}
-        className="relative z-10 h-full w-full appearance-none rounded-[.625rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-1"
+        className="relative z-10 h-full w-full appearance-none rounded-[.625rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-2"
         {...props}
       >
+        <option disabled value="">
+          이름 검색
+        </option>
         {options?.map((option, _) => (
           <option key={_} value={option.value}>
             {option.label}

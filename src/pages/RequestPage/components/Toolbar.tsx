@@ -4,15 +4,24 @@ import Select from '@components/Select';
 
 interface Props {
   requestDuty: RequestDuty;
+  selectedNurse: Nurse | null;
+  setSelectedNurse: (nurse: Nurse | null) => void;
 }
 
-function Toolbar({ requestDuty }: Props) {
+function Toolbar({ requestDuty, selectedNurse, setSelectedNurse }: Props) {
+  const spreadDuty = requestDuty.requestRowsByLevel.flatMap((row) => row.dutyRows);
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Select
-        options={[{ label: '황인서', value: '황인서' }]}
-        className="absolute left-[.125rem] h-[2.1875rem] w-[10.1875rem] rounded-[.625rem] outline-main-1"
-      />
+        value={selectedNurse?.id || ''}
+        options={spreadDuty.map((rows) => ({ label: rows.user.name, value: rows.user.id }))}
+        onChange={(e) =>
+          setSelectedNurse(
+            spreadDuty.find((rows) => rows.user.id === parseInt(e.target.value))?.user || null
+          )
+        }
+        className="absolute left-[.125rem] h-[2.1875rem] w-[10.1875rem]"
+      ></Select>
       <div className="w-[3.375rem]"></div>
       <div className="w-[3.375rem]"></div>
       <div className="w-[1.875rem]"></div>

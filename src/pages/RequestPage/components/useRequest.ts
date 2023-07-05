@@ -204,7 +204,7 @@ const useRequest = () => {
         day: focus.day ?? 0,
         countByShiftList: shiftList.map((_, shiftIndex) => ({
           count: requestDuty.requestRowsByLevel
-            .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
+            .flatMap((row) => row.dutyRows)
             .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
           standard:
             requestDuty.days[focus.day].dayKind === 'workday'
@@ -214,7 +214,7 @@ const useRequest = () => {
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: requestDuty.requestRowsByLevel
-          .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
+          .flatMap((row) => row.dutyRows)
           .find((_, index) => index === focus.row)?.user!,
         message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
         tooltipLeft: focusRect.x + focusRect.width / 2,
