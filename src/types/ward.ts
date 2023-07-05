@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 type Ward = {
-  /** 병원 이름 */
-  hospitalName: string;
+  /** 병동 id */
+  id: number;
   /** 병동 이름 */
-  wardName: string;
+  name: string;
   /** 병상 수 */
   bedCnt: number;
   /** 간호사 수 */
@@ -23,4 +23,13 @@ type Ward = {
   nightInterval: number;
   /** 숙련도 구분 수 @example 3~6 */
   levelDivision: number;
+  /** 병원 정보 */
+  hospital: Hospital;
+};
+
+type Hospital = {
+  /** 병원 id */
+  id: number;
+  /** 병원 이름 */
+  name: string;
 };

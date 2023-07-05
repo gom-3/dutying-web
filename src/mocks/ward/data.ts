@@ -1,6 +1,6 @@
 export const mockWard: Ward = {
-  hospitalName: '곰',
-  wardName: '네마리',
+  id: 123,
+  name: '네마리',
   bedCnt: 60,
   nurseCnt: 20,
   code: 'DWE453AS',
@@ -9,4 +9,8 @@ export const mockWard: Ward = {
   straightNonNight: 5,
   straightNight: 3,
   levelDivision: 4,
+  hospital: {
+    id: 1,
+    name: '곰',
+  },
 };
