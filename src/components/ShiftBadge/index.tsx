@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 
 interface Props
   extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  shift: Shift;
+  shift: Shift | null;
   forwardRef?: Ref<HTMLDivElement>;
 }
 
@@ -15,10 +15,10 @@ function ShiftBadge({ shift, className, forwardRef, ...props }: Props) {
         className
       )}
       ref={forwardRef}
-      style={{ backgroundColor: shift.color }}
+      style={{ backgroundColor: shift ? shift.color : '#D6D6DE' }}
       {...props}
     >
-      {shift.shortName}
+      {shift ? shift.shortName : '-'}
     </div>
   );
 }

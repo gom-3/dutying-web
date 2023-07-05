@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, duty as mockDuty, dutyConstraint } from '@mocks/duty/data';
+import { shiftList, requestDuty as mockRequestDuty, dutyConstraint } from '@mocks/duty/data';
 
 export type Focus = {
   level: Nurse['level'];
@@ -10,12 +10,18 @@ export type Focus = {
 };
 
 export type DayInfo = {
+  /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
+  countByShiftList: { count: number; standard: number; shift: Shift }[];
   month: number;
   day: number;
+  nurse: Nurse;
+  message: string;
+  tooltipLeft: number;
+  tooltipTop: number;
 };
 
 const useRequest = () => {
-  const [duty, setDuty] = useState(mockDuty);
+  const [requestDuty, setRequestDuty] = useState(mockRequestDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
     Array.from({ length: dutyConstraint.levelDivision }).map(() => false)
   );
@@ -46,12 +52,12 @@ const useRequest = () => {
     (newShiftIndex: number) => {
       if (focus === null) return;
 
-      setDuty((duty) => ({
+      setRequestDuty((duty) => ({
         ...duty,
-        dutyRowsByLevel: duty.dutyRowsByLevel.map((dutyRows) => ({
-          ...dutyRows,
-          dutyRows: dutyRows.dutyRows.map((dutyRow, index) =>
-            focus.row === index && focus.level === dutyRows.level
+        requestRowsByLevel: duty.requestRowsByLevel.map((dutyRowsByProficiency) => ({
+          ...dutyRowsByProficiency,
+          dutyRows: dutyRowsByProficiency.dutyRows.map((dutyRow, index) =>
+            focus.row === index && focus.level === dutyRowsByProficiency.level
               ? {
                   ...dutyRow,
                   shiftIndexList: dutyRow.shiftIndexList.map((shiftIndex, day) =>
@@ -76,8 +82,8 @@ const useRequest = () => {
 
       if (focus === null) return;
 
-      const { level: level, day, row } = focus;
-      const rows = duty.dutyRowsByLevel[4 - level].dutyRows;
+      const { level, day, row } = focus;
+      const rows = requestDuty.requestRowsByLevel[dutyConstraint.levelDivision - level].dutyRows;
       let newProficiency = level;
       let newDay = day;
       let newRow = row;
@@ -86,11 +92,12 @@ const useRequest = () => {
         if (day === 0) {
           if (row === 0) {
             newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
-            newDay = duty.days.length - 1;
+            newDay = requestDuty.days.length - 1;
             newRow =
-              duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
+              requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+                .length - 1;
           } else {
-            newDay = duty.days.length - 1;
+            newDay = requestDuty.days.length - 1;
             newRow = row - 1;
           }
         } else {
@@ -105,7 +112,7 @@ const useRequest = () => {
         });
       }
       if (e.key === 'ArrowRight') {
-        if (day === duty.days.length - 1) {
+        if (day === requestDuty.days.length - 1) {
           if (row === rows.length - 1) {
             newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
             newDay = 0;
@@ -116,7 +123,9 @@ const useRequest = () => {
           }
         } else {
           newDay =
-            e.ctrlKey || e.metaKey ? duty.days.length - 1 : Math.min(duty.days.length - 1, day + 1);
+            e.ctrlKey || e.metaKey
+              ? requestDuty.days.length - 1
+              : Math.min(requestDuty.days.length - 1, day + 1);
           newRow = row;
         }
         setFocus({ level: newProficiency, day: newDay, row: newRow, openTooltip: false });
@@ -127,7 +136,8 @@ const useRequest = () => {
           newProficiency = level === dutyConstraint.levelDivision ? 1 : level + 1;
           newDay = day;
           newRow =
-            duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
+            requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+              .length - 1;
         } else {
           newDay = day;
           newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -136,7 +146,10 @@ const useRequest = () => {
       }
 
       if (e.key === 'ArrowDown') {
-        if (row === duty.dutyRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1) {
+        if (
+          row ===
+          requestDuty.requestRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1
+        ) {
           newProficiency = level === 1 ? dutyConstraint.levelDivision : level - 1;
           newDay = day;
           newRow = 0;
@@ -144,7 +157,8 @@ const useRequest = () => {
           newDay = day;
           newRow =
             e.ctrlKey || e.metaKey
-              ? duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1
+              ? requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+                  .length - 1
               : row + 1;
         }
         setFocus({ level: newProficiency, day: newDay, row: newRow, openTooltip: false });
@@ -159,7 +173,7 @@ const useRequest = () => {
         }
       });
     },
-    [duty, focus, handleFocusedDutyChange]
+    [requestDuty, focus, handleFocusedDutyChange]
   );
 
   useEffect(() => {
@@ -186,8 +200,25 @@ const useRequest = () => {
         container.scroll({ top: focusRect.top + window.scrollY - 132 });
 
       setFocusedDayInfo({
-        month: duty.month,
+        month: requestDuty.month,
         day: focus.day ?? 0,
+        countByShiftList: shiftList.map((_, shiftIndex) => ({
+          count: requestDuty.requestRowsByLevel
+            .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
+            .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
+          standard:
+            requestDuty.days[focus.day].dayKind === 'workday'
+              ? dutyConstraint.dutyStandard.workday[shiftIndex]
+              : dutyConstraint.dutyStandard.weekend[shiftIndex],
+          shift: shiftList[shiftIndex],
+        })),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        nurse: requestDuty.requestRowsByLevel
+          .reduce((accumulator, value) => accumulator.concat(...value.dutyRows), [] as DutyRow[])
+          .find((_, index) => index === focus.row)?.user!,
+        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
+        tooltipLeft: focusRect.x + focusRect.width / 2,
+        tooltipTop: focusRect.y + focusRect.height,
       });
     } else {
       setFocusedDayInfo(null);
@@ -196,11 +227,11 @@ const useRequest = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focus, duty, handleKeyDown]);
+  }, [focus, requestDuty, handleKeyDown]);
 
   return {
     /** 근무표 데이터 */
-    duty,
+    requestDuty,
     /** 접힌 숙련도 */
     foldedProficiency,
     /** 현재 선택한 근무 셀 */
