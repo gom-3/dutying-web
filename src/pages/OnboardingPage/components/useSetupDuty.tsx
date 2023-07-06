@@ -15,6 +15,8 @@ const useSetupDuty = () => {
   const [ward, setWard] = useState<Ward>(mockWard);
   const [shiftList, setShiftList] = useState<ShiftList>(mockShiftList);
 
+  console.log(ward);
+
   const steps: Step[] = [
     {
       name: '1 병동 • 간호사 정보',

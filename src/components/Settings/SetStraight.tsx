@@ -7,10 +7,11 @@ interface ContentsProps {
 }
 
 function Contents({ ward, setWard }: ContentsProps) {
+  console.log(ward);
   return (
     <div className="flex h-full w-full justify-evenly">
-      <div className="relative flex flex-[1] items-center justify-center border-r-[.0625rem] border-sub-4 px-[4.6875rem]">
-        <p className="absolute left-[50%] top-[2.375rem] translate-x-[-50%] font-apple text-[1.5rem] text-sub-3">
+      <div className="flex flex-[1] items-center justify-center border-r-[.0625rem] border-sub-4 px-[4.6875rem]">
+        <p className="self-start left-[50%] top-[2.375rem] translate-x-[-50%] font-apple text-[1.5rem] text-sub-3">
           연속 근무 수
         </p>
         <div className="flex items-center gap-[1.25rem]">

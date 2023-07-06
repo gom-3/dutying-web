@@ -21,7 +21,7 @@ export const Router = () => {
         </Route>
         <Route path={DUTY.ROOT}>
           <Route path={DUTY.ID} />
-          <Route path={DUTY.SETTING} element={<DutySetupPage />} />
+          <Route path={DUTY.SETTING} element={<SetupDutyPage />} />
           <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
         </Route>
       </Route>
