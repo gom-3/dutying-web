@@ -1,6 +1,6 @@
 import 'index.css';
 import { useRef } from 'react';
-import WeeklyCalendarRow from './WeeklyCalendarRow';
+import Row from './Row';
 
 interface Props {
   dateArray: Date[];
@@ -30,6 +30,7 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
           <tr className="rounded-[1.25rem]">
             {dateArray.map((date, i) => (
               <th
+                key={date.getDate()}
                 className={`h-[8.9375rem] w-[10.625rem] border-[.0313rem] border-sub-4 font-poppins text-[2.5rem] font-normal first:rounded-tl-[1.25rem] last:rounded-tr-[1.25rem] ${
                   areSameDate(today, date) ? 'text-sub-1' : 'text-sub-3'
                 }`}
@@ -41,24 +42,9 @@ const WeeklyCalendar = ({ dateArray }: Props) => {
           </tr>
         </thead>
         <tbody>
-          <WeeklyCalendarRow
-            dutyKind="day"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
-          <WeeklyCalendarRow
-            dutyKind="evening"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
-          <WeeklyCalendarRow
-            dutyKind="night"
-            today={today}
-            dateArray={dateArray}
-            areSameDate={areSameDate}
-          />
+          <Row dutyKind="day" today={today} dateArray={dateArray} areSameDate={areSameDate} />
+          <Row dutyKind="evening" today={today} dateArray={dateArray} areSameDate={areSameDate} />
+          <Row dutyKind="night" today={today} dateArray={dateArray} areSameDate={areSameDate} />
         </tbody>
       </table>
     </div>

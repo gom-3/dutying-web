@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { nurses as tempNurse } from '@mocks/members/data';
+import { nurses as tempNurse } from '@mocks/nurse/data';
 import { shiftList } from '@mocks/duty/data';
 
 const useRegistNurse = () => {
@@ -10,12 +10,13 @@ const useRegistNurse = () => {
     const id = nurse.id;
     const temp = nurses.find((n) => n.id === id);
     setNurse(temp || nurses[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
     setNurses((prevNurses) => {
       const nurseArray = prevNurses.map((nurse) => (nurse.id === id ? updatedNurse : nurse));
-      nurseArray.sort((a, b) => a.proficiency - b.proficiency);
+      nurseArray.sort((a, b) => a.level - b.level);
       return nurseArray;
     });
   };
@@ -27,9 +28,9 @@ const useRegistNurse = () => {
   const addNurse = () => {
     const temp = [...nurses].sort((a, b) => a.id - b.id);
     const newNurse: Nurse = {
-      id: temp[temp.length-1].id + 1,
+      id: temp[temp.length - 1].id + 1,
       name: '간호사',
-      proficiency: 1,
+      level: 1,
       phone: '01012341234',
       isConnected: false,
       shiftOption: [

@@ -1,18 +1,17 @@
 import 'index.css';
-import EditNurseTab from './components/EditNurseTab';
-import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
-
-import NurseTable from './components/NurseTable';
-import NurseCount from './components/NurseCount';
+import Editor from './components/Editor';
+import useRegistNurse from './useRegistNurse';
+import Table from './components/Table';
+import Count from './components/Count';
 
 const RegistMemberPage = () => {
   const { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse } = useRegistNurse();
 
   return (
     <div className="p-[3.125rem] pt-[2rem]">
-      <NurseCount nurses={nurses} proficiency={3} />
+      <Count nurses={nurses} level={3} />
       <div className="flex items-start">
-        <NurseTable
+        <Table
           nurse={nurse}
           nurses={nurses}
           deleteNurse={deleteNurse}
@@ -20,7 +19,7 @@ const RegistMemberPage = () => {
           addNurse={addNurse}
           updateNurse={updateNurse}
         />
-        <EditNurseTab nurse={nurse} updateNurse={updateNurse} />
+        <Editor nurse={nurse} updateNurse={updateNurse} />
       </div>
     </div>
   );

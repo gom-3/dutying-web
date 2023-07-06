@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgSettingIconSelected = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} fill="none" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 43 43" {...props}>
     <g
       stroke="#844AFF"
       strokeLinecap="round"

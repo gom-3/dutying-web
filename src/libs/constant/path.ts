@@ -1,5 +1,6 @@
 export const HOME = '/';
 export const LOGIN = '/login';
+export const ONBOARDING = '/onboarding';
 export const DUTY = {
   ROOT: '/duty',
   ID: '/duty/:id',

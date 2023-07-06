@@ -22,8 +22,7 @@ const NavigationBar = () => {
     <div className="group">
       {isFold && (
         <div className="fixed z-10 ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium">
-          <MenuIcon className="cursor-pointer" />
-          {/* <div className=" translate-y-[.125rem]">{currentTab}</div> */}
+          <MenuIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
         </div>
       )}
       <div
@@ -37,14 +36,18 @@ const NavigationBar = () => {
           <FoldIcon
             className={`${
               isFold && 'left-[.9375rem] scale-x-[-1]'
-            } absolute right-[.875rem] top-[.8125rem] cursor-pointer duration-300`}
+            } absolute right-[.875rem] top-[.8125rem] h-[1.875rem] w-[1.875rem] cursor-pointer duration-300`}
           />
         </div>
         <div
           onClick={() => navigate('/')}
           className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
-          {pathname === HOME ? <FullLogo /> : <FullLogoTransparent />}
+          {pathname === HOME ? (
+            <FullLogo className="h-[1.5625rem] w-[5.6875rem]" />
+          ) : (
+            <FullLogoTransparent className="h-[1.5625rem] w-[5.6875rem]" />
+          )}
           {pathname === HOME && (
             <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
           )}
