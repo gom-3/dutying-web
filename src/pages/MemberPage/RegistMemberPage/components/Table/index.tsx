@@ -42,7 +42,7 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
     setSelectedNurse(nurse.nurseId);
   }, [nurse]);
 
-  const proficiencyFilter = (p: number) => {
+  const levelFilter = (p: number) => {
     const temp = nurses.filter((nurse) => nurse.level === p);
     return temp.map((nurse, i) => (
       <Row
@@ -58,9 +58,9 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
     ));
   };
 
-  const group1 = proficiencyFilter(3);
-  const group2 = proficiencyFilter(2);
-  const group3 = proficiencyFilter(1);
+  const group1 = levelFilter(3);
+  const group2 = levelFilter(2);
+  const group3 = levelFilter(1);
 
   return (
     <div className="mt-[1.875rem]">

@@ -42,3 +42,10 @@ type Nurse = {
   /**병동 관리 권한 */
   isWardManager: boolean;
 };
+
+type RequestDuty = Omit<Duty, 'dutyRowsByLevel'> & {
+  requestRowsByLevel: Array<{
+    level: number;
+    dutyRows: Array<DutyRow>;
+  }>;
+};

@@ -52,8 +52,8 @@ const MakeDutyPage = () => {
               {[
                 ...focusedDayInfo.countByShiftList.slice(1),
                 focusedDayInfo?.countByShiftList[0],
-              ].map((shift) => (
-                <div className="flex h-[3.3125rem]">
+              ].map((shift, i) => (
+                <div key={i} className="flex h-[3.3125rem]">
                   <p className="font-poppins text-[.75rem] text-sub-2.5">
                     {shift.count}/{shift.standard}
                   </p>

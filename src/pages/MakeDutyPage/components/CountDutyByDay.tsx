@@ -1,5 +1,6 @@
-import { dutyConstraint } from '@mocks/duty/data';
+import { useState } from 'react';
 import { Focus } from './useEditDuty';
+import { mockDutyStandard } from '@mocks/duty/data';
 
 interface Props {
   focus: Focus | null;
@@ -8,6 +9,8 @@ interface Props {
 }
 
 function CountDutyByDay({ focus, duty, shiftList }: Props) {
+  const [dutyStandard] = useState(mockDutyStandard);
+
   return (
     <div className="mb-[3.125rem] mt-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
       {shiftList.slice(1).map((shift, index) => (
@@ -27,13 +30,13 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
           <div className="flex w-[3.4375rem] items-center justify-center gap-[.3125rem] font-apple text-[.875rem] text-sub-3">
             평일
             <span className="font-poppins text-[1.25rem] text-sub-2">
-              {dutyConstraint.dutyStandard.workday[index + 1]}
+              {dutyStandard.workday[index + 1]}
             </span>
           </div>
           <div className="flex w-[3.4375rem] items-center justify-center gap-[.3125rem] font-apple text-[.875rem] text-sub-3">
             주말
             <span className="font-poppins text-[1.25rem] text-sub-2">
-              {dutyConstraint.dutyStandard.weekend[index + 1]}
+              {dutyStandard.weekend[index + 1]}
             </span>
           </div>
           <div className="flex h-full w-[69.5rem] px-[1rem] text-center">
@@ -45,11 +48,8 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
                 }`}
               >
                 {
-                  duty.dutyRowsByProficiency
-                    .reduce(
-                      (accumulator, value) => accumulator.concat(...value.dutyRows),
-                      [] as DutyRow[]
-                    )
+                  duty.dutyRowsByLevel
+                    .flatMap((row) => row.dutyRows)
                     .filter((item) => item.shiftIndexList[i] === index + 1).length
                 }
               </p>

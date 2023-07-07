@@ -14,7 +14,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
   if (weeks.length > 0) {
     currentMonth = weeks[2][2].getMonth();
   }
-  const shiftIndexList = duty.dutyRows[0].shiftIndexList;
+  const shiftIndexList = duty.dutyRowsByLevel[0].dutyRows[0].shiftIndexList;
 
   return (
     <table className="h-[24.375rem] w-full">

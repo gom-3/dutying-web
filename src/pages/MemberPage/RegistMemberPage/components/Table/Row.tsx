@@ -85,7 +85,7 @@ const Row = ({
         <CheckBox isChecked checkedText="가능" uncheckedText="불가능" />
       </td>
       <td className="h-14 w-[10.8rem] border border-b-0 border-r-0 border-sub-4 text-[1.25rem] font-normal">
-        <ConnectState isConnected={false} textVisible/>
+        <ConnectState isConnected={false} textVisible />
       </td>
     </tr>
   );

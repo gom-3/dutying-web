@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, duty as mockDuty, mockDutyStandard } from '@mocks/duty/data';
+import { shiftList, requestDuty as mockRequestDuty, mockDutyStandard } from '@mocks/duty/data';
 import { mockWard } from '@mocks/ward/data';
 
 export type Focus = {
@@ -21,8 +21,8 @@ export type DayInfo = {
   tooltipTop: number;
 };
 
-const useEditDuty = () => {
-  const [duty, setDuty] = useState(mockDuty);
+const useRequest = () => {
+  const [requestDuty, setRequestDuty] = useState(mockRequestDuty);
   const [foldedProficiency, setFoldedProficiency] = useState(
     Array.from({ length: mockWard.levelDivision }).map(() => false)
   );
@@ -53,9 +53,9 @@ const useEditDuty = () => {
     (newShiftIndex: number) => {
       if (focus === null) return;
 
-      setDuty((duty) => ({
+      setRequestDuty((duty) => ({
         ...duty,
-        dutyRowsByLevel: duty.dutyRowsByLevel.map((dutyRowsByProficiency) => ({
+        requestRowsByLevel: duty.requestRowsByLevel.map((dutyRowsByProficiency) => ({
           ...dutyRowsByProficiency,
           dutyRows: dutyRowsByProficiency.dutyRows.map((dutyRow, index) =>
             focus.row === index && focus.level === dutyRowsByProficiency.level
@@ -84,7 +84,7 @@ const useEditDuty = () => {
       if (focus === null) return;
 
       const { level, day, row } = focus;
-      const rows = duty.dutyRowsByLevel[mockWard.levelDivision - level].dutyRows;
+      const rows = requestDuty.requestRowsByLevel[mockWard.levelDivision - level].dutyRows;
       let newProficiency = level;
       let newDay = day;
       let newRow = row;
@@ -93,11 +93,12 @@ const useEditDuty = () => {
         if (day === 0) {
           if (row === 0) {
             newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
-            newDay = duty.days.length - 1;
+            newDay = requestDuty.days.length - 1;
             newRow =
-              duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
+              requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+                .length - 1;
           } else {
-            newDay = duty.days.length - 1;
+            newDay = requestDuty.days.length - 1;
             newRow = row - 1;
           }
         } else {
@@ -112,7 +113,7 @@ const useEditDuty = () => {
         });
       }
       if (e.key === 'ArrowRight') {
-        if (day === duty.days.length - 1) {
+        if (day === requestDuty.days.length - 1) {
           if (row === rows.length - 1) {
             newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
             newDay = 0;
@@ -123,7 +124,9 @@ const useEditDuty = () => {
           }
         } else {
           newDay =
-            e.ctrlKey || e.metaKey ? duty.days.length - 1 : Math.min(duty.days.length - 1, day + 1);
+            e.ctrlKey || e.metaKey
+              ? requestDuty.days.length - 1
+              : Math.min(requestDuty.days.length - 1, day + 1);
           newRow = row;
         }
         setFocus({ level: newProficiency, day: newDay, row: newRow, openTooltip: false });
@@ -134,7 +137,8 @@ const useEditDuty = () => {
           newProficiency = level === mockWard.levelDivision ? 1 : level + 1;
           newDay = day;
           newRow =
-            duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1;
+            requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+              .length - 1;
         } else {
           newDay = day;
           newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -143,7 +147,10 @@ const useEditDuty = () => {
       }
 
       if (e.key === 'ArrowDown') {
-        if (row === duty.dutyRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1) {
+        if (
+          row ===
+          requestDuty.requestRowsByLevel.find((x) => x.level === level)!.dutyRows.length - 1
+        ) {
           newProficiency = level === 1 ? mockWard.levelDivision : level - 1;
           newDay = day;
           newRow = 0;
@@ -151,7 +158,8 @@ const useEditDuty = () => {
           newDay = day;
           newRow =
             e.ctrlKey || e.metaKey
-              ? duty.dutyRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows.length - 1
+              ? requestDuty.requestRowsByLevel.find((x) => x.level === newProficiency)!.dutyRows
+                  .length - 1
               : row + 1;
         }
         setFocus({ level: newProficiency, day: newDay, row: newRow, openTooltip: false });
@@ -166,7 +174,7 @@ const useEditDuty = () => {
         }
       });
     },
-    [duty, focus, handleFocusedDutyChange]
+    [requestDuty, focus, handleFocusedDutyChange]
   );
 
   useEffect(() => {
@@ -193,20 +201,20 @@ const useEditDuty = () => {
         container.scroll({ top: focusRect.top + window.scrollY - 132 });
 
       setFocusedDayInfo({
-        month: duty.month,
+        month: requestDuty.month,
         day: focus.day ?? 0,
         countByShiftList: shiftList.map((_, shiftIndex) => ({
-          count: duty.dutyRowsByLevel
+          count: requestDuty.requestRowsByLevel
             .flatMap((row) => row.dutyRows)
             .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
           standard:
-            duty.days[focus.day].dayKind === 'workday'
+            requestDuty.days[focus.day].dayKind === 'workday'
               ? mockDutyStandard.workday[shiftIndex]
               : mockDutyStandard.weekend[shiftIndex],
           shift: shiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: duty.dutyRowsByLevel
+        nurse: requestDuty.requestRowsByLevel
           .flatMap((row) => row.dutyRows)
           .find((_, index) => index === focus.row)?.user!,
         message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
@@ -220,11 +228,11 @@ const useEditDuty = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focus, duty, handleKeyDown]);
+  }, [focus, requestDuty, handleKeyDown]);
 
   return {
     /** 근무표 데이터 */
-    duty,
+    requestDuty,
     /** 접힌 숙련도 */
     foldedProficiency,
     /** 현재 선택한 근무 셀 */
@@ -246,4 +254,4 @@ const useEditDuty = () => {
   };
 };
 
-export default useEditDuty;
+export default useRequest;

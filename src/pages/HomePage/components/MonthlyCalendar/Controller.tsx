@@ -1,5 +1,5 @@
 import { NextIcon2, PrevIcon2, SelectboxArrowIcon } from '@assets/svg';
-import { nurses } from '@mocks/members/data';
+import { nurses } from '@mocks/nurse/data';
 import 'index.css';
 
 interface Props {

@@ -1,5 +1,3 @@
-import { shiftList } from '@mocks/duty/data';
-
 export const nurses: Nurse[] = [
   {
     nurseId: 1,

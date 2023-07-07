@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { nurses as tempNurse } from '@mocks/members/data';
+import { nurses as tempNurse } from '@mocks/nurse/data';
 import { shiftList } from '@mocks/duty/data';
 import { getNurses } from '@libs/api/nurse';
 
@@ -42,19 +42,18 @@ const useRegistNurse = () => {
       wardId: 1, // store 값으로 변경
       name: '간호사',
       level: 1,
-      phoneNumber: '01012341234',
-      connStatus: false,
+      phoneNum: '01012341234',
+      isConnected: false,
       isAssistant: false,
+      isDutyManager: false,
+      isWardManager: false,
       nurseShiftTypes: shiftList.map((shift, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
         name: shift.fullname,
-        abbr: shift.shortName,
+        shoftName: shift.shortName,
         isPossible: true,
-        isPrefer: false,
+        isPreferred: false,
       })),
-      workRequest: [],
-      trait: [],
-      accWeekendOff: 0,
     };
     temp.push(newNurse);
     setNurse(newNurse);
