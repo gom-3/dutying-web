@@ -8,6 +8,7 @@ export { default as FullLogo } from './FullLogo';
 export { default as FullLogoTransparent } from './FullLogoTransparent';
 export { default as InjectorIcon } from './InjectorIcon';
 export { default as InjectorIconSelected } from './InjectorIconSelected';
+export { default as KakaoIcon } from './KakaoIcon';
 export { default as LinkedIcon } from './LinkedIcon';
 export { default as LogoSymbolFill } from './LogoSymbolFill';
 export { default as MenuIcon } from './MenuIcon';

@@ -14,26 +14,34 @@ type Props = {
   rowspan?: number;
 };
 
-const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowspan }: Props) => {
-  const [isChecked, setIsChecked] = useState(nurse.shiftOption);
+const Row = ({
+  nurse,
+  selectNurse,
+  updateNurse,
+  edit,
+  isFirst,
+  isSelected,
+  rowspan,
+}: Props) => {
+  const [isChecked, setIsChecked] = useState(nurse.nurseShiftTypes);
 
   useEffect(() => {
-    setIsChecked(nurse.shiftOption);
+    setIsChecked(nurse.nurseShiftTypes);
   }, [nurse]);
 
   const handleNameClick = () => {
-    selectNurse(nurse.id);
+    selectNurse(nurse.nurseId);
     edit(nurse);
   };
 
   const handleBoxClick = (i: number) => {
     const temp = [...isChecked];
-    temp[i].avail = !temp[i].avail;
+    temp[i].isPossible = !temp[i].isPossible;
     const updatedNurse: Nurse = {
       ...nurse,
-      shiftOption: temp,
+      nurseShiftTypes: temp,
     };
-    updateNurse(nurse.id, updatedNurse);
+    updateNurse(nurse.nurseId, updatedNurse);
     setIsChecked(temp);
   };
 
@@ -59,19 +67,19 @@ const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowsp
         onClick={() => handleBoxClick(0)}
         className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
       >
-        <CheckBox isChecked={isChecked[0].avail} checkedText="가능" uncheckedText="불가능" />
+        <CheckBox isChecked={isChecked[0].isPossible} checkedText="가능" uncheckedText="불가능" />
       </td>
       <td
         onClick={() => handleBoxClick(1)}
         className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
       >
-        <CheckBox isChecked={isChecked[1].avail} checkedText="가능" uncheckedText="불가능" />
+        <CheckBox isChecked={isChecked[1].isPossible} checkedText="가능" uncheckedText="불가능" />
       </td>
       <td
         onClick={() => handleBoxClick(2)}
         className="h-14 w-[10.1875rem] cursor-pointer border border-b-0 border-sub-4 text-[1.25rem] font-normal"
       >
-        <CheckBox isChecked={isChecked[2].avail} checkedText="가능" uncheckedText="불가능" />
+        <CheckBox isChecked={isChecked[2].isPossible} checkedText="가능" uncheckedText="불가능" />
       </td>
       <td className="h-14 w-[10.1875rem] border border-b-0 border-sub-4 text-[1.25rem] font-normal">
         <CheckBox isChecked checkedText="가능" uncheckedText="불가능" />
