@@ -13,11 +13,11 @@ function Toolbar({ requestDuty, selectedNurse, setSelectedNurse }: Props) {
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Select
-        value={selectedNurse?.id || ''}
-        options={spreadDuty.map((rows) => ({ label: rows.user.name, value: rows.user.id }))}
+        value={selectedNurse?.nurseId || ''}
+        options={spreadDuty.map((rows) => ({ label: rows.user.name, value: rows.user.nurseId }))}
         onChange={(e) =>
           setSelectedNurse(
-            spreadDuty.find((rows) => rows.user.id === parseInt(e.target.value))?.user || null
+            spreadDuty.find((rows) => rows.user.nurseId === parseInt(e.target.value))?.user || null
           )
         }
         className="absolute left-[.125rem] h-[2.1875rem] w-[10.1875rem]"

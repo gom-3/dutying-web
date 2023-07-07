@@ -60,7 +60,7 @@ const Editor = ({ nurse, updateNurse }: Props) => {
           <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
             선호도에 따라 듀티표에 추천될 예정입니다
           </div>
-          <ShiftSelect nurse={nurse} mode="isPrefer" updateNurse={updateNurse} />
+          <ShiftSelect nurse={nurse} mode="isPreferred" updateNurse={updateNurse} />
         </div>
       </div>
     </div>

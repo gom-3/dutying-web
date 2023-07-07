@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   nurse: Nurse;
-  mode: 'isPrefer' | 'isPossible';
+  mode: 'isPreferred' | 'isPossible';
   updateNurse: (id: number, updatedNurse: Nurse) => void;
 }
 

@@ -10,10 +10,6 @@ export type CheckState = {
 const useEditNurseTab = (
   nurse: Nurse,
   closeTab: () => void,
-  isAdd: boolean,
-  isEdit: boolean,
-  updateNurse: (id: number, updatedNurse: Nurse) => void,
-  addNurse: (newNurse: Nurse) => void
 ) => {
   const [form, setForm] = useState(nurse);
   const [availChecked, setAvailChecked] = useState<CheckState>({});

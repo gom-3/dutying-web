@@ -28,7 +28,7 @@ const MonthlyCalendarController = ({ nurse, date, toNextMonth, toPrevMonth }: Pr
           defaultValue={nurse.name}
         >
           {nurses.map((n) => (
-            <option key={n.id}>{n.name}</option>
+            <option key={n.nurseId}>{n.name}</option>
           ))}
         </select>
         <SelectboxArrowIcon className="absolute right-[.625rem] top-[.0625rem] h-[1.875rem] w-[1.875rem]" />

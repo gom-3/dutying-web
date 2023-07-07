@@ -16,8 +16,6 @@ const NurseTable = ({ nurse, edit, addNurse, deleteNurse, nurses, updateNurse }:
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
   const ref = useRef<HTMLTableSectionElement>(null);
 
-  console.log(nurses);
-
   const handleOnClickAddNurse = () => {
     addNurse();
     setShouldScrollToBottom(true);

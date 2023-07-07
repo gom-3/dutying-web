@@ -1,14 +1,12 @@
-import { FullLogo, KakaoIcon, Logo } from '@assets/svg';
+import { FullLogo, KakaoIcon, LogoSymbolFill } from '@assets/svg';
 import 'index.css';
-import { useNavigate } from 'react-router';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   return (
     <div className="bg- flex w-screen justify-center">
       <div className="flex h-screen w-[100vh] flex-col items-center justify-between bg-white p-[4.5rem]">
         <div className="flex">
-          <Logo className="mr-[2.3438rem] h-[3.125rem] w-[2.9688rem]" />
+          <LogoSymbolFill className="mr-[2.3438rem] h-[3.125rem] w-[2.9688rem]" />
           <FullLogo className="h-[3.125rem] w-[11.3125rem]" />
         </div>
         <div className="relative">
