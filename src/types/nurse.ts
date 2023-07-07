@@ -8,11 +8,17 @@ type DayDuty = {
 
 type Nurse = {
   /** 간호사 id */
-  id: number;
+  nurseId: number;
+  /** 계정 id */
+  accountId: number | null;
+  /** 병동 id */
+  wardId: number;
+  /** 간호 조무사 */
+  isAssistant: boolean;
   /** 간호사 이름 */
   name: string;
   /** 간호사 전화번호 */
-  phone: string;
+  phoneNum: string | null;
   /** 간호사 숙련도
    * @example
    * 숙련도 구분이 3일 때
@@ -23,37 +29,18 @@ type Nurse = {
   level: number;
   /** 간호사 연동 여부 */
   isConnected: boolean;
-  /** 가능한 근무 리스트
-   * @example
-   * {...
-   * workAvailable: [shiftList[1], shiftList[3]],
-   * ...
-   * }
-   * shiftList: Shift[] 근무 유형 배열
-   */
-  shiftOption: {
-    shift: Shift;
-    avail: boolean;
-    prefer: boolean;
+  /** 근무 리스트 */
+  nurseShiftTypes: {
+    nurseShiftTypeId: number;
+    name: string;
+    shoftName: string;
+    isPossible: boolean;
+    isPreferred: boolean;
   }[];
-  workAvailable: Shift[];
-  /** 가능한 근무 리스트
-   * @example
-   * {...
-   * workPrefer: [shiftList[1], shiftList[3]],
-   * ...
-   * }
-   * shiftList: ShiftList 근무 유형 배열
-   */
-  workPrefer: Shift[];
-  /** 신청 근무 날짜 및 근무 유형 리스트*/
-  workRequest: DayDuty[];
-  /** 간호사 특성
-   * @example 임산부, 연차 사용 선호 등
-   */
-  trait: string[];
-  /** 주말 오프 누적 카운트 */
-  accWeekendOff: number;
+  /**근무표 제작 권한 */
+  isDutyManager: boolean;
+  /**병동 관리 권한 */
+  isWardManager: boolean;
 };
 
 type RequestDuty = Omit<Duty, 'dutyRowsByLevel'> & {

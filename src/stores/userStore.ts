@@ -16,31 +16,35 @@ interface User {
 interface UserState {
   isLoggedIn: boolean;
   user: User;
-  action: {
-    loginUser: (user: User) => void;
-    setHospital: (hospital: Hospital) => void;
-  };
+  // actions: {
+  loginUser: (user: User) => void;
+  setHospital: (hospital: Hospital) => void;
+  logOut: () => void;
+  // };
 }
 
-const useUserStore = create<UserState>()(
+const defaultUser = {
+  id: 0,
+  name: '',
+  hospitalInfo: {
+    hospital: '',
+    ward: '',
+    code: '',
+  },
+};
+
+export const useUserStore = create<UserState>()(
   devtools(
     persist(
       (set) => ({
         isLoggedIn: false,
-        user: {
-          id: 0,
-          name: '',
-          hospitalInfo: {
-            hospital: '',
-            ward: '',
-            code: '',
-          },
-        },
-        action: {
-          loginUser: (user) => set(() => ({ isLoggedIn: true, user: user })),
-          setHospital: (hospital) =>
-            set((state) => ({ user: { ...state.user, hospitalInfo: hospital } })),
-        },
+        user: defaultUser,
+        // actions: {
+        loginUser: (user) => set(() => ({ isLoggedIn: true, user: user })),
+        setHospital: (hospital) =>
+          set((state) => ({ user: { ...state.user, hospitalInfo: hospital } })),
+        logOut: () => set(() => ({ isLoggedIn: false, user: defaultUser })),
+        // },
       }),
       {
         name: 'user-storage',
@@ -54,6 +58,10 @@ const useUserStore = create<UserState>()(
  * user에 관련한 새로운 속성이 추가된다면 state.user에 추가
  * 새로운 action(reducer)가 추가된다면 state.action에 추가
  */
+
+/**유저 로그인 여부 */
 export const useUserLoggedIn = () => useUserStore((state) => state.isLoggedIn);
+/**유저 정보 */
 export const useUserInfo = () => useUserStore((state) => state.user);
-export const useUserAction = () => useUserStore((state) => state.action);
+/**유저 store dispatch actions */
+// export const useUserAction = () => useUserStore((state) => state.actions);

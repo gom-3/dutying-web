@@ -70,7 +70,7 @@ export default function DutyCalendar({
                   <div
                     key={rowIndex}
                     className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] hover:bg-main-4 ${
-                      selectedNurse?.id === row.user.id && 'bg-main-4'
+                      selectedNurse?.nurseId === row.user.nurseId && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>

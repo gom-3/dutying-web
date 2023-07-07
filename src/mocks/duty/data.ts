@@ -1,3 +1,6 @@
+
+import { nurses } from "@mocks/nurse/data";
+
 export const mockDutyStandard: {
   workday: number[];
   weekend: number[];
@@ -86,23 +89,7 @@ export const requestDuty: RequestDuty = {
       level: 4,
       dutyRows: [
         {
-          user: {
-            id: 1,
-            name: '노주영',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[0],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -111,23 +98,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 2,
-            name: '오지현',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[1],
           carry: 0,
           lastShiftIndexList: [0, 1, 2, 2],
           shiftIndexList: [
@@ -136,23 +107,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 3,
-            name: '유가영',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[2],
           carry: 0,
           lastShiftIndexList: [0, 0, 1, 1],
           shiftIndexList: [
@@ -161,23 +116,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 4,
-            name: '윤정은',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[3],
           carry: 0,
           lastShiftIndexList: [3, 3, 0, 0],
           shiftIndexList: [
@@ -186,23 +125,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 5,
-            name: '유미현',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[4],
           carry: 0,
           lastShiftIndexList: [1, 0, 0, 0],
           shiftIndexList: [
@@ -211,23 +134,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 6,
-            name: '고선미',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[5],
           carry: 0,
           lastShiftIndexList: [0, 1, 3, 3],
           shiftIndexList: [
@@ -241,23 +148,7 @@ export const requestDuty: RequestDuty = {
       level: 3,
       dutyRows: [
         {
-          user: {
-            id: 7,
-            name: '조나현',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[6],
           carry: 0,
           lastShiftIndexList: [1, 1, 1, 0],
           shiftIndexList: [
@@ -266,23 +157,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 8,
-            name: '박혜림',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[7],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -291,23 +166,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 9,
-            name: '이수진',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[8],
           carry: 0,
           lastShiftIndexList: [3, 0, 0, 1],
           shiftIndexList: [
@@ -316,23 +175,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 10,
-            name: '이지은',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[9],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -341,23 +184,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 11,
-            name: '이성희',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[10],
           carry: 0,
           lastShiftIndexList: [1, 3, 3, 3],
           shiftIndexList: [
@@ -371,23 +198,7 @@ export const requestDuty: RequestDuty = {
       level: 2,
       dutyRows: [
         {
-          user: {
-            id: 12,
-            name: '박보람',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[11],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -396,23 +207,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 13,
-            name: '이지영',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[12],
           carry: 0,
           lastShiftIndexList: [0, 3, 3, 0],
           shiftIndexList: [
@@ -421,23 +216,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 14,
-            name: '김현아',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[13],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -446,23 +225,7 @@ export const requestDuty: RequestDuty = {
           ],
         },
         {
-          user: {
-            id: 15,
-            name: '김예림',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[14],
           carry: 0,
           lastShiftIndexList: [3, 0, 0, 2],
           shiftIndexList: [
@@ -472,23 +235,7 @@ export const requestDuty: RequestDuty = {
         },
 
         {
-          user: {
-            id: 16,
-            name: '양가연',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[15],
           carry: 0,
           lastShiftIndexList: [2, 2, 2, 0],
           shiftIndexList: [
@@ -498,23 +245,7 @@ export const requestDuty: RequestDuty = {
         },
 
         {
-          user: {
-            id: 17,
-            name: '박초빈',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[16],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -528,51 +259,9 @@ export const requestDuty: RequestDuty = {
       level: 1,
       dutyRows: [
         {
-          user: {
-            id: 18,
-            name: '유아영',
-            level: 1,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[17],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
-          shiftIndexList: [
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-          ],
-        },
-
-        {
-          user: {
-            id: 19,
-            name: '오종욱',
-            level: 1,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
-          carry: 0,
-          lastShiftIndexList: [0, 1, 1, 1],
           shiftIndexList: [
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1,
@@ -628,23 +317,7 @@ export const duty: Duty = {
       level: 4,
       dutyRows: [
         {
-          user: {
-            id: 1,
-            name: '노주영',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[0],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -653,23 +326,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 2,
-            name: '오지현',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[1],
           carry: 0,
           lastShiftIndexList: [0, 1, 2, 2],
           shiftIndexList: [
@@ -678,23 +335,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 3,
-            name: '유가영',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[2],
           carry: 0,
           lastShiftIndexList: [0, 0, 1, 1],
           shiftIndexList: [
@@ -703,23 +344,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 4,
-            name: '윤정은',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user:nurses[3],
           carry: 0,
           lastShiftIndexList: [3, 3, 0, 0],
           shiftIndexList: [
@@ -728,23 +353,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 5,
-            name: '유미현',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[4],
           carry: 0,
           lastShiftIndexList: [1, 0, 0, 0],
           shiftIndexList: [
@@ -753,23 +362,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 6,
-            name: '고선미',
-            level: 4,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[5],
           carry: 0,
           lastShiftIndexList: [0, 1, 3, 3],
           shiftIndexList: [
@@ -783,23 +376,7 @@ export const duty: Duty = {
       level: 3,
       dutyRows: [
         {
-          user: {
-            id: 7,
-            name: '조나현',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[6],
           carry: 0,
           lastShiftIndexList: [1, 1, 1, 0],
           shiftIndexList: [
@@ -808,23 +385,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 8,
-            name: '박혜림',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[7],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -833,23 +394,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 9,
-            name: '이수진',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[8],
           carry: 0,
           lastShiftIndexList: [3, 0, 0, 1],
           shiftIndexList: [
@@ -858,23 +403,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 10,
-            name: '이지은',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[9],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -883,23 +412,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 11,
-            name: '이성희',
-            level: 3,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[10],
           carry: 0,
           lastShiftIndexList: [1, 3, 3, 3],
           shiftIndexList: [
@@ -913,23 +426,7 @@ export const duty: Duty = {
       level: 2,
       dutyRows: [
         {
-          user: {
-            id: 12,
-            name: '박보람',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[11],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -938,23 +435,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 13,
-            name: '이지영',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[12],
           carry: 0,
           lastShiftIndexList: [0, 3, 3, 0],
           shiftIndexList: [
@@ -963,23 +444,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 14,
-            name: '김현아',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[13],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -988,23 +453,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user: {
-            id: 15,
-            name: '김예림',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[14],
           carry: 0,
           lastShiftIndexList: [3, 0, 0, 2],
           shiftIndexList: [
@@ -1014,23 +463,7 @@ export const duty: Duty = {
         },
 
         {
-          user: {
-            id: 16,
-            name: '양가연',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[15],
           carry: 0,
           lastShiftIndexList: [2, 2, 2, 0],
           shiftIndexList: [
@@ -1040,23 +473,7 @@ export const duty: Duty = {
         },
 
         {
-          user: {
-            id: 17,
-            name: '박초빈',
-            level: 2,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[16],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
@@ -1070,54 +487,12 @@ export const duty: Duty = {
       level: 1,
       dutyRows: [
         {
-          user: {
-            id: 18,
-            name: '유아영',
-            level: 1,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
+          user: nurses[17],
           carry: 0,
           lastShiftIndexList: [2, 2, 0, 0],
           shiftIndexList: [
             1, 1, 2, 3, 3, 0, 0, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 0, 2, 2, 3,
             3,
-          ],
-        },
-
-        {
-          user: {
-            id: 19,
-            name: '오종욱',
-            level: 1,
-            phone: '01012341234',
-            isConnected: false,
-            shiftOption: [
-              { shift: shiftList[0], prefer: true, avail: true },
-              { shift: shiftList[1], prefer: false, avail: true },
-              { shift: shiftList[2], prefer: true, avail: true },
-            ],
-            workAvailable: [shiftList[0], shiftList[1], shiftList[2], shiftList[3]],
-            workPrefer: [shiftList[1]],
-            workRequest: [],
-            trait: [],
-            accWeekendOff: 0,
-          },
-          carry: 0,
-          lastShiftIndexList: [0, 1, 1, 1],
-          shiftIndexList: [
-            1, 0, 0, 3, 3, 3, 0, 0, 1, 1, 2, 2, 0, 3, 3, 0, 0, 1, 2, 2, 3, 3, 0, 0, 0, 1, 1, 2, 2,
-            0,
           ],
         },
       ],

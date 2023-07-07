@@ -3,6 +3,8 @@ const SvgFullLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
+    width={92}
+    height={25}
     fill="none"
     viewBox="0 0 92 25"
     {...props}
