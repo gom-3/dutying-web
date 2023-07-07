@@ -10,7 +10,8 @@ function MainLayout() {
 
   useEffect(() => {
     if (!isLoggedIn) navigate(LOGIN);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   return (
     <div className="flex bg-[#FDFCFE]">

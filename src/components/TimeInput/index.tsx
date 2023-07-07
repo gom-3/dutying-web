@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 interface Props
   extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   initTime?: string;
-  onTimeChange: (value: string) => void;
+  onTimeChange?: (value: string) => void;
 }
 
 function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
@@ -64,7 +64,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
     }
     if (isValid(value)) {
       console.log('valid');
-      if (value.length === 3 && lastValue.current.length === 4) value = value.slice(0, 1);
+      if (value.length === 2 && lastValue.current.length === 3) value = value.slice(0, 1);
       if (value.length === 2 && lastValue.current.length === 1) value += ':';
 
       lastValue.current = value;
@@ -72,7 +72,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
       setTime(value);
 
       if (value.length === 5) {
-        onTimeChange(value);
+        onTimeChange && onTimeChange(value);
       }
     }
     console.log({ lastValue: lastValue.current, value });

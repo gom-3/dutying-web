@@ -3,8 +3,11 @@ export const LOGIN = '/login';
 
 export const REDIRECT = '/oauth2/redirect';
 
-export const ONBOARDING = '/onboarding';
-
+export const ONBOARDING = {
+  ROOT: '/onboarding',
+  ACCOUNT: '/onboarding/account',
+  WARD: '/onboarding/setting',
+};
 export const DUTY = {
   ROOT: '/duty',
   ID: '/duty/:id',

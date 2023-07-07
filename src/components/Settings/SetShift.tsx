@@ -1,6 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
+import { PlusIcon } from '@assets/svg';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
+import CreateShiftModal from './CreateShiftModal';
+import { useState } from 'react';
 
 interface ContentsProps {
   shiftList: ShiftList;
@@ -8,12 +11,14 @@ interface ContentsProps {
 }
 
 function Contents({ shiftList, setShiftList }: ContentsProps) {
+  const [openModal, setOpenModal] = useState(false);
+
   const handleChangeShift = (shift: Shift, shiftIndex: number, key: keyof Shift, value: string) => {
     setShiftList(shiftList.map((_, i) => (i === shiftIndex ? { ...shift, [key]: value } : _)));
   };
 
   return (
-    <div className="h-fit rounded-[1.25rem]">
+    <div className="relative h-fit rounded-[1.25rem]">
       <div className="mb-[.6875rem] flex h-[3.125rem] items-center rounded-t-[1.25rem] bg-sub-4.5">
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">근무 명</p>
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">약자</p>
@@ -23,7 +28,7 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
       {shiftList.map((shift, index) => (
         <div key={index} className="flex h-[9.1875rem] items-center">
           <div className="flex flex-1 items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
-            {shift.fullname}
+            {shift.name}
           </div>
           <div className="flex flex-1 items-center justify-center">
             <TextField
@@ -40,17 +45,25 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
             />
           </div>
           <div className="flex flex-[2] items-center justify-center gap-[1.125rem] text-sub-2.5">
-            <TimeInput
-              className="h-[4rem] w-[9.375rem] text-center"
-              initTime={shift.startTime}
-              onTimeChange={(value) => handleChangeShift(shift, index, 'startTime', value || '')}
-            />
-            <p>~</p>
-            <TimeInput
-              className="h-[4rem] w-[9.375rem] text-center"
-              initTime={shift.endTime}
-              onTimeChange={(value) => handleChangeShift(shift, index, 'endTime', value || '')}
-            />
+            {shift.isOff ? (
+              <p className="font-poppins text-[2.25rem]">-</p>
+            ) : (
+              <>
+                <TimeInput
+                  className="h-[4rem] w-[9.375rem] text-center"
+                  initTime={shift.startTime}
+                  onTimeChange={(value) =>
+                    handleChangeShift(shift, index, 'startTime', value || '')
+                  }
+                />
+                <p className="font-poppins text-[2.25rem]">~</p>
+                <TimeInput
+                  className="h-[4rem] w-[9.375rem] text-center"
+                  initTime={shift.endTime}
+                  onTimeChange={(value) => handleChangeShift(shift, index, 'endTime', value || '')}
+                />
+              </>
+            )}
           </div>
           <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
             <label
@@ -68,6 +81,21 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
           </div>
         </div>
       ))}
+      <div
+        className="absolute bottom-[-3rem] flex cursor-pointer items-center gap-[1.25rem]"
+        onClick={() => setOpenModal(true)}
+      >
+        <PlusIcon className="h-[1.75rem] w-[1.75rem]" />
+        <p className="font-apple text-[1.25rem] text-sub-2.5">새로운 근무/휴가 추가하기</p>
+      </div>
+      <CreateShiftModal
+        open={openModal}
+        setOpen={setOpenModal}
+        onSubmit={(shift) => {
+          setShiftList(shiftList.concat(shift));
+          setOpenModal(false);
+        }}
+      />
     </div>
   );
 }
