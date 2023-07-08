@@ -2,7 +2,9 @@ import axios from 'axios';
 import { refreshToken } from './login';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://650c3613-c7e5-47e1-a0d9-9b96530e30bf.mock.pstmn.io',
+  baseURL: import.meta.env.DEV
+    ? import.meta.env.VITE_SERVER_URL_DEV
+    : import.meta.env.VITE_SERVER_URL_PROD,
   headers: {
     'Content-Type': 'application/json',
   },

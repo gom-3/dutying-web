@@ -5,7 +5,7 @@ interface NursesResponse {
   nurses: Nurse[];
 }
 
-export const getNurses: () => Promise<Nurse[]> = async () => {
+export const getNurses = async () => {
   const response: NursesResponse = await axiosInstance.get('/nurses');
   return response.nurses;
 };
