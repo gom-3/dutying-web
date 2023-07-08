@@ -1,4 +1,3 @@
-import { PenIcon } from '@assets/svg';
 import { SetShift } from '@components/Settings';
 import 'index.css';
 import { useShiftStore } from 'stores/shiftStore';

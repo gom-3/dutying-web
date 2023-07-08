@@ -1,18 +1,15 @@
 import 'index.css';
 import Setting from './components/Setting';
 import { useWardStore } from 'stores/wardStore';
-import useCreateWard from '@pages/OnboardingPage/components/useCreateWard';
 import { useState } from 'react';
 import Modal from './components/Modal';
 import { shallow } from 'zustand/shallow';
-import { useShiftList } from 'stores/shiftStore';
 import ShiftTypeSetting from './components/ShiftTypeSetting';
 
 type ModalType = '숙련도' | '연속근무';
 
 const DutySetupPage = () => {
   const { maxContinuosNight, maxContinuosWork, minNightInterval, levelDivision } = useWardStore();
-  const { steps } = useCreateWard();
   const wardName = useWardStore((state) => state.name, shallow);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentModal, setCurrentModal] = useState<'숙련도' | '연속근무'>('숙련도');
