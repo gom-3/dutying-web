@@ -10,7 +10,7 @@ interface Hospital {
 interface User {
   id: number;
   name: string;
-  hospitalInfo: Hospital;
+  hospital: Hospital;
 }
 
 interface UserState {
@@ -23,10 +23,10 @@ interface UserState {
   // };
 }
 
-const defaultUser = {
+const defaultUser: User = {
   id: 0,
   name: '',
-  hospitalInfo: {
+  hospital: {
     hospital: '',
     ward: '',
     code: '',

@@ -92,7 +92,7 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
         open={openModal}
         setOpen={setOpenModal}
         onSubmit={(shift) => {
-          setShiftList(shiftList.concat(shift));
+          setShiftList(shiftList.concat({ ...shift, wardId: 2, shiftTypeId: 1 }));
           setOpenModal(false);
         }}
       />

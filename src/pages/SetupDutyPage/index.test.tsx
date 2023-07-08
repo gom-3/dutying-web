@@ -1,8 +1,8 @@
 import { render } from '@libs/util/test-utils';
-import SetupDutyPage from '.';
+import DutySetupPage from '.';
 
-describe('SetupDutyPage 렌더링 테스트', () => {
+describe('DutySetupPage 렌더링 테스트', () => {
   it('충돌 없이 렌더링 된다', () => {
-    render(<SetupDutyPage />);
+    render(<DutySetupPage />);
   });
 });
