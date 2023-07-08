@@ -1,4 +1,4 @@
-import { Step } from '@pages/OnboardingPage/components/useSetupDuty';
+import { Step } from '@pages/OnboardingPage/components/useCreateWard';
 import 'index.css';
 import useOnclickOutside from 'react-cool-onclickoutside';
 

@@ -1,13 +1,13 @@
 import 'index.css';
 import Setting from './components/Setting';
 import { useWardStore } from 'stores/wardStore';
-import useSetupDuty from '@pages/OnboardingPage/components/useSetupDuty';
+import useCreateWard from '@pages/OnboardingPage/components/useCreateWard';
 import { useState } from 'react';
 import Modal from './components/Modal';
 
 const DutySetupPage = () => {
   const { maxContinuosNight, maxContinuosShift, minNightInterval } = useWardStore();
-  const { steps } = useSetupDuty();
+  const { steps } = useCreateWard();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentModal, setCurrentModal] = useState(0);
 
