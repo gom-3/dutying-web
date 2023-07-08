@@ -10,6 +10,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -44,6 +46,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -78,6 +82,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -112,6 +118,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -146,6 +154,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -180,6 +190,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -214,6 +226,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -248,6 +262,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -282,6 +298,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -316,6 +334,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -350,6 +370,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -384,6 +406,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -418,6 +442,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -452,6 +478,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -486,6 +514,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -520,6 +550,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -554,6 +586,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",
@@ -588,6 +622,8 @@ export const nurses: Nurse[] = [
     isDutyManager: false,
     isWardManager: false,
     isConnected: false,
+    gender:'여',
+    employmentDate:'2010-10-10',
     nurseShiftTypes: [{
       nurseShiftTypeId: 1,
       name:"데이",

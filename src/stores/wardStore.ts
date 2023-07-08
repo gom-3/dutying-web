@@ -1,4 +1,3 @@
-import { shiftList } from '@mocks/duty/data';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 

@@ -23,7 +23,7 @@ function Contents({ shiftList, setShiftList }: ContentsProps) {
       {shiftList.map((shift, index) => (
         <div key={index} className="flex h-[9.1875rem] items-center">
           <div className="flex flex-1 items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
-            {shift.fullname}
+            {shift.name}
           </div>
           <div className="flex flex-1 items-center justify-center">
             <TextField

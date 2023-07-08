@@ -15,10 +15,8 @@ function Contents({ ward, setWard }: ContentsProps) {
           <div className="flex items-center gap-[1.25rem]">
             <TextField
               className="h-[3.375rem] w-[9.375rem] text-right text-[2.125rem] text-sub-2.5"
-              value={ward.hospital.name}
-              onChange={(e) =>
-                setWard({ ...ward, hospital: { ...ward.hospital, name: e.target.value } })
-              }
+              value={ward.hospitalName}
+              onChange={(e) => setWard({ ...ward, hospitalName: e.target.value })}
             />
             <p className="font-apple text-[2.25rem] font-semibold text-sub-2.5">병원</p>
           </div>

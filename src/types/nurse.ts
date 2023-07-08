@@ -41,6 +41,10 @@ type Nurse = {
   isDutyManager: boolean;
   /**병동 관리 권한 */
   isWardManager: boolean;
+  /**성별 */
+  gender: string;
+  /**입사날짜 */
+  employmentDate: string;
 };
 
 type RequestDuty = Omit<Duty, 'dutyRowsByLevel'> & {

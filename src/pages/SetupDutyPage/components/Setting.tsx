@@ -9,7 +9,7 @@ interface Props {
   foldedContext?: JSX.Element;
 }
 
-const Setting = ({ name, value, modal, edit, foldedContext }: Props) => {
+const Setting = ({ name, value, modal, edit }: Props) => {
 
   const handleClickPenIcon = () => {
     edit(modal);

@@ -11,15 +11,15 @@ function Contents({ ward, setWard }: ContentsProps) {
   return (
     <div className="flex h-full w-full justify-evenly">
       <div className="flex flex-[1] items-center justify-center border-r-[.0625rem] border-sub-4 px-[4.6875rem]">
-        <p className="self-start left-[50%] top-[2.375rem] translate-x-[-50%] font-apple text-[1.5rem] text-sub-3">
+        <p className="left-[50%] top-[2.375rem] translate-x-[-50%] self-start font-apple text-[1.5rem] text-sub-3">
           연속 근무 수
         </p>
         <div className="flex items-center gap-[1.25rem]">
           <p className="font-base font-apple text-[1.5rem] text-sub-2.5">최대</p>
           <Select
             className="h-[3.375rem] w-[6.25rem] text-[2.125rem] text-sub-2.5"
-            value={ward.straightNonNight}
-            onChange={(e) => setWard({ ...ward, straightNonNight: parseInt(e.target.value) })}
+            value={ward.maxContinuousWork}
+            onChange={(e) => setWard({ ...ward, maxContinuousWork: parseInt(e.target.value) })}
             options={[
               { value: 4, label: '4일' },
               { value: 5, label: '5일' },
@@ -36,8 +36,8 @@ function Contents({ ward, setWard }: ContentsProps) {
           <p className="font-base font-apple text-[1.5rem] text-sub-2.5">최대</p>
           <Select
             className="h-[3.375rem] w-[6.25rem] text-[2.125rem] text-sub-2.5"
-            value={ward.straightNight}
-            onChange={(e) => setWard({ ...ward, straightNight: parseInt(e.target.value) })}
+            value={ward.maxContinuousNight}
+            onChange={(e) => setWard({ ...ward, maxContinuousNight: parseInt(e.target.value) })}
             options={[
               { value: 3, label: '3일' },
               { value: 4, label: '4일' },
@@ -54,8 +54,8 @@ function Contents({ ward, setWard }: ContentsProps) {
           <p className="font-base font-apple text-[1.5rem] text-sub-2.5">최소</p>
           <Select
             className="h-[3.375rem] w-[6.25rem] text-[2.125rem] text-sub-2.5"
-            value={ward.nightInterval}
-            onChange={(e) => setWard({ ...ward, nightInterval: parseInt(e.target.value) })}
+            value={ward.minNightInterval}
+            onChange={(e) => setWard({ ...ward, minNightInterval: parseInt(e.target.value) })}
             options={[
               { value: 3, label: '3일' },
               { value: 4, label: '4일' },

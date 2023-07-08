@@ -47,9 +47,11 @@ const useRegistNurse = () => {
       isAssistant: false,
       isDutyManager: false,
       isWardManager: false,
+      gender:'여',
+      employmentDate:'2010-10-10',
       nurseShiftTypes: shiftList.map((shift, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
-        name: shift.fullname,
+        name: shift.name,
         shoftName: shift.shortName,
         isPossible: true,
         isPreferred: false,
