@@ -2,11 +2,9 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from 'App';
-import { worker } from '@mocks/browser';
+import initializeApp from 'initializeApp';
 
-if (import.meta.env.DEV) {
-  await worker.start();
-}
+initializeApp();
 
 const container = document.getElementById('root') as HTMLElement;
 const element = (
