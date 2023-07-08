@@ -3,25 +3,17 @@ import Button from '@components/Button';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
 import { useEffect, useState } from 'react';
-import { useShiftList } from 'stores/shiftStore';
-import { useWardStore } from 'stores/wardStore';
-import { shallow } from 'zustand/shallow';
 
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (shift: Shift) => void;
+  onSubmit: (shift: CreateShiftRequestDTO) => void;
 }
 
-type CreateShiftRequestDTO = Shift;
+type CreateShiftRequestDTO = Omit<Shift, 'shiftTypeId' | 'wardId'>;
 
 function CreateShiftModal({ open, setOpen, onSubmit }: Props) {
-  const shiftList = useShiftList();
-  const { wardId } = useWardStore((state) => ({ wardId: state.wardId }), shallow);
   const initValue: CreateShiftRequestDTO = {
-    shiftTypeId: shiftList[shiftList.length - 1].shiftTypeId,
-    wardId: wardId,
-    hotKey: [],
     name: '',
     startTime: '00:00',
     endTime: '00:00',
@@ -29,6 +21,7 @@ function CreateShiftModal({ open, setOpen, onSubmit }: Props) {
     isDefault: false,
     isOff: false,
     shortName: '',
+    hotkey: [],
   };
   const [shift, setShift] = useState(initValue);
 

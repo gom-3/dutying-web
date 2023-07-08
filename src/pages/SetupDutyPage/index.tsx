@@ -26,9 +26,24 @@ const DutySetupPage = () => {
       {isModalOpen && <div className="fixed left-0 top-0 z-20 h-[100vh] w-[100vw] bg-black/50" />}
       {isModalOpen && <Modal steps={steps} current={currentModal} close={closeModal} />}
       <div className="mb-[3.625rem] font-apple text-[2.25rem] text-text-1">xx병동 근무 설정</div>
-      <Setting name="최대 연속 근무" value={`${maxContinuosShift}일`} modal={1} edit={handleClickPenIcon} />
-      <Setting name="최대 연속 나이트" value={`${maxContinuosNight}일`} modal={2} edit={handleClickPenIcon} />
-      <Setting name="최소 나이트 간격" value={`${minNightInterval}일`} modal={2} edit={handleClickPenIcon} />
+      <Setting
+        name="최대 연속 근무"
+        value={`${maxContinuosShift}일`}
+        modal={1}
+        edit={handleClickPenIcon}
+      />
+      <Setting
+        name="최대 연속 나이트"
+        value={`${maxContinuosNight}일`}
+        modal={2}
+        edit={handleClickPenIcon}
+      />
+      <Setting
+        name="최소 나이트 간격"
+        value={`${minNightInterval}일`}
+        modal={2}
+        edit={handleClickPenIcon}
+      />
       <Setting name="근무 유형" value="5일" modal={3} edit={handleClickPenIcon} />
     </div>
   );
