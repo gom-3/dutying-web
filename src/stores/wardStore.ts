@@ -38,7 +38,7 @@ export const useWardStore = create<WardState>()(
     persist(
       (set) => ({
         wardId: 0,
-        name: '',
+        name: '곰세마리',
         hospitalName: '',
         nuresCount: 0,
         code: '',

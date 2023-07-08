@@ -17,9 +17,9 @@ const Setting = ({ name, value, modal, edit }: Props) => {
 
   return (
     <div className="mb-[1.5625rem] flex items-center justify-between rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
-      <div className="flex">
-        <SixDotsIcon className="w-[2.375rem]" />
-        <div className="ml-[1.875rem] font-apple text-[2rem] text-sub-2">{name}</div>
+      <div className="flex items-center">
+        <div className="w-[.625rem] h-[.625rem] rounded-full bg-sub-3 ml-[1rem]"/>
+        <div className="ml-[1.875rem] font-apple text-[1.875rem] text-sub-2">{name}</div>
       </div>
       <div className="flex items-center">
         <div className="mr-[1.875rem] font-poppins text-[2rem] text-main-1">{value}</div>
