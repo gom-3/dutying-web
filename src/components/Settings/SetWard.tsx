@@ -2,43 +2,53 @@ import TextField from '@components/TextField';
 
 /* eslint-disable react-refresh/only-export-components */
 interface ContentsProps {
-  ward: Ward;
-  setWard: (ward: Ward) => void;
+  wardName: string;
+  hospitalName: string;
+  nurseCount: number;
+  setWardName: (wardName: string) => void;
+  setHospitalName: (hospitalName: string) => void;
+  setNurseCount: (nurseCount: number) => void;
 }
 
-function Contents({ ward, setWard }: ContentsProps) {
+function Contents({
+  wardName,
+  hospitalName,
+  nurseCount,
+  setWardName,
+  setHospitalName,
+  setNurseCount,
+}: ContentsProps) {
   return (
-    <div className="flex h-full w-full justify-evenly">
+    <div className="flex h-full w-full justify-evenly py-[1.25rem]">
       <div className="relative flex flex-[7] items-center border-r-[.0625rem] border-sub-4 px-[4.6875rem]">
-        <p className="fo nt-apple absolute top-[2.375rem] text-[1.5rem] text-sub-3">병원 • 병동</p>
+        <p className="absolute top-[1.125rem] font-apple text-[1.5rem] text-sub-3">병원 • 병동</p>
         <div className="flex w-full justify-center gap-[4.0625rem]">
           <div className="flex items-center gap-[1.25rem]">
             <TextField
               className="h-[3.375rem] w-[9.375rem] text-right text-[2.125rem] text-sub-2.5"
-              value={ward.hospital.name}
-              onChange={(e) =>
-                setWard({ ...ward, hospital: { ...ward.hospital, name: e.target.value } })
-              }
+              value={wardName}
+              onChange={(e) => setWardName(e.target.value)}
+              autoFocus
             />
             <p className="font-apple text-[2.25rem] font-semibold text-sub-2.5">병원</p>
           </div>
           <div className="flex items-center gap-[1.25rem]">
             <TextField
               className="h-[3.375rem] w-[9.375rem] text-right text-[2.125rem] text-sub-2.5"
-              value={ward.name}
-              onChange={(e) => setWard({ ...ward, name: e.target.value })}
+              value={hospitalName}
+              onChange={(e) => setHospitalName(e.target.value)}
             />
             <p className="font-apple text-[2.25rem] font-semibold text-sub-2.5">병동</p>
           </div>
         </div>
       </div>
       <div className="relative flex flex-[3] flex-col justify-center px-[4.6875rem]">
-        <p className="absolute top-[2.375rem] font-apple text-[1.5rem] text-sub-3">총 간호사 수</p>
+        <p className="absolute top-[1.125rem] font-apple text-[1.5rem] text-sub-3">총 간호사 수</p>
         <div className="flex items-center gap-[1.25rem]">
           <TextField
             className="h-[3.375rem] w-[6.25rem] text-right text-[2.125rem] text-sub-2.5"
-            value={ward.nurseCnt}
-            onChange={(e) => setWard({ ...ward, nurseCnt: parseInt(e.target.value) })}
+            value={nurseCount}
+            onChange={(e) => setNurseCount(parseInt(e.target.value))}
           />
           <p className="font-apple text-[2.25rem] font-semibold text-sub-2.5">명</p>
         </div>

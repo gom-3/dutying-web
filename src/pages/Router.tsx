@@ -7,11 +7,11 @@ import SetupDutyPage from './SetupDutyPage';
 import HomePage from './HomePage';
 import MainLayout from '@components/MainLayout/indes';
 import RedirectPage from './LoginPage/RedirectPage';
-import OnboardingPage from './OnboardingPage';
 import RequestPage from './RequestPage';
+import SetAccount from './OnboardingPage/SetAccount';
+import SetWard from './OnboardingPage/SetWard';
 
 export const Router = () => {
-  
   return (
     <Routes>
       <Route path={LOGIN} element={<LoginPage />} />
@@ -28,7 +28,10 @@ export const Router = () => {
           <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
         </Route>
       </Route>
-      <Route path={ONBOARDING} element={<OnboardingPage />} />
+      <Route path={ONBOARDING.ROOT}>
+        <Route path={ONBOARDING.ACCOUNT} element={<SetAccount />} />
+        <Route path={ONBOARDING.WARD} element={<SetWard />} />
+      </Route>
     </Routes>
   );
 };

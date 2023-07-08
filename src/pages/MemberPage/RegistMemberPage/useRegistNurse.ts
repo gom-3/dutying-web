@@ -8,7 +8,7 @@ const useRegistNurse = () => {
   const [nurse, setNurse] = useState<Nurse>(tempNurse[0]);
   const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
 
-  const { data,isLoading,isError } = useQuery(['nurses'], getNurses);
+  const { data, isLoading, isError } = useQuery(['nurses'], getNurses);
 
   useEffect(() => {
     // if(data && !isError && !isLoading) setNurses(data);
@@ -49,7 +49,7 @@ const useRegistNurse = () => {
       isWardManager: false,
       nurseShiftTypes: shiftList.map((shift, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
-        name: shift.fullname,
+        name: shift.name,
         shoftName: shift.shortName,
         isPossible: true,
         isPreferred: false,

@@ -1,5 +1,4 @@
-
-import { nurses } from "@mocks/nurse/data";
+import { nurses } from '@mocks/nurse/data';
 
 export const mockDutyStandard: {
   workday: number[];
@@ -11,36 +10,36 @@ export const mockDutyStandard: {
 
 export const shiftList: ShiftList = [
   {
-    fullname: '오프',
+    name: '오프',
     shortName: 'O',
     startTime: '00:00',
     endTime: '00:00',
-    hotKey: ['/', 'o', 'O', '0'],
     color: '#5534E0',
+    isOff: true,
   },
   {
-    fullname: '데이',
+    name: '데이',
     shortName: 'D',
     startTime: '07:00',
     endTime: '15:00',
-    hotKey: ['D', 'd', 'ㅇ', '1'],
     color: '#D7EB2A',
+    isOff: false,
   },
   {
-    fullname: '이브닝',
+    name: '이브닝',
     shortName: 'E',
     startTime: '15:00',
     endTime: '23:00',
-    hotKey: ['E', 'e', 'ㄷ', '2'],
     color: '#EB39E8',
+    isOff: false,
   },
   {
-    fullname: '나이트',
+    name: '나이트',
     shortName: 'N',
     startTime: '23:00',
     endTime: '07:00',
-    hotKey: ['N', 'n', 'ㅜ', '3'],
     color: '#271F3E',
+    isOff: false,
   },
 ];
 
@@ -344,7 +343,7 @@ export const duty: Duty = {
           ],
         },
         {
-          user:nurses[3],
+          user: nurses[3],
           carry: 0,
           lastShiftIndexList: [3, 3, 0, 0],
           shiftIndexList: [
