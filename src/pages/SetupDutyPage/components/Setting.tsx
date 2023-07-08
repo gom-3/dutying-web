@@ -1,24 +1,23 @@
-import { PenIcon, SixDotsIcon } from '@assets/svg';
+import { PenIcon } from '@assets/svg';
 import 'index.css';
 
 interface Props {
   name: string;
   value: string;
-  modal: number;
-  edit: (modal: number) => void;
+  step: '숙련도' | '연속근무';
+  edit: (step: '숙련도' | '연속근무') => void;
   foldedContext?: JSX.Element;
 }
 
-const Setting = ({ name, value, modal, edit }: Props) => {
-
+const Setting = ({ name, value, step, edit }: Props) => {
   const handleClickPenIcon = () => {
-    edit(modal);
+    edit(step);
   };
 
   return (
     <div className="mb-[1.5625rem] flex items-center justify-between rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center">
-        <div className="w-[.625rem] h-[.625rem] rounded-full bg-sub-3 ml-[1rem]"/>
+        <div className="ml-[1rem] h-[.625rem] w-[.625rem] rounded-full bg-sub-3" />
         <div className="ml-[1.875rem] font-apple text-[1.875rem] text-sub-2">{name}</div>
       </div>
       <div className="flex items-center">

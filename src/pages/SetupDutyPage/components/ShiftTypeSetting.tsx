@@ -1,13 +1,15 @@
 import { PenIcon } from '@assets/svg';
-import { Step } from '@pages/OnboardingPage/components/useCreateWard';
+import { SetShift } from '@components/Settings';
 import 'index.css';
+import { useShiftStore } from 'stores/shiftStore';
+import { shallow } from 'zustand/shallow';
 
-interface Props {
-  shiftList: Shift[];
-  steps: Step[];
-}
+const ShiftTypeSetting = () => {
+  const { shiftList, setShiftList } = useShiftStore(
+    (state) => ({ shiftList: state.shiftList, setShiftList: state.setShiftList }),
+    shallow
+  );
 
-const ShiftTypeSetting = ({ shiftList, steps }: Props) => {
   let shiftListInitial = '';
   shiftList.forEach((shift) => (shiftListInitial += ` ${shift.shortName}`));
   return (
@@ -23,7 +25,9 @@ const ShiftTypeSetting = ({ shiftList, steps }: Props) => {
           </div>
         </div>
       </div>
-      <div>{steps[3].contents}</div>
+      <div>
+        <SetShift.Contents shiftList={shiftList} setShiftList={setShiftList} />
+      </div>
     </div>
   );
 };

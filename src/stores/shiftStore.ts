@@ -6,14 +6,8 @@ import { devtools, persist } from 'zustand/middleware';
 interface ShiftState {
   /**근무 유형 목록 */
   shiftList: ShiftList;
-  actions: {
-    /**기존의 근무 유형 수정 */
-    changeShift: (id: number, newShift: Shift) => void;
-    /**새로운 근무 유형 추가 */
-    addShift: (shift: Shift) => void;
-    /**기존의 근무 유형 삭제 */
-    deleteShift: (id: number) => void;
-  };
+  /**근무 유형 수정 */
+  setShiftList: (shiftList: ShiftList) => void;
 }
 
 export const useShiftStore = create<ShiftState>()(
@@ -21,19 +15,7 @@ export const useShiftStore = create<ShiftState>()(
     persist(
       (set) => ({
         shiftList: shiftList,
-        actions: {
-          changeShift: (index, newShift) =>
-            set((state) => ({
-              ...state,
-              shiftList: state.shiftList.map((shift, i) => (i === index ? newShift : shift)),
-            })),
-          addShift: (shift) => set((state) => ({ shiftList: [...state.shiftList, shift] })),
-          deleteShift: (index) =>
-            set((state) => ({
-              ...state,
-              shiftList: state.shiftList.filter((_, i) => i !== index),
-            })),
-        },
+        setShiftList: (shiftList) => set((state) => ({ ...state, shiftList: shiftList })),
       }),
       {
         name: 'shift-storage',
@@ -43,4 +25,3 @@ export const useShiftStore = create<ShiftState>()(
 );
 
 export const useShiftList = () => useShiftStore((state) => state.shiftList);
-export const useShiftAction = () => useShiftStore((state) => state.actions);
