@@ -3,6 +3,8 @@ import { devtools, persist } from 'zustand/middleware';
 
 /** 병동 설정 전역상태 */
 interface WardState {
+  /**병동 id */
+  wardId:number;
   /**병동 이름 */
   name: string;
   /**병원 이름 */
@@ -35,6 +37,7 @@ export const useWardStore = create<WardState>()(
   devtools(
     persist(
       (set) => ({
+        wardId: 0,
         name: '',
         hospitalName: '',
         nuresCount: 0,
