@@ -26,7 +26,8 @@ const RedirectPage = () => {
     // Login API 호출
     login(tempUser);
     navigate(HOME);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
   return <div />;
 };

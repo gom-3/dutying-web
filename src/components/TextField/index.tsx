@@ -8,7 +8,7 @@ function TextField({ value, onChange, className, ...props }: Props) {
       value={value}
       onChange={onChange}
       className={twMerge(
-        'rounded-[.625rem] px-[1.5625rem] font-apple text-[2.25rem] outline outline-1 outline-sub-4 focus:text-main-1 focus:outline-main-1',
+        'w-full rounded-[.625rem] px-[1.5625rem] font-apple text-[2.25rem] outline outline-1 outline-sub-4 focus:outline-main-1',
         className
       )}
       {...props}

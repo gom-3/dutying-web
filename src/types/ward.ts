@@ -10,7 +10,7 @@ type Ward = {
   bedCnt: number;
   /** 간호사 수 */
   nurseCnt: number;
-  /** 병동 코드 */
+  /** SHA-256 해싱한 병동 고유 코드 */
   code: string;
   /** 교대 수 @example 2, 3, 4 */
   rotationNum: number;
@@ -25,5 +25,6 @@ type Ward = {
   minNightInterval: number;
   /** 숙련도 구분 수 @example 3~6 */
   levelDivision: number;
+  /** 삭제 여부 */
+  isDeleted: boolean;
 };
-

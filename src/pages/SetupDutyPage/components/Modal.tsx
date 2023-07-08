@@ -1,6 +1,6 @@
-import { Step } from '@pages/OnboardingPage/components/useSetupDuty';
 import 'index.css';
 import useOnclickOutside from 'react-cool-onclickoutside';
+import { Step } from './useSetupDuty';
 
 interface Props {
   steps: Step[];

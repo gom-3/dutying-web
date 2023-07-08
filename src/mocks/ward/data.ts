@@ -9,5 +9,6 @@ export const mockWard: Ward = {
   maxContinuousWork: 5,
   maxContinuousNight: 3,
   levelDivision: 4,
-  hospitalName: '곰'
+  hospitalName: '곰',
+  isDeleted: false,
 };

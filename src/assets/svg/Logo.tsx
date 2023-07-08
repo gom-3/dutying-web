@@ -5,7 +5,7 @@ const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={48}
     height={50}
-    viewBox='0 0 48 50'
+    viewBox="0 0 48 50"
     fill="none"
     {...props}
   >

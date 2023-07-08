@@ -8,7 +8,7 @@ const useRegistNurse = () => {
   const [nurse, setNurse] = useState<Nurse>(tempNurse[0]);
   const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
 
-  const { data,isLoading,isError } = useQuery(['nurses'], getNurses);
+  const { data, isLoading, isError } = useQuery(['nurses'], getNurses);
 
   useEffect(() => {
     // if(data && !isError && !isLoading) setNurses(data);
