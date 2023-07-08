@@ -161,7 +161,7 @@ const useEditDuty = () => {
         setFocus({ ...focus, openTooltip: !focus.openTooltip });
       }
       shiftList.forEach((shift, index) => {
-        if (shift.hotKey.includes(e.key)) {
+        if (shift.shortName.toUpperCase() === e.key.toUpperCase()) {
           handleFocusedDutyChange(index);
         }
       });

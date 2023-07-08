@@ -7,14 +7,7 @@ export type CheckState = {
   [key: string]: boolean;
 };
 
-const useEditNurseTab = (
-  nurse: Nurse,
-  closeTab: () => void,
-  isAdd: boolean,
-  isEdit: boolean,
-  updateNurse: (id: number, updatedNurse: Nurse) => void,
-  addNurse: (newNurse: Nurse) => void
-) => {
+const useEditNurseTab = (nurse: Nurse, closeTab: () => void) => {
   const [form, setForm] = useState(nurse);
   const [availChecked, setAvailChecked] = useState<CheckState>({});
   const [preferChecked, setPreferChecked] = useState<CheckState>({});
@@ -69,11 +62,6 @@ const useEditNurseTab = (
     }));
   };
 
-  const handleSaveButton = () => {
-    if (isAdd) addNurse(form);
-    if (isEdit) updateNurse(form.id, form);
-  };
-
   return {
     formState: { form, availChecked, preferChecked },
     shiftList,
@@ -82,7 +70,6 @@ const useEditNurseTab = (
       handleAvailCheckboxChange,
       handlePreferCheckboxChange,
       handleInputChange,
-      handleSaveButton,
     },
   };
 };
