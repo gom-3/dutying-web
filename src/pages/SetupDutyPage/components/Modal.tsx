@@ -56,7 +56,7 @@ const Modal = ({ current, close }: Props) => {
         onClick={close}
         className="absolute right-[1.25rem] top-[1.25rem] h-[1.875rem] w-[1.875rem] cursor-pointer"
       />
-      {contents}
+      <div className="absolute h-full w-full">{contents}</div>
       <div
         className="absolute bottom-[1.25rem] right-[1.25rem] cursor-pointer rounded-[3.125rem] border border-main-1 px-[1.25rem] py-[.375rem] font-apple text-[1.25rem] font-medium text-main-1"
         onClick={handleClickSaveButton}

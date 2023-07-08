@@ -9,8 +9,6 @@ const ShiftTypeSetting = () => {
     shallow
   );
 
-  let shiftListInitial = '';
-  shiftList.forEach((shift) => (shiftListInitial += ` ${shift.shortName}`));
   return (
     <div className="mb-[1.5625rem] rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center justify-between">
@@ -20,12 +18,18 @@ const ShiftTypeSetting = () => {
         </div>
         <div className="flex items-center">
           <div className="mr-[1.875rem] font-poppins text-[2rem] text-main-1">
-            {shiftListInitial}
+            {shiftList.map((x) => x.shortName).join(' ')}
           </div>
         </div>
       </div>
       <div>
-        <SetShift.Contents shiftList={shiftList} setShiftList={setShiftList} />
+        {/* @TODO  */}
+        <SetShift
+          shiftList={shiftList}
+          setShiftList={(shiftList) => {
+            setShiftList(shiftList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
+          }}
+        />
       </div>
     </div>
   );

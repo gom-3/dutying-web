@@ -5,8 +5,7 @@ interface ContentsProps {
 }
 
 function Contents({ levelDivistion, setLevelDivision }: ContentsProps) {
-
-  const handleClick = (level:number) => {
+  const handleClick = (level: number) => {
     setLevelDivision(level);
   };
 
