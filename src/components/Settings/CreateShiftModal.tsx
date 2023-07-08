@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (shift: Shift) => void;
+  onSubmit: (shift: CreateShiftRequestDTO) => void;
 }
 
-type CreateShiftRequestDTO = Shift;
+type CreateShiftRequestDTO = Omit<Shift, 'shiftTypeId' | 'wardId'>;
 
 function CreateShiftModal({ open, setOpen, onSubmit }: Props) {
   const initValue: CreateShiftRequestDTO = {
@@ -18,8 +18,10 @@ function CreateShiftModal({ open, setOpen, onSubmit }: Props) {
     startTime: '00:00',
     endTime: '00:00',
     color: '#FFFFFF',
+    isDefault: false,
     isOff: false,
     shortName: '',
+    hotkey: [],
   };
   const [shift, setShift] = useState(initValue);
 

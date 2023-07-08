@@ -7,7 +7,7 @@ import { useUserStore } from 'stores/userStore';
 const tempUser = {
   id: 0,
   name: '',
-  hospitalInfo: {
+  hospital: {
     hospital: '',
     ward: '',
     code: '',

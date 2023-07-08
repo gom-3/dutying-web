@@ -2,11 +2,11 @@ import { shiftList } from '@mocks/duty/data';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-/** Shift의 종류를 전역상태로 관리 */
+/** 근무 종류 전역 상태 */
 interface ShiftState {
-  rotation: number;
+  /**근무 유형 목록 */
   shiftList: ShiftList;
-  action: {
+  actions: {
     /**기존의 근무 유형 수정 */
     changeShift: (id: number, newShift: Shift) => void;
     /**새로운 근무 유형 추가 */
@@ -16,13 +16,12 @@ interface ShiftState {
   };
 }
 
-const useShiftStore = create<ShiftState>()(
+export const useShiftStore = create<ShiftState>()(
   devtools(
     persist(
       (set) => ({
-        rotation: 3,
         shiftList: shiftList,
-        action: {
+        actions: {
           changeShift: (index, newShift) =>
             set((state) => ({
               ...state,
@@ -43,6 +42,5 @@ const useShiftStore = create<ShiftState>()(
   )
 );
 
-export const useShiftRotation = () => useShiftStore((state) => state.rotation);
 export const useShiftList = () => useShiftStore((state) => state.shiftList);
-export const useShiftAction = () => useShiftStore((state) => state.action);
+export const useShiftAction = () => useShiftStore((state) => state.actions);
