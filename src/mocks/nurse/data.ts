@@ -1,3 +1,20 @@
+export const mockAccount: Account = {
+  accountId: 191534,
+  nurseId: null,
+  wardId: null,
+  name: '황인서',
+  gender: '남',
+  email: 'sjsjsj1246@gmail.com',
+  phoneNum: '01012345678',
+  birthday: '1999-10-17',
+  status: 'NURSE',
+  isDeleted: false,
+  isWorker: true,
+  employmentDate: '2020-01-01',
+  createdAt: '2020-01-01T00:00:00.000Z',
+  modifiedAt: '2020-01-01T00:00:00.000Z',
+};
+
 export const nurses: Nurse[] = [
   {
     nurseId: 1,

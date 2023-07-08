@@ -13,6 +13,7 @@ function Toolbar({ requestDuty, selectedNurse, setSelectedNurse }: Props) {
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Select
+        placeholder="이름 검색"
         value={selectedNurse?.nurseId || ''}
         options={spreadDuty.map((rows) => ({ label: rows.user.name, value: rows.user.nurseId }))}
         onChange={(e) =>

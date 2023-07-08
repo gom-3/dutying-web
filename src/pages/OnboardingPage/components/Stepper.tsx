@@ -1,12 +1,13 @@
-import { Step } from './useSetupDuty';
+import { Step } from './useCreateWard';
 
 interface Props {
   steps: Step[];
   currentStep: number;
+  isFilled: boolean;
   setCurrentStep: (steps: number) => void;
 }
 
-function Stepper({ steps, currentStep, setCurrentStep }: Props) {
+function Stepper({ steps, currentStep, isFilled, setCurrentStep }: Props) {
   return (
     <div className="flex w-full gap-[.5625rem]">
       {steps.map((item, index) => {
@@ -23,7 +24,7 @@ function Stepper({ steps, currentStep, setCurrentStep }: Props) {
                 ? 'border-main-2 bg-main-2 text-white'
                 : 'border-sub-4 bg-[#F2F2F7] text-sub-3'
             }`}
-            onClick={() => setCurrentStep(index)}
+            onClick={() => isFilled && setCurrentStep(index)}
           >
             {item.name}
           </div>

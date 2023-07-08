@@ -14,15 +14,7 @@ type Props = {
   rowspan?: number;
 };
 
-const Row = ({
-  nurse,
-  selectNurse,
-  updateNurse,
-  edit,
-  isFirst,
-  isSelected,
-  rowspan,
-}: Props) => {
+const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowspan }: Props) => {
   const [isChecked, setIsChecked] = useState(nurse.nurseShiftTypes);
 
   useEffect(() => {
