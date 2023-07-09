@@ -25,5 +25,6 @@ type Ward = {
   minNightInterval: number;
   /** 숙련도 구분 수 @example 3~6 */
   levelDivision: number;
+  /** 삭제 여부 */
+  isDeleted: boolean;
 };
-

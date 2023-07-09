@@ -1,4 +1,3 @@
-import { worker } from '@mocks/browser';
 import * as Sentry from '@sentry/react';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
@@ -11,10 +10,6 @@ import {
 } from 'react-router';
 
 export default async function initializeApp() {
-  if (import.meta.env.DEV) {
-    await worker.start();
-  }
-
   if (import.meta.env.PROD) {
     ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { debug: true });
 
