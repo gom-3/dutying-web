@@ -1,5 +1,4 @@
 import { FullLogo, KakaoIcon, LogoSymbolFill } from '@assets/svg';
-import 'index.css';
 
 const LoginPage = () => {
   return (

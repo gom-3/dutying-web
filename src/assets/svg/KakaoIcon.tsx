@@ -3,10 +3,8 @@ const SvgKakaoIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
-    width={76}
-    height={76}
-    viewBox='0 0 76 76'
     fill="none"
+    viewBox="0 0 76 76"
     {...props}
   >
     <circle cx={38} cy={38} r={38} fill="#FEE500" />

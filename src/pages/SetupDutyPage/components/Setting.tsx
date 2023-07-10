@@ -10,7 +10,6 @@ interface Props {
 }
 
 const Setting = ({ name, value, modal, edit }: Props) => {
-
   const handleClickPenIcon = () => {
     edit(modal);
   };

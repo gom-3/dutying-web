@@ -27,7 +27,6 @@ function CreateShiftModal({ open, setOpen, onSubmit }: Props) {
 
   useEffect(() => {
     if (open === false) setShift(initValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return open ? (

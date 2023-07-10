@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { ONBOARDING } from '@libs/constant/path';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';

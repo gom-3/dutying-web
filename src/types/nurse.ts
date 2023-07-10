@@ -6,29 +6,6 @@ type DayDuty = {
   shiftId: number;
 };
 
-type Account = {
-  accountId: number;
-  /** 연동된 간호사 ID */
-  nurseId: number | null;
-  /** 소속된 병동 ID */
-  wardId: number | null;
-  email: string;
-  name: string;
-  createdAt: string;
-  modifiedAt: string;
-  /** 계정 삭제 여부 */
-  isDeleted: boolean;
-  /** 교대근무에 참여하는가? */
-  isWorker: boolean;
-  /** 계정의 상태 */
-  status: 'ONBOARDING' | 'GUIDE' | 'NURSE' | 'MANAGER';
-  phoneNum: string;
-  gender: string;
-  birthday: string;
-  /** 입사 날짜 */
-  employmentDate: string;
-};
-
 type Nurse = {
   /** 간호사 id */
   nurseId: number;

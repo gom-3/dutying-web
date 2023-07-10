@@ -18,7 +18,6 @@ const LevelSelect = ({ nurse, updateNurse, devide }: Props) => {
   useEffect(() => {
     const updatedNurse: Nurse = { ...nurse, level: currentProficiency };
     updateNurse(nurse.nurseId, updatedNurse);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentProficiency]);
 
   const handleOnClick = (i: number) => {

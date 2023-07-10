@@ -19,7 +19,6 @@ const useRegistNurse = () => {
     const temp = nurses.find((n) => n.nurseId === id);
     setNurse(temp || nurses[0]);
     getNurses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
@@ -47,8 +46,8 @@ const useRegistNurse = () => {
       isAssistant: false,
       isDutyManager: false,
       isWardManager: false,
-      gender:'여',
-      employmentDate:'2010-10-10',
+      gender: '여',
+      employmentDate: '2010-10-10',
       nurseShiftTypes: shiftList.map((shift, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
         name: shift.name,
