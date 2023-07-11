@@ -3,6 +3,7 @@ export { default as CancelIcon } from './CancelIcon';
 export { default as CheckedIcon } from './CheckedIcon';
 export { default as DutyIcon } from './DutyIcon';
 export { default as DutyIconSelected } from './DutyIconSelected';
+export { default as ExitIcon } from './ExitIcon';
 export { default as FoldDutyIcon } from './FoldDutyIcon';
 export { default as FoldIcon } from './FoldIcon';
 export { default as FullLogo } from './FullLogo';
