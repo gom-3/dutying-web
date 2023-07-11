@@ -5,6 +5,10 @@ interface ContentsProps {
 }
 
 function Contents({ levelDivistion, setLevelDivision }: ContentsProps) {
+  const handleClick = (level: number) => {
+    setLevelDivision(level);
+  };
+
   return (
     <div className="mx-auto h-full w-[80%] pt-[4.375rem]">
       <p className="font-apple text-[1.5rem] text-sub-2">
@@ -19,7 +23,7 @@ function Contents({ levelDivistion, setLevelDivision }: ContentsProps) {
               key={level}
               className={`h-[6.25rem] flex-1 rounded-[.9375rem] font-apple text-[2.25rem] font-medium
               ${isActive ? 'bg-main-1 text-white' : 'bg-sub-4.5 text-sub-2.5'}`}
-              onClick={() => setLevelDivision(level)}
+              onClick={() => handleClick(level)}
             >
               {level}
             </button>

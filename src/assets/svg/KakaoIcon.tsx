@@ -5,7 +5,7 @@ const SvgKakaoIcon = (props: SVGProps<SVGSVGElement>) => (
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={76}
     height={76}
-    viewBox='0 0 76 76'
+    viewBox="0 0 76 76"
     fill="none"
     {...props}
   >

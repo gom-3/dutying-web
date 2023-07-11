@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { shiftList as mockShiftList } from '@mocks/duty/data';
 import { SetDivision, SetShift, SetStraight, SetWard } from '@components/Settings';
 
 export type Step = {
@@ -8,7 +7,7 @@ export type Step = {
   description: JSX.Element | null;
 };
 
-type CreateWardRequestDTO = Pick<
+export type CreateWardRequest = Pick<
   Ward,
   | 'name'
   | 'nurseCnt'
@@ -18,10 +17,12 @@ type CreateWardRequestDTO = Pick<
   | 'levelDivision'
 > & { hospitalName: string };
 
+export type CreateShiftRequest = Omit<Shift, 'shiftTypeId' | 'wardId'>;
+export type CreateShiftListRequest = CreateShiftRequest[];
+
 const useCreateWard = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  // 추후 server state로 변경
-  const [ward, setWard] = useState<CreateWardRequestDTO>({
+  // 서버에 POST 요청을 보내기 위한 data
+  const [ward, setWard] = useState<CreateWardRequest>({
     name: '',
     hospitalName: '',
     nurseCnt: 20,
@@ -30,7 +31,50 @@ const useCreateWard = () => {
     maxContinuousNight: 3,
     levelDivision: 4,
   });
-  const [shiftList, setShiftList] = useState<ShiftList>(mockShiftList);
+  const [shiftList, setShiftList] = useState<CreateShiftListRequest>([
+    {
+      name: '오프',
+      shortName: 'O',
+      startTime: '00:00',
+      endTime: '00:00',
+      hotkey: ['/', 'o', 'O', '0'],
+      isDefault: true,
+      isOff: true,
+      color: '#5534E0',
+    },
+    {
+      name: '데이',
+      shortName: 'D',
+      startTime: '07:00',
+      endTime: '15:00',
+      hotkey: ['D', 'd', 'ㅇ', '1'],
+      isDefault: true,
+      isOff: false,
+      color: '#D7EB2A',
+    },
+    {
+      name: '이브닝',
+      shortName: 'E',
+      startTime: '15:00',
+      endTime: '23:00',
+      hotkey: ['E', 'e', 'ㄷ', '2'],
+      isDefault: true,
+      isOff: false,
+      color: '#EB39E8',
+    },
+    {
+      name: '나이트',
+      shortName: 'N',
+      startTime: '23:00',
+      endTime: '07:00',
+      hotkey: ['N', 'n', 'ㅜ', '3'],
+      isDefault: true,
+      isOff: false,
+      color: '#271F3E',
+    },
+  ]);
+
+  const [currentStep, setCurrentStep] = useState(0);
   const [isFilled, setIsFilled] = useState(false);
   const [error, setError] = useState<{ step: number; message: string } | null>(null);
 
@@ -46,7 +90,7 @@ const useCreateWard = () => {
   }, [ward, currentStep]);
 
   const handleChangeCreateWardRequestDTO = (
-    key: keyof CreateWardRequestDTO,
+    key: keyof CreateWardRequest,
     value: string | number
   ) => {
     setWard({ ...ward, [key]: value });
@@ -99,7 +143,7 @@ const useCreateWard = () => {
     },
     {
       name: '4 근무 형태',
-      contents: <SetShift.Contents shiftList={shiftList} setShiftList={setShiftList} />,
+      contents: <SetShift shiftList={shiftList} setShiftList={setShiftList} />,
       description: null,
     },
   ];

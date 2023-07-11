@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 type User = {
   accountId: number;
   nurseId: number;
@@ -9,4 +10,4 @@ type User = {
   isDutyManager: boolean;
   /**병동 관리 권한 */
   isWardManager: boolean;
-}
+};

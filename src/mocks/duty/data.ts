@@ -47,7 +47,7 @@ export const shiftList: ShiftList = [
   },
   {
     shiftTypeId: 3,
-    wardId:1,
+    wardId: 1,
     name: '나이트',
     shortName: 'N',
     startTime: '23:00',
