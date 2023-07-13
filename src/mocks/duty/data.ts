@@ -8,7 +8,7 @@ export const mockDutyStandard: {
   weekend: [3, 3, 3, 3],
 };
 
-export const shiftList: ShiftList = [
+export const mockShiftList: ShiftList = [
   {
     shiftTypeId: 0,
     wardId: 1,
@@ -287,7 +287,7 @@ export const requestDuty: RequestDuty = {
   ],
 };
 
-export const duty: Duty = {
+export const mockDuty: Duty = {
   month: 6,
   lastDays: [
     { day: 28, dayKind: 'sunday' },

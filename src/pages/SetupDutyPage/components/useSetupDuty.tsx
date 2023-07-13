@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { shiftList as mockShiftList } from '@mocks/duty/data';
+import { mockShiftList as mockShiftList } from '@mocks/duty/data';
 import { SetDivision, SetShift, SetStraight, SetWard } from '@components/Settings';
 import { mockWard } from '@mocks/ward/data';
 

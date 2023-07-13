@@ -1,4 +1,4 @@
-import { shiftList } from '@mocks/duty/data';
+import { mockShiftList } from '@mocks/duty/data';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -14,7 +14,7 @@ export const useShiftStore = create<ShiftState>()(
   devtools(
     persist(
       (set) => ({
-        shiftList: shiftList,
+        shiftList: mockShiftList,
         setShiftList: (shiftList) => set((state) => ({ ...state, shiftList: shiftList })),
       }),
       {
