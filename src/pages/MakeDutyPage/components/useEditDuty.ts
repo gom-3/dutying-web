@@ -12,7 +12,7 @@ export type Focus = {
 
 export type DayInfo = {
   /** @example D E N O가 각각 1, 2, 3, 4 이면 [4, 1, 2, 3] */
-  countByShiftList: { count: number; standard: number; shift: Shift }[];
+  countByShiftList: { count: number; standard: number; shiftType: ShiftType }[];
   month: number;
   day: number;
   nurse: Nurse;
@@ -160,8 +160,8 @@ const useEditDuty = () => {
       if (e.key === 'Space' || e.key === ' ') {
         setFocus({ ...focus, openTooltip: !focus.openTooltip });
       }
-      mockShiftList.forEach((shift, index) => {
-        if (shift.shortName.toUpperCase() === e.key.toUpperCase()) {
+      mockShiftList.forEach((shiftType, index) => {
+        if (shiftType.shortName.toUpperCase() === e.key.toUpperCase()) {
           handleFocusedDutyChange(index);
         }
       });
@@ -203,7 +203,7 @@ const useEditDuty = () => {
             duty.days[focus.day].dayKind === 'workday'
               ? mockDutyStandard.workday[shiftIndex]
               : mockDutyStandard.weekend[shiftIndex],
-          shift: mockShiftList[shiftIndex],
+          shiftType: mockShiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: duty.dutyRowsByLevel

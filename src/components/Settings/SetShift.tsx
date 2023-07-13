@@ -4,40 +4,44 @@ import TimeInput from '@components/TimeInput';
 import CreateShiftModal from './CreateShiftModal';
 import { useState } from 'react';
 import {
-  CreateShiftListRequest,
-  CreateShiftRequest,
+  CreateShiftTypeListRequest,
+  CreateShiftTypeRequest,
 } from '@pages/OnboardingPage/components/useCreateWard';
 
 interface ContentsProps {
-  shiftList: CreateShiftListRequest;
-  setShiftList: (shiftList: CreateShiftListRequest) => void;
+  shiftTypeList: CreateShiftTypeListRequest;
+  setShiftTypeList: (shiftTypeList: CreateShiftTypeListRequest) => void;
 }
 
-function SetShift({ shiftList, setShiftList }: ContentsProps) {
+function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
   const [openModal, setOpenModal] = useState(false);
-  const [editShift, setEditShift] = useState<CreateShiftRequest | null>(null);
+  const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
 
   const handleChangeShift = (
-    shift: CreateShiftRequest,
+    shiftType: CreateShiftTypeRequest,
     shiftIndex: number,
-    key: keyof CreateShiftRequest,
+    key: keyof CreateShiftTypeRequest,
     value: string
   ) => {
-    setShiftList(shiftList.map((_, i) => (i === shiftIndex ? { ...shift, [key]: value } : _)));
+    setShiftTypeList(
+      shiftTypeList.map((_, i) => (i === shiftIndex ? { ...shiftType, [key]: value } : _))
+    );
   };
 
-  const handleWriteShift = (shift: CreateShiftRequest) => {
+  const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
     if (editShift) {
-      setShiftList(shiftList.map((_, i) => (i === shiftList.indexOf(editShift) ? shift : _)));
+      setShiftTypeList(
+        shiftTypeList.map((_, i) => (i === shiftTypeList.indexOf(editShift) ? shiftType : _))
+      );
       setEditShift(null);
     } else {
-      setShiftList([...shiftList, shift]);
+      setShiftTypeList([...shiftTypeList, shiftType]);
     }
     setOpenModal(false);
   };
 
   const handleDeleteShift = (shiftIndex: number) => {
-    setShiftList(shiftList.filter((_, i) => i !== shiftIndex));
+    setShiftTypeList(shiftTypeList.filter((_, i) => i !== shiftIndex));
   };
 
   return (
@@ -49,18 +53,18 @@ function SetShift({ shiftList, setShiftList }: ContentsProps) {
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">색상</p>
         <p className="flex-1"></p>
       </div>
-      {shiftList.map((shift, index) => (
+      {shiftTypeList.map((shiftType, index) => (
         <div key={index} className="flex h-[9.1875rem] items-center">
           <div className="flex flex-[2] items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
-            {shift.name}
+            {shiftType.name}
           </div>
           <div className="flex flex-1 items-center justify-center">
             <TextField
               className="h-[4rem] w-[4rem] px-0 text-center font-poppins text-[2.25rem] font-normal text-sub-2.5"
-              value={shift.shortName}
+              value={shiftType.shortName}
               onChange={(e) =>
                 handleChangeShift(
-                  shift,
+                  shiftType,
                   index,
                   'shortName',
                   e.target.value.slice(0, 1).toUpperCase()
@@ -69,22 +73,24 @@ function SetShift({ shiftList, setShiftList }: ContentsProps) {
             />
           </div>
           <div className="flex flex-[3] items-center justify-center gap-[1.125rem] text-sub-2.5">
-            {shift.isOff ? (
+            {shiftType.isOff ? (
               <p className="font-poppins text-[2.25rem]">-</p>
             ) : (
               <>
                 <TimeInput
                   className="h-[4rem] w-[9.375rem] text-center"
-                  initTime={shift.startTime}
+                  initTime={shiftType.startTime}
                   onTimeChange={(value) =>
-                    handleChangeShift(shift, index, 'startTime', value || '')
+                    handleChangeShift(shiftType, index, 'startTime', value || '')
                   }
                 />
                 <p className="font-poppins text-[2.25rem]">~</p>
                 <TimeInput
                   className="h-[4rem] w-[9.375rem] text-center"
-                  initTime={shift.endTime}
-                  onTimeChange={(value) => handleChangeShift(shift, index, 'endTime', value || '')}
+                  initTime={shiftType.endTime}
+                  onTimeChange={(value) =>
+                    handleChangeShift(shiftType, index, 'endTime', value || '')
+                  }
                 />
               </>
             )}
@@ -93,14 +99,14 @@ function SetShift({ shiftList, setShiftList }: ContentsProps) {
             <label
               htmlFor={`color_picker_${index}`}
               className={`h-[4rem] w-[4rem] rounded-full`}
-              style={{ backgroundColor: shift.color }}
+              style={{ backgroundColor: shiftType.color }}
             />
             <input
               id={`color_picker_${index}`}
               className="absolute translate-x-[100%] translate-y-[50%] opacity-0"
               type="color"
-              value={shift.color}
-              onChange={(e) => handleChangeShift(shift, index, 'color', e.target.value)}
+              value={shiftType.color}
+              onChange={(e) => handleChangeShift(shiftType, index, 'color', e.target.value)}
             />
           </div>
           <div className="flex flex-1 justify-end">
@@ -108,11 +114,11 @@ function SetShift({ shiftList, setShiftList }: ContentsProps) {
               <PenIcon
                 className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                 onClick={() => {
-                  setEditShift(shift);
+                  setEditShift(shiftType);
                   setOpenModal(true);
                 }}
               />
-              {!shift.isDefault && (
+              {!shiftType.isDefault && (
                 <ExitIcon
                   className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                   onClick={() => handleDeleteShift(index)}
@@ -133,7 +139,7 @@ function SetShift({ shiftList, setShiftList }: ContentsProps) {
         <p className="font-apple text-[1.25rem] text-sub-2.5">새로운 근무/휴가 추가하기</p>
       </div>
       <CreateShiftModal
-        shift={editShift}
+        shiftType={editShift}
         open={openModal}
         setOpen={setOpenModal}
         onSubmit={handleWriteShift}

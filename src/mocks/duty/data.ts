@@ -8,7 +8,7 @@ export const mockDutyStandard: {
   weekend: [3, 3, 3, 3],
 };
 
-export const mockShiftList: ShiftList = [
+export const mockShiftList: ShiftType[] = [
   {
     shiftTypeId: 0,
     wardId: 1,

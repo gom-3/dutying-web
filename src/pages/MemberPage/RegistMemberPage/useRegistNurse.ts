@@ -48,10 +48,10 @@ const useRegistNurse = () => {
       isWardManager: false,
       gender: '여',
       employmentDate: '2010-10-10',
-      nurseShiftTypes: mockShiftList.map((shift, index) => ({
+      nurseShiftTypes: mockShiftList.map((shiftType, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
-        name: shift.name,
-        shoftName: shift.shortName,
+        name: shiftType.name,
+        shoftName: shiftType.shortName,
         isPossible: true,
         isPreferred: false,
       })),

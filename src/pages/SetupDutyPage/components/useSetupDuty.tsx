@@ -94,8 +94,8 @@ const useSetupDuty = () => {
       name: '4 근무 형태',
       contents: (
         <SetShift
-          shiftList={shiftList}
-          setShiftList={(shiftList) => {
+          shiftTypeList={shiftList}
+          setShiftTypeList={(shiftList) => {
             setShiftList(shiftList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
           }}
         />

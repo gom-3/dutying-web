@@ -112,7 +112,7 @@ export default function DutyCalendar({
                                   ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
                                   : null
                               }
-                              shift={shiftList[shiftIndex]}
+                              shiftType={shiftList[shiftIndex]}
                               className={`cursor-pointer ${
                                 isFocued && 'outline outline-[.0625rem] outline-main-1'
                               }`}

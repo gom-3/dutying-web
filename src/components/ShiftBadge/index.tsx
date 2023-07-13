@@ -3,11 +3,11 @@ import { twMerge } from 'tailwind-merge';
 
 interface Props
   extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  shift: Shift | null;
+  shiftType: ShiftType | null;
   forwardRef?: Ref<HTMLDivElement>;
 }
 
-function ShiftBadge({ shift, className, forwardRef, ...props }: Props) {
+function ShiftBadge({ shiftType, className, forwardRef, ...props }: Props) {
   return (
     <div
       className={twMerge(
@@ -15,10 +15,10 @@ function ShiftBadge({ shift, className, forwardRef, ...props }: Props) {
         className
       )}
       ref={forwardRef}
-      style={{ backgroundColor: shift ? shift.color : '#D6D6DE' }}
+      style={{ backgroundColor: shiftType ? shiftType.color : '#D6D6DE' }}
       {...props}
     >
-      {shift ? shift.shortName : '-'}
+      {shiftType ? shiftType.shortName : '-'}
     </div>
   );
 }

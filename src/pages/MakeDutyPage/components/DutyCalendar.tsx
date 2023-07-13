@@ -6,7 +6,7 @@ import ShiftBadge from '@components/ShiftBadge';
 
 interface Props {
   duty: Duty;
-  shiftList: ShiftList;
+  shiftTypeList: ShiftType[];
   isEditable?: boolean;
   focus?: Focus | null;
   focusedCellRef: RefObject<HTMLElement>;
@@ -19,7 +19,7 @@ interface Props {
 export default function DutyCalendar({
   duty,
   foldedProficiency,
-  shiftList,
+  shiftTypeList,
   isEditable,
   focus,
   focusedCellRef,
@@ -60,9 +60,9 @@ export default function DutyCalendar({
           </div>
         </div>
         <div className="flex w-[13.625rem] items-center px-[1.5625rem] text-center">
-          {shiftList.slice(1).map((shift, index) => (
+          {shiftTypeList.slice(1).map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
-              {shift.shortName}
+              {shiftType.shortName}
             </div>
           ))}
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">O</div>
@@ -106,7 +106,7 @@ export default function DutyCalendar({
                       {row.lastShiftIndexList.map((shiftIndex, j) => (
                         <ShiftBadge
                           key={j}
-                          shift={shiftList[shiftIndex]}
+                          shiftType={shiftTypeList[shiftIndex]}
                           className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
                         />
                       ))}
@@ -143,7 +143,7 @@ export default function DutyCalendar({
                                   ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
                                   : null
                               }
-                              shift={shiftList[shiftIndex]}
+                              shiftType={shiftTypeList[shiftIndex]}
                               className={`cursor-pointer ${
                                 isFocued && 'outline outline-[.0625rem] outline-main-1'
                               }`}
@@ -158,7 +158,7 @@ export default function DutyCalendar({
               <div className="w-[13.625rem] rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 {dutyRows.map((row, i) => (
                   <div key={i} className="flex h-[3.25rem] items-center">
-                    {shiftList.slice(1).map((_, index) => (
+                    {shiftTypeList.slice(1).map((_, index) => (
                       <div
                         key={index}
                         className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"

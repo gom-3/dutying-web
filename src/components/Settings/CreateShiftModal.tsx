@@ -2,18 +2,18 @@ import { CancelIcon } from '@assets/svg';
 import Button from '@components/Button';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
-import { CreateShiftRequest } from '@pages/OnboardingPage/components/useCreateWard';
+import { CreateShiftTypeRequest } from '@pages/OnboardingPage/components/useCreateWard';
 import { useEffect, useState } from 'react';
 
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (shift: CreateShiftRequest) => void;
-  shift?: CreateShiftRequest | null;
+  onSubmit: (shiftType: CreateShiftTypeRequest) => void;
+  shiftType?: CreateShiftTypeRequest | null;
 }
 
-function CreateShiftModal({ open, setOpen, onSubmit, shift }: Props) {
-  const initValue: CreateShiftRequest = {
+function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
+  const initValue: CreateShiftTypeRequest = {
     name: '',
     startTime: '00:00',
     endTime: '00:00',
@@ -26,8 +26,8 @@ function CreateShiftModal({ open, setOpen, onSubmit, shift }: Props) {
   const [writeShift, setWriteShift] = useState(initValue);
 
   useEffect(() => {
-    if (shift) setWriteShift(shift);
-  }, [shift]);
+    if (shiftType) setWriteShift(shiftType);
+  }, [shiftType]);
 
   useEffect(() => {
     if (open === false) setWriteShift(initValue);
@@ -44,7 +44,7 @@ function CreateShiftModal({ open, setOpen, onSubmit, shift }: Props) {
       >
         <div className="flex items-center">
           <h1 className="flex-1 font-apple text-[1.75rem] font-semibold text-[#150B3C]">
-            {shift ? '근무•휴가 수정하기' : '근무•휴가 추가하기'}
+            {shiftType ? '근무•휴가 수정하기' : '근무•휴가 추가하기'}
           </h1>
           <CancelIcon className="h-[1.875rem] w-[1.875rem]" />
         </div>
