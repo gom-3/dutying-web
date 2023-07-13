@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { shiftList, requestDuty as mockRequestDuty, mockDutyStandard } from '@mocks/duty/data';
+import { mockShiftList, requestDuty as mockRequestDuty, mockDutyStandard } from '@mocks/duty/data';
 import { mockWard } from '@mocks/ward/data';
 
 export type Focus = {
@@ -168,7 +168,7 @@ const useRequest = () => {
       if (e.key === 'Space' || e.key === ' ') {
         setFocus({ ...focus, openTooltip: !focus.openTooltip });
       }
-      shiftList.forEach((shift, index) => {
+      mockShiftList.forEach((shift, index) => {
         if (shift.shortName.toUpperCase() === e.key.toUpperCase()) {
           handleFocusedDutyChange(index);
         }
@@ -203,7 +203,7 @@ const useRequest = () => {
       setFocusedDayInfo({
         month: requestDuty.month,
         day: focus.day ?? 0,
-        countByShiftList: shiftList.map((_, shiftIndex) => ({
+        countByShiftList: mockShiftList.map((_, shiftIndex) => ({
           count: requestDuty.requestRowsByLevel
             .flatMap((row) => row.dutyRows)
             .filter((dutyRow) => dutyRow.shiftIndexList[focus.day] === shiftIndex).length,
@@ -211,7 +211,7 @@ const useRequest = () => {
             requestDuty.days[focus.day].dayKind === 'workday'
               ? mockDutyStandard.workday[shiftIndex]
               : mockDutyStandard.weekend[shiftIndex],
-          shift: shiftList[shiftIndex],
+          shift: mockShiftList[shiftIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: requestDuty.requestRowsByLevel
@@ -243,7 +243,7 @@ const useRequest = () => {
     focusedCellRef,
     rowContainerRef,
     /** 근무 유형 */
-    shiftList,
+    shiftList: mockShiftList,
     handlers: {
       handleFold,
       /** 근무 셀 선택 */

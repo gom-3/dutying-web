@@ -8,18 +8,18 @@ export const mockDutyStandard: {
   weekend: [3, 3, 3, 3],
 };
 
-export const shiftList: ShiftList = [
+export const mockShiftList: ShiftList = [
   {
     shiftTypeId: 0,
     wardId: 1,
     name: '오프',
-    shortName: 'O',
+    shortName: '/',
     startTime: '00:00',
     endTime: '00:00',
     hotkey: ['/', 'o', 'O', '0'],
     isDefault: true,
     isOff: true,
-    color: '#5534E0',
+    color: '#465B7A',
   },
   {
     shiftTypeId: 1,
@@ -31,7 +31,7 @@ export const shiftList: ShiftList = [
     hotkey: ['D', 'd', 'ㅇ', '1'],
     isDefault: true,
     isOff: false,
-    color: '#D7EB2A',
+    color: '#4DC2AD',
   },
   {
     shiftTypeId: 2,
@@ -43,7 +43,7 @@ export const shiftList: ShiftList = [
     hotkey: ['E', 'e', 'ㄷ', '2'],
     isDefault: true,
     isOff: false,
-    color: '#EB39E8',
+    color: '#FF8BA5',
   },
   {
     shiftTypeId: 3,
@@ -55,7 +55,7 @@ export const shiftList: ShiftList = [
     hotkey: ['N', 'n', 'ㅜ', '3'],
     isDefault: true,
     isOff: false,
-    color: '#271F3E',
+    color: '#629CFF',
   },
 ];
 
@@ -287,7 +287,7 @@ export const requestDuty: RequestDuty = {
   ],
 };
 
-export const duty: Duty = {
+export const mockDuty: Duty = {
   month: 6,
   lastDays: [
     { day: 28, dayKind: 'sunday' },

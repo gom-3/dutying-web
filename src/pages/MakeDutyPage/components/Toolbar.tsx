@@ -1,5 +1,7 @@
 import { NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
+import { dutyToExcel } from '@libs/util/dutyToExcel';
+import { mockShiftList } from '@mocks/duty/data';
 
 interface Props {
   duty: Duty;
@@ -21,8 +23,9 @@ function Toolbar({ duty }: Props) {
       <Button
         type="outline"
         className="h-[2.5rem] w-[4.6875rem] border-[.0938rem] text-[1.25rem] font-normal"
+        onClick={() => dutyToExcel(duty, mockShiftList)}
       >
-        완료
+        엑셀로 저장하기
       </Button>
     </div>
   );

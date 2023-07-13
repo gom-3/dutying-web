@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { nurses as tempNurse } from '@mocks/nurse/data';
-import { shiftList } from '@mocks/duty/data';
+import { mockShiftList } from '@mocks/duty/data';
 import { getNurses } from '@libs/api/nurse';
 
 const useRegistNurse = () => {
@@ -48,7 +48,7 @@ const useRegistNurse = () => {
       isWardManager: false,
       gender: '여',
       employmentDate: '2010-10-10',
-      nurseShiftTypes: shiftList.map((shift, index) => ({
+      nurseShiftTypes: mockShiftList.map((shift, index) => ({
         nurseShiftTypeId: index, // shift에 id 추가해서 변경
         name: shift.name,
         shoftName: shift.shortName,

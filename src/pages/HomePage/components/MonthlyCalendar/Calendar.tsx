@@ -1,5 +1,5 @@
 import 'index.css';
-import { duty } from '@mocks/duty/data';
+import { mockDuty } from '@mocks/duty/data';
 import ShiftCircle from '@components/ShiftCircle';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -14,7 +14,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
   if (weeks.length > 0) {
     currentMonth = weeks[2][2].getMonth();
   }
-  const shiftIndexList = duty.dutyRowsByLevel[0].dutyRows[0].shiftIndexList;
+  const shiftIndexList = mockDuty.dutyRowsByLevel[0].dutyRows[0].shiftIndexList;
 
   return (
     <table className="h-[24.375rem] w-full">
