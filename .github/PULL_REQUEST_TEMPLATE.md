@@ -1,20 +1,19 @@
 ## Motivation
 
-closed #
+기능 설명과 개발 동기에 대해서는 티켓을 확인해주세요.
 
-- ~을 사용하여 ~을 했습니다.
+[DUT-XXX](https://gom3.atlassian.net/browse/DUT-XXX)
 
 <br>
 
 ## Key Changes
 
+주요 변경사항을 요약하면 다음과 같습니다.
+
 - ~가 변경되었습니다.
-
-### 스크린샷
-
 
 <br>
 
 ## To Reviewers
 
-- ~를 중점으로 보면서 검토해주세요
+-
