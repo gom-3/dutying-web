@@ -22,6 +22,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'react-hooks/exhaustive-deps': 'off',
     'react-refresh/only-export-components': 'warn',
     'tailwindcss/no-custom-classname': 'off',
   },

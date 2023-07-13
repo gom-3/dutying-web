@@ -1,35 +1,53 @@
-import axiosInstance from '@libs/api/client';
-import { HOME } from '@libs/constant/path';
+import { LOGIN } from '@libs/constant/path';
+import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { useUserStore } from 'stores/userStore';
-
-const tempUser = {
-  id: 0,
-  name: '',
-  hospital: {
-    hospital: '',
-    ward: '',
-    code: '',
-  },
-};
+import { setAccessToken } from '@libs/api/client';
+import { useAccount } from 'store';
+import { getAccountMe } from '@libs/api/account';
+import { TailSpin } from 'react-loader-spinner';
+import qs from 'qs';
 
 const RedirectPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const login = useUserStore((state) => state.loginUser);
-  const queryParmas = new URLSearchParams(location.search);
-  const accessToken = queryParmas.get('accessToken');
+  const { setAccount } = useAccount();
+
+  const handleLogin = async (nextPageUrl: string) => {
+    try {
+      const account = await getAccountMe();
+      setAccount(account);
+      location.replace(nextPageUrl);
+      // @TODO 도메인 구입 이후 처리
+      // switch (account.onboardingStatus) {
+      //   case '미입력':
+      //     return navigate(ONBOARDING.ACCOUNT);
+      //   case '온보딩':
+      //     return navigate(ONBOARDING.WARD);
+      //   default:
+      //     return navigate(HOME);
+      // }
+    } catch (e) {
+      alert('로그인에 실패했습니다.');
+      navigate(LOGIN, { replace: true });
+    }
+  };
 
   useEffect(() => {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    // Login API 호출
-    login(tempUser);
-    navigate(HOME);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+    const query = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const accessToken = query?.['accessToken'] as string;
+    const nextPageUrl = query?.['nextPageUrl'] as string;
+    console.log(nextPageUrl);
+    if (accessToken) {
+      setAccessToken(accessToken);
+      handleLogin(nextPageUrl);
+    }
+  }, []);
 
-  return <div />;
+  return (
+    <div className="flex h-screen w-screen flex-col items-center justify-center">
+      로그인중입니다.
+      <TailSpin color="#844AFF" />
+    </div>
+  );
 };
 
 export default RedirectPage;

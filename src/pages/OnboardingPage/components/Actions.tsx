@@ -1,6 +1,7 @@
 import Button from '@components/Button';
 import { Step } from './useCreateWard';
 import { useNavigate } from 'react-router';
+import { HOME } from '@libs/constant/path';
 
 interface Props {
   steps: Step[];
@@ -32,7 +33,7 @@ function Actions({ steps, currentStep, isFilled, setCurrentStep }: Props) {
           다음
         </Button>
       ) : (
-        <Button className="h-[5rem] w-[11.4375rem]" onClick={() => navigate('/')}>
+        <Button className="h-[5rem] w-[11.4375rem]" onClick={() => navigate(HOME)}>
           저장
         </Button>
       )}

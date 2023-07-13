@@ -40,7 +40,7 @@ const NavigationBar = () => {
           />
         </div>
         <div
-          onClick={() => navigate('/')}
+          onClick={() => navigate(HOME)}
           className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
         >
           {pathname === HOME ? (

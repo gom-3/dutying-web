@@ -1,8 +1,13 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
+const queryClient = new QueryClient();
+
 const wrapper = ({ children }: { children: JSX.Element }) => (
-  <BrowserRouter>{children}</BrowserRouter>
+  <BrowserRouter>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  </BrowserRouter>
 );
 
 const customRender = (child: React.ReactElement, options = {}) =>

@@ -19,7 +19,6 @@ const useRegistNurse = () => {
     const temp = nurses.find((n) => n.nurseId === id);
     setNurse(temp || nurses[0]);
     getNurses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nurses]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {

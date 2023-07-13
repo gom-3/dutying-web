@@ -1,13 +1,16 @@
+import { getAccountMe } from '@libs/api/account';
 import { Router } from '@pages/Router';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useAccount } from 'store';
 
 function App() {
-  const queryClient = new QueryClient();
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-    </QueryClientProvider>
-  );
+  const { setAccount } = useAccount();
+  useQuery(['account'], getAccountMe, {
+    onSuccess: (account) => setAccount(account),
+    onError: () => setAccount(null),
+  });
+
+  return <Router />;
 }
 
 export default App;

@@ -2,16 +2,15 @@ import NavigationBar from '@components/NavigationBar';
 import { LOGIN } from '@libs/constant/path';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import { useUserLoggedIn } from 'stores/userStore';
+import { useAccount } from 'store';
 
 function MainLayout() {
   const navigate = useNavigate();
-  const isLoggedIn = useUserLoggedIn();
+  const { account } = useAccount();
 
   useEffect(() => {
-    if (!isLoggedIn) navigate(LOGIN);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn]);
+    if (!account) navigate(LOGIN);
+  }, [account]);
 
   return (
     <div className="flex bg-[#FDFCFE]">

@@ -7,12 +7,13 @@ export const mockAccount: Account = {
   email: 'sjsjsj1246@gmail.com',
   phoneNum: '01012345678',
   birthday: '1999-10-17',
-  status: 'NURSE',
   isDeleted: false,
   isWorker: true,
   employmentDate: '2020-01-01',
   createdAt: '2020-01-01T00:00:00.000Z',
   modifiedAt: '2020-01-01T00:00:00.000Z',
+  isManager: true,
+  onboardingStatus: '완료',
 };
 
 export const nurses: Nurse[] = [

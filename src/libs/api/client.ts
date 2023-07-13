@@ -2,7 +2,9 @@ import axios from 'axios';
 import { refreshToken } from './login';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://650c3613-c7e5-47e1-a0d9-9b96530e30bf.mock.pstmn.io',
+  baseURL: import.meta.env.DEV
+    ? import.meta.env.VITE_SERVER_URL_DEV
+    : import.meta.env.VITE_SERVER_URL_PROD,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,13 +12,7 @@ const axiosInstance = axios.create({
 
 // 응답 인터셉터 처리
 axiosInstance.interceptors.response.use(
-  // Data가 있으면 바로 반환하고 없으면 response를 반환
-  (response) => {
-    if (response && response.data) {
-      return response.data;
-    }
-    return response;
-  },
+  (response) => response,
   // 에러가 발생하면 각 에러에 대한 처리
   (error) => {
     if (error.response) {
@@ -50,5 +46,9 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const setAccessToken = (token: string) => {
+  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
 
 export default axiosInstance;
