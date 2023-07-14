@@ -1,5 +1,5 @@
 import 'index.css';
-import { mockDuty } from '@mocks/duty/data';
+import { mockShift } from '@mocks/shift';
 import ShiftCircle from '@components/ShiftCircle';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -14,7 +14,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
   if (weeks.length > 0) {
     currentMonth = weeks[2][2].getMonth();
   }
-  const shiftIndexList = mockDuty.dutyRowsByLevel[0].dutyRows[0].shiftIndexList;
+  const shiftTypeIndexList = mockShift.levels[0][0].shiftTypeIndexList;
 
   return (
     <table className="h-[24.375rem] w-full">
@@ -44,6 +44,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
             <tr className={`${isSelectedWeek ? 'bg-sub-5' : ''}`} key={week[0].getDate()}>
               {week.map((day) => {
                 const isCurrentMonth = currentMonth === day.getMonth();
+                console.log(shiftTypeIndexList[day.getDate() - 1]?.current);
                 return (
                   <td
                     key={day.getDate()}
@@ -54,7 +55,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
                     </div>
                     <ShiftCircle
                       translucent={!isCurrentMonth}
-                      id={shiftIndexList[day.getDate() - 1]}
+                      id={shiftTypeIndexList[day.getDate() - 1]?.current}
                     />
                   </td>
                 );

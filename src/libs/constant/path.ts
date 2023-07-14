@@ -10,10 +10,10 @@ export const ONBOARDING = {
   ACCOUNT: '/onboarding/account',
   WARD: '/onboarding/ward',
 };
-export const DUTY = {
-  ROOT: '/duty',
-  MAKE: '/duty/make',
-  SETTING: '/duty/setup',
+export const SHIFT = {
+  ROOT: '/shift',
+  MAKE: '/shift/make',
+  SETTING: '/shift/setup',
 };
 export const MEMBER = {
   ROOT: '/members',

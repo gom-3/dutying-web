@@ -4,8 +4,8 @@ import { useShiftStore } from 'stores/shiftStore';
 import { shallow } from 'zustand/shallow';
 
 const ShiftTypeSetting = () => {
-  const { shiftList, setShiftList } = useShiftStore(
-    (state) => ({ shiftList: state.shiftList, setShiftList: state.setShiftList }),
+  const { shiftTypeList, setShiftTypeList } = useShiftStore(
+    (state) => ({ shiftTypeList: state.shiftTypeList, setShiftTypeList: state.setShiftTypeList }),
     shallow
   );
 
@@ -18,16 +18,15 @@ const ShiftTypeSetting = () => {
         </div>
         <div className="flex items-center">
           <div className="mr-[1.875rem] font-poppins text-[2rem] text-main-1">
-            {shiftList.map((x) => x.shortName).join(' ')}
+            {shiftTypeList.map((x) => x.shortName).join(' ')}
           </div>
         </div>
       </div>
       <div>
-        {/* @TODO  */}
         <SetShift
-          shiftList={shiftList}
-          setShiftList={(shiftList) => {
-            setShiftList(shiftList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
+          shiftTypeList={shiftTypeList}
+          setShiftTypeList={(shiftTypeList) => {
+            setShiftTypeList(shiftTypeList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
           }}
         />
       </div>

@@ -8,7 +8,7 @@ import ShiftTypeSetting from './components/ShiftTypeSetting';
 
 type ModalType = '숙련도' | '연속근무';
 
-const DutySetupPage = () => {
+const SetShiftPage = () => {
   const { maxContinuosNight, maxContinuosWork, minNightInterval, levelDivision } = useWardStore();
   const wardName = useWardStore((state) => state.name, shallow);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,4 +54,4 @@ const DutySetupPage = () => {
   );
 };
 
-export default DutySetupPage;
+export default SetShiftPage;

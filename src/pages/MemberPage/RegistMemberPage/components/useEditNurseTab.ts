@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { useShiftList } from 'stores/shiftStore';
+import { useShiftTypeList } from 'stores/shiftStore';
 
 export type CheckState = {
   [key: string]: boolean;
@@ -11,20 +11,20 @@ const useEditNurseTab = (nurse: Nurse, closeTab: () => void) => {
   const [availChecked, setAvailChecked] = useState<CheckState>({});
   const [preferChecked, setPreferChecked] = useState<CheckState>({});
   const ref = useOnclickOutside(() => closeTab());
-  const shiftList = useShiftList();
+  const shiftTypeList = useShiftTypeList();
 
   /** 가능 근무, 선호 근무 체크리스트 업데이트 */
   useEffect(() => {
-    const updatedWorkAvailable: Shift[] = [];
-    const updatedWorkPrefer: Shift[] = [];
+    const updatedWorkAvailable: ShiftType[] = [];
+    const updatedWorkPrefer: ShiftType[] = [];
 
     for (const key in availChecked) {
       if (availChecked[key] === true) {
-        const item = shiftList.find((_, index) => index === +key);
+        const item = shiftTypeList.find((_, index) => index === +key);
         if (item) updatedWorkAvailable.push(item);
       }
       if (preferChecked[key] === true) {
-        const item = shiftList.find((_, index) => index === +key);
+        const item = shiftTypeList.find((_, index) => index === +key);
         if (item) updatedWorkPrefer.push(item);
       }
     }
@@ -63,7 +63,7 @@ const useEditNurseTab = (nurse: Nurse, closeTab: () => void) => {
 
   return {
     formState: { form, availChecked, preferChecked },
-    shiftList,
+    shiftTypeList,
     ref,
     handlers: {
       handleAvailCheckboxChange,

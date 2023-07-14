@@ -1,6 +1,6 @@
 import axiosInstance from './client';
 
-export type WardResponse = Ward & ShiftList;
+export type WardResponse = Ward & ShiftType[];
 export const getWard = async (wardId: number) =>
   await axiosInstance.get<WardResponse>('/wards/' + wardId);
 

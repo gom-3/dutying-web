@@ -2,7 +2,7 @@ import 'index.css';
 import Calendar from './Calendar';
 import Controller from './Controller';
 import { useState } from 'react';
-import { nurses } from '@mocks/nurse/data';
+import { nurses } from '@mocks/nurse';
 
 interface Props {
   date: Date;

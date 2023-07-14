@@ -1,9 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import { DUTY, HOME, LOGIN, MEMBER, REDIRECT, ONBOARDING, ROOT } from '@libs/constant/path';
-import MakeDutyPage from './MakeDutyPage';
+import { SHIFT, HOME, LOGIN, MEMBER, REDIRECT, ONBOARDING, ROOT } from '@libs/constant/path';
+import MakeShiftPage from './MakeShiftPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
-import SetupDutyPage from './SetupDutyPage';
 import HomePage from './HomePage';
 import MainLayout from '@libs/layouts/MainLayout';
 import RedirectPage from './LoginPage/RedirectPage';
@@ -12,6 +11,7 @@ import SetAccount from './OnboardingPage/SetAccount';
 import SetWard from './OnboardingPage/SetWard';
 import LandingPage from './LandingPage';
 import NotAuthzLayout from '@libs/layouts/NotAuthzLayout';
+import SetShiftPage from './SetShiftPage';
 
 export const Router = () => {
   return (
@@ -29,8 +29,8 @@ export const Router = () => {
         <Route path={HOME} element={<HomePage />} />
         <Route path={MEMBER.REGIST} element={<RegistMemberPage />} />
         <Route path={MEMBER.REQUEST} element={<RequestPage />} />
-        <Route path={DUTY.SETTING} element={<SetupDutyPage />} />
-        <Route path={DUTY.MAKE} element={<MakeDutyPage />} />
+        <Route path={SHIFT.SETTING} element={<SetShiftPage />} />
+        <Route path={SHIFT.MAKE} element={<MakeShiftPage />} />
       </Route>
     </Routes>
   );

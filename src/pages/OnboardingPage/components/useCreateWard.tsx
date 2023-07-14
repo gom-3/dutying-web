@@ -17,8 +17,8 @@ export type CreateWardRequest = Pick<
   | 'levelDivision'
 > & { hospitalName: string };
 
-export type CreateShiftRequest = Omit<Shift, 'shiftTypeId' | 'wardId'>;
-export type CreateShiftListRequest = CreateShiftRequest[];
+export type CreateShiftTypeRequest = Omit<ShiftType, 'shiftTypeId' | 'wardId'>;
+export type CreateShiftTypeListRequest = CreateShiftTypeRequest[];
 
 const useCreateWard = () => {
   // 서버에 POST 요청을 보내기 위한 data
@@ -31,7 +31,7 @@ const useCreateWard = () => {
     maxContinuousNight: 3,
     levelDivision: 4,
   });
-  const [shiftList, setShiftList] = useState<CreateShiftListRequest>([
+  const [shiftTypeList, setShiftTypeList] = useState<CreateShiftTypeListRequest>([
     {
       name: '오프',
       shortName: 'O',
@@ -143,7 +143,7 @@ const useCreateWard = () => {
     },
     {
       name: '4 근무 형태',
-      contents: <SetShift shiftList={shiftList} setShiftList={setShiftList} />,
+      contents: <SetShift shiftTypeList={shiftTypeList} setShiftTypeList={setShiftTypeList} />,
       description: null,
     },
   ];

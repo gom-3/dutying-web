@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { Focus } from './useEditDuty';
-import { mockDutyStandard } from '@mocks/duty/data';
+import { mockShiftStandard } from '@mocks/shift';
 
 interface Props {
   focus: Focus | null;
-  duty: Duty;
-  shiftList: ShiftList;
+  shift: Shift;
+  shiftTypeList: ShiftType[];
 }
 
-function CountDutyByDay({ focus, duty, shiftList }: Props) {
-  const [dutyStandard] = useState(mockDutyStandard);
+function CountDutyByDay({ focus, shift, shiftTypeList }: Props) {
+  const [dutyStandard] = useState(mockShiftStandard);
 
   return (
     <div className="mb-[3.125rem] mt-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-      {shiftList.slice(1).map((shift, index) => (
+      {shiftTypeList.slice(1).map((shiftType, index) => (
         <div
           key={index}
           className="flex h-[3.875rem] items-center justify-center gap-[1.25rem] border-b-[.0625rem] border-[#E0E0E0] last:border-none"
@@ -21,11 +21,11 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
           <div
             className={`flex h-full w-[3.125rem] items-center justify-center font-poppins text-[1.5rem] text-white 
             ${index === 0 && 'rounded-tl-[1.25rem]'} 
-            ${index === shiftList.length - 2 && 'rounded-bl-[1.25rem]'}
+            ${index === shiftTypeList.length - 2 && 'rounded-bl-[1.25rem]'}
             `}
-            style={{ backgroundColor: shift.color }}
+            style={{ backgroundColor: shiftType.color }}
           >
-            {shift.shortName}
+            {shiftType.shortName}
           </div>
           <div className="flex w-[3.4375rem] items-center justify-center gap-[.3125rem] font-apple text-[.875rem] text-sub-3">
             평일
@@ -40,7 +40,7 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
             </span>
           </div>
           <div className="flex h-full w-[69.5rem] px-[1rem] text-center">
-            {duty.days.map((_date, i) => (
+            {shift.days.map((_date, i) => (
               <p
                 key={i}
                 className={`flex flex-1 items-center justify-center font-poppins text-[1.25rem] text-sub-3 ${
@@ -48,9 +48,9 @@ function CountDutyByDay({ focus, duty, shiftList }: Props) {
                 }`}
               >
                 {
-                  duty.dutyRowsByLevel
-                    .flatMap((row) => row.dutyRows)
-                    .filter((item) => item.shiftIndexList[i] === index + 1).length
+                  shift.levels
+                    .flatMap((row) => row)
+                    .filter((item) => item.shiftTypeIndexList[i].current === index + 1).length
                 }
               </p>
             ))}

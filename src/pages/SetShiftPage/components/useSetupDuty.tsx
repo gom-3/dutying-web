@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { mockShiftList as mockShiftList } from '@mocks/duty/data';
+import { mockShiftTypeList as mockShiftTypeList } from '@mocks/shift';
 import { SetDivision, SetShift, SetStraight, SetWard } from '@components/Settings';
-import { mockWard } from '@mocks/ward/data';
+import { mockWard } from '@mocks/ward';
 
 export type Step = {
   name: string;
@@ -23,7 +23,7 @@ const useSetupDuty = () => {
   const [currentStep, setCurrentStep] = useState(0);
   // 추후 server state로 변경
   const [ward, setWard] = useState<CreateWardRequestDTO>(mockWard);
-  const [shiftList, setShiftList] = useState<ShiftList>(mockShiftList);
+  const [shiftTypeList, setShiftTypeList] = useState<ShiftType[]>(mockShiftTypeList);
   const [isFilled, setIsFilled] = useState(false);
   const [error, setError] = useState<{ step: number; message: string } | null>(null);
 
@@ -94,9 +94,9 @@ const useSetupDuty = () => {
       name: '4 근무 형태',
       contents: (
         <SetShift
-          shiftList={shiftList}
-          setShiftList={(shiftList) => {
-            setShiftList(shiftList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
+          shiftTypeList={shiftTypeList}
+          setShiftTypeList={(shiftTypeList) => {
+            setShiftTypeList(shiftTypeList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
           }}
         />
       ),

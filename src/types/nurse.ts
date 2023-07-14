@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-type DayDuty = {
+type DayShift = {
   /** 날짜 */
   day: Day;
   /** 근무 형태종류 */
@@ -45,11 +45,4 @@ type Nurse = {
   gender: string;
   /**입사날짜 */
   employmentDate: string;
-};
-
-type RequestDuty = Omit<Duty, 'dutyRowsByLevel'> & {
-  requestRowsByLevel: Array<{
-    level: number;
-    dutyRows: Array<DutyRow>;
-  }>;
 };

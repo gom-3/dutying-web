@@ -1,17 +1,11 @@
 import * as Excel from 'exceljs';
 
-export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
-  const flatDuty = duty.dutyRowsByLevel.flatMap((row) => row.dutyRows);
+export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
+  const flatRows = shift.levels.flatMap((row) => row);
 
   const workbook = new Excel.Workbook();
-  const worksheet = workbook.addWorksheet(`${duty.month}월 근무표`);
-  console.log(
-    ...(shiftList.map((x) => ({
-      key: x.shortName,
-      width: 8,
-      style: { alignment: { horizontal: 'center', vertical: 'middle' } },
-    })) as Excel.Column[])
-  );
+  const worksheet = workbook.addWorksheet(`${shift.month}월 근무표`);
+
   worksheet.columns = [
     { key: 'name', width: 8, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
     {
@@ -19,12 +13,12 @@ export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
       width: 10,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
     },
-    ...(duty.days.map((day) => ({
+    ...(shift.days.map((day) => ({
       key: day.day.toString(),
       width: 3,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
     })) as Excel.Column[]),
-    ...(shiftList.slice(1).map((x) => ({
+    ...(shiftTypeList.slice(1).map((x) => ({
       key: x.shortName,
       width: 8,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
@@ -41,19 +35,19 @@ export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
     },
   ];
 
-  const title = worksheet.addRow({ name: `${duty.month}월 근무표` });
+  const title = worksheet.addRow({ name: `${shift.month}월 근무표` });
   title.font = { bold: true, size: 16 };
   title.alignment = { horizontal: 'left' };
 
   const header = worksheet.addRow({
     name: '이름',
     lastShift: '전달 근무',
-    ...duty.days.reduce((acc, day, index) => {
+    ...shift.days.reduce((acc, day, index) => {
       acc[index + 1] = day.day;
       return acc;
     }, {} as { [key: string]: number }),
-    ...shiftList.slice(1).reduce((acc, shift) => {
-      acc[shift.shortName] = shift.shortName;
+    ...shiftTypeList.slice(1).reduce((acc, shiftType) => {
+      acc[shiftType.shortName] = shiftType.shortName;
       return acc;
     }, {} as { [key: string]: string }),
     O: 'O',
@@ -61,7 +55,7 @@ export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
   });
 
   // 토요일 일요일 공휴일 표시
-  duty.days.map((day) => {
+  shift.days.map((day) => {
     header.getCell(day.day.toString()).font = {
       color: {
         argb:
@@ -74,35 +68,43 @@ export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
     };
   });
 
-  flatDuty.map((dutyRow) =>
+  flatRows.map((dutyRow) =>
     worksheet.addRow({
-      name: dutyRow.user.name,
-      lastShift: dutyRow.lastShiftIndexList
-        .map((shiftIndex) =>
-          shiftList[shiftIndex].shortName === '/' ? 'O' : shiftList[shiftIndex].shortName
+      name: dutyRow.nurse.name,
+      lastShift: dutyRow.lastShiftTypeIndexList
+        .map(({ current }) =>
+          current
+            ? shiftTypeList[current].shortName === '/'
+              ? 'O'
+              : shiftTypeList[current].shortName
+            : ''
         )
         .join(''),
-      ...dutyRow.shiftIndexList.reduce((acc, shiftIndex, index) => {
-        acc[index + 1] = shiftList[shiftIndex].shortName;
+      ...dutyRow.shiftTypeIndexList.reduce((acc, { current }, index) => {
+        acc[index + 1] = current != null ? shiftTypeList[current].shortName : '';
         return acc;
       }, {} as { [key: string]: string }),
-      ...shiftList.slice(1).reduce((acc, shift, index) => {
-        acc[shift.shortName] = dutyRow.shiftIndexList.filter((x) => x === index + 1).length;
+      ...shiftTypeList.slice(1).reduce((acc, shiftType, index) => {
+        acc[shiftType.shortName] = dutyRow.shiftTypeIndexList.filter(
+          ({ current }) => current === index + 1
+        ).length;
         return acc;
       }, {} as { [key: string]: number }),
-      O: dutyRow.shiftIndexList.filter((x) => x === 0).length,
-      WO: dutyRow.shiftIndexList.filter(
-        (shiftIndex, i) =>
-          shiftIndex === 0 && duty.days.find((x) => x.day === i + 1)?.dayKind != 'workday'
+      O: dutyRow.shiftTypeIndexList.filter(({ current }) => current === 0).length,
+      WO: dutyRow.shiftTypeIndexList.filter(
+        ({ current }, i) =>
+          current === 0 && shift.days.find((x) => x.day === i + 1)?.dayKind != 'workday'
       ).length,
     })
   );
 
-  shiftList.slice(1).map((shift, index) => {
+  shiftTypeList.slice(1).map((shiftType, index) => {
     worksheet.addRow({
-      lastShift: shift.name,
-      ...duty.days.reduce((acc, _, i) => {
-        acc[i + 1] = flatDuty.filter((item) => item.shiftIndexList[i] === index + 1).length;
+      lastShift: shiftType.name,
+      ...shift.days.reduce((acc, _, i) => {
+        acc[i + 1] = flatRows.filter(
+          (item) => item.shiftTypeIndexList[i].current === index + 1
+        ).length;
         return acc;
       }, {} as { [key: string]: number }),
     });
@@ -116,7 +118,7 @@ export const dutyToExcel = (duty: Duty, shiftList: ShiftList) => {
     const anchor = document.createElement('a');
     anchor.href = url;
     // 파일명
-    anchor.download = `${duty.month}월 근무표.xlsx`;
+    anchor.download = `${shift.month}월 근무표.xlsx`;
     anchor.click();
     window.URL.revokeObjectURL(url);
   });
