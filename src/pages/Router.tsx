@@ -4,13 +4,13 @@ import MakeShiftPage from './MakeShiftPage';
 import LoginPage from './LoginPage';
 import RegistMemberPage from './MemberPage/RegistMemberPage';
 import HomePage from './HomePage';
-import MainLayout from '@libs/layouts/MainLayout';
+import MainLayout from '@components/Layouts/MainLayout';
 import RedirectPage from './LoginPage/RedirectPage';
 import RequestPage from './RequestPage';
 import SetAccount from './OnboardingPage/SetAccount';
 import SetWard from './OnboardingPage/SetWard';
 import LandingPage from './LandingPage';
-import NotAuthzLayout from '@libs/layouts/NotAuthzLayout';
+import NotAuthzLayout from '@components/Layouts/NotAuthzLayout';
 import SetShiftPage from './SetShiftPage';
 
 export const Router = () => {
