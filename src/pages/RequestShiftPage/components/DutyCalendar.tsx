@@ -1,26 +1,19 @@
-import { RefObject } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 
 interface Props {
   requestShift: RequestShift;
-  shiftTypeList: ShiftType[];
-  isEditable?: boolean;
-  focus?: Focus | null;
-  focusedCellRef: RefObject<HTMLElement>;
-  rowContainerRef: RefObject<HTMLDivElement>;
-  handleFocusChange?: (focus: Focus | null) => void;
   selectedNurse: Nurse | null;
+  focus?: Focus | null;
+  isEditable?: boolean;
+  handleFocusChange?: (focus: Focus | null) => void;
 }
 
 export default function DutyCalendar({
   requestShift,
-  shiftTypeList,
   isEditable,
   focus,
-  focusedCellRef,
-  rowContainerRef,
   handleFocusChange,
   selectedNurse,
 }: Props) {
@@ -54,10 +47,7 @@ export default function DutyCalendar({
           </div>
         </div>
       </div>
-      <div
-        className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
-        ref={rowContainerRef}
-      >
+      <div className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
         {requestShift.levels.map((rows, level) => {
           return (
             <div key={level} className="flex gap-[1.25rem]">
@@ -107,12 +97,9 @@ export default function DutyCalendar({
                                   openTooltip: true,
                                 });
                               }}
-                              forwardRef={
-                                isFocued
-                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
-                                  : null
+                              shiftType={
+                                current != null ? requestShift.shiftTypeList[current] : null
                               }
-                              shiftType={current != null ? shiftTypeList[current] : null}
                               className={`cursor-pointer ${
                                 isFocued && 'outline outline-[.0625rem] outline-main-1'
                               }`}

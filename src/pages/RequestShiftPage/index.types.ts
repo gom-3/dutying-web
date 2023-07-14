@@ -14,20 +14,20 @@ interface DayInfo {
   message: string;
 }
 
-interface MakeShiftPageViewModelState {
-  shift: Shift | undefined;
+interface RequestShiftPageState {
+  requestShift: RequestShift | undefined;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
   isLoading: boolean;
 }
 
-interface MakeShiftPageViewModelActions {
+interface RequestShiftPageActions {
   foldLevel: (level: Nurse['level']) => void;
   changeFocus: (focus: Focus | null) => void;
   changeFocusedShift: (shiftTypeIndex: number) => void;
 }
 
-interface MakeShiftPageViewModel {
-  (): { state: MakeShiftPageViewModelState; actions: MakeShiftPageViewModelActions };
+interface RequestShiftPageViewModel {
+  (): { state: RequestShiftPageState; actions: RequestShiftPageActions };
 }
