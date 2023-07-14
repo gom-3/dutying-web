@@ -37,12 +37,6 @@ const useRequest = () => {
 
   const handleFold = useCallback(
     (level: Nurse['level']) => {
-      console.log(foldedProficiency);
-      console.log(
-        foldedProficiency.map((isFolded, index) =>
-          index === mockWard.levelDivision - level ? !isFolded : isFolded
-        )
-      );
       setFoldedProficiency(
         foldedProficiency.map((isFolded, index) =>
           index === mockWard.levelDivision - level ? !isFolded : isFolded

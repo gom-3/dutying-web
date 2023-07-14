@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import { Focus } from './useEditDuty';
 import { mockShiftStandard } from '@mocks/shift';
 
 interface Props {
   focus: Focus | null;
   shift: Shift;
-  shiftTypeList: ShiftType[];
 }
 
-function CountDutyByDay({ focus, shift, shiftTypeList }: Props) {
+function CountDutyByDay({ focus, shift }: Props) {
   const [dutyStandard] = useState(mockShiftStandard);
 
   return (
     <div className="mb-[3.125rem] mt-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-      {shiftTypeList.slice(1).map((shiftType, index) => (
+      {shift.shiftTypeList.slice(1).map((shiftType, index) => (
         <div
           key={index}
           className="flex h-[3.875rem] items-center justify-center gap-[1.25rem] border-b-[.0625rem] border-[#E0E0E0] last:border-none"
@@ -21,7 +19,7 @@ function CountDutyByDay({ focus, shift, shiftTypeList }: Props) {
           <div
             className={`flex h-full w-[3.125rem] items-center justify-center font-poppins text-[1.5rem] text-white 
             ${index === 0 && 'rounded-tl-[1.25rem]'} 
-            ${index === shiftTypeList.length - 2 && 'rounded-bl-[1.25rem]'}
+            ${index === shift.shiftTypeList.length - 2 && 'rounded-bl-[1.25rem]'}
             `}
             style={{ backgroundColor: shiftType.color }}
           >

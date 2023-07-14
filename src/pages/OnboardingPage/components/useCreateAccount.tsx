@@ -50,7 +50,6 @@ const useCreateAccount = () => {
       }
     }
     setAccount({ ...account, [key]: value });
-    console.log(validate());
   };
 
   /** 서버에 제출하기 전 검토를 합니다. */

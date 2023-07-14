@@ -1,35 +1,27 @@
-import { Focus } from '@pages/MakeShiftPage/components/useEditDuty';
-import { RefObject } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 
 interface Props {
-  shift: Shift;
-  shiftTypeList: ShiftType[];
+  shift: Shift | null | undefined;
   isEditable?: boolean;
   focus?: Focus | null;
-  focusedCellRef: RefObject<HTMLElement>;
-  rowContainerRef: RefObject<HTMLDivElement>;
-  foldedProficiency: boolean[];
+  foldedLevels: boolean[] | null;
   handleFocusChange?: (focus: Focus | null) => void;
   handleFold: (level: number) => void;
 }
 
 export default function ShiftCalendar({
   shift,
-  foldedProficiency,
-  shiftTypeList,
-  isEditable,
   focus,
-  focusedCellRef,
-  rowContainerRef,
+  foldedLevels,
+  isEditable,
   handleFocusChange,
   handleFold,
 }: Props) {
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
-  return (
+  return shift && foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -60,7 +52,7 @@ export default function ShiftCalendar({
           </div>
         </div>
         <div className="flex w-[13.625rem] items-center px-[1.5625rem] text-center">
-          {shiftTypeList.slice(1).map((shiftType, index) => (
+          {shift.shiftTypeList.slice(1).map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
@@ -69,12 +61,9 @@ export default function ShiftCalendar({
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
-      <div
-        className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
-        ref={rowContainerRef}
-      >
+      <div className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
         {shift.levels.map((dutyRows, level) => {
-          return foldedProficiency[4 - level] ? (
+          return foldedLevels[4 - level] ? (
             <div
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
@@ -106,7 +95,7 @@ export default function ShiftCalendar({
                       {row.lastShiftTypeIndexList.map(({ current }, j) => (
                         <ShiftBadge
                           key={j}
-                          shiftType={current != null ? shiftTypeList[current] : null}
+                          shiftType={current != null ? shift.shiftTypeList[current] : null}
                           className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
                         />
                       ))}
@@ -138,12 +127,7 @@ export default function ShiftCalendar({
                                   openTooltip: true,
                                 });
                               }}
-                              forwardRef={
-                                isFocued
-                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
-                                  : null
-                              }
-                              shiftType={current != null ? shiftTypeList[current] : null}
+                              shiftType={current != null ? shift.shiftTypeList[current] : null}
                               className={`cursor-pointer ${
                                 isFocued && 'outline outline-[.0625rem] outline-main-1'
                               }`}
@@ -158,7 +142,7 @@ export default function ShiftCalendar({
               <div className="w-[13.625rem] rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 {dutyRows.map((row, i) => (
                   <div key={i} className="flex h-[3.25rem] items-center">
-                    {shiftTypeList.slice(1).map((_, index) => (
+                    {shift.shiftTypeList.slice(1).map((_, index) => (
                       <div
                         key={index}
                         className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
@@ -189,5 +173,5 @@ export default function ShiftCalendar({
         })}
       </div>
     </div>
-  );
+  ) : null;
 }

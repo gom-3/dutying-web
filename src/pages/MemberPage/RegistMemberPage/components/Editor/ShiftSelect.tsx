@@ -10,8 +10,6 @@ interface Props {
 const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
   const [isSelected, setIsSelected] = useState(nurse.nurseShiftTypes);
 
-  console.log(nurse, isSelected);
-
   useEffect(() => {
     setIsSelected(nurse.nurseShiftTypes);
   }, [nurse]);

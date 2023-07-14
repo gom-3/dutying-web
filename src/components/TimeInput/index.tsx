@@ -57,13 +57,11 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
 
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    console.log({ lastValue: lastValue.current, value });
 
     if (value == time) {
       return;
     }
     if (isValid(value)) {
-      console.log('valid');
       if (value.length === 2 && lastValue.current.length === 3) value = value.slice(0, 1);
       if (value.length === 2 && lastValue.current.length === 1) value += ':';
 
@@ -75,7 +73,6 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
         onTimeChange && onTimeChange(value);
       }
     }
-    console.log({ lastValue: lastValue.current, value });
   };
 
   return (

@@ -1,4 +1,3 @@
-import { Focus } from '@pages/MakeShiftPage/components/useEditDuty';
 import { RefObject } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { UnlinkedIcon } from '@assets/svg';
