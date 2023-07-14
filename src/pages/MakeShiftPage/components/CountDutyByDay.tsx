@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Focus } from './useEditDuty';
-import { mockDutyStandard } from '@mocks/duty/data';
+import { mockShiftStandard } from '@mocks/shift';
 
 interface Props {
   focus: Focus | null;
-  duty: Duty;
+  shift: Shift;
   shiftTypeList: ShiftType[];
 }
 
-function CountDutyByDay({ focus, duty, shiftTypeList }: Props) {
-  const [dutyStandard] = useState(mockDutyStandard);
+function CountDutyByDay({ focus, shift, shiftTypeList }: Props) {
+  const [dutyStandard] = useState(mockShiftStandard);
 
   return (
     <div className="mb-[3.125rem] mt-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
@@ -40,7 +40,7 @@ function CountDutyByDay({ focus, duty, shiftTypeList }: Props) {
             </span>
           </div>
           <div className="flex h-full w-[69.5rem] px-[1rem] text-center">
-            {duty.days.map((_date, i) => (
+            {shift.days.map((_date, i) => (
               <p
                 key={i}
                 className={`flex flex-1 items-center justify-center font-poppins text-[1.25rem] text-sub-3 ${
@@ -48,9 +48,9 @@ function CountDutyByDay({ focus, duty, shiftTypeList }: Props) {
                 }`}
               >
                 {
-                  duty.dutyRowsByLevel
-                    .flatMap((row) => row.dutyRows)
-                    .filter((item) => item.shiftIndexList[i] === index + 1).length
+                  shift.levels
+                    .flatMap((row) => row)
+                    .filter((item) => item.shiftTypeIndexList[i].current === index + 1).length
                 }
               </p>
             ))}

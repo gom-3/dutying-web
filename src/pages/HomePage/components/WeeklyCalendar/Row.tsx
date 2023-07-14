@@ -1,5 +1,5 @@
 import 'index.css';
-import { dutyByDate } from '@mocks/duty/data';
+import { dutyByDate } from '@mocks/shift';
 import { useRef } from 'react';
 
 interface Props {

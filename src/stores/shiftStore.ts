@@ -1,21 +1,21 @@
-import { mockShiftList } from '@mocks/duty/data';
+import { mockShiftTypeList } from '@mocks/shift';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 /** 근무 종류 전역 상태 */
 interface ShiftState {
   /**근무 유형 목록 */
-  shiftList: ShiftList;
+  shiftTypeList: ShiftType[];
   /**근무 유형 수정 */
-  setShiftList: (shiftList: ShiftList) => void;
+  setShiftTypeList: (shiftTypeList: ShiftType[]) => void;
 }
 
 export const useShiftStore = create<ShiftState>()(
   devtools(
     persist(
       (set) => ({
-        shiftList: mockShiftList,
-        setShiftList: (shiftList) => set((state) => ({ ...state, shiftList: shiftList })),
+        shiftTypeList: mockShiftTypeList,
+        setShiftTypeList: (shiftTypeList) => set((state) => ({ ...state, shiftTypeList })),
       }),
       {
         name: 'shift-storage',
@@ -24,4 +24,4 @@ export const useShiftStore = create<ShiftState>()(
   )
 );
 
-export const useShiftList = () => useShiftStore((state) => state.shiftList);
+export const useShiftTypeList = () => useShiftStore((state) => state.shiftTypeList);

@@ -3,22 +3,23 @@ import Button from '@components/Button';
 import Select from '@components/Select';
 
 interface Props {
-  requestDuty: RequestDuty;
+  requestShift: RequestShift;
   selectedNurse: Nurse | null;
   setSelectedNurse: (nurse: Nurse | null) => void;
 }
 
-function Toolbar({ requestDuty, selectedNurse, setSelectedNurse }: Props) {
-  const spreadDuty = requestDuty.requestRowsByLevel.flatMap((row) => row.dutyRows);
+function Toolbar({ requestShift: requestDuty, selectedNurse, setSelectedNurse }: Props) {
+  const flatDuty = requestDuty.levels.flatMap((row) => row);
+
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Select
         placeholder="이름 검색"
         value={selectedNurse?.nurseId || ''}
-        options={spreadDuty.map((rows) => ({ label: rows.user.name, value: rows.user.nurseId }))}
+        options={flatDuty.map((rows) => ({ label: rows.nurse.name, value: rows.nurse.nurseId }))}
         onChange={(e) =>
           setSelectedNurse(
-            spreadDuty.find((rows) => rows.user.nurseId === parseInt(e.target.value))?.user || null
+            flatDuty.find((rows) => rows.nurse.nurseId === parseInt(e.target.value))?.nurse || null
           )
         }
         className="absolute left-[.125rem] h-[2.1875rem] w-[10.1875rem]"

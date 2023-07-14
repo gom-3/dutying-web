@@ -1,8 +1,8 @@
 import 'index.css';
-import { useShiftList } from 'stores/shiftStore';
+import { useShiftTypeList } from 'stores/shiftStore';
 
 interface Props {
-  id: number;
+  id: number | null;
   translucent?: boolean;
 }
 
@@ -12,8 +12,8 @@ interface Props {
  * @example true-반투명 false-일반
  */
 const ShiftCircle = ({ id, translucent }: Props) => {
-  const shiftKind = useShiftList();
-  return shiftKind[id] ? (
+  const shiftKind = useShiftTypeList();
+  return id != null && shiftKind[id] ? (
     <div
       className={`${
         translucent && 'opacity-30'

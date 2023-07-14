@@ -1,6 +1,6 @@
 import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
-import { DUTY, MEMBER } from '@libs/constant/path';
+import { SHIFT, MEMBER } from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
@@ -20,7 +20,7 @@ const items = [
     text: '간호사 관리',
   },
   {
-    path: DUTY.SETTING,
+    path: SHIFT.SETTING,
     icon: InjectorIcon,
     selectedIcon: InjectorIconSelected,
     text: '근무 설정',
@@ -32,7 +32,7 @@ const items = [
     text: '휴가 신청 관리',
   },
   {
-    path: DUTY.MAKE,
+    path: SHIFT.MAKE,
     icon: DutyIcon,
     selectedIcon: DutyIconSelected,
     text: '근무표 만들기',
