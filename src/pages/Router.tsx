@@ -6,7 +6,7 @@ import RegistMemberPage from './MemberPage/RegistMemberPage';
 import HomePage from './HomePage';
 import MainLayout from '@components/Layouts/MainLayout';
 import RedirectPage from './LoginPage/RedirectPage';
-import RequestPage from './RequestPage';
+import RequestPage from './RequestShiftPage';
 import SetAccount from './OnboardingPage/SetAccount';
 import SetWard from './OnboardingPage/SetWard';
 import LandingPage from './LandingPage';

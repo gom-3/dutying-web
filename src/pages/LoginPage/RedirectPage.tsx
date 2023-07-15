@@ -35,7 +35,6 @@ const RedirectPage = () => {
     const query = qs.parse(location.search, { ignoreQueryPrefix: true });
     const accessToken = query?.['accessToken'] as string;
     const nextPageUrl = query?.['nextPageUrl'] as string;
-    console.log(nextPageUrl);
     if (accessToken) {
       setAccessToken(accessToken);
       handleLogin(nextPageUrl);

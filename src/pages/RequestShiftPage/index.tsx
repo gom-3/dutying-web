@@ -1,32 +1,31 @@
 import Toolbar from './components/Toolbar';
 import DutyCalendar from './components/DutyCalendar';
 import { useState } from 'react';
-import useRequest from './components/useRequest';
+import RequestShiftPageViewModel from './index.viewmodel';
 
 const RequestPage = () => {
-  const { requestDuty, focus, rowContainerRef, shiftTypeList, focusedCellRef, handlers } =
-    useRequest();
+  const {
+    state: { focus, requestShift },
+    actions: { changeFocus },
+  } = RequestShiftPageViewModel();
   const [selectedNurse, setSelectedNurse] = useState<Nurse | null>(null);
 
-  return (
+  return requestShift ? (
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">
       <Toolbar
-        requestShift={requestDuty}
+        requestShift={requestShift}
         selectedNurse={selectedNurse}
         setSelectedNurse={setSelectedNurse}
       />
       <DutyCalendar
-        requestShift={requestDuty}
-        shiftTypeList={shiftTypeList}
-        isEditable
-        focus={focus}
-        focusedCellRef={focusedCellRef}
-        rowContainerRef={rowContainerRef}
-        handleFocusChange={handlers.handleFocusChange}
+        requestShift={requestShift}
         selectedNurse={selectedNurse}
+        focus={focus}
+        handleFocusChange={changeFocus}
+        isEditable
       />
     </div>
-  );
+  ) : null;
 };
 
 export default RequestPage;

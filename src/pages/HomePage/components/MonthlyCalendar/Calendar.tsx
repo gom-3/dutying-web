@@ -44,7 +44,6 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
             <tr className={`${isSelectedWeek ? 'bg-sub-5' : ''}`} key={week[0].getDate()}>
               {week.map((day) => {
                 const isCurrentMonth = currentMonth === day.getMonth();
-                console.log(shiftTypeIndexList[day.getDate() - 1]?.current);
                 return (
                   <td
                     key={day.getDate()}
