@@ -1,6 +1,7 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
+import { RefObject, useEffect, useRef } from 'react';
 
 interface Props {
   requestShift: RequestShift;
@@ -17,7 +18,33 @@ export default function DutyCalendar({
   handleFocusChange,
   selectedNurse,
 }: Props) {
+  const focusedCellRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
+
+  useEffect(() => {
+    if (focus) {
+      const focusRect = focusedCellRef.current?.getBoundingClientRect();
+      const container = containerRef.current;
+      if (!focusRect || !container) return;
+
+      // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
+      if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
+        container.scroll({
+          left: focusRect.left + container.scrollLeft,
+        });
+      // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
+      if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
+      // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
+      if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
+        container.scroll({
+          top: focusRect.top + container.scrollTop,
+        });
+      // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
+      if (focusRect.y - container.offsetTop < 0)
+        container.scroll({ top: focusRect.top + window.scrollY - 132 });
+    }
+  }, [focus]);
 
   return (
     <div ref={clickAwayRef} className="flex flex-col">
@@ -47,7 +74,10 @@ export default function DutyCalendar({
           </div>
         </div>
       </div>
-      <div className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
+      <div
+        className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        ref={containerRef}
+      >
         {requestShift.levels.map((rows, level) => {
           return (
             <div key={level} className="flex gap-[1.25rem]">
@@ -75,7 +105,7 @@ export default function DutyCalendar({
                         const isSunday =
                           requestShift.days[j].dayKind === 'sunday' ||
                           requestShift.days[j].dayKind === 'holyday';
-                        const isFocued =
+                        const isFocused =
                           focus &&
                           level === focus.level &&
                           focus.day === j &&
@@ -101,8 +131,13 @@ export default function DutyCalendar({
                                 current != null ? requestShift.shiftTypeList[current] : null
                               }
                               className={`cursor-pointer ${
-                                isFocued && 'outline outline-[.0625rem] outline-main-1'
+                                isFocused && 'outline outline-[.0625rem] outline-main-1'
                               }`}
+                              forwardRef={
+                                isFocused
+                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                                  : null
+                              }
                             />
                           </div>
                         );

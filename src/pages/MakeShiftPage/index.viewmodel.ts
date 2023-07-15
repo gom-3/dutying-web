@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { mockShift } from '@mocks/shift';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { koToEn } from '@libs/util/koToEn';
 
 const shiftData = mockShift;
 
@@ -13,7 +14,7 @@ const getShiftApi = () => {
   });
 };
 
-const updateFocusedShiftApi = (focus: Focus, shiftTypeIndex: number) => {
+const updateFocusedShiftApi = (focus: Focus, shiftTypeIndex: number | null) => {
   shiftData.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current = shiftTypeIndex;
   return new Promise<Shift>((resolve) => {
     setTimeout(() => {
@@ -26,49 +27,79 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
+  const [histories, setHistories] = useState<EditHistory[]>([]);
 
   const queryClient = useQueryClient();
-  const { data: shift, isLoading } = useQuery(['shift'], getShiftApi, {
+  const { data: shift, status: shiftStatus } = useQuery(['shift'], getShiftApi, {
     onSuccess: (data) => setFoldedLevels(data.levels.map(() => false)),
   });
-  const { mutate: focusedShiftChange } = useMutation(
-    ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number }) =>
+  const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
+    ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number | null }) =>
       updateFocusedShiftApi(focus, shiftTypeIndex),
     {
       onMutate: async ({ focus, shiftTypeIndex }) => {
         await queryClient.cancelQueries(['shift']);
         const oldShift = queryClient.getQueryData<Shift>(['shift']);
-        if (oldShift) {
-          queryClient.setQueryData<Shift>(['shift'], {
-            ...oldShift,
-            levels: oldShift.levels.map((rows, level) =>
-              rows.map((row, index) =>
-                focus.row === index && focus.level === level
-                  ? {
-                      ...row,
-                      shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
-                        day === focus.day
-                          ? { ...oldShiftTypeIndex, current: shiftTypeIndex }
-                          : oldShiftTypeIndex
-                      ),
-                    }
-                  : row
-              )
-            ),
-          });
-        }
-        return { oldShift };
+
+        if (!oldShift) return;
+        const oldShiftTypeIndex =
+          oldShift.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current;
+
+        const history: EditHistory = {
+          nurseId: oldShift.levels[focus.level][focus.row].nurse.nurseId,
+          nurseName: oldShift.levels[focus.level][focus.row].nurse.name,
+          prevShiftType:
+            oldShiftTypeIndex !== null ? oldShift.shiftTypeList[oldShiftTypeIndex] : null,
+          nextShiftType: shiftTypeIndex !== null ? oldShift.shiftTypeList[shiftTypeIndex] : null,
+          dateString: new Date().toLocaleString(),
+        };
+        setHistories([...histories, history]);
+
+        queryClient.setQueryData<Shift>(['shift'], {
+          ...oldShift,
+          levels: oldShift.levels.map((rows, level) =>
+            rows.map((row, index) =>
+              focus.row === index && focus.level === level
+                ? {
+                    ...row,
+                    shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
+                      day === focus.day
+                        ? { ...oldShiftTypeIndex, current: shiftTypeIndex }
+                        : oldShiftTypeIndex
+                    ),
+                  }
+                : row
+            )
+          ),
+        });
+
+        return { oldShift, history };
       },
       onError: (_, __, context) => {
-        if (context === undefined || context.oldShift === undefined) return;
+        if (
+          context === undefined ||
+          context.oldShift === undefined ||
+          context.history === undefined
+        )
+          return;
         queryClient.setQueryData(['shift'], context.oldShift);
+        setHistories(histories.filter((history) => history !== context.history));
       },
     }
   );
 
+  const changeFocusedShift = (shiftTypeIndex: number | null) => {
+    if (
+      !focus ||
+      !shift ||
+      shift.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current === shiftTypeIndex
+    )
+      return;
+    focusedShiftChange({ focus, shiftTypeIndex });
+  };
+
   const foldLevel = (level: Nurse['level']) => {
     if (!shift || !foldedLevels) return;
-
     setFoldedLevels(foldedLevels.map((x, index) => (index === level ? !x : x)));
   };
 
@@ -153,15 +184,19 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (e.key === 'Space' || e.key === ' ') {
       setFocus({ ...focus, openTooltip: !focus.openTooltip });
     }
+
     shift.shiftTypeList.forEach((shiftType, index) => {
-      if (shiftType.shortName.toUpperCase() === e.key.toUpperCase() && focus) {
-        focusedShiftChange({ focus, shiftTypeIndex: index });
+      if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
+        changeFocusedShift(index);
       }
     });
+
+    if (e.key === 'Backspace') {
+      changeFocusedShift(null);
+    }
   };
 
   useEffect(() => {
-    console.log(focus);
     document.addEventListener('keydown', handleKeyDown);
     if (shift && focus) {
       setFocusedDayInfo({
@@ -191,14 +226,15 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     state: {
       shift,
       focus,
+      histories,
       focusedDayInfo,
       foldedLevels,
-      isLoading,
+      shiftStatus,
+      changeStatus,
     },
     actions: {
       foldLevel,
-      changeFocusedShift: (shiftTypeIndex: number) =>
-        focus && focusedShiftChange({ focus, shiftTypeIndex }),
+      changeFocusedShift,
       changeFocus: setFocus,
     },
   };

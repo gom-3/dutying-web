@@ -14,12 +14,22 @@ interface DayInfo {
   message: string;
 }
 
+interface EditHistory {
+  nurseId: number;
+  nurseName: string;
+  prevShiftType: ShiftType | null;
+  nextShiftType: ShiftType | null;
+  dateString: string;
+}
+
 interface MakeShiftPageViewModelState {
   shift: Shift | undefined;
   focus: Focus | null;
+  histories: EditHistory[];
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
-  isLoading: boolean;
+  shiftStatus: 'error' | 'success' | 'loading';
+  changeStatus: 'error' | 'success' | 'loading' | 'idle';
 }
 
 interface MakeShiftPageViewModelActions {

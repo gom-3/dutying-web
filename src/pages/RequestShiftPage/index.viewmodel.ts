@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { mockRequestShift } from '@mocks/shift';
+import { koToEn } from '@libs/util/koToEn';
 
 const requestShiftData = mockRequestShift;
 
@@ -89,7 +90,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (focus === null) return;
 
     const { level, day, row } = focus;
-    const rows = requestShift.levels[requestShift.levels.length - level];
+    const rows = requestShift.levels[level];
     let newLevel = level;
     let newDay = day;
     let newRow = row;
@@ -97,9 +98,9 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (e.key === 'ArrowLeft') {
       if (day === 0) {
         if (row === 0) {
-          newLevel = level === requestShift.levels.length ? 1 : level + 1;
+          newLevel = level === 0 ? requestShift.levels.length - 1 : level - 1;
           newDay = requestShift.days.length - 1;
-          newRow = requestShift.levels[level].length - 1;
+          newRow = requestShift.levels[newLevel].length - 1;
         } else {
           newDay = requestShift.days.length - 1;
           newRow = row - 1;
@@ -109,7 +110,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         newRow = row;
       }
       setFocus({
-        level: newLevel || level,
+        level: newLevel,
         day: newDay,
         row: newRow,
         openTooltip: false,
@@ -118,7 +119,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (e.key === 'ArrowRight') {
       if (day === requestShift.days.length - 1) {
         if (row === rows.length - 1) {
-          newLevel = level === 1 ? requestShift.levels.length : level - 1;
+          newLevel = level === requestShift.levels.length - 1 ? 0 : level + 1;
           newDay = 0;
           newRow = 0;
         } else {
@@ -137,9 +138,9 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
     if (e.key === 'ArrowUp') {
       if (row === 0) {
-        newLevel = level === requestShift.levels.length ? 1 : level + 1;
+        newLevel = level === 0 ? requestShift.levels.length - 1 : level - 1;
         newDay = day;
-        newRow = requestShift.levels[level].length - 1;
+        newRow = requestShift.levels[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -148,13 +149,13 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     }
 
     if (e.key === 'ArrowDown') {
-      if (row === requestShift.levels[level].length - 1) {
-        newLevel = level === 1 ? requestShift.levels.length : level - 1;
+      if (row === rows.length - 1) {
+        newLevel = level === requestShift.levels.length - 1 ? 0 : level + 1;
         newDay = day;
         newRow = 0;
       } else {
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? requestShift.levels[level].length - 1 : row + 1;
+        newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
       }
       setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
     }
@@ -163,7 +164,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
       setFocus({ ...focus, openTooltip: !focus.openTooltip });
     }
     requestShift.shiftTypeList.forEach((shiftType, index) => {
-      if (shiftType.shortName.toUpperCase() === e.key.toUpperCase() && focus) {
+      if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
         focusedShiftChange({ focus, shiftTypeIndex: index });
       }
     });

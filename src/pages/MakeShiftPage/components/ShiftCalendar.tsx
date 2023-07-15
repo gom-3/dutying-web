@@ -1,6 +1,7 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
+import { RefObject, useEffect, useRef } from 'react';
 
 interface Props {
   shift: Shift | null | undefined;
@@ -19,7 +20,33 @@ export default function ShiftCalendar({
   handleFocusChange,
   handleFold,
 }: Props) {
+  const focusedCellRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
+
+  useEffect(() => {
+    if (focus) {
+      const focusRect = focusedCellRef.current?.getBoundingClientRect();
+      const container = containerRef.current;
+      if (!focusRect || !container) return;
+
+      // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
+      if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
+        container.scroll({
+          left: focusRect.left + container.scrollLeft,
+        });
+      // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
+      if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
+      // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
+      if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
+        container.scroll({
+          top: focusRect.top + container.scrollTop,
+        });
+      // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
+      if (focusRect.y - container.offsetTop < 0)
+        container.scroll({ top: focusRect.top + window.scrollY - 132 });
+    }
+  }, [focus]);
 
   return shift && foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
@@ -61,7 +88,10 @@ export default function ShiftCalendar({
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
-      <div className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
+      <div
+        className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        ref={containerRef}
+      >
         {shift.levels.map((rows, level) => {
           return foldedLevels[level] ? (
             <div
@@ -105,7 +135,7 @@ export default function ShiftCalendar({
                         const isSaturday = shift.days[j].dayKind === 'saturday';
                         const isSunday =
                           shift.days[j].dayKind === 'sunday' || shift.days[j].dayKind === 'holyday';
-                        const isFocued =
+                        const isFocused =
                           focus &&
                           level === focus.level &&
                           focus.day === j &&
@@ -129,8 +159,13 @@ export default function ShiftCalendar({
                               }}
                               shiftType={current != null ? shift.shiftTypeList[current] : null}
                               className={`cursor-pointer ${
-                                isFocued && 'outline outline-[.0625rem] outline-main-1'
+                                isFocused && 'outline outline-[.0625rem] outline-main-1'
                               }`}
+                              forwardRef={
+                                isFocused
+                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                                  : null
+                              }
                             />
                           </div>
                         );
