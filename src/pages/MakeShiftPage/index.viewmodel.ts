@@ -69,11 +69,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   const foldLevel = (level: Nurse['level']) => {
     if (!shift || !foldedLevels) return;
 
-    setFoldedLevels(
-      foldedLevels.map((isFolded, index) =>
-        index === shift.levels.length - level ? !isFolded : isFolded
-      )
-    );
+    setFoldedLevels(foldedLevels.map((x, index) => (index === level ? !x : x)));
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -86,7 +82,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (focus === null) return;
 
     const { level, day, row } = focus;
-    const rows = shift.levels[shift.levels.length - level];
+    const rows = shift.levels[level];
     let newLevel = level;
     let newDay = day;
     let newRow = row;
@@ -94,9 +90,9 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (e.key === 'ArrowLeft') {
       if (day === 0) {
         if (row === 0) {
-          newLevel = level === shift.levels.length ? 1 : level + 1;
+          newLevel = level === 0 ? shift.levels.length - 1 : level - 1;
           newDay = shift.days.length - 1;
-          newRow = shift.levels[level].length - 1;
+          newRow = shift.levels[newLevel].length - 1;
         } else {
           newDay = shift.days.length - 1;
           newRow = row - 1;
@@ -106,7 +102,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
         newRow = row;
       }
       setFocus({
-        level: newLevel || level,
+        level: newLevel,
         day: newDay,
         row: newRow,
         openTooltip: false,
@@ -115,7 +111,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (e.key === 'ArrowRight') {
       if (day === shift.days.length - 1) {
         if (row === rows.length - 1) {
-          newLevel = level === 1 ? shift.levels.length : level - 1;
+          newLevel = level === shift.levels.length - 1 ? 0 : level + 1;
           newDay = 0;
           newRow = 0;
         } else {
@@ -132,9 +128,9 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
 
     if (e.key === 'ArrowUp') {
       if (row === 0) {
-        newLevel = level === shift.levels.length ? 1 : level + 1;
+        newLevel = level === 0 ? shift.levels.length - 1 : level - 1;
         newDay = day;
-        newRow = shift.levels[level].length - 1;
+        newRow = shift.levels[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -143,13 +139,13 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     }
 
     if (e.key === 'ArrowDown') {
-      if (row === shift.levels[level].length - 1) {
-        newLevel = level === 1 ? shift.levels.length : level - 1;
+      if (row === rows.length - 1) {
+        newLevel = level === shift.levels.length - 1 ? 0 : level + 1;
         newDay = day;
         newRow = 0;
       } else {
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? shift.levels[level].length - 1 : row + 1;
+        newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
       }
       setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
     }
@@ -165,6 +161,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   };
 
   useEffect(() => {
+    console.log(focus);
     document.addEventListener('keydown', handleKeyDown);
     if (shift && focus) {
       setFocusedDayInfo({

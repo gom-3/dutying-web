@@ -26,7 +26,7 @@ export default function ShiftCalendar({
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            숙련도
+            구분
           </div>
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             이름
@@ -62,27 +62,27 @@ export default function ShiftCalendar({
         </div>
       </div>
       <div className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
-        {shift.levels.map((dutyRows, level) => {
-          return foldedLevels[4 - level] ? (
+        {shift.levels.map((rows, level) => {
+          return foldedLevels[level] ? (
             <div
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
               onClick={() => handleFold(level)}
             >
-              <p className="font-poppins text-base text-sub-2.5">{level}</p>
+              {/* <p className="font-poppins text-base text-sub-2.5">{level}</p> */}
               <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
             </div>
           ) : (
             <div key={level} className="flex gap-[1.25rem]">
               <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
-                  {level}
+                  {/* {level} */}
+                  <FoldDutyIcon
+                    className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
+                    onClick={() => handleFold(level)}
+                  />
                 </div>
-                <FoldDutyIcon
-                  className="absolute left-[1.875rem] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
-                  onClick={() => handleFold(level)}
-                />
-                {dutyRows.map((row, rowIndex) => (
+                {rows.map((row, rowIndex) => (
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div className="w-[3.375rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
@@ -140,7 +140,7 @@ export default function ShiftCalendar({
                 ))}
               </div>
               <div className="w-[13.625rem] rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-                {dutyRows.map((row, i) => (
+                {rows.map((row, i) => (
                   <div key={i} className="flex h-[3.25rem] items-center">
                     {shift.shiftTypeList.slice(1).map((_, index) => (
                       <div
