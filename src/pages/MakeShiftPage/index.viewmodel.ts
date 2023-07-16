@@ -26,14 +26,20 @@ const updateFocusedShiftApi = (focus: Focus, shiftTypeIndex: number | null) => {
 const checkFaultOptions: CheckFaultOptions = {
   twoOffAfterNight: {
     isActive: true,
-    regExp: /3([^30]|0[^0])/g,
+    regExp: /3([12]|0[123])/g,
     message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
     isWrong: true,
   },
-  continuousWork: {
+  ed: {
     isActive: true,
     regExp: /21/g,
     message: 'E 근무 후 D 근무는 권장되지 않습니다.',
+    isWrong: true,
+  },
+  maxContinuousWork: {
+    isActive: true,
+    regExp: /(?<=[^123])[123]{6,}(?=[^123])/g,
+    message: '근무는 연속 5일을 초과할 수 없습니다.',
     isWrong: true,
   },
   maxContinuousNight: {
@@ -141,6 +147,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   );
 
   const checkShift = () => {
+    const newFaults: Fault[] = [];
     if (shift === undefined) return;
 
     for (let i = 0; i < shift.levels.length; i++) {
@@ -149,29 +156,34 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
         const row = level[j];
         for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
           const option = checkFaultOptions[key];
-          const str = row.shiftTypeIndexList.map((x) => x.current).join('');
+          const str = row.shiftTypeIndexList
+            .map((x) => (x.current === null ? 'x' : x.current))
+            .join('');
           // eslint-disable-next-line no-constant-condition
           while (true) {
             const match = option.regExp.exec(str);
             if (match === null) break;
-            setFaults((faults) => [
-              ...faults,
-              {
-                faultType: key,
-                nurse: row.nurse,
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                focus: { level: i, row: j, day: match!.index },
-                message: option.message,
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                matchString: match![0],
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                length: match![0].length,
-              },
-            ]);
+            newFaults.push({
+              faultType: key,
+              nurse: row.nurse,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              focus: { level: i, row: j, day: match!.index },
+              message: option.message,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              matchString: match![0]
+                .split('')
+                .map((x) => (x === 'x' ? '-' : shift.shiftTypeList[Number(x)].shortName))
+                .map((x) => (x === '/' ? 'O' : x))
+                .join(''),
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              length: match![0].length,
+            });
           }
         }
       }
     }
+
+    setFaults(newFaults);
   };
 
   const changeFocusedShift = (shiftTypeIndex: number | null) => {

@@ -23,7 +23,8 @@ interface EditHistory {
 
 type FaultType =
   | 'twoOffAfterNight' // NOD | NOE
-  | 'continuousWork' // ED
+  | 'ed' // ED
+  | 'maxContinuousWork' // DDDEEE
   | 'maxContinuousNight' // NNNN
   | 'minNightInterval' // NOON
   | 'singleNight' // ONO
