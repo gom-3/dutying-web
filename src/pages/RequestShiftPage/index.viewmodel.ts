@@ -113,7 +113,6 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         level: newLevel,
         day: newDay,
         row: newRow,
-        openTooltip: false,
       });
     }
     if (e.key === 'ArrowRight') {
@@ -133,7 +132,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
             : Math.min(requestShift.days.length - 1, day + 1);
         newRow = row;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
     if (e.key === 'ArrowUp') {
@@ -145,7 +144,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
     if (e.key === 'ArrowDown') {
@@ -157,12 +156,13 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
-    if (e.key === 'Space' || e.key === ' ') {
-      setFocus({ ...focus, openTooltip: !focus.openTooltip });
-    }
+    // if (e.key === 'Space' || e.key === ' ') {
+    //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
+    // }
+
     requestShift.shiftTypeList.forEach((shiftType, index) => {
       if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
         focusedShiftChange({ focus, shiftTypeIndex: index });
