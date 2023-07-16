@@ -9,7 +9,7 @@ const MakeShiftPage = () => {
     state: { shift, focus, foldedLevels, changeStatus, shiftStatus, histories },
     actions: { changeFocus, foldLevel },
   } = MakeShiftPageViewModel();
-  console.log(histories);
+
   return shiftStatus === 'success' ? (
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">
       <Toolbar shift={shift} changeStatus={changeStatus} />

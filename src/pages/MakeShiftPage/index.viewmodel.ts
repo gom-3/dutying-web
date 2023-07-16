@@ -23,11 +23,63 @@ const updateFocusedShiftApi = (focus: Focus, shiftTypeIndex: number | null) => {
   });
 };
 
+const checkFaultOptions: CheckFaultOptions = {
+  twoOffAfterNight: {
+    isActive: true,
+    regExp: /3([^30]|0[^0])/g,
+    message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
+    isWrong: true,
+  },
+  continuousWork: {
+    isActive: true,
+    regExp: /21/g,
+    message: 'E 근무 후 D 근무는 권장되지 않습니다.',
+    isWrong: true,
+  },
+  maxContinuousNight: {
+    isActive: true,
+    regExp: /3333+/g,
+    message: '나이트 근무가 연속 3일을 초과했습니다',
+    isWrong: true,
+  },
+  minNightInterval: {
+    isActive: true,
+    regExp: /3[^3]{1,6}3/g,
+    message: '나이트 간격이 최소 7일 이상이어야 합니다.',
+    isWrong: true,
+  },
+  singleNight: {
+    isActive: true,
+    regExp: /(?<!3)3(?!3)/g,
+    message: '단일 나이트 근무는 권장되지 않습니다.',
+    isWrong: false,
+  },
+  maxContinuousOff: {
+    isActive: true,
+    regExp: /0000+/g,
+    message: 'OFF가 연속 3일을 초과했습니다.',
+    isWrong: false,
+  },
+  pongdang: {
+    isActive: true,
+    regExp: /(0101|1010|2020|0202)/g,
+    message: '퐁당퐁당 근무입니다.',
+    isWrong: false,
+  },
+  noeeod: {
+    isActive: true,
+    regExp: /201/g,
+    message: 'EOD 형태의 근무는 권장되지 않습니다.',
+    isWrong: false,
+  },
+};
+
 const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
+  const [faults, setFaults] = useState<Fault[]>([]);
 
   const queryClient = useQueryClient();
   const { data: shift, status: shiftStatus } = useQuery(['shift'], getShiftApi, {
@@ -88,6 +140,40 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     }
   );
 
+  const checkShift = () => {
+    if (shift === undefined) return;
+
+    for (let i = 0; i < shift.levels.length; i++) {
+      const level = shift.levels[i];
+      for (let j = 0; j < level.length; j++) {
+        const row = level[j];
+        for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
+          const option = checkFaultOptions[key];
+          const str = row.shiftTypeIndexList.map((x) => x.current).join('');
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            const match = option.regExp.exec(str);
+            if (match === null) break;
+            setFaults((faults) => [
+              ...faults,
+              {
+                faultType: key,
+                nurse: row.nurse,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                focus: { level: i, row: j, day: match!.index },
+                message: option.message,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                matchString: match![0],
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                length: match![0].length,
+              },
+            ]);
+          }
+        }
+      }
+    }
+  };
+
   const changeFocusedShift = (shiftTypeIndex: number | null) => {
     if (
       !focus ||
@@ -136,7 +222,6 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
         level: newLevel,
         day: newDay,
         row: newRow,
-        openTooltip: false,
       });
     }
     if (e.key === 'ArrowRight') {
@@ -154,7 +239,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
           e.ctrlKey || e.metaKey ? shift.days.length - 1 : Math.min(shift.days.length - 1, day + 1);
         newRow = row;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
     if (e.key === 'ArrowUp') {
@@ -166,7 +251,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
     if (e.key === 'ArrowDown') {
@@ -178,12 +263,12 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
       }
-      setFocus({ level: newLevel, day: newDay, row: newRow, openTooltip: false });
+      setFocus({ level: newLevel, day: newDay, row: newRow });
     }
 
-    if (e.key === 'Space' || e.key === ' ') {
-      setFocus({ ...focus, openTooltip: !focus.openTooltip });
-    }
+    // if (e.key === 'Space' || e.key === ' ') {
+    //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
+    // }
 
     shift.shiftTypeList.forEach((shiftType, index) => {
       if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
@@ -195,6 +280,10 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
       changeFocusedShift(null);
     }
   };
+
+  useEffect(() => {
+    checkShift();
+  }, [shift]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -222,10 +311,15 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     };
   }, [focus, shift]);
 
+  useEffect(() => {
+    console.log(faults);
+  }, [faults]);
+
   return {
     state: {
       shift,
       focus,
+      faults,
       histories,
       focusedDayInfo,
       foldedLevels,

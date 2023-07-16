@@ -154,7 +154,6 @@ export default function ShiftCalendar({
                                   level: level,
                                   day: j,
                                   row: rowIndex,
-                                  openTooltip: true,
                                 });
                               }}
                               shiftType={current != null ? shift.shiftTypeList[current] : null}

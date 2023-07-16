@@ -124,7 +124,6 @@ export default function DutyCalendar({
                                   level: level,
                                   day: j,
                                   row: rowIndex,
-                                  openTooltip: true,
                                 });
                               }}
                               shiftType={

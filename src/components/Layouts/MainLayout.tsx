@@ -9,7 +9,8 @@ function MainLayout() {
   const { account } = useAccount();
 
   useEffect(() => {
-    if (!account) navigate(LOGIN);
+    // 임시 차단
+    // if (!account) navigate(LOGIN);
   }, [account]);
 
   return (
