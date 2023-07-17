@@ -1,9 +1,11 @@
 import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
-import { SHIFT, MEMBER } from '@libs/constant/path';
+import { SHIFT, MEMBER, HOME } from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
+  HomeIcon,
+  HomeIconSelected,
   InjectorIcon,
   InjectorIconSelected,
   NurseIcon,
@@ -14,25 +16,31 @@ import {
 
 const items = [
   {
+    path: HOME,
+    icon: HomeIcon,
+    selectedIcon: HomeIconSelected,
+    text: '홈',
+  },
+  {
     path: SHIFT.MAKE,
     icon: DutyIcon,
     selectedIcon: DutyIconSelected,
     text: '근무표 만들기',
   },
   {
-    path: MEMBER.REQUEST,
+    path: SHIFT.REQUEST,
     icon: RequestIcon,
     selectedIcon: RequestIconSelected,
     text: '휴가 신청 관리',
   },
   {
-    path: MEMBER.REGIST,
+    path: MEMBER,
     icon: NurseIcon,
     selectedIcon: NurseIconSelected,
     text: '간호사 관리',
   },
   {
-    path: SHIFT.SETTING,
+    path: SHIFT.SETUP,
     icon: InjectorIcon,
     selectedIcon: InjectorIconSelected,
     text: '근무 설정',
@@ -41,7 +49,7 @@ const items = [
 
 const NavigationBarItemGroups = () => {
   return (
-    <>
+    <div className="mt-[3.125rem]">
       {items.map((item) => (
         <NavigationBarItem
           key={item.path}
@@ -51,7 +59,7 @@ const NavigationBarItemGroups = () => {
           text={item.text}
         />
       ))}
-    </>
+    </div>
   );
 };
 

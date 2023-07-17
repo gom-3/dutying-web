@@ -27,9 +27,9 @@ export const Router = () => {
       {/* 인증되지 않은 사용자가 접근할 수 없는 페이지 */}
       <Route element={<MainLayout />}>
         <Route path={HOME} element={<HomePage />} />
-        <Route path={MEMBER.REGIST} element={<RegistMemberPage />} />
-        <Route path={MEMBER.REQUEST} element={<RequestPage />} />
-        <Route path={SHIFT.SETTING} element={<SetShiftPage />} />
+        <Route path={MEMBER} element={<RegistMemberPage />} />
+        <Route path={SHIFT.REQUEST} element={<RequestPage />} />
+        <Route path={SHIFT.SETUP} element={<SetShiftPage />} />
         <Route path={SHIFT.MAKE} element={<MakeShiftPage />} />
       </Route>
     </Routes>

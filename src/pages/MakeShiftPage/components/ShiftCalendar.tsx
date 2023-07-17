@@ -2,9 +2,12 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import { FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
+import FaultLayer from './FaultLayer';
+import RequestLayer from './RequestLayer';
 
 interface Props {
-  shift: Shift | null | undefined;
+  shift: Shift;
+  faults: Map<string, Fault>;
   isEditable?: boolean;
   focus?: Focus | null;
   foldedLevels: boolean[] | null;
@@ -15,6 +18,7 @@ interface Props {
 export default function ShiftCalendar({
   shift,
   focus,
+  faults,
   foldedLevels,
   isEditable,
   handleFocusChange,
@@ -48,7 +52,7 @@ export default function ShiftCalendar({
     }
   }, [focus]);
 
-  return shift && foldedLevels ? (
+  return foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -131,7 +135,7 @@ export default function ShiftCalendar({
                       ))}
                     </div>
                     <div className="flex h-full w-[69.5rem] px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ current }, j) => {
+                      {row.shiftTypeIndexList.map(({ request, current }, j) => {
                         const isSaturday = shift.days[j].dayKind === 'saturday';
                         const isSunday =
                           shift.days[j].dayKind === 'sunday' || shift.days[j].dayKind === 'holyday';
@@ -140,13 +144,21 @@ export default function ShiftCalendar({
                           level === focus.level &&
                           focus.day === j &&
                           focus.row === rowIndex;
+                        const fault = faults.get(`${level},${rowIndex},${j}`);
                         return (
                           <div
                             key={j}
-                            className={`flex h-full flex-1 items-center px-[.25rem] ${
+                            className={`group relative flex h-full flex-1 items-center justify-start px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >
+                            {fault && <FaultLayer fault={fault} />}
+                            {request !== null && current !== null && (
+                              <RequestLayer
+                                isAccept={request === current}
+                                request={shift.shiftTypeList[request]}
+                              />
+                            )}
                             <ShiftBadge
                               key={j}
                               onClick={() => {
@@ -156,9 +168,16 @@ export default function ShiftCalendar({
                                   row: rowIndex,
                                 });
                               }}
-                              shiftType={current != null ? shift.shiftTypeList[current] : null}
+                              shiftType={
+                                current === null
+                                  ? request === null
+                                    ? null
+                                    : shift.shiftTypeList[request]
+                                  : shift.shiftTypeList[current]
+                              }
+                              isOnlyRequest={current === null && request !== null}
                               className={`cursor-pointer ${
-                                isFocused && 'outline outline-[.0625rem] outline-main-1'
+                                isFocused && 'outline outline-[.125rem] outline-main-1'
                               }`}
                               forwardRef={
                                 isFocused

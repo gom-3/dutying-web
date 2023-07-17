@@ -1,15 +1,11 @@
-import { FoldIcon, FullLogo, FullLogoTransparent, MenuIcon } from '@assets/svg';
+import { FoldIcon, MenuIcon } from '@assets/svg';
 import 'index.css';
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { HOME } from '@libs/constant/path';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
 
 const NavigationBar = () => {
-  const navigate = useNavigate();
   const [isFold, setIsFold] = useState(false);
   const [canHover, setCanHover] = useState(true);
-  const { pathname } = useLocation();
 
   useEffect(() => {
     setCanHover(false);
@@ -38,19 +34,6 @@ const NavigationBar = () => {
               isFold && 'left-[.9375rem] scale-x-[-1]'
             } absolute right-[.875rem] top-[.8125rem] h-[1.875rem] w-[1.875rem] cursor-pointer duration-300`}
           />
-        </div>
-        <div
-          onClick={() => navigate(HOME)}
-          className="mt-[4.625rem] flex h-[4.375rem] w-full cursor-pointer items-center justify-center"
-        >
-          {pathname === HOME ? (
-            <FullLogo className="h-[1.5625rem] w-[5.6875rem]" />
-          ) : (
-            <FullLogoTransparent className="h-[1.5625rem] w-[5.6875rem]" />
-          )}
-          {pathname === HOME && (
-            <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
-          )}
         </div>
         <NavigationBarItemGroups />
         <div className="absolute bottom-[1.875rem] mt-[3.125rem] flex cursor-pointer flex-col items-center">

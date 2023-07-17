@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect } from 'react';
 import { mockShift } from '@mocks/shift';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -28,55 +29,55 @@ const checkFaultOptions: CheckFaultOptions = {
     isActive: true,
     regExp: /3([12]|0[123])/g,
     message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
-    isWrong: true,
+    type: 'wrong',
   },
   ed: {
     isActive: true,
     regExp: /21/g,
     message: 'E 근무 후 D 근무는 권장되지 않습니다.',
-    isWrong: true,
+    type: 'wrong',
   },
   maxContinuousWork: {
     isActive: true,
     regExp: /(?<=[^123])[123]{6,}(?=[^123])/g,
     message: '근무는 연속 5일을 초과할 수 없습니다.',
-    isWrong: true,
+    type: 'wrong',
   },
   maxContinuousNight: {
     isActive: true,
     regExp: /3333+/g,
     message: '나이트 근무가 연속 3일을 초과했습니다',
-    isWrong: true,
+    type: 'wrong',
   },
   minNightInterval: {
     isActive: true,
     regExp: /3[^3]{1,6}3/g,
     message: '나이트 간격이 최소 7일 이상이어야 합니다.',
-    isWrong: true,
+    type: 'wrong',
   },
   singleNight: {
     isActive: true,
     regExp: /(?<!3)3(?!3)/g,
     message: '단일 나이트 근무는 권장되지 않습니다.',
-    isWrong: false,
+    type: 'bad',
   },
   maxContinuousOff: {
     isActive: true,
     regExp: /0000+/g,
     message: 'OFF가 연속 3일을 초과했습니다.',
-    isWrong: false,
+    type: 'bad',
   },
   pongdang: {
     isActive: true,
     regExp: /(0101|1010|2020|0202)/g,
     message: '퐁당퐁당 근무입니다.',
-    isWrong: false,
+    type: 'bad',
   },
   noeeod: {
     isActive: true,
     regExp: /201/g,
     message: 'EOD 형태의 근무는 권장되지 않습니다.',
-    isWrong: false,
+    type: 'bad',
   },
 };
 
@@ -85,7 +86,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
-  const [faults, setFaults] = useState<Fault[]>([]);
+  const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
 
   const queryClient = useQueryClient();
   const { data: shift, status: shiftStatus } = useQuery(['shift'], getShiftApi, {
@@ -104,8 +105,8 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
           oldShift.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current;
 
         const history: EditHistory = {
-          nurseId: oldShift.levels[focus.level][focus.row].nurse.nurseId,
-          nurseName: oldShift.levels[focus.level][focus.row].nurse.name,
+          nurse: oldShift.levels[focus.level][focus.row].nurse,
+          focus,
           prevShiftType:
             oldShiftTypeIndex !== null ? oldShift.shiftTypeList[oldShiftTypeIndex] : null,
           nextShiftType: shiftTypeIndex !== null ? oldShift.shiftTypeList[shiftTypeIndex] : null,
@@ -147,7 +148,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
   );
 
   const checkShift = () => {
-    const newFaults: Fault[] = [];
+    const newFaults: Map<string, Fault> = new Map();
     if (shift === undefined) return;
 
     for (let i = 0; i < shift.levels.length; i++) {
@@ -163,20 +164,20 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
           while (true) {
             const match = option.regExp.exec(str);
             if (match === null) break;
-            newFaults.push({
+            const focus = { level: i, row: j, day: match.index };
+
+            newFaults.set(Object.values(focus).join(), {
+              type: option.type,
               faultType: key,
               nurse: row.nurse,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              focus: { level: i, row: j, day: match!.index },
+              focus,
               message: option.message,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              matchString: match![0]
+              matchString: match[0]
                 .split('')
                 .map((x) => (x === 'x' ? '-' : shift.shiftTypeList[Number(x)].shortName))
                 .map((x) => (x === '/' ? 'O' : x))
                 .join(''),
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              length: match![0].length,
+              length: match[0].length,
             });
           }
         }
@@ -310,7 +311,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
             .length,
           shiftType: shift.shiftTypeList[shiftTypeIndex],
         })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: shift.levels.flatMap((row) => row).find((_, index) => index === focus.row)?.nurse!,
         message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
       });

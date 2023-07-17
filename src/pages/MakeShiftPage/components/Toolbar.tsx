@@ -1,4 +1,4 @@
-import { NextIcon, PrevIcon } from '@assets/svg';
+import { Labels, NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
 import { mockShiftTypeList } from '@mocks/shift';
@@ -12,6 +12,7 @@ interface Props {
 function Toolbar({ shift, changeStatus }: Props) {
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
+      <Labels className="absolute h-[2.25rem] w-[10.625rem]" />
       <div className="w-[3.375rem]"></div>
       <div className="w-[3.375rem]"></div>
       <div className="w-[1.875rem]"></div>

@@ -14,8 +14,8 @@ interface DayInfo {
 }
 
 interface EditHistory {
-  nurseId: number;
-  nurseName: string;
+  nurse: Nurse;
+  focus: Focus;
   prevShiftType: ShiftType | null;
   nextShiftType: ShiftType | null;
   dateString: string;
@@ -34,14 +34,15 @@ type FaultType =
 
 type CheckFaultOptions = {
   [key in FaultType]: {
+    type: 'wrong' | 'bad';
     isActive: boolean;
     regExp: RegExp;
     message: string;
-    isWrong: boolean;
   };
 };
 
 type Fault = {
+  type: 'wrong' | 'bad';
   faultType: FaultType;
   nurse: Nurse;
   message: string;
@@ -53,7 +54,7 @@ type Fault = {
 interface MakeShiftPageViewModelState {
   shift: Shift | undefined;
   focus: Focus | null;
-  faults: Fault[];
+  faults: Map<string, Fault>;
   histories: EditHistory[];
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
