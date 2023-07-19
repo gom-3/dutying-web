@@ -1,23 +1,34 @@
 import * as Sentry from '@sentry/react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { createBrowserHistory } from 'history';
-import React from 'react';
 import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
   useNavigationType,
 } from 'react-router';
+import ReactPixel from 'react-facebook-pixel';
+import { useEffect } from 'react';
 
 export default async function initializeApp() {
-  ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { debug: true });
+  // GA 관련 초기화
+  ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { gaOptions: {} });
+  // Pixel 관련 초기화
+  ReactPixel.init(import.meta.env.VITE_PIXEL_ID);
+  // const advancedMatching = { em: 'some@email.com' }; // optional, more info: https://developers.facebook.com/docs/facebook-pixel/advanced/advanced-matching
+  // const options = {
+  //   autoConfig: true, // set pixel's autoConfig. More info: https://developers.facebook.com/docs/facebook-pixel/advanced/
+  //   debug: false, // enable logs
+  // };
 
   const history = createBrowserHistory();
   history.listen((response) => {
-    ReactGA.set({ page: response.location.pathname });
-    ReactGA.pageview(response.location.pathname);
+    ReactGA.send({ hitType: 'pageview', page: response.location.pathname });
+    ReactPixel.pageView();
+    ReactPixel.fbq('track', 'PageView');
   });
 
+  // Sentry 관련 초기화
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [
@@ -27,7 +38,7 @@ export default async function initializeApp() {
         // See docs for support of different versions of variation of react router
         // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
         routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-          React.useEffect,
+          useEffect,
           useLocation,
           useNavigationType,
           createRoutesFromChildren,
