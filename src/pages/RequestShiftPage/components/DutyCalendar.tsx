@@ -4,6 +4,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 
 interface Props {
+  month: number;
   requestShift: RequestShift;
   selectedNurse: Nurse | null;
   focus?: Focus | null;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function DutyCalendar({
+  month,
   requestShift,
   isEditable,
   focus,
@@ -67,7 +69,7 @@ export default function DutyCalendar({
                   j === focus?.day && 'rounded-full bg-main-1 text-white'
                 }`}
               >
-                {j === focus?.day ? requestShift.month + '/' : ''}
+                {j === focus?.day ? month + '/' : ''}
                 {item.day}
               </p>
             ))}

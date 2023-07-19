@@ -9,7 +9,6 @@ function App() {
   //   onSuccess: (account) => setAccount(account),
   //   onError: () => setAccount(null),
   // });
-
   return <Router />;
 }
 

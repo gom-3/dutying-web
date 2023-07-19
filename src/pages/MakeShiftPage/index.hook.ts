@@ -8,63 +8,63 @@ import { useAccount } from 'store';
 const checkFaultOptions: CheckFaultOptions = {
   twoOffAfterNight: {
     isActive: true,
-    regExp: /3([12]|4[123])/g,
+    regExp: /2([01]|3[012])/g,
     message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
     type: 'wrong',
   },
   ed: {
     isActive: true,
-    regExp: /21/g,
+    regExp: /10/g,
     message: 'E 근무 후 D 근무는 권장되지 않습니다.',
     type: 'wrong',
   },
   maxContinuousWork: {
     isActive: true,
-    regExp: /(?<=[^123])[123]{6,}(?=[^123])/g,
+    regExp: /(?<=[^012])[012]{6,}(?=[^012])/g,
     message: '근무는 연속 5일을 초과할 수 없습니다.',
     type: 'wrong',
   },
   maxContinuousNight: {
     isActive: true,
-    regExp: /3333+/g,
+    regExp: /2222+/g,
     message: '나이트 근무가 연속 3일을 초과했습니다',
     type: 'wrong',
   },
   minNightInterval: {
     isActive: true,
-    regExp: /3[^3]{1,6}3/g,
+    regExp: /2[^2]{1,6}2/g,
     message: '나이트 간격이 최소 7일 이상이어야 합니다.',
     type: 'wrong',
   },
   singleNight: {
     isActive: true,
-    regExp: /(?<!3)3(?!3)/g,
+    regExp: /(?<!2)2(?!2)/g,
     message: '단일 나이트 근무는 권장되지 않습니다.',
     type: 'bad',
   },
   maxContinuousOff: {
     isActive: true,
-    regExp: /4444+/g,
+    regExp: /3333+/g,
     message: 'OFF가 연속 3일을 초과했습니다.',
     type: 'bad',
   },
   pongdang: {
     isActive: true,
-    regExp: /(4141|1414|2424|4242)/g,
+    regExp: /(3030|0303|1313|3131)/g,
     message: '퐁당퐁당 근무입니다.',
     type: 'bad',
   },
   noeeod: {
     isActive: true,
-    regExp: /241/g,
+    regExp: /130/g,
     message: 'EOD 형태의 근무는 권장되지 않습니다.',
     type: 'bad',
   },
 };
 
-const MakeShiftPageHook: MakeShiftPageHook = () => {
+const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [month, setMonth] = useState(6);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
@@ -74,31 +74,31 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
   const { account } = useAccount();
 
   const queryClient = useQueryClient();
+
+  const shiftQueryKey = ['shift', account.nurseId, year, month];
   const { data: shift, status: shiftStatus } = useQuery(
-    ['shift', account.nurseId, year, month],
+    shiftQueryKey,
     () => getWardShift(account.nurseId, year, month),
     {
       onSuccess: (data) => {
-        console.log(data);
         setFoldedLevels(data.levelNurses.map(() => false));
       },
     }
   );
   const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
-    ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number | null }) => {
-      if (shift === undefined) return Promise.reject();
+    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) => {
       return updateWardShift(
         year,
         month,
         shift.days[focus.day].day,
         shift.levelNurses[focus.level][focus.row].nurse.nurseId,
-        shiftTypeIndex
+        shiftTypeId
       );
     },
     {
-      onMutate: async ({ focus, shiftTypeIndex }) => {
+      onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
-        const oldShift = queryClient.getQueryData<Shift>(['shift']);
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
         if (!oldShift) return;
         const oldShiftTypeIndex =
@@ -108,12 +108,16 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
           nurse: oldShift.levelNurses[focus.level][focus.row].nurse,
           focus,
           prevShiftType: oldShiftTypeIndex !== null ? oldShift.shiftTypes[oldShiftTypeIndex] : null,
-          nextShiftType: shiftTypeIndex !== null ? oldShift.shiftTypes[shiftTypeIndex] : null,
+          nextShiftType: oldShift.shiftTypes.find((x) => x.shiftTypeId === shiftTypeId) || null,
           dateString: new Date().toLocaleString(),
         };
         setHistories([...histories, history]);
 
-        queryClient.setQueryData<Shift>(['shift'], {
+        const newShiftTypeIndex = oldShift.shiftTypes.findIndex(
+          (x) => x.shiftTypeId === shiftTypeId
+        );
+
+        queryClient.setQueryData<Shift>(shiftQueryKey, {
           ...oldShift,
           levelNurses: oldShift.levelNurses.map((rows, level) =>
             rows.map((row, index) =>
@@ -122,7 +126,10 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
                     ...row,
                     shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
                       day === focus.day
-                        ? { ...oldShiftTypeIndex, shift: shiftTypeIndex }
+                        ? {
+                            ...oldShiftTypeIndex,
+                            shift: newShiftTypeIndex === undefined ? null : newShiftTypeIndex,
+                          }
                         : oldShiftTypeIndex
                     ),
                   }
@@ -140,6 +147,7 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
           context.history === undefined
         )
           return;
+        console.log('error');
         queryClient.setQueryData(['shift'], context.oldShift);
         setHistories(histories.filter((history) => history !== context.history));
       },
@@ -204,15 +212,15 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
     }
   };
 
-  const changeFocusedShift = (shiftTypeIndex: number | null) => {
+  const changeFocusedShift = (shiftTypeId: number | null) => {
     if (
       !focus ||
       !shift ||
       shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift ===
-        shiftTypeIndex
+        shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
     )
       return;
-    focusedShiftChange({ focus, shiftTypeIndex });
+    focusedShiftChange({ shift, focus, shiftTypeId });
   };
 
   const foldLevel = (level: Nurse['level']) => {
@@ -320,7 +328,7 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
     document.addEventListener('keydown', handleKeyDown);
     if (shift && focus) {
       setFocusedDayInfo({
-        month: shift.month,
+        month: month,
         day: focus.day ?? 0,
         countByShiftList: shift.shiftTypes.map((_, shiftTypeIndex) => ({
           count: shift.levelNurses
@@ -368,4 +376,4 @@ const MakeShiftPageHook: MakeShiftPageHook = () => {
   };
 };
 
-export default MakeShiftPageHook;
+export default useMakeShiftPageHook;

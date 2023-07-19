@@ -24,8 +24,6 @@ type ShiftType = {
 
 /** 근무표 타입 */
 type Shift = {
-  /** 근무표의 월 */
-  month: number;
   /** 지난달 근무표의 날짜들 */
   lastDays: Array<Day>;
   /** 이번달 근무표의 날짜들 */

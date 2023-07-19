@@ -60,7 +60,6 @@ export const mockShiftTypeList: ShiftType[] = [
 ];
 
 export const mockRequestShift: RequestShift = {
-  month: 6,
   days: [
     { day: 1, dayType: 'workday' },
     { day: 2, dayType: 'workday' },
@@ -757,7 +756,6 @@ export const mockRequestShift: RequestShift = {
 };
 
 export const mockShift: Shift = {
-  month: 6,
   lastDays: [
     { day: 28, dayType: 'sunday' },
     { day: 29, dayType: 'workday' },
