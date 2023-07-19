@@ -3,7 +3,6 @@ interface Focus {
   level: Nurse['level'];
   day: number;
   row: number;
-  openTooltip: boolean;
 }
 
 interface DayInfo {

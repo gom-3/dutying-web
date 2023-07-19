@@ -1,9 +1,13 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
+import { RefObject, useEffect, useRef } from 'react';
+import FaultLayer from './FaultLayer';
+import RequestLayer from './RequestLayer';
 
 interface Props {
-  shift: Shift | null | undefined;
+  shift: Shift;
+  faults: Map<string, Fault>;
   isEditable?: boolean;
   focus?: Focus | null;
   foldedLevels: boolean[] | null;
@@ -14,14 +18,41 @@ interface Props {
 export default function ShiftCalendar({
   shift,
   focus,
+  faults,
   foldedLevels,
   isEditable,
   handleFocusChange,
   handleFold,
 }: Props) {
+  const focusedCellRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
 
-  return shift && foldedLevels ? (
+  useEffect(() => {
+    if (focus) {
+      const focusRect = focusedCellRef.current?.getBoundingClientRect();
+      const container = containerRef.current;
+      if (!focusRect || !container) return;
+
+      // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
+      if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
+        container.scroll({
+          left: focusRect.left + container.scrollLeft,
+        });
+      // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
+      if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
+      // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
+      if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
+        container.scroll({
+          top: focusRect.top + container.scrollTop,
+        });
+      // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
+      if (focusRect.y - container.offsetTop < 0)
+        container.scroll({ top: focusRect.top + window.scrollY - 132 });
+    }
+  }, [focus]);
+
+  return foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -61,7 +92,10 @@ export default function ShiftCalendar({
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
-      <div className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide">
+      <div
+        className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        ref={containerRef}
+      >
         {shift.levels.map((rows, level) => {
           return foldedLevels[level] ? (
             <div
@@ -101,22 +135,30 @@ export default function ShiftCalendar({
                       ))}
                     </div>
                     <div className="flex h-full w-[69.5rem] px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ current }, j) => {
+                      {row.shiftTypeIndexList.map(({ request, current }, j) => {
                         const isSaturday = shift.days[j].dayKind === 'saturday';
                         const isSunday =
                           shift.days[j].dayKind === 'sunday' || shift.days[j].dayKind === 'holyday';
-                        const isFocued =
+                        const isFocused =
                           focus &&
                           level === focus.level &&
                           focus.day === j &&
                           focus.row === rowIndex;
+                        const fault = faults.get(`${level},${rowIndex},${j}`);
                         return (
                           <div
                             key={j}
-                            className={`flex h-full flex-1 items-center px-[.25rem] ${
+                            className={`group relative flex h-full flex-1 items-center justify-start px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >
+                            {fault && <FaultLayer fault={fault} />}
+                            {request !== null && current !== null && (
+                              <RequestLayer
+                                isAccept={request === current}
+                                request={shift.shiftTypeList[request]}
+                              />
+                            )}
                             <ShiftBadge
                               key={j}
                               onClick={() => {
@@ -124,13 +166,24 @@ export default function ShiftCalendar({
                                   level: level,
                                   day: j,
                                   row: rowIndex,
-                                  openTooltip: true,
                                 });
                               }}
-                              shiftType={current != null ? shift.shiftTypeList[current] : null}
+                              shiftType={
+                                current === null
+                                  ? request === null
+                                    ? null
+                                    : shift.shiftTypeList[request]
+                                  : shift.shiftTypeList[current]
+                              }
+                              isOnlyRequest={current === null && request !== null}
                               className={`cursor-pointer ${
-                                isFocued && 'outline outline-[.0625rem] outline-main-1'
+                                isFocused && 'outline outline-[.125rem] outline-main-1'
                               }`}
+                              forwardRef={
+                                isFocused
+                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                                  : null
+                              }
                             />
                           </div>
                         );

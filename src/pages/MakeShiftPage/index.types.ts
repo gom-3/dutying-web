@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 interface Focus {
-  level: Nurse['level'];
+  level: number;
   day: number;
   row: number;
-  openTooltip: boolean;
 }
 
 interface DayInfo {
@@ -14,12 +13,53 @@ interface DayInfo {
   message: string;
 }
 
+interface EditHistory {
+  nurse: Nurse;
+  focus: Focus;
+  prevShiftType: ShiftType | null;
+  nextShiftType: ShiftType | null;
+  dateString: string;
+}
+
+type FaultType =
+  | 'twoOffAfterNight' // NOD | NOE
+  | 'ed' // ED
+  | 'maxContinuousWork' // DDDEEE
+  | 'maxContinuousNight' // NNNN
+  | 'minNightInterval' // NOON
+  | 'singleNight' // ONO
+  | 'maxContinuousOff' // OOOO
+  | 'pongdang' // EOEO | DODO
+  | 'noeeod'; // NOE | EOD
+
+type CheckFaultOptions = {
+  [key in FaultType]: {
+    type: 'wrong' | 'bad';
+    isActive: boolean;
+    regExp: RegExp;
+    message: string;
+  };
+};
+
+type Fault = {
+  type: 'wrong' | 'bad';
+  faultType: FaultType;
+  nurse: Nurse;
+  message: string;
+  focus: Focus;
+  matchString: string;
+  length: number;
+};
+
 interface MakeShiftPageViewModelState {
   shift: Shift | undefined;
   focus: Focus | null;
+  faults: Map<string, Fault>;
+  histories: EditHistory[];
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
-  isLoading: boolean;
+  shiftStatus: 'error' | 'success' | 'loading';
+  changeStatus: 'error' | 'success' | 'loading' | 'idle';
 }
 
 interface MakeShiftPageViewModelActions {
