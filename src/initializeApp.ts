@@ -10,15 +10,13 @@ import {
 } from 'react-router';
 
 export default async function initializeApp() {
-  if (import.meta.env.PROD) {
-    ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { debug: true });
+  ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { debug: true });
 
-    const history = createBrowserHistory();
-    history.listen((response) => {
-      ReactGA.set({ page: response.location.pathname });
-      ReactGA.pageview(response.location.pathname);
-    });
-  }
+  const history = createBrowserHistory();
+  history.listen((response) => {
+    ReactGA.set({ page: response.location.pathname });
+    ReactGA.pageview(response.location.pathname);
+  });
 
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,

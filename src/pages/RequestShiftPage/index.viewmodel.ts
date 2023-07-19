@@ -15,7 +15,7 @@ const getRequestShiftApi = () => {
 };
 
 const updateFocusedRequestShiftApi = (focus: Focus, shiftTypeIndex: number) => {
-  requestShiftData.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current =
+  requestShiftData.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift =
     shiftTypeIndex;
   return new Promise<RequestShift>((resolve) => {
     setTimeout(() => {
@@ -33,7 +33,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
   const queryClient = useQueryClient();
   const { data: requestShift, isLoading } = useQuery([SHIFT_KEY], getRequestShiftApi, {
-    onSuccess: (data) => setFoldedLevels(data.levels.map(() => false)),
+    onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
   });
   const { mutate: focusedShiftChange } = useMutation(
     ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number }) =>
@@ -45,14 +45,14 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         if (oldShift) {
           queryClient.setQueryData<Shift>([SHIFT_KEY], {
             ...oldShift,
-            levels: oldShift.levels.map((rows, level) =>
+            levelNurses: oldShift.levelNurses.map((rows, level) =>
               rows.map((row, index) =>
                 focus.row === index && focus.level === level
                   ? {
                       ...row,
                       shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
                         day === focus.day
-                          ? { ...oldShiftTypeIndex, current: shiftTypeIndex }
+                          ? { ...oldShiftTypeIndex, shift: shiftTypeIndex }
                           : oldShiftTypeIndex
                       ),
                     }
@@ -75,7 +75,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
     setFoldedLevels(
       foldedLevels.map((isFolded, index) =>
-        index === requestShift.levels.length - level ? !isFolded : isFolded
+        index === requestShift.levelNurses.length - level ? !isFolded : isFolded
       )
     );
   };
@@ -90,7 +90,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (focus === null) return;
 
     const { level, day, row } = focus;
-    const rows = requestShift.levels[level];
+    const rows = requestShift.levelNurses[level];
     let newLevel = level;
     let newDay = day;
     let newRow = row;
@@ -98,9 +98,9 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (e.key === 'ArrowLeft') {
       if (day === 0) {
         if (row === 0) {
-          newLevel = level === 0 ? requestShift.levels.length - 1 : level - 1;
+          newLevel = level === 0 ? requestShift.levelNurses.length - 1 : level - 1;
           newDay = requestShift.days.length - 1;
-          newRow = requestShift.levels[newLevel].length - 1;
+          newRow = requestShift.levelNurses[newLevel].length - 1;
         } else {
           newDay = requestShift.days.length - 1;
           newRow = row - 1;
@@ -118,7 +118,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     if (e.key === 'ArrowRight') {
       if (day === requestShift.days.length - 1) {
         if (row === rows.length - 1) {
-          newLevel = level === requestShift.levels.length - 1 ? 0 : level + 1;
+          newLevel = level === requestShift.levelNurses.length - 1 ? 0 : level + 1;
           newDay = 0;
           newRow = 0;
         } else {
@@ -137,9 +137,9 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
     if (e.key === 'ArrowUp') {
       if (row === 0) {
-        newLevel = level === 0 ? requestShift.levels.length - 1 : level - 1;
+        newLevel = level === 0 ? requestShift.levelNurses.length - 1 : level - 1;
         newDay = day;
-        newRow = requestShift.levels[newLevel].length - 1;
+        newRow = requestShift.levelNurses[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -149,7 +149,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
     if (e.key === 'ArrowDown') {
       if (row === rows.length - 1) {
-        newLevel = level === requestShift.levels.length - 1 ? 0 : level + 1;
+        newLevel = level === requestShift.levelNurses.length - 1 ? 0 : level + 1;
         newDay = day;
         newRow = 0;
       } else {
@@ -163,7 +163,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
     // }
 
-    requestShift.shiftTypeList.forEach((shiftType, index) => {
+    requestShift.shiftTypes.forEach((shiftType, index) => {
       if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
         focusedShiftChange({ focus, shiftTypeIndex: index });
       }
@@ -176,16 +176,17 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
       setFocusedDayInfo({
         month: requestShift.month,
         day: focus.day ?? 0,
-        countByShiftList: requestShift.shiftTypeList.map((_, shiftTypeIndex) => ({
-          count: requestShift.levels
+        countByShiftList: requestShift.shiftTypes.map((_, shiftTypeIndex) => ({
+          count: requestShift.levelNurses
             .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].current === shiftTypeIndex)
+            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
             .length,
-          shiftType: requestShift.shiftTypeList[shiftTypeIndex],
+          shiftType: requestShift.shiftTypes[shiftTypeIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: requestShift.levels.flatMap((row) => row).find((_, index) => index === focus.row)
-          ?.nurse!,
+        nurse: requestShift.levelNurses
+          .flatMap((row) => row)
+          .find((_, index) => index === focus.row)?.nurse!,
         message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
       });
     } else {

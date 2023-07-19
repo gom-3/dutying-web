@@ -5,11 +5,13 @@ import { mockShiftTypeList } from '@mocks/shift';
 import { MutationStatus } from '@tanstack/react-query';
 
 interface Props {
+  month: number;
   shift: Shift | undefined;
   changeStatus: MutationStatus;
+  changeMonth: MakeShiftPageActions['changeMonth'];
 }
 
-function Toolbar({ shift, changeStatus }: Props) {
+function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Labels className="absolute h-[2.25rem] w-[10.625rem]" />
@@ -18,11 +20,17 @@ function Toolbar({ shift, changeStatus }: Props) {
       <div className="w-[1.875rem]"></div>
       <div className="w-[5.625rem]"></div>
       <div className="flex flex-1 items-center gap-[1.25rem]">
-        <PrevIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
-        {shift && <p className="font-poppins text-2xl text-main-1">{shift.month}월</p>}
-        <NextIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
+        <PrevIcon
+          onClick={() => changeMonth('prev')}
+          className="h-[1.875rem] w-[1.875rem] cursor-pointer"
+        />
+        {shift && <p className="font-poppins text-2xl text-main-1">{month}월</p>}
+        <NextIcon
+          onClick={() => changeMonth('prev')}
+          className="h-[1.875rem] w-[1.875rem] cursor-pointer"
+        />
         <p className="font-apple text-[.875rem] text-main-1 ">
-          기본 OFF {shift?.days.filter((x) => x.dayKind !== 'workday').length}일
+          기본 OFF {shift?.days.filter((x) => x.dayType !== 'workday').length}일
         </p>
         <p className="font-apple text-[.875rem] text-sub-2 ">
           {changeStatus === 'loading' ? '저장 중...' : '저장 완료'}

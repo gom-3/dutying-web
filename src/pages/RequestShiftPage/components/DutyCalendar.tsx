@@ -78,7 +78,7 @@ export default function DutyCalendar({
         className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {requestShift.levels.map((rows, level) => {
+        {requestShift.levelNurses.map((rows, level) => {
           return (
             <div key={level} className="flex gap-[1.25rem]">
               <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
@@ -100,11 +100,11 @@ export default function DutyCalendar({
                       <UnlinkedIcon className="h-[1.5rem] w-[1.5rem]" />
                     </div>
                     <div className="flex h-full w-[69.5rem] px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ current }, j) => {
-                        const isSaturday = requestShift.days[j].dayKind === 'saturday';
+                      {row.shiftTypeIndexList.map(({ shift: current }, j) => {
+                        const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
-                          requestShift.days[j].dayKind === 'sunday' ||
-                          requestShift.days[j].dayKind === 'holyday';
+                          requestShift.days[j].dayType === 'sunday' ||
+                          requestShift.days[j].dayType === 'holyday';
                         const isFocused =
                           focus &&
                           level === focus.level &&
@@ -127,7 +127,9 @@ export default function DutyCalendar({
                                 });
                               }}
                               shiftType={
-                                current != null ? requestShift.shiftTypeList[current] : null
+                                current != null
+                                  ? requestShift.shiftTypes.find((x) => x.shiftTypeId === current)
+                                  : null
                               }
                               className={`cursor-pointer ${
                                 isFocused && 'outline outline-[.0625rem] outline-main-1'

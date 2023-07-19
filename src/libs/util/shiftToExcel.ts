@@ -1,7 +1,7 @@
 import * as Excel from 'exceljs';
 
 export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
-  const flatRows = shift.levels.flatMap((row) => row);
+  const flatRows = shift.levelNurses.flatMap((row) => row);
 
   const workbook = new Excel.Workbook();
   const worksheet = workbook.addWorksheet(`${shift.month}월 근무표`);
@@ -59,9 +59,9 @@ export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
     header.getCell(day.day.toString()).font = {
       color: {
         argb:
-          day.dayKind === 'workday'
+          day.dayType === 'workday'
             ? 'FF000000'
-            : day.dayKind === 'saturday'
+            : day.dayType === 'saturday'
             ? 'FF2029FA'
             : 'FFFA2D12',
       },
@@ -72,7 +72,7 @@ export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
     worksheet.addRow({
       name: dutyRow.nurse.name,
       lastShift: dutyRow.lastShiftTypeIndexList
-        .map(({ current }) =>
+        .map(({ shift: current }) =>
           current
             ? shiftTypeList[current].shortName === '/'
               ? 'O'
@@ -80,20 +80,20 @@ export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
             : ''
         )
         .join(''),
-      ...dutyRow.shiftTypeIndexList.reduce((acc, { current }, index) => {
+      ...dutyRow.shiftTypeIndexList.reduce((acc, { shift: current }, index) => {
         acc[index + 1] = current != null ? shiftTypeList[current].shortName : '';
         return acc;
       }, {} as { [key: string]: string }),
       ...shiftTypeList.slice(1).reduce((acc, shiftType, index) => {
         acc[shiftType.shortName] = dutyRow.shiftTypeIndexList.filter(
-          ({ current }) => current === index + 1
+          ({ shift: current }) => current === index + 1
         ).length;
         return acc;
       }, {} as { [key: string]: number }),
-      O: dutyRow.shiftTypeIndexList.filter(({ current }) => current === 0).length,
+      O: dutyRow.shiftTypeIndexList.filter(({ shift: current }) => current === 0).length,
       WO: dutyRow.shiftTypeIndexList.filter(
-        ({ current }, i) =>
-          current === 0 && shift.days.find((x) => x.day === i + 1)?.dayKind != 'workday'
+        ({ shift: current }, i) =>
+          current === 0 && shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
       ).length,
     })
   );
@@ -103,7 +103,7 @@ export const shiftToExcel = (shift: Shift, shiftTypeList: ShiftType[]) => {
       lastShift: shiftType.name,
       ...shift.days.reduce((acc, _, i) => {
         acc[i + 1] = flatRows.filter(
-          (item) => item.shiftTypeIndexList[i].current === index + 1
+          (item) => item.shiftTypeIndexList[i].shift === index + 1
         ).length;
         return acc;
       }, {} as { [key: string]: number }),
