@@ -2,9 +2,7 @@ import axios from 'axios';
 import { refreshToken } from './login';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.DEV
-    ? import.meta.env.VITE_SERVER_URL_PROD
-    : import.meta.env.VITE_SERVER_URL_PROD,
+  baseURL: import.meta.env.VITE_SERVER_URL,
   headers: {
     'Content-Type': 'application/json',
   },

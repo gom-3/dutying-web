@@ -7,25 +7,32 @@ import {
   useLocation,
   useNavigationType,
 } from 'react-router';
-import ReactPixel from 'react-facebook-pixel';
 import { useEffect } from 'react';
+import { createInstance } from '@hackler/react-sdk';
 
 export default async function initializeApp() {
+  const hackleClient = createInstance(import.meta.env.VITE_HACKLE_SDK_KEY);
+
   // GA 관련 초기화
   ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID, { gaOptions: {} });
+
   // Pixel 관련 초기화
-  ReactPixel.init(import.meta.env.VITE_PIXEL_ID);
-  // const advancedMatching = { em: 'some@email.com' }; // optional, more info: https://developers.facebook.com/docs/facebook-pixel/advanced/advanced-matching
-  // const options = {
-  //   autoConfig: true, // set pixel's autoConfig. More info: https://developers.facebook.com/docs/facebook-pixel/advanced/
-  //   debug: false, // enable logs
-  // };
+  import('react-facebook-pixel')
+    .then((module) => module.default)
+    .then((ReactPixel) => {
+      ReactPixel.init(import.meta.env.VITE_PIXEL_ID);
+      ReactPixel.pageView();
+    });
 
   const history = createBrowserHistory();
-  history.listen((response) => {
+  history.listen(async (response) => {
     ReactGA.send({ hitType: 'pageview', page: response.location.pathname });
-    ReactPixel.pageView();
-    ReactPixel.fbq('track', 'PageView');
+    hackleClient.track({
+      key: 'naviagtion_item_click',
+      properties: {
+        name: response.location.pathname,
+      },
+    });
   });
 
   // Sentry 관련 초기화
@@ -53,4 +60,8 @@ export default async function initializeApp() {
     replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
     replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
   });
+
+  return {
+    hackleClient,
+  };
 }
