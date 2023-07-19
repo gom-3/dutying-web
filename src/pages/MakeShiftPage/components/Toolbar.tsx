@@ -1,7 +1,6 @@
 import { Labels, NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
-import { mockShiftTypeList } from '@mocks/shift';
 import { MutationStatus } from '@tanstack/react-query';
 
 interface Props {
@@ -38,7 +37,7 @@ function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
         <Button
           type="outline"
           className="ml-auto h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
-          onClick={() => shift && shiftToExcel(shift, mockShiftTypeList)}
+          onClick={() => shift && shiftToExcel(month, shift)}
         >
           엑셀로 저장하기
         </Button>

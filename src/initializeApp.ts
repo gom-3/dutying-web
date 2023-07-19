@@ -10,7 +10,7 @@ import {
 import { useEffect } from 'react';
 import { createInstance } from '@hackler/react-sdk';
 
-export default async function initializeApp() {
+export default function initializeApp() {
   const hackleClient = createInstance(import.meta.env.VITE_HACKLE_SDK_KEY);
 
   // GA 관련 초기화

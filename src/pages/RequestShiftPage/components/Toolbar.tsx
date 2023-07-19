@@ -3,13 +3,14 @@ import Button from '@components/Button';
 import Select from '@components/Select';
 
 interface Props {
+  month: number;
   requestShift: RequestShift;
   selectedNurse: Nurse | null;
   setSelectedNurse: (nurse: Nurse | null) => void;
 }
 
-function Toolbar({ requestShift: requestDuty, selectedNurse, setSelectedNurse }: Props) {
-  const flatDuty = requestDuty.levelNurses.flatMap((row) => row);
+function Toolbar({ month, requestShift, selectedNurse, setSelectedNurse }: Props) {
+  const flatDuty = requestShift.levelNurses.flatMap((row) => row);
 
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
@@ -30,7 +31,7 @@ function Toolbar({ requestShift: requestDuty, selectedNurse, setSelectedNurse }:
       <div className="w-[5.625rem]"></div>
       <div className="flex flex-1 items-center gap-[1.25rem]">
         <PrevIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
-        <p className="font-poppins text-2xl text-main-1">{requestDuty.month}월</p>
+        <p className="font-poppins text-2xl text-main-1">{month}월</p>
         <NextIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
       </div>
 

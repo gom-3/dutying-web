@@ -26,7 +26,8 @@ const updateFocusedRequestShiftApi = (focus: Focus, shiftTypeIndex: number) => {
 
 const SHIFT_KEY = 'request_shift';
 
-const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
+const useRequestShiftPageHook: RequestShiftPageHook = () => {
+  const [month] = useState(6);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
@@ -174,7 +175,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     document.addEventListener('keydown', handleKeyDown);
     if (requestShift && focus) {
       setFocusedDayInfo({
-        month: requestShift.month,
+        month: month,
         day: focus.day ?? 0,
         countByShiftList: requestShift.shiftTypes.map((_, shiftTypeIndex) => ({
           count: requestShift.levelNurses
@@ -200,6 +201,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
 
   return {
     state: {
+      month,
       requestShift,
       focus,
       focusedDayInfo,
@@ -215,4 +217,4 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
   };
 };
 
-export default RequestShiftPageViewModel;
+export default useRequestShiftPageHook;

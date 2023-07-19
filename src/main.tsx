@@ -7,7 +7,7 @@ import './index.css';
 import initializeApp from 'initializeApp';
 import { HackleProvider } from '@hackler/react-sdk';
 
-const { hackleClient } = await initializeApp();
+const { hackleClient } = initializeApp();
 hackleClient.setUserId('test-user-1');
 
 const queryClient = new QueryClient();

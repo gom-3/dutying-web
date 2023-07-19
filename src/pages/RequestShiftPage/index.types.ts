@@ -14,6 +14,7 @@ interface DayInfo {
 }
 
 interface RequestShiftPageState {
+  month: number;
   requestShift: RequestShift | undefined;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
@@ -27,6 +28,6 @@ interface RequestShiftPageActions {
   changeFocusedShift: (shiftTypeIndex: number) => void;
 }
 
-interface RequestShiftPageViewModel {
+interface RequestShiftPageHook {
   (): { state: RequestShiftPageState; actions: RequestShiftPageActions };
 }
