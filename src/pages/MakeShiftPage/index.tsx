@@ -14,6 +14,7 @@ const MakeShiftPage = () => {
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">
       <Toolbar month={month} shift={shift} changeStatus={changeStatus} changeMonth={changeMonth} />
       <ShiftCalendar
+        month={month}
         shift={shift}
         faults={faults}
         focus={focus}

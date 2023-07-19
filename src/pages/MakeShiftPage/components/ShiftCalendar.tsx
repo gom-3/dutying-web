@@ -6,6 +6,7 @@ import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 
 interface Props {
+  month: number;
   shift: Shift;
   faults: Map<string, Fault>;
   isEditable?: boolean;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function ShiftCalendar({
+  month,
   shift,
   focus,
   faults,
@@ -76,7 +78,7 @@ export default function ShiftCalendar({
                   j === focus?.day && 'rounded-full bg-main-1 text-white'
                 }`}
               >
-                {j === focus?.day ? shift.month + '/' : ''}
+                {j === focus?.day ? month + '/' : ''}
                 {item.day}
               </p>
             ))}
@@ -157,7 +159,7 @@ export default function ShiftCalendar({
                               <RequestLayer
                                 isAccept={request === current}
                                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                                request={shift.shiftTypes.find((x) => x.shiftTypeId === request)!}
+                                request={shift.shiftTypes[request]}
                               />
                             )}
                             <ShiftBadge
@@ -173,8 +175,8 @@ export default function ShiftCalendar({
                                 current === null
                                   ? request === null
                                     ? null
-                                    : shift.shiftTypes.find((x) => x.shiftTypeId === request)
-                                  : shift.shiftTypes.find((x) => x.shiftTypeId === current)
+                                    : shift.shiftTypes[request]
+                                  : shift.shiftTypes[current]
                               }
                               isOnlyRequest={current === null && request !== null}
                               className={`cursor-pointer ${
