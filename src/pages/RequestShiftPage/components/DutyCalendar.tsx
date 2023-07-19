@@ -100,11 +100,11 @@ export default function DutyCalendar({
                       <UnlinkedIcon className="h-[1.5rem] w-[1.5rem]" />
                     </div>
                     <div className="flex h-full w-[69.5rem] px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ current }, j) => {
-                        const isSaturday = requestShift.days[j].dayKind === 'saturday';
+                      {row.shiftTypeIndexList.map(({ shift: current }, j) => {
+                        const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
-                          requestShift.days[j].dayKind === 'sunday' ||
-                          requestShift.days[j].dayKind === 'holyday';
+                          requestShift.days[j].dayType === 'sunday' ||
+                          requestShift.days[j].dayType === 'holyday';
                         const isFocused =
                           focus &&
                           level === focus.level &&
@@ -127,7 +127,9 @@ export default function DutyCalendar({
                                 });
                               }}
                               shiftType={
-                                current != null ? requestShift.shiftTypeList[current] : null
+                                current != null
+                                  ? requestShift.shiftTypes.find((x) => x.shiftTypeId === current)
+                                  : null
                               }
                               className={`cursor-pointer ${
                                 isFocused && 'outline outline-[.0625rem] outline-main-1'

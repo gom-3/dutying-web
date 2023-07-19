@@ -15,7 +15,7 @@ const getRequestShiftApi = () => {
 };
 
 const updateFocusedRequestShiftApi = (focus: Focus, shiftTypeIndex: number) => {
-  requestShiftData.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current =
+  requestShiftData.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].shift =
     shiftTypeIndex;
   return new Promise<RequestShift>((resolve) => {
     setTimeout(() => {
@@ -45,14 +45,14 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
         if (oldShift) {
           queryClient.setQueryData<Shift>([SHIFT_KEY], {
             ...oldShift,
-            levels: oldShift.levels.map((rows, level) =>
+            levelNurses: oldShift.levelNurses.map((rows, level) =>
               rows.map((row, index) =>
                 focus.row === index && focus.level === level
                   ? {
                       ...row,
                       shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
                         day === focus.day
-                          ? { ...oldShiftTypeIndex, current: shiftTypeIndex }
+                          ? { ...oldShiftTypeIndex, shift: shiftTypeIndex }
                           : oldShiftTypeIndex
                       ),
                     }
@@ -163,7 +163,7 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
     //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
     // }
 
-    requestShift.shiftTypeList.forEach((shiftType, index) => {
+    requestShift.shiftTypes.forEach((shiftType, index) => {
       if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
         focusedShiftChange({ focus, shiftTypeIndex: index });
       }
@@ -176,12 +176,12 @@ const RequestShiftPageViewModel: RequestShiftPageViewModel = () => {
       setFocusedDayInfo({
         month: requestShift.month,
         day: focus.day ?? 0,
-        countByShiftList: requestShift.shiftTypeList.map((_, shiftTypeIndex) => ({
+        countByShiftList: requestShift.shiftTypes.map((_, shiftTypeIndex) => ({
           count: requestShift.levels
             .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].current === shiftTypeIndex)
+            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
             .length,
-          shiftType: requestShift.shiftTypeList[shiftTypeIndex],
+          shiftType: requestShift.shiftTypes[shiftTypeIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
         nurse: requestShift.levels.flatMap((row) => row).find((_, index) => index === focus.row)
