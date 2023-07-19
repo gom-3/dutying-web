@@ -36,8 +36,8 @@ type Shift = {
   levelNurses: Row[][];
 };
 
-type RequestShift = Omit<Shift, 'lastDays' | 'levels'> & {
-  levels: Omit<Row, 'lastShiftTypeIndexList'>[][];
+type RequestShift = Omit<Shift, 'lastDays' | 'levelNurses'> & {
+  levelNurses: Omit<Row, 'lastShiftTypeIndexList'>[][];
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */

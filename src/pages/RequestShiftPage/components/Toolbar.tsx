@@ -9,7 +9,7 @@ interface Props {
 }
 
 function Toolbar({ requestShift: requestDuty, selectedNurse, setSelectedNurse }: Props) {
-  const flatDuty = requestDuty.levels.flatMap((row) => row);
+  const flatDuty = requestDuty.levelNurses.flatMap((row) => row);
 
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">

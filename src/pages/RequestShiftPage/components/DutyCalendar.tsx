@@ -78,7 +78,7 @@ export default function DutyCalendar({
         className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {requestShift.levels.map((rows, level) => {
+        {requestShift.levelNurses.map((rows, level) => {
           return (
             <div key={level} className="flex gap-[1.25rem]">
               <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
