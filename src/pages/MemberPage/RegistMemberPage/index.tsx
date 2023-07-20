@@ -5,7 +5,8 @@ import Table from './components/Table';
 import Count from './components/Count';
 
 const RegistMemberPage = () => {
-  const { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse } = useRegistNurse();
+  const { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse, updateNurseShift } =
+    useRegistNurse();
 
   return (
     <div className="p-[3.125rem] pt-[2rem]">
@@ -17,9 +18,9 @@ const RegistMemberPage = () => {
           deleteNurse={deleteNurse}
           edit={selectNurse}
           addNurse={addNurse}
-          updateNurse={updateNurse}
+          updateNurseShift={updateNurseShift}
         />
-        <Editor nurse={nurse} updateNurse={updateNurse} />
+        <Editor nurse={nurse} updateNurse={updateNurse} updateNurseShift={updateNurseShift} />
       </div>
     </div>
   );

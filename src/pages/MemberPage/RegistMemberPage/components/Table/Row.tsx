@@ -1,11 +1,16 @@
 import CheckBox from '@components/CheckBox';
 import ConnectState from '@components/ConnectState';
+import { updateNurseShiftTypeRequest } from '@libs/api/nurse';
 import 'index.css';
 import { useEffect, useState } from 'react';
 
 type Props = {
   nurse: Nurse;
-  updateNurse: (id: number, updatedNurse: Nurse) => void;
+  updateNurseShift: (
+    nurseId: number,
+    nurseShiftTypeId: number,
+    change: updateNurseShiftTypeRequest
+  ) => void;
   edit: (nurse: Nurse) => void;
   add: () => void;
   selectNurse: (id: number) => void;
@@ -14,7 +19,15 @@ type Props = {
   rowspan?: number;
 };
 
-const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowspan }: Props) => {
+const Row = ({
+  nurse,
+  selectNurse,
+  updateNurseShift,
+  edit,
+  isFirst,
+  isSelected,
+  rowspan,
+}: Props) => {
   const [isChecked, setIsChecked] = useState(nurse.nurseShiftTypes);
 
   useEffect(() => {
@@ -27,14 +40,9 @@ const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowsp
   };
 
   const handleBoxClick = (i: number) => {
-    const temp = [...isChecked];
-    temp[i].isPossible = !temp[i].isPossible;
-    const updatedNurse: Nurse = {
-      ...nurse,
-      nurseShiftTypes: temp,
-    };
-    updateNurse(nurse.nurseId, updatedNurse);
-    setIsChecked(temp);
+    updateNurseShift(nurse.nurseId, isChecked[i].nurseShiftTypeId, {
+      isPossible: !isChecked[i].isPossible,
+    });
   };
 
   return (
@@ -50,7 +58,7 @@ const Row = ({ nurse, selectNurse, updateNurse, edit, isFirst, isSelected, rowsp
       <td
         onClick={handleNameClick}
         className={`${
-          isSelected ? 'border-2 border-main-2 bg-main-2/10' : ''
+          isSelected ? 'border-1 border-main-2 bg-main-2/10' : ''
         } h-14 w-[11.625rem] cursor-pointer border border-b-0 border-sub-4 font-apple text-[1.25rem] font-normal text-sub-1`}
       >
         {nurse.name}
