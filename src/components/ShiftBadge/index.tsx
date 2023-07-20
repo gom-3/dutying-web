@@ -17,7 +17,7 @@ function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props 
         className
       )}
       ref={forwardRef}
-      style={{ backgroundColor: shiftType ? '#' + shiftType.color : '#D6D6DE' }}
+      style={{ backgroundColor: shiftType ? shiftType.color : '#D6D6DE' }}
       {...props}
     >
       {shiftType ? shiftType.shortName : '-'}

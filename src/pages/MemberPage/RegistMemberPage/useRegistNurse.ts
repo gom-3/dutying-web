@@ -49,6 +49,7 @@ const useRegistNurse = () => {
         const prevNurseIndex =
           (data?.nurses.findIndex((nurse) => nurse.nurseId === nurseId) || 1) - 1;
         queryClient.invalidateQueries(['nurses', wardId]);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         setNurse(data!.nurses[prevNurseIndex]);
       },
     }

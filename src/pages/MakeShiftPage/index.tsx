@@ -1,14 +1,14 @@
 import Toolbar from './components/Toolbar';
 import CountDutyByDay from './components/CountDutyByDay';
 import ShiftCalendar from './components/ShiftCalendar';
-import MakeShiftPageHook from './index.hook';
 import Panel from './components/Panel';
+import useMakeShiftPageHook from './index.hook';
 
 const MakeShiftPage = () => {
   const {
     state: { month, shift, focus, foldedLevels, changeStatus, faults, histories },
     actions: { changeFocus, foldLevel, changeMonth },
-  } = MakeShiftPageHook();
+  } = useMakeShiftPageHook();
 
   return shift ? (
     <div className="mx-auto flex h-screen w-fit flex-col overflow-hidden">

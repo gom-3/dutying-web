@@ -1,73 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { mockRequestShift } from '@mocks/shift';
-import { koToEn } from '@libs/util/koToEn';
-
-const requestShiftData = mockRequestShift;
-
-/**추후 서버 API로 대체 */
-const getRequestShiftApi = () => {
-  return new Promise<RequestShift>((resolve) => {
-    setTimeout(() => {
-      resolve(requestShiftData);
-    }, 500);
-  });
-};
-
-const updateFocusedRequestShiftApi = (focus: Focus, shiftTypeIndex: number) => {
-  requestShiftData.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift =
-    shiftTypeIndex;
-  return new Promise<RequestShift>((resolve) => {
-    setTimeout(() => {
-      resolve(requestShiftData);
-    }, 500);
-  });
-};
-
-const SHIFT_KEY = 'request_shift';
+import { useQuery } from '@tanstack/react-query';
+import { getRequestShift } from '@libs/api/shift';
+import { useAccount } from 'store';
 
 const useRequestShiftPageHook: RequestShiftPageHook = () => {
-  const [month] = useState(6);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(6);
   const [focus, setFocus] = useState<Focus | null>(null);
-  const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
+  const { account } = useAccount();
 
-  const queryClient = useQueryClient();
-  const { data: requestShift, isLoading } = useQuery([SHIFT_KEY], getRequestShiftApi, {
-    onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
-  });
-  const { mutate: focusedShiftChange } = useMutation(
-    ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number }) =>
-      updateFocusedRequestShiftApi(focus, shiftTypeIndex),
+  const requestShiftQueryKey = ['requestShift', account.nurseId, year, month];
+  const { data: requestShift } = useQuery(
+    requestShiftQueryKey,
+    () => getRequestShift(account.nurseId, year, month),
     {
-      onMutate: async ({ focus, shiftTypeIndex }) => {
-        await queryClient.cancelQueries([SHIFT_KEY]);
-        const oldShift = queryClient.getQueryData<Shift>([SHIFT_KEY]);
-        if (oldShift) {
-          queryClient.setQueryData<Shift>([SHIFT_KEY], {
-            ...oldShift,
-            levelNurses: oldShift.levelNurses.map((rows, level) =>
-              rows.map((row, index) =>
-                focus.row === index && focus.level === level
-                  ? {
-                      ...row,
-                      shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
-                        day === focus.day
-                          ? { ...oldShiftTypeIndex, shift: shiftTypeIndex }
-                          : oldShiftTypeIndex
-                      ),
-                    }
-                  : row
-              )
-            ),
-          });
-        }
-        return { oldShift };
-      },
-      onError: (_, __, context) => {
-        if (context === undefined || context.oldShift === undefined) return;
-        queryClient.setQueryData(['shift'], context.oldShift);
-      },
+      onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
     }
   );
 
@@ -79,6 +27,24 @@ const useRequestShiftPageHook: RequestShiftPageHook = () => {
         index === requestShift.levelNurses.length - level ? !isFolded : isFolded
       )
     );
+  };
+
+  const changeMonth: MakeShiftPageActions['changeMonth'] = (type) => {
+    if (type === 'prev') {
+      if (month === 1) {
+        setMonth(12);
+        setYear(year - 1);
+      } else {
+        setMonth(month - 1);
+      }
+    } else if (type === 'next') {
+      if (month === 12) {
+        setMonth(1);
+        setYear(year + 1);
+      } else {
+        setMonth(month + 1);
+      }
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -159,41 +125,10 @@ const useRequestShiftPageHook: RequestShiftPageHook = () => {
       }
       setFocus({ level: newLevel, day: newDay, row: newRow });
     }
-
-    // if (e.key === 'Space' || e.key === ' ') {
-    //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
-    // }
-
-    requestShift.shiftTypes.forEach((shiftType, index) => {
-      if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-        focusedShiftChange({ focus, shiftTypeIndex: index });
-      }
-    });
   };
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    if (requestShift && focus) {
-      setFocusedDayInfo({
-        month: month,
-        day: focus.day ?? 0,
-        countByShiftList: requestShift.shiftTypes.map((_, shiftTypeIndex) => ({
-          count: requestShift.levelNurses
-            .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
-            .length,
-          shiftType: requestShift.shiftTypes[shiftTypeIndex],
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: requestShift.levelNurses
-          .flatMap((row) => row)
-          .find((_, index) => index === focus.row)?.nurse!,
-        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
-      });
-    } else {
-      setFocusedDayInfo(null);
-    }
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -204,14 +139,11 @@ const useRequestShiftPageHook: RequestShiftPageHook = () => {
       month,
       requestShift,
       focus,
-      focusedDayInfo,
       foldedLevels,
-      isLoading,
     },
     actions: {
       foldLevel,
-      changeFocusedShift: (shiftTypeIndex: number) =>
-        focus && focusedShiftChange({ focus, shiftTypeIndex }),
+      changeMonth,
       changeFocus: setFocus,
     },
   };
