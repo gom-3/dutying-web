@@ -12,7 +12,7 @@ function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props 
   return (
     <div
       className={twMerge(
-        'z-20 flex h-[1.75rem] w-[1.75rem] items-center justify-center rounded-[.4063rem] text-center font-poppins text-[1.25rem] text-white ',
+        'flex h-[1.75rem] w-[1.75rem] items-center justify-center rounded-[.4063rem] text-center font-poppins text-[1.25rem] text-white ',
         isOnlyRequest && 'opacity-[30%]',
         className
       )}

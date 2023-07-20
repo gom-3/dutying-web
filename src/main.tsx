@@ -8,7 +8,7 @@ import App from 'App';
 import './index.css';
 
 const { hackleClient } = initializeApp();
-hackleClient.setUserId('test-user-1');
+hackleClient.setUserId('test-user-1'); // @TODO 로그인 부착 시 삭제
 
 const queryClient = new QueryClient();
 
