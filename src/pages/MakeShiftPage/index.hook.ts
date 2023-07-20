@@ -1,129 +1,135 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect } from 'react';
-import { mockShift } from '@mocks/shift';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { koToEn } from '@libs/util/koToEn';
-
-const shiftData = mockShift;
-
-/**추후 서버 API로 대체 */
-const getShiftApi = () => {
-  return new Promise<Shift>((resolve) => {
-    setTimeout(() => {
-      resolve(shiftData);
-    }, 500);
-  });
-};
-
-const updateFocusedShiftApi = (focus: Focus, shiftTypeIndex: number | null) => {
-  shiftData.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current = shiftTypeIndex;
-  return new Promise<Shift>((resolve) => {
-    setTimeout(() => {
-      resolve(shiftData);
-    }, 500);
-  });
-};
+import { getWardShift, updateWardShift } from '@libs/api/shift';
+import { useAccount } from 'store';
 
 const checkFaultOptions: CheckFaultOptions = {
   twoOffAfterNight: {
     isActive: true,
-    regExp: /3([12]|0[123])/g,
+    regExp: /2([01]|3[012])/g,
     message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
     type: 'wrong',
   },
   ed: {
     isActive: true,
-    regExp: /21/g,
+    regExp: /10/g,
     message: 'E 근무 후 D 근무는 권장되지 않습니다.',
     type: 'wrong',
   },
   maxContinuousWork: {
     isActive: true,
-    regExp: /(?<=[^123])[123]{6,}(?=[^123])/g,
+    regExp: /(?<=[^012])[012]{6,}(?=[^012])/g,
     message: '근무는 연속 5일을 초과할 수 없습니다.',
     type: 'wrong',
   },
   maxContinuousNight: {
     isActive: true,
-    regExp: /3333+/g,
+    regExp: /2222+/g,
     message: '나이트 근무가 연속 3일을 초과했습니다',
     type: 'wrong',
   },
   minNightInterval: {
     isActive: true,
-    regExp: /3[^3]{1,6}3/g,
+    regExp: /2[^2]{1,6}2/g,
     message: '나이트 간격이 최소 7일 이상이어야 합니다.',
     type: 'wrong',
   },
   singleNight: {
     isActive: true,
-    regExp: /(?<!3)3(?!3)/g,
+    regExp: /(?<!2)2(?!2)/g,
     message: '단일 나이트 근무는 권장되지 않습니다.',
     type: 'bad',
   },
   maxContinuousOff: {
     isActive: true,
-    regExp: /0000+/g,
+    regExp: /3333+/g,
     message: 'OFF가 연속 3일을 초과했습니다.',
     type: 'bad',
   },
   pongdang: {
     isActive: true,
-    regExp: /(0101|1010|2020|0202)/g,
+    regExp: /(3030|0303|1313|3131)/g,
     message: '퐁당퐁당 근무입니다.',
     type: 'bad',
   },
   noeeod: {
     isActive: true,
-    regExp: /201/g,
+    regExp: /130/g,
     message: 'EOD 형태의 근무는 권장되지 않습니다.',
     type: 'bad',
   },
 };
 
-const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
+const useMakeShiftPageHook: MakeShiftPageHook = () => {
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(6);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
 
+  const { account } = useAccount();
+
   const queryClient = useQueryClient();
-  const { data: shift, status: shiftStatus } = useQuery(['shift'], getShiftApi, {
-    onSuccess: (data) => setFoldedLevels(data.levels.map(() => false)),
-  });
-  const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
-    ({ focus, shiftTypeIndex }: { focus: Focus; shiftTypeIndex: number | null }) =>
-      updateFocusedShiftApi(focus, shiftTypeIndex),
+
+  const shiftQueryKey = ['shift', account.nurseId, year, month];
+  const { data: shift, status: shiftStatus } = useQuery(
+    shiftQueryKey,
+    () => getWardShift(account.nurseId, year, month),
     {
-      onMutate: async ({ focus, shiftTypeIndex }) => {
+      onSuccess: (data) => {
+        setFoldedLevels(data.levelNurses.map(() => false));
+      },
+    }
+  );
+  const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
+    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) => {
+      return updateWardShift(
+        year,
+        month,
+        shift.days[focus.day].day,
+        shift.levelNurses[focus.level][focus.row].nurse.nurseId,
+        shiftTypeId
+      );
+    },
+    {
+      onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
-        const oldShift = queryClient.getQueryData<Shift>(['shift']);
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
         if (!oldShift) return;
         const oldShiftTypeIndex =
-          oldShift.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current;
+          oldShift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift;
 
         const history: EditHistory = {
-          nurse: oldShift.levels[focus.level][focus.row].nurse,
+          nurse: oldShift.levelNurses[focus.level][focus.row].nurse,
           focus,
-          prevShiftType:
-            oldShiftTypeIndex !== null ? oldShift.shiftTypeList[oldShiftTypeIndex] : null,
-          nextShiftType: shiftTypeIndex !== null ? oldShift.shiftTypeList[shiftTypeIndex] : null,
+          prevShiftType: oldShiftTypeIndex !== null ? oldShift.shiftTypes[oldShiftTypeIndex] : null,
+          nextShiftType: oldShift.shiftTypes.find((x) => x.shiftTypeId === shiftTypeId) || null,
           dateString: new Date().toLocaleString(),
         };
         setHistories([...histories, history]);
 
-        queryClient.setQueryData<Shift>(['shift'], {
+        const newShiftTypeIndex = oldShift.shiftTypes.findIndex(
+          (x) => x.shiftTypeId === shiftTypeId
+        );
+
+        queryClient.setQueryData<Shift>(shiftQueryKey, {
           ...oldShift,
-          levels: oldShift.levels.map((rows, level) =>
+          levelNurses: oldShift.levelNurses.map((rows, level) =>
             rows.map((row, index) =>
               focus.row === index && focus.level === level
                 ? {
                     ...row,
                     shiftTypeIndexList: row.shiftTypeIndexList.map((oldShiftTypeIndex, day) =>
                       day === focus.day
-                        ? { ...oldShiftTypeIndex, current: shiftTypeIndex }
+                        ? {
+                            ...oldShiftTypeIndex,
+                            shift: newShiftTypeIndex === undefined ? null : newShiftTypeIndex,
+                          }
                         : oldShiftTypeIndex
                     ),
                   }
@@ -141,6 +147,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
           context.history === undefined
         )
           return;
+        console.log('error');
         queryClient.setQueryData(['shift'], context.oldShift);
         setHistories(histories.filter((history) => history !== context.history));
       },
@@ -151,14 +158,14 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     const newFaults: Map<string, Fault> = new Map();
     if (shift === undefined) return;
 
-    for (let i = 0; i < shift.levels.length; i++) {
-      const level = shift.levels[i];
+    for (let i = 0; i < shift.levelNurses.length; i++) {
+      const level = shift.levelNurses[i];
       for (let j = 0; j < level.length; j++) {
         const row = level[j];
         for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
           const option = checkFaultOptions[key];
           const str = row.shiftTypeIndexList
-            .map((x) => (x.current === null ? 'x' : x.current))
+            .map((x) => (x.shift === null ? 'x' : x.shift))
             .join('');
           // eslint-disable-next-line no-constant-condition
           while (true) {
@@ -174,7 +181,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
               message: option.message,
               matchString: match[0]
                 .split('')
-                .map((x) => (x === 'x' ? '-' : shift.shiftTypeList[Number(x)].shortName))
+                .map((x) => (x === 'x' ? '-' : shift.shiftTypes[Number(x)].shortName))
                 .map((x) => (x === '/' ? 'O' : x))
                 .join(''),
               length: match[0].length,
@@ -187,14 +194,33 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     setFaults(newFaults);
   };
 
-  const changeFocusedShift = (shiftTypeIndex: number | null) => {
+  const changeMonth: MakeShiftPageActions['changeMonth'] = (type) => {
+    if (type === 'prev') {
+      if (month === 1) {
+        setMonth(12);
+        setYear(year - 1);
+      } else {
+        setMonth(month - 1);
+      }
+    } else if (type === 'next') {
+      if (month === 12) {
+        setMonth(1);
+        setYear(year + 1);
+      } else {
+        setMonth(month + 1);
+      }
+    }
+  };
+
+  const changeFocusedShift = (shiftTypeId: number | null) => {
     if (
       !focus ||
       !shift ||
-      shift.levels[focus.level][focus.row].shiftTypeIndexList[focus.day].current === shiftTypeIndex
+      shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift ===
+        shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
     )
       return;
-    focusedShiftChange({ focus, shiftTypeIndex });
+    focusedShiftChange({ shift, focus, shiftTypeId });
   };
 
   const foldLevel = (level: Nurse['level']) => {
@@ -212,7 +238,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (focus === null) return;
 
     const { level, day, row } = focus;
-    const rows = shift.levels[level];
+    const rows = shift.levelNurses[level];
     let newLevel = level;
     let newDay = day;
     let newRow = row;
@@ -220,9 +246,9 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (e.key === 'ArrowLeft') {
       if (day === 0) {
         if (row === 0) {
-          newLevel = level === 0 ? shift.levels.length - 1 : level - 1;
+          newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
           newDay = shift.days.length - 1;
-          newRow = shift.levels[newLevel].length - 1;
+          newRow = shift.levelNurses[newLevel].length - 1;
         } else {
           newDay = shift.days.length - 1;
           newRow = row - 1;
@@ -240,7 +266,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     if (e.key === 'ArrowRight') {
       if (day === shift.days.length - 1) {
         if (row === rows.length - 1) {
-          newLevel = level === shift.levels.length - 1 ? 0 : level + 1;
+          newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
           newDay = 0;
           newRow = 0;
         } else {
@@ -257,9 +283,9 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
 
     if (e.key === 'ArrowUp') {
       if (row === 0) {
-        newLevel = level === 0 ? shift.levels.length - 1 : level - 1;
+        newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
         newDay = day;
-        newRow = shift.levels[newLevel].length - 1;
+        newRow = shift.levelNurses[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -269,7 +295,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
 
     if (e.key === 'ArrowDown') {
       if (row === rows.length - 1) {
-        newLevel = level === shift.levels.length - 1 ? 0 : level + 1;
+        newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
         newDay = day;
         newRow = 0;
       } else {
@@ -283,9 +309,9 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
     // }
 
-    shift.shiftTypeList.forEach((shiftType, index) => {
+    shift.shiftTypes.forEach((shiftType) => {
       if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-        changeFocusedShift(index);
+        changeFocusedShift(shiftType.shiftTypeId);
       }
     });
 
@@ -302,17 +328,18 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     document.addEventListener('keydown', handleKeyDown);
     if (shift && focus) {
       setFocusedDayInfo({
-        month: shift.month,
+        month: month,
         day: focus.day ?? 0,
-        countByShiftList: shift.shiftTypeList.map((_, shiftTypeIndex) => ({
-          count: shift.levels
+        countByShiftList: shift.shiftTypes.map((_, shiftTypeIndex) => ({
+          count: shift.levelNurses
             .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].current === shiftTypeIndex)
+            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
             .length,
-          shiftType: shift.shiftTypeList[shiftTypeIndex],
+          shiftType: shift.shiftTypes[shiftTypeIndex],
         })),
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: shift.levels.flatMap((row) => row).find((_, index) => index === focus.row)?.nurse!,
+        nurse: shift.levelNurses.flatMap((row) => row).find((_, index) => index === focus.row)
+          ?.nurse!,
         message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
       });
     } else {
@@ -330,6 +357,7 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
 
   return {
     state: {
+      month,
       shift,
       focus,
       faults,
@@ -341,10 +369,11 @@ const MakeShiftPageViewModel: MakeShiftPageViewModel = () => {
     },
     actions: {
       foldLevel,
+      changeMonth,
       changeFocusedShift,
       changeFocus: setFocus,
     },
   };
 };
 
-export default MakeShiftPageViewModel;
+export default useMakeShiftPageHook;

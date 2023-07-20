@@ -24,24 +24,22 @@ type ShiftType = {
 
 /** 근무표 타입 */
 type Shift = {
-  /** 근무표의 월 */
-  month: number;
   /** 지난달 근무표의 날짜들 */
   lastDays: Array<Day>;
   /** 이번달 근무표의 날짜들 */
   days: Array<Day>;
   /** 해당 근무표의 근무유형 리스트 */
-  shiftTypeList: ShiftType[];
+  shiftTypes: ShiftType[];
   /** 숙련도별로 묶은 근무 데이터 */
-  levels: Row[][];
+  levelNurses: Row[][];
 };
 
-type RequestShift = Omit<Shift, 'lastDays' | 'levels'> & {
-  levels: Omit<Row, 'lastShiftTypeIndexList'>[][];
+type RequestShift = Omit<Shift, 'lastDays' | 'levelNurses'> & {
+  levelNurses: Omit<Row, 'lastShiftTypeIndexList'>[][];
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */
-type Day = { day: number; dayKind: 'saturday' | 'sunday' | 'holyday' | 'workday' };
+type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holyday' | 'workday' };
 
 /** 근무표 한줄에 해당하는 데이터 */
 type Row = {
@@ -49,7 +47,7 @@ type Row = {
   /** 이월 @example 1 */
   carry: number;
   /** 전달 근무 정보, 근무 유형의 index 배열 형식이다. */
-  lastShiftTypeIndexList: { request: number | null; current: number | null }[];
+  lastShiftTypeIndexList: { reqShift: number | null; shift: number | null }[];
   /** 이번달 근무 정보, 근무 유형의 index 배열 형식이다. */
-  shiftTypeIndexList: { request: number | null; current: number | null }[];
+  shiftTypeIndexList: { reqShift: number | null; shift: number | null }[];
 };

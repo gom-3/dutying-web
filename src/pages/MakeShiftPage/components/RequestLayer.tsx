@@ -13,7 +13,7 @@ function RequestLayer({ isAccept, request }: Props) {
       `}
     >
       {!isAccept && (
-        <div className=" relative top-[-1.3125rem] z-30 flex justify-center group-hover:visible">
+        <div className="invisible relative top-[-1.3125rem] z-30 flex justify-center group-hover:visible">
           <ChatIcon className="absolute h-[1.25rem] w-[1.0625rem]" fill={request.color} />
           <p className="absolute top-[-0.24rem] font-poppins text-[.6rem] text-white">
             {request.shortName}
