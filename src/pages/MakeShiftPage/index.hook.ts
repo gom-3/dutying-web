@@ -66,7 +66,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(6);
   const [focus, setFocus] = useState<Focus | null>(null);
-  const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
+  const [focusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
@@ -84,15 +84,14 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
     }
   );
   const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
-    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) => {
-      return updateShift(
+    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) =>
+      updateShift(
         year,
         month,
         shift.days[focus.day].day,
         shift.levelNurses[focus.level][focus.row].nurse.nurseId,
         shiftTypeId
-      );
-    },
+      ),
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
@@ -227,123 +226,29 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (!shift) return;
-
-    if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
-      e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
-    }
-
-    if (focus === null) return;
-
-    const { level, day, row } = focus;
-    const rows = shift.levelNurses[level];
-    let newLevel = level;
-    let newDay = day;
-    let newRow = row;
-
-    if (e.key === 'ArrowLeft') {
-      if (day === 0) {
-        if (row === 0) {
-          newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
-          newDay = shift.days.length - 1;
-          newRow = shift.levelNurses[newLevel].length - 1;
-        } else {
-          newDay = shift.days.length - 1;
-          newRow = row - 1;
-        }
-      } else {
-        newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
-        newRow = row;
-      }
-      setFocus({
-        level: newLevel,
-        day: newDay,
-        row: newRow,
-      });
-    }
-    if (e.key === 'ArrowRight') {
-      if (day === shift.days.length - 1) {
-        if (row === rows.length - 1) {
-          newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
-          newDay = 0;
-          newRow = 0;
-        } else {
-          newRow = row + 1;
-          newDay = 0;
-        }
-      } else {
-        newDay =
-          e.ctrlKey || e.metaKey ? shift.days.length - 1 : Math.min(shift.days.length - 1, day + 1);
-        newRow = row;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    if (e.key === 'ArrowUp') {
-      if (row === 0) {
-        newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
-        newDay = day;
-        newRow = shift.levelNurses[newLevel].length - 1;
-      } else {
-        newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    if (e.key === 'ArrowDown') {
-      if (row === rows.length - 1) {
-        newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
-        newDay = day;
-        newRow = 0;
-      } else {
-        newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    // if (e.key === 'Space' || e.key === ' ') {
-    //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
-    // }
-
-    shift.shiftTypes.forEach((shiftType) => {
-      if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-        changeFocusedShift(shiftType.shiftTypeId);
-      }
-    });
-
-    if (e.key === 'Backspace') {
-      changeFocusedShift(null);
-    }
+    if (!focus || !shift) return;
+    moveFocusByKeydown(e, shift, focus, setFocus);
+    keydownEventMapper(
+      e,
+      ...shift.shiftTypes.map((shiftType) => ({
+        keys: [shiftType.shortName],
+        callback: () => {
+          if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
+            changeFocusedShift(shiftType.shiftTypeId);
+          }
+        },
+      })),
+      { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+    );
   };
 
   useEffect(() => {
+    console.log(shift);
     checkShift();
   }, [shift]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    if (shift && focus) {
-      setFocusedDayInfo({
-        month: month,
-        day: focus.day ?? 0,
-        countByShiftList: shift.shiftTypes.map((_, shiftTypeIndex) => ({
-          count: shift.levelNurses
-            .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
-            .length,
-          shiftType: shift.shiftTypes[shiftTypeIndex],
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: shift.levelNurses.flatMap((row) => row).find((_, index) => index === focus.row)
-          ?.nurse!,
-        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
-      });
-    } else {
-      setFocusedDayInfo(null);
-    }
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -371,3 +276,96 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
 };
 
 export default useMakeShiftPageHook;
+
+const moveFocusByKeydown = (
+  e: KeyboardEvent,
+  shift: Shift,
+  focus: Focus,
+  setFocus: (focus: Focus) => void
+) => {
+  const { level, day, row } = focus;
+  const levelCnt = shift.levelNurses.length;
+  const rowCnt = shift.levelNurses[level].length;
+  const dayCnt = shift.days.length;
+  let newLevel = level;
+  let newDay = day;
+  let newRow = row;
+
+  if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
+    e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+  }
+
+  switch (e.key) {
+    case 'ArrowLeft': {
+      if (day === 0) {
+        if (row === 0) {
+          newLevel = level === 0 ? levelCnt - 1 : level - 1;
+          newDay = dayCnt - 1;
+          newRow = shift.levelNurses[newLevel].length - 1;
+        } else {
+          newDay = dayCnt - 1;
+          newRow = row - 1;
+        }
+      } else {
+        newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
+        newRow = row;
+      }
+      break;
+    }
+    case 'ArrowRight': {
+      if (day === dayCnt - 1) {
+        if (row === rowCnt - 1) {
+          newLevel = level === levelCnt - 1 ? 0 : level + 1;
+          newDay = 0;
+          newRow = 0;
+        } else {
+          newRow = row + 1;
+          newDay = 0;
+        }
+      } else {
+        newDay = e.ctrlKey || e.metaKey ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
+        newRow = row;
+      }
+      break;
+    }
+    case 'ArrowUp': {
+      if (row === 0) {
+        newLevel = level === 0 ? levelCnt - 1 : level - 1;
+        newDay = day;
+        newRow = shift.levelNurses[newLevel].length - 1;
+      } else {
+        newDay = day;
+        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
+      }
+      break;
+    }
+    case 'ArrowDown': {
+      if (row === rowCnt - 1) {
+        newLevel = level === levelCnt - 1 ? 0 : level + 1;
+        newDay = day;
+        newRow = 0;
+      } else {
+        newDay = day;
+        newRow = e.ctrlKey || e.metaKey ? rowCnt - 1 : row + 1;
+      }
+      break;
+    }
+  }
+
+  setFocus({
+    level: newLevel,
+    day: newDay,
+    row: newRow,
+  });
+};
+
+const keydownEventMapper = (
+  e: KeyboardEvent,
+  ...op: { keys: string[]; callback: () => void }[]
+) => {
+  op.forEach(({ keys, callback }) => {
+    if (keys.map((key) => key.toUpperCase()).indexOf(koToEn(e.key).toUpperCase()) != -1) {
+      callback();
+    }
+  });
+};
