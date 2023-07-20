@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { refreshToken } from './login';
+import { useRefreshToken } from './login';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
       }
       if (error.response.status === 401) {
         // 토큰 만료되었을 때 refreshToken으로 accessToken 재발급
-        refreshToken();
+        useRefreshToken();
         return {
           code: '401',
           message: '401',

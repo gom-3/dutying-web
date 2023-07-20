@@ -5,9 +5,9 @@ interface NursesList {
 }
 
 export type updateNurseShiftTypeRequest = {
-  isPossible? : boolean;
-  isPrefer? : boolean;
-}
+  isPossible?: boolean;
+  isPrefer?: boolean;
+};
 
 export const getNurses = async () => {
   const response: NursesList = await axiosInstance.get('/nurses');
@@ -26,5 +26,10 @@ export const addNurseInWard = async (wardId: number) =>
 export const deleteNurseInWard = async (nurseId: number) =>
   (await axiosInstance.delete('/nurses/' + nurseId)).data;
 
-export const updateNurseShiftType = async (nurseId:number, nurseShiftTypeId:number, change:updateNurseShiftTypeRequest) => 
-  (await axiosInstance.patch('/nurses/' + nurseId + '/shift-types/' + nurseShiftTypeId, change)).data;
+export const updateNurseShiftType = async (
+  nurseId: number,
+  nurseShiftTypeId: number,
+  change: updateNurseShiftTypeRequest
+) =>
+  (await axiosInstance.patch('/nurses/' + nurseId + '/shift-types/' + nurseShiftTypeId, change))
+    .data;

@@ -27,12 +27,6 @@ export default function initializeApp() {
   const history = createBrowserHistory();
   history.listen(async (response) => {
     ReactGA.send({ hitType: 'pageview', page: response.location.pathname });
-    hackleClient.track({
-      key: 'naviagtion_item_click',
-      properties: {
-        name: response.location.pathname,
-      },
-    });
   });
 
   // Sentry 관련 초기화

@@ -30,10 +30,10 @@ export const updateShiftType = async (
     )
   ).data;
 
-export const getWardShift = async (wardId: number, year: number, month: number) =>
+export const getShift = async (wardId: number, year: number, month: number) =>
   (await axiosInstance.get<Shift>(`/wards/${wardId}/duty?${qs.stringify({ year, month })}`)).data;
 
-export const updateWardShift = async (
+export const updateShift = async (
   year: number,
   month: number,
   day: number,
@@ -44,4 +44,11 @@ export const updateWardShift = async (
     await axiosInstance.patch<null>(`/shifts?${qs.stringify({ nurseId, year, month, day })}`, {
       shiftTypeId,
     })
+  ).data;
+
+export const getRequestShift = async (wardId: number, year: number, month: number) =>
+  (
+    await axiosInstance.get<RequestShift>(
+      `/wards/${wardId}/req-duty?${qs.stringify({ year, month })}`
+    )
   ).data;

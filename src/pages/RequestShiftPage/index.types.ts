@@ -17,15 +17,12 @@ interface RequestShiftPageState {
   month: number;
   requestShift: RequestShift | undefined;
   focus: Focus | null;
-  focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
-  isLoading: boolean;
 }
 
 interface RequestShiftPageActions {
   foldLevel: (level: Nurse['level']) => void;
   changeFocus: (focus: Focus | null) => void;
-  changeFocusedShift: (shiftTypeIndex: number) => void;
 }
 
 interface RequestShiftPageHook {

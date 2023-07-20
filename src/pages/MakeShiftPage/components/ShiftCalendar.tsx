@@ -158,7 +158,6 @@ export default function ShiftCalendar({
                             {request !== null && current !== null && (
                               <RequestLayer
                                 isAccept={request === current}
-                                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                                 request={shift.shiftTypes[request]}
                               />
                             )}

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { koToEn } from '@libs/util/koToEn';
-import { getWardShift, updateWardShift } from '@libs/api/shift';
+import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
 
 const checkFaultOptions: CheckFaultOptions = {
@@ -78,16 +78,14 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const shiftQueryKey = ['shift', account.nurseId, year, month];
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getWardShift(account.nurseId, year, month),
+    () => getShift(account.nurseId, year, month),
     {
-      onSuccess: (data) => {
-        setFoldedLevels(data.levelNurses.map(() => false));
-      },
+      onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
     }
   );
   const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
     ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) => {
-      return updateWardShift(
+      return updateShift(
         year,
         month,
         shift.days[focus.day].day,
@@ -350,10 +348,6 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [focus, shift]);
-
-  useEffect(() => {
-    console.log(faults);
-  }, [faults]);
 
   return {
     state: {
