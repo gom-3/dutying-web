@@ -3,6 +3,7 @@ import 'index.css';
 import LevelSelect from './LevelSelect';
 import ShiftSelect from './ShiftSelect';
 import { updateNurseShiftTypeRequest } from '@libs/api/nurse';
+import useOnclickOutside from 'react-cool-onclickoutside';
 
 type Props = {
   nurse: Nurse;
@@ -16,6 +17,10 @@ type Props = {
 
 const Editor = ({ nurse, updateNurse, updateNurseShift }: Props) => {
   const [name, setName] = useState(nurse.name);
+  const ref = useOnclickOutside(() => {
+    const updatedNurse = { ...nurse, name };
+    updateNurse(nurse.nurseId, updatedNurse);
+  });
 
   useEffect(() => {
     setName(nurse.name);
@@ -34,6 +39,7 @@ const Editor = ({ nurse, updateNurse, updateNurseShift }: Props) => {
       >
         <div className="m-[1.875rem] flex justify-start">
           <input
+            ref={ref}
             className="w-1/2 text-[2rem] font-semibold text-text-1"
             type="text"
             onChange={handleInputChange}
