@@ -1,13 +1,18 @@
+import { updateNurseShiftTypeRequest } from '@libs/api/nurse';
 import 'index.css';
 import { useEffect, useState } from 'react';
 
 interface Props {
   nurse: Nurse;
   mode: 'isPreferred' | 'isPossible';
-  updateNurse: (id: number, updatedNurse: Nurse) => void;
+  updateNurseShift: (
+    nurseId: number,
+    nurseShiftTypeId: number,
+    change: updateNurseShiftTypeRequest
+  ) => void;
 }
 
-const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
+const ShiftSelect = ({ nurse, updateNurseShift, mode }: Props) => {
   const [isSelected, setIsSelected] = useState(nurse.nurseShiftTypes);
 
   useEffect(() => {
@@ -15,14 +20,9 @@ const ShiftSelect = ({ nurse, updateNurse, mode }: Props) => {
   }, [nurse]);
 
   const handleOnClick = (i: number) => {
-    const temp = [...isSelected];
-    temp[i][mode] = !temp[i][mode];
-    const updatedNurse: Nurse = {
-      ...nurse,
-      nurseShiftTypes: temp,
-    };
-    updateNurse(nurse.nurseId, updatedNurse);
-    setIsSelected(temp);
+    updateNurseShift(nurse.nurseId, isSelected[i].nurseShiftTypeId, {
+      [mode]: !isSelected[i][mode],
+    });
   };
 
   return (

@@ -15,13 +15,10 @@ const LevelSelect = ({ nurse, updateNurse, devide }: Props) => {
     setCurrentProficiency(nurse.level);
   }, [nurse]);
 
-  useEffect(() => {
-    const updatedNurse: Nurse = { ...nurse, level: currentProficiency };
-    updateNurse(nurse.nurseId, updatedNurse);
-  }, [currentProficiency]);
-
   const handleOnClick = (i: number) => {
     setCurrentProficiency(i);
+    const updatedNurse: Nurse = { ...nurse, level: i };
+    updateNurse(nurse.nurseId, updatedNurse);
   };
 
   return (

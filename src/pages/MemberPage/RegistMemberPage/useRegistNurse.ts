@@ -1,32 +1,93 @@
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { nurses as tempNurse } from '@mocks/nurse';
-import { mockShiftTypeList } from '@mocks/shift';
-import { getNurses } from '@libs/api/nurse';
+import {
+  addNurseInWard,
+  deleteNurseInWard,
+  getNursesByWardId,
+  updateNurse as patchNurse,
+  updateNurseShiftType,
+  updateNurseShiftTypeRequest,
+} from '@libs/api/nurse';
 
 const useRegistNurse = () => {
   const [nurse, setNurse] = useState<Nurse>(tempNurse[0]);
-  const [nurses, setNurses] = useState<Nurse[]>(tempNurse);
 
-  const { data, isLoading, isError } = useQuery(['nurses'], getNurses);
+  const queryClient = useQueryClient();
+  const wardId = 1;
 
-  useEffect(() => {
-    // if(data && !isError && !isLoading) setNurses(data);
-  }, [data, isLoading, isError]);
+  const { data } = useQuery(['nurses', wardId], () => getNursesByWardId(1));
+
+  const { mutate: updateNurseMutate } = useMutation(
+    ({ id, updatedNurse }: { id: number; updatedNurse: Nurse }) => patchNurse(id, updatedNurse),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['nurses', wardId]);
+      },
+      onError: (error) => {
+        console.log(error);
+        alert('간호사 정보 수정이 실패했습니다.');
+      },
+    }
+  );
+
+  const { mutate: addNurseMutate } = useMutation((wardId: number) => addNurseInWard(wardId), {
+    onSuccess: (nurse) => {
+      queryClient.invalidateQueries(['nurses', wardId]);
+      setNurse(nurse);
+    },
+    onError: (error) => {
+      console.log(error);
+      alert('간호사 추가에 실패했습니다.');
+    },
+  });
+
+  const { mutate: deleteNurseMutate } = useMutation(
+    (nurseId: number) => deleteNurseInWard(nurseId),
+    {
+      onSuccess: (_, nurseId) => {
+        const prevNurseIndex =
+          (data?.nurses.findIndex((nurse) => nurse.nurseId === nurseId) || 1) - 1;
+        queryClient.invalidateQueries(['nurses', wardId]);
+        setNurse(data!.nurses[prevNurseIndex]);
+      },
+    }
+  );
+
+  const { mutate: updateNurseShiftTypeMutate } = useMutation(
+    ({
+      nurseId,
+      nurseShiftTypeId,
+      change,
+    }: {
+      nurseId: number;
+      nurseShiftTypeId: number;
+      change: updateNurseShiftTypeRequest;
+    }) => updateNurseShiftType(nurseId, nurseShiftTypeId, change),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['nurses', wardId]);
+      },
+    }
+  );
 
   useEffect(() => {
     const id = nurse.nurseId;
-    const temp = nurses.find((n) => n.nurseId === id);
-    setNurse(temp || nurses[0]);
-    getNurses();
-  }, [nurses]);
+    if (!data) return;
+    const temp = data.nurses.find((n) => n.nurseId === id);
+    setNurse(temp || data.nurses[0]);
+  }, [data]);
 
   const updateNurse = (id: number, updatedNurse: Nurse) => {
-    setNurses((prevNurses) => {
-      const nurseArray = prevNurses.map((nurse) => (nurse.nurseId === id ? updatedNurse : nurse));
-      nurseArray.sort((a, b) => a.level - b.level);
-      return nurseArray;
-    });
+    updateNurseMutate({ id, updatedNurse });
+  };
+
+  const updateNurseShift = (
+    nurseId: number,
+    nurseShiftTypeId: number,
+    change: updateNurseShiftTypeRequest
+  ) => {
+    updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change });
   };
 
   const selectNurse = (nurse: Nurse) => {
@@ -34,39 +95,22 @@ const useRegistNurse = () => {
   };
 
   const addNurse = () => {
-    const temp = [...nurses].sort((a, b) => a.nurseId - b.nurseId);
-    const newNurse: Nurse = {
-      nurseId: temp[temp.length - 1].nurseId + 1,
-      accountId: null,
-      wardId: 1, // store 값으로 변경
-      name: '간호사',
-      level: 1,
-      phoneNum: '01012341234',
-      isConnected: false,
-      isAssistant: false,
-      isDutyManager: false,
-      isWardManager: false,
-      gender: '여',
-      employmentDate: '2010-10-10',
-      nurseShiftTypes: mockShiftTypeList.map((shiftType, index) => ({
-        nurseShiftTypeId: index, // shift에 id 추가해서 변경
-        name: shiftType.name,
-        shoftName: shiftType.shortName,
-        isPossible: true,
-        isPreferred: false,
-      })),
-    };
-    temp.push(newNurse);
-    setNurse(newNurse);
-    setNurses(temp);
+    addNurseMutate(wardId);
   };
 
   const deleteNurse = (id: number) => {
-    const temp = [...nurses].filter((nurse) => nurse.nurseId !== id);
-    setNurses(temp);
+    deleteNurseMutate(id);
   };
 
-  return { nurse, selectNurse, addNurse, deleteNurse, nurses, updateNurse };
+  return {
+    nurse,
+    selectNurse,
+    addNurse,
+    deleteNurse,
+    nurses: data?.nurses || [],
+    updateNurse,
+    updateNurseShift,
+  };
 };
 
 export default useRegistNurse;

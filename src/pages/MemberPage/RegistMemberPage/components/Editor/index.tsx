@@ -2,13 +2,19 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import 'index.css';
 import LevelSelect from './LevelSelect';
 import ShiftSelect from './ShiftSelect';
+import { updateNurseShiftTypeRequest } from '@libs/api/nurse';
 
 type Props = {
   nurse: Nurse;
   updateNurse: (id: number, updatedNurse: Nurse) => void;
+  updateNurseShift: (
+    nurseId: number,
+    nurseShiftTypeId: number,
+    change: updateNurseShiftTypeRequest
+  ) => void;
 };
 
-const Editor = ({ nurse, updateNurse }: Props) => {
+const Editor = ({ nurse, updateNurse, updateNurseShift }: Props) => {
   const [name, setName] = useState(nurse.name);
 
   useEffect(() => {
@@ -50,7 +56,7 @@ const Editor = ({ nurse, updateNurse }: Props) => {
           <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
             가능 근무를 모두 선택해주세요
           </div>
-          <ShiftSelect nurse={nurse} mode="isPossible" updateNurse={updateNurse} />
+          <ShiftSelect nurse={nurse} mode="isPossible" updateNurseShift={updateNurseShift} />
         </div>
         <div className="h-[.3125rem] w-full bg-sub-5" />
         <div className="relative flex h-[7.875rem] w-full items-center justify-center">
@@ -60,7 +66,7 @@ const Editor = ({ nurse, updateNurse }: Props) => {
           <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
             선호도에 따라 듀티표에 추천될 예정입니다
           </div>
-          <ShiftSelect nurse={nurse} mode="isPreferred" updateNurse={updateNurse} />
+          <ShiftSelect nurse={nurse} mode="isPreferred" updateNurseShift={updateNurseShift} />
         </div>
       </div>
     </div>
