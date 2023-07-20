@@ -4,6 +4,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
+import { event, sendEvent } from 'analytics';
 
 interface Props {
   month: number;
@@ -61,7 +62,7 @@ export default function ShiftCalendar({
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             구분
           </div>
-          <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             이름
           </div>
           <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
@@ -84,18 +85,17 @@ export default function ShiftCalendar({
             ))}
           </div>
         </div>
-        <div className="flex w-[13.625rem] items-center px-[1.5625rem] text-center">
-          {shift.shiftTypes.slice(1).map((shiftType, index) => (
+        <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
+          {shift.shiftTypes.map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
           ))}
-          <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">O</div>
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
       <div
-        className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        className="m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
         {shift.levelNurses.map((rows, level) => {
@@ -103,7 +103,10 @@ export default function ShiftCalendar({
             <div
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
-              onClick={() => foldLevel(level)}
+              onClick={() => {
+                sendEvent(event.clickFoldButton, 'close');
+                foldLevel(level);
+              }}
             >
               {/* <p className="font-poppins text-base text-sub-2.5">{level}</p> */}
               <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
@@ -115,13 +118,16 @@ export default function ShiftCalendar({
                   {/* {level} */}
                   <FoldDutyIcon
                     className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
-                    onClick={() => foldLevel(level)}
+                    onClick={() => {
+                      sendEvent(event.clickFoldButton, 'open');
+                      foldLevel(level);
+                    }}
                   />
                 </div>
                 {rows.map((row, rowIndex) => (
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
-                    <div className="w-[3.375rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
+                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
                       {row.nurse.name}
                     </div>
                     <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
@@ -194,29 +200,23 @@ export default function ShiftCalendar({
                   </div>
                 ))}
               </div>
-              <div className="w-[13.625rem] rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
+              <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 {rows.map((row, i) => (
                   <div key={i} className="flex h-[3.25rem] items-center">
-                    {shift.shiftTypes.slice(1).map((_, index) => (
+                    {shift.shiftTypes.map((_, index) => (
                       <div
                         key={index}
                         className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                       >
-                        {
-                          row.shiftTypeIndexList.filter(
-                            ({ shift: current }) => current === index + 1
-                          ).length
-                        }
+                        {row.shiftTypeIndexList.filter(({ shift }) => shift === index).length}
                       </div>
                     ))}
-                    <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
-                      {row.shiftTypeIndexList.filter(({ shift: current }) => current === 0).length}
-                    </div>
                     <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
                       {
                         row.shiftTypeIndexList.filter(
                           ({ shift: current }, i) =>
-                            current === 0 &&
+                            current &&
+                            shift.shiftTypes[current].isOff &&
                             shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
                         ).length
                       }
