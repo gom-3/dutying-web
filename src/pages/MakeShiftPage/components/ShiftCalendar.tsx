@@ -184,7 +184,7 @@ export default function ShiftCalendar({
                         return (
                           <div
                             key={j}
-                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-start px-[.25rem] ${
+                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >

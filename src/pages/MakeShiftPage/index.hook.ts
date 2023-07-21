@@ -166,7 +166,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       },
       singleNight: {
         isActive: true,
-        regExp: new RegExp(`(?<!2)2(?!2)`, 'g'),
+        regExp: new RegExp(`(?<!(2|x))2(?!(2|x))`, 'g'),
         message: `단일 나이트 근무는 권장되지 않습니다.`,
         type: 'bad',
       },
@@ -201,14 +201,13 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
         const row = level[j];
         for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
           const option = checkFaultOptions[key];
-          const str = row.shiftTypeIndexList
-            .map((x) => (x.shift === null ? 'x' : x.shift))
-            .join('');
+          let str = row.shiftTypeIndexList.map((x) => (x.shift === null ? 'x' : x.shift)).join('');
+          str = 'x' + str + 'x'; // 단일 나이트 검사를 위한 처리
           // eslint-disable-next-line no-constant-condition
           while (true) {
             const match = option.regExp.exec(str);
             if (match === null) break;
-            const focus = { level: i, row: j, day: match.index };
+            const focus = { level: i, row: j, day: match.index - 1 };
 
             newFaults.set(Object.values(focus).join(), {
               type: option.type,
