@@ -9,12 +9,15 @@ import {
   updateNurseShiftType,
   updateNurseShiftTypeRequest,
 } from '@libs/api/nurse';
+import { useAccount } from 'store';
 
 const useRegistNurse = () => {
   const [nurse, setNurse] = useState<Nurse>(tempNurse[0]);
 
   const queryClient = useQueryClient();
   const wardId = 1;
+
+  const {account} = useAccount();
 
   const { data } = useQuery(['nurses', wardId], () => getNursesByWardId(1));
 
@@ -23,6 +26,7 @@ const useRegistNurse = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['nurses', wardId]);
+        queryClient.invalidateQueries(['shift', account.nurseId, 2023, 7]);
       },
       onError: (error) => {
         console.log(error);

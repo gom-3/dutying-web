@@ -61,6 +61,7 @@ interface MakeShiftPageState {
   foldedLevels: boolean[] | null;
   shiftStatus: 'error' | 'success' | 'loading';
   changeStatus: 'error' | 'success' | 'loading' | 'idle';
+  isNurseTabOpen: boolean;
 }
 
 interface MakeShiftPageActions {
@@ -68,6 +69,7 @@ interface MakeShiftPageActions {
   changeMonth: (type: 'prev' | 'next') => void;
   changeFocus: (focus: Focus | null) => void;
   changeFocusedShift: (shiftTypeIndex: number) => void;
+  setIsNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface MakeShiftPageHook {

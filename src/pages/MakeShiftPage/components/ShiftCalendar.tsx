@@ -14,6 +14,8 @@ interface Props {
   foldedLevels: boolean[] | null;
   changeFocus?: (focus: Focus | null) => void;
   foldLevel: (level: number) => void;
+  selectNurse: (nurse: Nurse) => void;
+  setNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function ShiftCalendar({
@@ -25,6 +27,8 @@ export default function ShiftCalendar({
   isEditable,
   changeFocus,
   foldLevel,
+  selectNurse,
+  setNurseTabOpen,
 }: Props) {
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -121,7 +125,13 @@ export default function ShiftCalendar({
                 {rows.map((row, rowIndex) => (
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
-                    <div className="w-[3.375rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
+                    <div
+                      className="w-[3.375rem] shrink-0 cursor-pointer text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
+                      onClick={() => {
+                        setNurseTabOpen(true);
+                        selectNurse(row.nurse);
+                      }}
+                    >
                       {row.nurse.name}
                     </div>
                     <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
