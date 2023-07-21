@@ -3,66 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { koToEn } from '@libs/util/koToEn';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
-
-const checkFaultOptions: CheckFaultOptions = {
-  twoOffAfterNight: {
-    isActive: true,
-    regExp: /2([01]|3[012])/g,
-    message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
-    type: 'wrong',
-  },
-  ed: {
-    isActive: true,
-    regExp: /10/g,
-    message: 'E 근무 후 D 근무는 권장되지 않습니다.',
-    type: 'wrong',
-  },
-  maxContinuousWork: {
-    isActive: true,
-    regExp: /(?<=[^012])[012]{6,}(?=[^012])/g,
-    message: '근무는 연속 5일을 초과할 수 없습니다.',
-    type: 'wrong',
-  },
-  maxContinuousNight: {
-    isActive: true,
-    regExp: /2222+/g,
-    message: '나이트 근무가 연속 3일을 초과했습니다',
-    type: 'wrong',
-  },
-  minNightInterval: {
-    isActive: true,
-    regExp: /2[^2]{1,6}2/g,
-    message: '나이트 간격이 최소 7일 이상이어야 합니다.',
-    type: 'wrong',
-  },
-  singleNight: {
-    isActive: true,
-    regExp: /(?<!2)2(?!2)/g,
-    message: '단일 나이트 근무는 권장되지 않습니다.',
-    type: 'bad',
-  },
-  maxContinuousOff: {
-    isActive: true,
-    regExp: /3333+/g,
-    message: 'OFF가 연속 3일을 초과했습니다.',
-    type: 'bad',
-  },
-  pongdang: {
-    isActive: true,
-    regExp: /(3030|0303|1313|3131)/g,
-    message: '퐁당퐁당 근무입니다.',
-    type: 'bad',
-  },
-  noeeod: {
-    isActive: true,
-    regExp: /130/g,
-    message: 'EOD 형태의 근무는 권장되지 않습니다.',
-    type: 'bad',
-  },
-};
+import { getWard } from '@libs/api/ward';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo] = useState<DayInfo | null>(null);
@@ -70,6 +14,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
   const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
+  const [checkFaultOptions, setCheckFaultOptions] = useState<CheckFaultOptions>();
 
   const { account } = useAccount();
 
@@ -151,9 +96,69 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
     }
   );
 
+  const updateCheckFaultOption = async () => {
+    const ward = await getWard(account.wardId);
+    setCheckFaultOptions({
+      twoOffAfterNight: {
+        isActive: true,
+        regExp: new RegExp(`2([01]|3[012])`, 'g'),
+        message: `나이트 근무 후 2일 이상 OFF를 권장합니다.`,
+        type: 'wrong',
+      },
+      ed: {
+        isActive: true,
+        regExp: new RegExp(`10`, 'g'),
+        message: `E 근무 후 D 근무는 권장되지 않습니다.`,
+        type: 'wrong',
+      },
+      maxContinuousWork: {
+        isActive: true,
+        regExp: new RegExp(`(?<=[^012])[012]{${ward.maxContinuousWork + 1},}(?=[^012])`, 'g'),
+        message: `근무는 연속 ${ward.maxContinuousWork}일을 초과할 수 없습니다.`,
+        type: 'wrong',
+      },
+      maxContinuousNight: {
+        isActive: true,
+        regExp: new RegExp(`2{${ward.maxContinuousNight + 1},}`, 'g'),
+        message: `나이트 근무가 연속 ${ward.maxContinuousNight}일을 초과했습니다`,
+        type: 'wrong',
+      },
+      minNightInterval: {
+        isActive: true,
+        regExp: new RegExp(`2[^2]{1,${ward.minNightInterval - 1}}2`, 'g'),
+        message: `나이트 간격이 최소 ${ward.minNightInterval}일 이상이어야 합니다.`,
+        type: 'wrong',
+      },
+      singleNight: {
+        isActive: true,
+        regExp: new RegExp(`(?<!2)2(?!2)`, 'g'),
+        message: `단일 나이트 근무는 권장되지 않습니다.`,
+        type: 'bad',
+      },
+      maxContinuousOff: {
+        isActive: true,
+        regExp: new RegExp(`3{4,}`, 'g'),
+        message: `OFF가 연속 3일을 초과했습니다.`,
+        type: 'bad',
+      },
+      pongdang: {
+        isActive: true,
+        regExp: new RegExp(`(3030|0303|1313|3131)`, 'g'),
+        message: `퐁당퐁당 근무입니다.`,
+        type: 'bad',
+      },
+      noeeod: {
+        isActive: true,
+        regExp: new RegExp(`130`, 'g'),
+        message: `EOD 형태의 근무는 권장되지 않습니다.`,
+        type: 'bad',
+      },
+    });
+  };
+
   const checkShift = () => {
     const newFaults: Map<string, Fault> = new Map();
-    if (shift === undefined) return;
+    if (shift === undefined || !checkFaultOptions) return;
 
     for (let i = 0; i < shift.levelNurses.length; i++) {
       const level = shift.levelNurses[i];
@@ -247,9 +252,12 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   };
 
   useEffect(() => {
-    console.log(shift);
+    updateCheckFaultOption();
+  }, []);
+
+  useEffect(() => {
     checkShift();
-  }, [shift]);
+  }, [shift, checkFaultOptions]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
