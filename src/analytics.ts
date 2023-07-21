@@ -33,6 +33,10 @@ export const event = {
     category: 'make',
     action: 'change_shift',
   },
+  login: {
+    category: 'access',
+    action: 'login',
+  },
 };
 
 export const sendEvent = (event: Event, label?: string) => {
