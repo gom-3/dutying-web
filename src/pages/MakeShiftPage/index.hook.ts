@@ -63,7 +63,8 @@ const checkFaultOptions: CheckFaultOptions = {
 };
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, _] = useState(new Date().getFullYear());
+  // const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(7);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);

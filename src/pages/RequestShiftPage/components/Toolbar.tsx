@@ -1,4 +1,4 @@
-import { NextIcon, PrevIcon } from '@assets/svg';
+// import { NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
 import Select from '@components/Select';
 
