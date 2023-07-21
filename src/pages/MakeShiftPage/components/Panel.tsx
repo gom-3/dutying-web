@@ -1,3 +1,4 @@
+import { event, sendEvent } from 'analytics';
 import { useState } from 'react';
 import { match } from 'ts-pattern';
 
@@ -16,7 +17,10 @@ function Panel({ faults, histories }: Props) {
           className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 ${
             currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'
           }`}
-          onClick={() => setCurrentTab('faults')}
+          onClick={() => {
+            setCurrentTab('faults');
+            sendEvent(event.clickFaultTab);
+          }}
         >
           문제점
         </div>
@@ -24,7 +28,10 @@ function Panel({ faults, histories }: Props) {
           className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] ${
             currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'
           }`}
-          onClick={() => setCurrentTab('histories')}
+          onClick={() => {
+            setCurrentTab('histories');
+            sendEvent(event.clickHistoryTab);
+          }}
         >
           기록
         </div>

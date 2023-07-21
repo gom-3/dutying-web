@@ -9,13 +9,29 @@ interface Event {
 }
 
 export const event = {
-  clickNavigationItem: {
+  clickFoldLevelButton: {
     category: 'click',
-    action: 'click_navigation_item',
+    action: 'click_fold_level_button',
   },
-  clickFoldButton: {
+  clickHistoryTab: {
     category: 'click',
-    action: 'click_fold_button',
+    action: 'click_history_tab',
+  },
+  clickFaultTab: {
+    category: 'click',
+    action: 'click_fault_tab',
+  },
+  clickExcelDownloadButton: {
+    category: 'click',
+    action: 'click_excel_download_button',
+  },
+  clickFoldNavigationButton: {
+    category: 'click',
+    action: 'click_fold_navigation_button',
+  },
+  changeShift: {
+    category: 'make',
+    action: 'change_shift',
   },
 };
 

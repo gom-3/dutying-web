@@ -2,6 +2,7 @@ import { FoldIcon, MenuIcon } from '@assets/svg';
 import 'index.css';
 import { useState, useEffect } from 'react';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
+import { event, sendEvent } from 'analytics';
 
 const NavigationBar = () => {
   const [isFold, setIsFold] = useState(false);
@@ -28,7 +29,15 @@ const NavigationBar = () => {
           !isFold ? '' : 'translate-x-[-10.0625rem]'
         } left-0 flex h-screen w-[10.125rem] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3`}
       >
-        <div onClick={() => setIsFold(!isFold)}>
+        <div
+          onClick={() => {
+            setIsFold(!isFold);
+            sendEvent(
+              event.clickFoldNavigationButton,
+              isFold ? 'open navigation' : 'close navigation'
+            );
+          }}
+        >
           <FoldIcon
             className={`${
               isFold && 'left-[.9375rem] scale-x-[-1]'

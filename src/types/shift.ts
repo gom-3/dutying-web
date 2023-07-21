@@ -41,7 +41,7 @@ type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holyday' | 'workday'
 type Row = {
   nurse: Nurse;
   /** 이월 @example 1 */
-  carry: number;
+  carried: number;
   /** 전달 근무 정보, 근무 유형의 index 배열 형식이다. */
   lastShiftTypeIndexList: { reqShift: number | null; shift: number | null }[];
   /** 이번달 근무 정보, 근무 유형의 index 배열 형식이다. */
