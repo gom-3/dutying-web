@@ -15,7 +15,7 @@ interface Props {
 function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
   return (
     <div className="sticky top-0 z-20 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
-      <Labels className="absolute h-auto w-[14rem]" />
+      <Labels className="absolute h-auto w-[15rem]" />
       <div className="w-[3.375rem]"></div>
       <div className="w-[3.375rem]"></div>
       <div className="w-[1.875rem]"></div>
@@ -36,13 +36,16 @@ function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
         <p className="font-apple text-[.875rem] text-sub-2 ">
           {changeStatus === 'loading' ? '저장 중...' : '저장 완료'}
         </p>
-        {shift?.shiftTypes.map((shiftType, index) => (
-          <div className="flex items-center" key={index}>
-            <ShiftBadge shiftType={shiftType} />
-            <p className="ml-2 font-apple text-base text-sub-2">{shiftType.name}</p>
-            <p className="font-apple text-base font-bold text-sub-2">({shiftType.shortName})</p>
-          </div>
-        ))}
+        <div className="flex w-[400px] gap-2 overflow-x-scroll scrollbar-hide">
+          {shift?.shiftTypes.map((shiftType, index) => (
+            <div className="flex shrink-0 items-center" key={index}>
+              <ShiftBadge shiftType={shiftType} />
+              <p className="ml-2 font-apple text-base text-sub-2">{shiftType.name}</p>
+              <p className="font-apple text-base font-bold text-sub-2">({shiftType.shortName})</p>
+            </div>
+          ))}
+        </div>
+
         <Button
           type="outline"
           className="ml-auto h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
