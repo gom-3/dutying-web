@@ -17,7 +17,7 @@ export type CreateWardRequest = Pick<
   | 'levelDivision'
 > & { hospitalName: string };
 
-export type CreateShiftTypeRequest = Omit<ShiftType, 'shiftTypeId' | 'wardId'>;
+export type CreateShiftTypeRequest = Omit<ShiftType, 'shiftTypeId' | 'wardId'|'hotkey'|'isDefault'>;
 export type CreateShiftTypeListRequest = CreateShiftTypeRequest[];
 
 const useCreateWard = () => {
@@ -37,8 +37,8 @@ const useCreateWard = () => {
       shortName: 'O',
       startTime: '00:00',
       endTime: '00:00',
-      hotkey: ['/', 'o', 'O', '0'],
-      isDefault: true,
+      // hotkey: ['/', 'o', 'O', '0'],
+      // isDefault: true,
       isOff: true,
       color: '#5534E0',
     },
@@ -47,8 +47,8 @@ const useCreateWard = () => {
       shortName: 'D',
       startTime: '07:00',
       endTime: '15:00',
-      hotkey: ['D', 'd', 'ㅇ', '1'],
-      isDefault: true,
+      // hotkey: ['D', 'd', 'ㅇ', '1'],
+      // isDefault: true,
       isOff: false,
       color: '#D7EB2A',
     },
@@ -57,8 +57,8 @@ const useCreateWard = () => {
       shortName: 'E',
       startTime: '15:00',
       endTime: '23:00',
-      hotkey: ['E', 'e', 'ㄷ', '2'],
-      isDefault: true,
+      // hotkey: ['E', 'e', 'ㄷ', '2'],
+      // isDefault: true,
       isOff: false,
       color: '#EB39E8',
     },
@@ -67,8 +67,8 @@ const useCreateWard = () => {
       shortName: 'N',
       startTime: '23:00',
       endTime: '07:00',
-      hotkey: ['N', 'n', 'ㅜ', '3'],
-      isDefault: true,
+      // hotkey: ['N', 'n', 'ㅜ', '3'],
+      // isDefault: true,
       isOff: false,
       color: '#271F3E',
     },
