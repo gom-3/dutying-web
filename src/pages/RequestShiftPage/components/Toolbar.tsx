@@ -1,4 +1,4 @@
-import { NextIcon, PrevIcon } from '@assets/svg';
+// import { NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
 import Select from '@components/Select';
 
@@ -30,9 +30,9 @@ function Toolbar({ month, requestShift, selectedNurse, setSelectedNurse }: Props
       <div className="w-[1.875rem]"></div>
       <div className="w-[5.625rem]"></div>
       <div className="flex flex-1 items-center gap-[1.25rem]">
-        <PrevIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
+        {/* <PrevIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" /> */}
         <p className="font-poppins text-2xl text-main-1">{month}월</p>
-        <NextIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
+        {/* <NextIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" /> */}
       </div>
 
       <Button
