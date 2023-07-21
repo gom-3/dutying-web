@@ -5,6 +5,8 @@ import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
 import { getWard } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
+import { match } from 'ts-pattern';
+import { event, sendEvent } from 'analytics';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year] = useState(new Date().getFullYear());
@@ -80,6 +82,17 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
             )
           ),
         });
+
+        sendEvent(
+          event.changeShift,
+          `${history.nurse.name} / ${history.focus.day + 1}일 | ` +
+            match(history)
+              .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
+              .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
+              .otherwise(
+                () => `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+              )
+        );
 
         return { oldShift, history };
       },
