@@ -64,12 +64,13 @@ const checkFaultOptions: CheckFaultOptions = {
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(6);
+  const [month, setMonth] = useState(7);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
+  const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
 
   const { account } = useAccount();
 
@@ -360,12 +361,14 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       foldedLevels,
       shiftStatus,
       changeStatus,
+      isNurseTabOpen
     },
     actions: {
       foldLevel,
       changeMonth,
       changeFocusedShift,
       changeFocus: setFocus,
+      setIsNurseTabOpen
     },
   };
 };
