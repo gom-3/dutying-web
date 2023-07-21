@@ -16,7 +16,7 @@ const useRegistNurse = () => {
 
   const queryClient = useQueryClient();
 
-  const {account} = useAccount();
+  const { account } = useAccount();
 
   const { data } = useQuery(['nurses', account.wardId], () => getNursesByWardId(account.wardId));
 

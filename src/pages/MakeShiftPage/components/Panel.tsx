@@ -10,7 +10,7 @@ function Panel({ faults, histories }: Props) {
   const [currentTab, setCurrentTab] = useState('faults');
 
   return (
-    <div className="mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-1">
+    <div className="mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-shadow-1">
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
           className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 ${

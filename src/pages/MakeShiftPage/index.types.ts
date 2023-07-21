@@ -69,7 +69,7 @@ interface MakeShiftPageActions {
   changeMonth: (type: 'prev' | 'next') => void;
   changeFocus: (focus: Focus | null) => void;
   changeFocusedShift: (shiftTypeIndex: number) => void;
-  setIsNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface MakeShiftPageHook {

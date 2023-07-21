@@ -1,77 +1,20 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { koToEn } from '@libs/util/koToEn';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
-
-const checkFaultOptions: CheckFaultOptions = {
-  twoOffAfterNight: {
-    isActive: true,
-    regExp: /2([01]|3[012])/g,
-    message: '나이트 근무 후 2일 이상 OFF를 권장합니다.',
-    type: 'wrong',
-  },
-  ed: {
-    isActive: true,
-    regExp: /10/g,
-    message: 'E 근무 후 D 근무는 권장되지 않습니다.',
-    type: 'wrong',
-  },
-  maxContinuousWork: {
-    isActive: true,
-    regExp: /(?<=[^012])[012]{6,}(?=[^012])/g,
-    message: '근무는 연속 5일을 초과할 수 없습니다.',
-    type: 'wrong',
-  },
-  maxContinuousNight: {
-    isActive: true,
-    regExp: /2222+/g,
-    message: '나이트 근무가 연속 3일을 초과했습니다',
-    type: 'wrong',
-  },
-  minNightInterval: {
-    isActive: true,
-    regExp: /2[^2]{1,6}2/g,
-    message: '나이트 간격이 최소 7일 이상이어야 합니다.',
-    type: 'wrong',
-  },
-  singleNight: {
-    isActive: true,
-    regExp: /(?<!2)2(?!2)/g,
-    message: '단일 나이트 근무는 권장되지 않습니다.',
-    type: 'bad',
-  },
-  maxContinuousOff: {
-    isActive: true,
-    regExp: /3333+/g,
-    message: 'OFF가 연속 3일을 초과했습니다.',
-    type: 'bad',
-  },
-  pongdang: {
-    isActive: true,
-    regExp: /(3030|0303|1313|3131)/g,
-    message: '퐁당퐁당 근무입니다.',
-    type: 'bad',
-  },
-  noeeod: {
-    isActive: true,
-    regExp: /130/g,
-    message: 'EOD 형태의 근무는 권장되지 않습니다.',
-    type: 'bad',
-  },
-};
+import { getWard } from '@libs/api/ward';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
-  const [year, _] = useState(new Date().getFullYear());
-  // const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(7);
+  const [year] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [focus, setFocus] = useState<Focus | null>(null);
-  const [focusedDayInfo, setFocusedDayInfo] = useState<DayInfo | null>(null);
+  const [focusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
   const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
+  const [checkFaultOptions, setCheckFaultOptions] = useState<CheckFaultOptions>();
 
   const { account } = useAccount();
 
@@ -86,15 +29,14 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
     }
   );
   const { mutate: focusedShiftChange, status: changeStatus } = useMutation(
-    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) => {
-      return updateShift(
+    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) =>
+      updateShift(
         year,
         month,
         shift.days[focus.day].day,
         shift.levelNurses[focus.level][focus.row].nurse.nurseId,
         shiftTypeId
-      );
-    },
+      ),
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
@@ -128,7 +70,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
                       day === focus.day
                         ? {
                             ...oldShiftTypeIndex,
-                            shift: newShiftTypeIndex === undefined ? null : newShiftTypeIndex,
+                            shift: newShiftTypeIndex === -1 ? null : newShiftTypeIndex,
                           }
                         : oldShiftTypeIndex
                     ),
@@ -154,9 +96,69 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
     }
   );
 
+  const updateCheckFaultOption = async () => {
+    const ward = await getWard(account.wardId);
+    setCheckFaultOptions({
+      twoOffAfterNight: {
+        isActive: true,
+        regExp: new RegExp(`2([01]|3[012])`, 'g'),
+        message: `나이트 근무 후 2일 이상 OFF를 권장합니다.`,
+        type: 'wrong',
+      },
+      ed: {
+        isActive: true,
+        regExp: new RegExp(`10`, 'g'),
+        message: `E 근무 후 D 근무는 권장되지 않습니다.`,
+        type: 'wrong',
+      },
+      maxContinuousWork: {
+        isActive: true,
+        regExp: new RegExp(`(?<=[^012])[012]{${ward.maxContinuousWork + 1},}(?=[^012])`, 'g'),
+        message: `근무는 연속 ${ward.maxContinuousWork}일을 초과할 수 없습니다.`,
+        type: 'wrong',
+      },
+      maxContinuousNight: {
+        isActive: true,
+        regExp: new RegExp(`2{${ward.maxContinuousNight + 1},}`, 'g'),
+        message: `나이트 근무가 연속 ${ward.maxContinuousNight}일을 초과했습니다`,
+        type: 'wrong',
+      },
+      minNightInterval: {
+        isActive: true,
+        regExp: new RegExp(`2[^2]{1,${ward.minNightInterval - 1}}2`, 'g'),
+        message: `나이트 간격이 최소 ${ward.minNightInterval}일 이상이어야 합니다.`,
+        type: 'wrong',
+      },
+      singleNight: {
+        isActive: true,
+        regExp: new RegExp(`(?<!2)2(?!2)`, 'g'),
+        message: `단일 나이트 근무는 권장되지 않습니다.`,
+        type: 'bad',
+      },
+      maxContinuousOff: {
+        isActive: true,
+        regExp: new RegExp(`3{4,}`, 'g'),
+        message: `OFF가 연속 3일을 초과했습니다.`,
+        type: 'bad',
+      },
+      pongdang: {
+        isActive: true,
+        regExp: new RegExp(`(3030|0303|1313|3131)`, 'g'),
+        message: `퐁당퐁당 근무입니다.`,
+        type: 'bad',
+      },
+      noeeod: {
+        isActive: true,
+        regExp: new RegExp(`130`, 'g'),
+        message: `EOD 형태의 근무는 권장되지 않습니다.`,
+        type: 'bad',
+      },
+    });
+  };
+
   const checkShift = () => {
     const newFaults: Map<string, Fault> = new Map();
-    if (shift === undefined) return;
+    if (shift === undefined || !checkFaultOptions) return;
 
     for (let i = 0; i < shift.levelNurses.length; i++) {
       const level = shift.levelNurses[i];
@@ -202,7 +204,8 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       // } else {
       //   setMonth(month - 1);
       // }
-      setMonth(7);
+      if (month === 7) return;
+      else setMonth(month - 1);
     } else if (type === 'next') {
       // if (month === 12) {
       //   setMonth(1);
@@ -210,7 +213,8 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       // } else {
       //   setMonth(month + 1);
       // }
-      setMonth(8);
+      if (month === 8) return;
+      else setMonth(month + 1);
     }
   };
 
@@ -231,123 +235,32 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (!shift) return;
-
-    if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
-      e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
-    }
-
-    if (focus === null) return;
-
-    const { level, day, row } = focus;
-    const rows = shift.levelNurses[level];
-    let newLevel = level;
-    let newDay = day;
-    let newRow = row;
-
-    if (e.key === 'ArrowLeft') {
-      if (day === 0) {
-        if (row === 0) {
-          newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
-          newDay = shift.days.length - 1;
-          newRow = shift.levelNurses[newLevel].length - 1;
-        } else {
-          newDay = shift.days.length - 1;
-          newRow = row - 1;
-        }
-      } else {
-        newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
-        newRow = row;
-      }
-      setFocus({
-        level: newLevel,
-        day: newDay,
-        row: newRow,
-      });
-    }
-    if (e.key === 'ArrowRight') {
-      if (day === shift.days.length - 1) {
-        if (row === rows.length - 1) {
-          newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
-          newDay = 0;
-          newRow = 0;
-        } else {
-          newRow = row + 1;
-          newDay = 0;
-        }
-      } else {
-        newDay =
-          e.ctrlKey || e.metaKey ? shift.days.length - 1 : Math.min(shift.days.length - 1, day + 1);
-        newRow = row;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    if (e.key === 'ArrowUp') {
-      if (row === 0) {
-        newLevel = level === 0 ? shift.levelNurses.length - 1 : level - 1;
-        newDay = day;
-        newRow = shift.levelNurses[newLevel].length - 1;
-      } else {
-        newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    if (e.key === 'ArrowDown') {
-      if (row === rows.length - 1) {
-        newLevel = level === shift.levelNurses.length - 1 ? 0 : level + 1;
-        newDay = day;
-        newRow = 0;
-      } else {
-        newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? rows.length - 1 : row + 1;
-      }
-      setFocus({ level: newLevel, day: newDay, row: newRow });
-    }
-
-    // if (e.key === 'Space' || e.key === ' ') {
-    //   setFocus({ ...focus, openTooltip: !focus.openTooltip });
-    // }
-
-    shift.shiftTypes.forEach((shiftType) => {
-      if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-        changeFocusedShift(shiftType.shiftTypeId);
-      }
-    });
-
-    if (e.key === 'Backspace') {
-      changeFocusedShift(null);
-    }
+    if (!focus || !shift) return;
+    moveFocusByKeydown(e, shift, focus, setFocus);
+    keydownEventMapper(
+      e,
+      ...shift.shiftTypes.map((shiftType) => ({
+        keys: [shiftType.shortName],
+        callback: () => {
+          if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
+            changeFocusedShift(shiftType.shiftTypeId);
+          }
+        },
+      })),
+      { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+    );
   };
 
   useEffect(() => {
+    updateCheckFaultOption();
+  }, []);
+
+  useEffect(() => {
     checkShift();
-  }, [shift]);
+  }, [shift, checkFaultOptions]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    if (shift && focus) {
-      setFocusedDayInfo({
-        month: month,
-        day: focus.day ?? 0,
-        countByShiftList: shift.shiftTypes.map((_, shiftTypeIndex) => ({
-          count: shift.levelNurses
-            .flatMap((row) => row)
-            .filter((dutyRow) => dutyRow.shiftTypeIndexList[focus.day].shift === shiftTypeIndex)
-            .length,
-          shiftType: shift.shiftTypes[shiftTypeIndex],
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        nurse: shift.levelNurses.flatMap((row) => row).find((_, index) => index === focus.row)
-          ?.nurse!,
-        message: '3연속 N 근무 후 2일 이상 OFF를 권장합니다.',
-      });
-    } else {
-      setFocusedDayInfo(null);
-    }
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -364,16 +277,109 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       foldedLevels,
       shiftStatus,
       changeStatus,
-      isNurseTabOpen
+      isNurseTabOpen,
     },
     actions: {
       foldLevel,
       changeMonth,
       changeFocusedShift,
       changeFocus: setFocus,
-      setIsNurseTabOpen
+      setIsNurseTabOpen,
     },
   };
 };
 
 export default useMakeShiftPageHook;
+
+const moveFocusByKeydown = (
+  e: KeyboardEvent,
+  shift: Shift,
+  focus: Focus,
+  setFocus: (focus: Focus) => void
+) => {
+  const { level, day, row } = focus;
+  const levelCnt = shift.levelNurses.length;
+  const rowCnt = shift.levelNurses[level].length;
+  const dayCnt = shift.days.length;
+  let newLevel = level;
+  let newDay = day;
+  let newRow = row;
+
+  if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
+    e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+  }
+
+  switch (e.key) {
+    case 'ArrowLeft': {
+      if (day === 0) {
+        if (row === 0) {
+          newLevel = level === 0 ? levelCnt - 1 : level - 1;
+          newDay = dayCnt - 1;
+          newRow = shift.levelNurses[newLevel].length - 1;
+        } else {
+          newDay = dayCnt - 1;
+          newRow = row - 1;
+        }
+      } else {
+        newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
+        newRow = row;
+      }
+      break;
+    }
+    case 'ArrowRight': {
+      if (day === dayCnt - 1) {
+        if (row === rowCnt - 1) {
+          newLevel = level === levelCnt - 1 ? 0 : level + 1;
+          newDay = 0;
+          newRow = 0;
+        } else {
+          newRow = row + 1;
+          newDay = 0;
+        }
+      } else {
+        newDay = e.ctrlKey || e.metaKey ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
+        newRow = row;
+      }
+      break;
+    }
+    case 'ArrowUp': {
+      if (row === 0) {
+        newLevel = level === 0 ? levelCnt - 1 : level - 1;
+        newDay = day;
+        newRow = shift.levelNurses[newLevel].length - 1;
+      } else {
+        newDay = day;
+        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
+      }
+      break;
+    }
+    case 'ArrowDown': {
+      if (row === rowCnt - 1) {
+        newLevel = level === levelCnt - 1 ? 0 : level + 1;
+        newDay = day;
+        newRow = 0;
+      } else {
+        newDay = day;
+        newRow = e.ctrlKey || e.metaKey ? rowCnt - 1 : row + 1;
+      }
+      break;
+    }
+  }
+
+  setFocus({
+    level: newLevel,
+    day: newDay,
+    row: newRow,
+  });
+};
+
+const keydownEventMapper = (
+  e: KeyboardEvent,
+  ...op: { keys: string[]; callback: () => void }[]
+) => {
+  op.forEach(({ keys, callback }) => {
+    if (keys.map((key) => key.toUpperCase()).indexOf(koToEn(e.key).toUpperCase()) != -1) {
+      callback();
+    }
+  });
+};

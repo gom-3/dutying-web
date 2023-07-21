@@ -1,14 +1,9 @@
 import { Router } from '@pages/Router';
-// import { getAccountMe } from '@libs/api/account';
-// import { useQuery } from '@tanstack/react-query';
-// import { useAccount } from 'store';
+import { hackleClient } from 'initializeApp';
+
+hackleClient.setUserId('test-user-1'); // @TODO 로그인 부착 시 삭제
 
 function App() {
-  // const { setAccount } = useAccount();
-  // useQuery(['account'], getAccountMe, {
-  //   onSuccess: (account) => setAccount(account),
-  //   onError: () => setAccount(null),
-  // });
   return <Router />;
 }
 
