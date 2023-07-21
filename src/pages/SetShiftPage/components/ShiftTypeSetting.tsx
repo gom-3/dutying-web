@@ -1,14 +1,22 @@
-import { SetShift } from '@components/Settings';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
+import SetShift from './SetShift';
 import 'index.css';
-import { useShiftStore } from 'stores/shiftStore';
-import { shallow } from 'zustand/shallow';
+import { useState } from 'react';
 
-const ShiftTypeSetting = () => {
-  const { shiftTypeList, setShiftTypeList } = useShiftStore(
-    (state) => ({ shiftTypeList: state.shiftTypeList, setShiftTypeList: state.setShiftTypeList }),
-    shallow
-  );
+interface Props {
+  shiftTypeList: ShiftType[];
+  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
+  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
+  removeShiftType: (hiftTypeId: number) => void;
+}
 
+const ShiftTypeSetting = ({
+  shiftTypeList,
+  addShiftType,
+  editShiftType,
+  removeShiftType,
+}: Props) => {
+  const [_, setShiftTypeList] = useState<ShiftType[]>();
   return (
     <div className="mb-[1.5625rem] rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center justify-between">
@@ -28,6 +36,9 @@ const ShiftTypeSetting = () => {
           setShiftTypeList={(shiftTypeList) => {
             setShiftTypeList(shiftTypeList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
           }}
+          addShiftType={addShiftType}
+          editShiftType={editShiftType}
+          removeShiftType={removeShiftType}
         />
       </div>
     </div>

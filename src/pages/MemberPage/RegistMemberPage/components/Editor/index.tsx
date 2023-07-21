@@ -13,13 +13,21 @@ type Props = {
     nurseShiftTypeId: number,
     change: updateNurseShiftTypeRequest
   ) => void;
+  isFixed?: boolean;
+  close?: () => void;
 };
 
-const Editor = ({ nurse, updateNurse, updateNurseShift }: Props) => {
+const Editor = ({ nurse, updateNurse, updateNurseShift, isFixed, close }: Props) => {
   const [name, setName] = useState(nurse.name);
-  const ref = useOnclickOutside(() => {
+  const inputRef = useOnclickOutside(() => {
     const updatedNurse = { ...nurse, name };
     updateNurse(nurse.nurseId, updatedNurse);
+  });
+
+  const tabRef = useOnclickOutside(() => {
+    if (isFixed && close) {
+      close();
+    }
   });
 
   useEffect(() => {
@@ -31,15 +39,20 @@ const Editor = ({ nurse, updateNurse, updateNurseShift }: Props) => {
   };
 
   return (
-    <div className="ml-[1.875rem] mt-[1.875rem]">
-      <div className="mb-[.9375rem] font-apple text-sub-3">간호사별 관리</div>
+    <div
+      ref={tabRef}
+      className={`ml-[1.875rem] mt-[1.875rem] ${
+        isFixed && 'fixed right-[3rem] top-[50%] z-30 translate-y-[-50%]'
+      }`}
+    >
+      {!isFixed && <div className="mb-[.9375rem] font-apple text-sub-3">간호사별 관리</div>}
       <div
         style={{ height: 'calc(100vh - 19.5rem' }}
         className="flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1"
       >
         <div className="m-[1.875rem] flex justify-start">
           <input
-            ref={ref}
+            ref={inputRef}
             className="w-1/2 text-[2rem] font-semibold text-text-1"
             type="text"
             onChange={handleInputChange}

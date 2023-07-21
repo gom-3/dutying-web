@@ -26,6 +26,7 @@ export const addNurseInWard = async (wardId: number) =>
 export const deleteNurseInWard = async (nurseId: number) =>
   (await axiosInstance.delete('/nurses/' + nurseId)).data;
 
+
 export const updateNurseShiftType = async (
   nurseId: number,
   nurseShiftTypeId: number,

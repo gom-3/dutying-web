@@ -6,7 +6,6 @@ interface Props {
   value: string;
   step: '숙련도' | '연속근무';
   edit: (step: '숙련도' | '연속근무') => void;
-  foldedContext?: JSX.Element;
 }
 
 const Setting = ({ name, value, step, edit }: Props) => {

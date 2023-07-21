@@ -69,6 +69,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const [histories, setHistories] = useState<EditHistory[]>([]);
   const [faults, setFaults] = useState<Map<string, Fault>>(new Map());
+  const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
 
   const { account } = useAccount();
 
@@ -263,12 +264,14 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       foldedLevels,
       shiftStatus,
       changeStatus,
+      isNurseTabOpen,
     },
     actions: {
       foldLevel,
       changeMonth,
       changeFocusedShift,
       changeFocus: setFocus,
+      setIsNurseTabOpen,
     },
   };
 };
