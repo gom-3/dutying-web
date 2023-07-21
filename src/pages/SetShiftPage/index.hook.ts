@@ -19,7 +19,6 @@ const SetShiftPageHook = () => {
   const { account } = useAccount();
 
   const { data: ward } = useQuery(['wardSettings', account.wardId], () => getWard(account.wardId));
-  console.log(ward?.shiftTypes);
   const { mutate: editWardMutate } = useMutation(
     ({ wardId, editWardDTO }: { wardId: number; editWardDTO: EditWardRequest }) =>
       editWard(wardId, editWardDTO),

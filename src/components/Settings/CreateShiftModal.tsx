@@ -25,8 +25,6 @@ function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
   };
   const [writeShift, setWriteShift] = useState(initValue);
 
-  console.log(writeShift);
-
   useEffect(() => {
     if (shiftType) setWriteShift(shiftType);
   }, [shiftType]);
