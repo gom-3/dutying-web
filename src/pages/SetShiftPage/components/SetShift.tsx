@@ -10,12 +10,7 @@ interface ContentsProps {
   removeShiftType: (shiftTypeId: number) => void;
 }
 
-function SetShift({
-  shiftTypeList,
-  addShiftType,
-  editShiftType,
-  removeShiftType,
-}: ContentsProps) {
+function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType }: ContentsProps) {
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState(0);
   const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
@@ -61,7 +56,7 @@ function SetShift({
                 <div className="h-[4rem] w-[9.375rem] text-center font-poppins text-[2.25rem]">
                   {shiftType.startTime}
                 </div>
-                <p className="ml-[1rem] mr-[1rem] font-poppins text-[2.25rem]">~</p>
+                <p className="mx-[1rem] font-poppins text-[2.25rem]">~</p>
                 <div className="h-[4rem] w-[9.375rem] text-center font-poppins text-[2.25rem]">
                   {shiftType.endTime}
                 </div>
