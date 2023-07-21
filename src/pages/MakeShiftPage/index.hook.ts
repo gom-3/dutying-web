@@ -195,19 +195,21 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
 
   const changeMonth: MakeShiftPageActions['changeMonth'] = (type) => {
     if (type === 'prev') {
-      if (month === 1) {
-        setMonth(12);
-        setYear(year - 1);
-      } else {
-        setMonth(month - 1);
-      }
+      // if (month === 1) {
+      //   setMonth(12);
+      //   setYear(year - 1);
+      // } else {
+      //   setMonth(month - 1);
+      // }
+      setMonth(7);
     } else if (type === 'next') {
-      if (month === 12) {
-        setMonth(1);
-        setYear(year + 1);
-      } else {
-        setMonth(month + 1);
-      }
+      // if (month === 12) {
+      //   setMonth(1);
+      //   setYear(year + 1);
+      // } else {
+      //   setMonth(month + 1);
+      // }
+      setMonth(8);
     }
   };
 
