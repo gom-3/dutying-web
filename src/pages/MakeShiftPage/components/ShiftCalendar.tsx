@@ -4,6 +4,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
+import { event, sendEvent } from 'analytics';
 
 interface Props {
   month: number;
@@ -60,12 +61,12 @@ export default function ShiftCalendar({
 
   return foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
-      <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
+      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             구분
           </div>
-          <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             이름
           </div>
           <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
@@ -74,11 +75,11 @@ export default function ShiftCalendar({
           <div className="w-[5.625rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             전달 근무
           </div>
-          <div className="flex w-[69.5rem] rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
+          <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
                   j === focus?.day && 'rounded-full bg-main-1 text-white'
                 }`}
               >
@@ -88,18 +89,17 @@ export default function ShiftCalendar({
             ))}
           </div>
         </div>
-        <div className="flex w-[13.625rem] items-center px-[1.5625rem] text-center">
-          {shift.shiftTypes.slice(1).map((shiftType, index) => (
+        <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
+          {shift.shiftTypes.map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
           ))}
-          <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">O</div>
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
       <div
-        className="scroll m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        className="m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
         {shift.levelNurses.map((rows, level) => {
@@ -107,9 +107,11 @@ export default function ShiftCalendar({
             <div
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
-              onClick={() => foldLevel(level)}
+              onClick={() => {
+                sendEvent(event.clickFoldButton, 'close');
+                foldLevel(level);
+              }}
             >
-              {/* <p className="font-poppins text-base text-sub-2.5">{level}</p> */}
               <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
             </div>
           ) : (
@@ -119,14 +121,17 @@ export default function ShiftCalendar({
                   {/* {level} */}
                   <FoldDutyIcon
                     className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
-                    onClick={() => foldLevel(level)}
+                    onClick={() => {
+                      sendEvent(event.clickFoldButton, 'open');
+                      foldLevel(level);
+                    }}
                   />
                 </div>
                 {rows.map((row, rowIndex) => (
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div
-                      className="w-[3.375rem] shrink-0 cursor-pointer text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
+                      className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                       onClick={() => {
                         setNurseTabOpen(true);
                         selectNurse(row.nurse);
@@ -146,7 +151,7 @@ export default function ShiftCalendar({
                         />
                       ))}
                     </div>
-                    <div className="flex h-full w-[69.5rem] px-[1rem]">
+                    <div className="flex h-full  px-[1rem]">
                       {row.shiftTypeIndexList.map(({ reqShift: request, shift: current }, j) => {
                         const isSaturday = shift.days[j].dayType === 'saturday';
                         const isSunday =
@@ -160,7 +165,7 @@ export default function ShiftCalendar({
                         return (
                           <div
                             key={j}
-                            className={`group relative flex h-full flex-1 items-center justify-start px-[.25rem] ${
+                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-start px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >
@@ -188,7 +193,7 @@ export default function ShiftCalendar({
                                   : shift.shiftTypes[current]
                               }
                               isOnlyRequest={current === null && request !== null}
-                              className={`cursor-pointer ${
+                              className={`z-10 cursor-pointer ${
                                 isFocused && 'outline outline-[.125rem] outline-main-1'
                               }`}
                               forwardRef={
@@ -204,29 +209,23 @@ export default function ShiftCalendar({
                   </div>
                 ))}
               </div>
-              <div className="w-[13.625rem] rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
+              <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 {rows.map((row, i) => (
                   <div key={i} className="flex h-[3.25rem] items-center">
-                    {shift.shiftTypes.slice(1).map((_, index) => (
+                    {shift.shiftTypes.map((_, index) => (
                       <div
                         key={index}
                         className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                       >
-                        {
-                          row.shiftTypeIndexList.filter(
-                            ({ shift: current }) => current === index + 1
-                          ).length
-                        }
+                        {row.shiftTypeIndexList.filter(({ shift }) => shift === index).length}
                       </div>
                     ))}
-                    <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
-                      {row.shiftTypeIndexList.filter(({ shift: current }) => current === 0).length}
-                    </div>
                     <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
                       {
                         row.shiftTypeIndexList.filter(
                           ({ shift: current }, i) =>
-                            current === 0 &&
+                            current &&
+                            shift.shiftTypes[current].isOff &&
                             shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
                         ).length
                       }
