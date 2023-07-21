@@ -15,18 +15,19 @@ const useRegistNurse = () => {
   const [nurse, setNurse] = useState<Nurse>(tempNurse[0]);
 
   const queryClient = useQueryClient();
-  const wardId = 1;
 
   const {account} = useAccount();
 
-  const { data } = useQuery(['nurses', wardId], () => getNursesByWardId(1));
+  console.log(account.wardId);
+
+  const { data } = useQuery(['nurses', account.wardId], () => getNursesByWardId(account.wardId));
 
   const { mutate: updateNurseMutate } = useMutation(
     ({ id, updatedNurse }: { id: number; updatedNurse: Nurse }) => patchNurse(id, updatedNurse),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['nurses', wardId]);
-        queryClient.invalidateQueries(['shift', account.nurseId, 2023, 7]);
+        queryClient.invalidateQueries(['nurses', account.wardId]);
+        queryClient.invalidateQueries(['shift', account.wardId, 2023, 7]);
       },
       onError: (error) => {
         console.log(error);
@@ -37,7 +38,7 @@ const useRegistNurse = () => {
 
   const { mutate: addNurseMutate } = useMutation((wardId: number) => addNurseInWard(wardId), {
     onSuccess: (nurse) => {
-      queryClient.invalidateQueries(['nurses', wardId]);
+      queryClient.invalidateQueries(['nurses', account.wardId]);
       setNurse(nurse);
     },
     onError: (error) => {
@@ -52,7 +53,7 @@ const useRegistNurse = () => {
       onSuccess: (_, nurseId) => {
         const prevNurseIndex =
           (data?.nurses.findIndex((nurse) => nurse.nurseId === nurseId) || 1) - 1;
-        queryClient.invalidateQueries(['nurses', wardId]);
+        queryClient.invalidateQueries(['nurses', account.wardId]);
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         setNurse(data!.nurses[prevNurseIndex]);
@@ -72,7 +73,7 @@ const useRegistNurse = () => {
     }) => updateNurseShiftType(nurseId, nurseShiftTypeId, change),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['nurses', wardId]);
+        queryClient.invalidateQueries(['nurses', account.wardId]);
       },
     }
   );
@@ -101,7 +102,7 @@ const useRegistNurse = () => {
   };
 
   const addNurse = () => {
-    addNurseMutate(wardId);
+    addNurseMutate(account.wardId);
   };
 
   const deleteNurse = (id: number) => {

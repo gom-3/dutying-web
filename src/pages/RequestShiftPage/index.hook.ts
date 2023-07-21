@@ -5,7 +5,7 @@ import { useAccount } from 'store';
 
 const useRequestShiftPageHook: RequestShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(6);
+  const [month, setMonth] = useState(8);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
   const { account } = useAccount();
@@ -13,7 +13,7 @@ const useRequestShiftPageHook: RequestShiftPageHook = () => {
   const requestShiftQueryKey = ['requestShift', account.nurseId, year, month];
   const { data: requestShift } = useQuery(
     requestShiftQueryKey,
-    () => getRequestShift(account.nurseId, year, month),
+    () => getRequestShift(account.wardId, year, month),
     {
       onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
     }

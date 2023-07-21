@@ -76,10 +76,10 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
 
   const queryClient = useQueryClient();
 
-  const shiftQueryKey = ['shift', account.nurseId, year, month];
+  const shiftQueryKey = ['shift', account.wardId, year, month];
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getShift(account.nurseId, year, month),
+    () => getShift(account.wardId, year, month),
     {
       onSuccess: (data) => setFoldedLevels(data.levelNurses.map(() => false)),
     }
