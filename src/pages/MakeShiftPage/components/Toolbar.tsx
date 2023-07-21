@@ -1,7 +1,9 @@
 import { Labels, NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
+import ShiftBadge from '@components/ShiftBadge';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
 import { MutationStatus } from '@tanstack/react-query';
+import { event, sendEvent } from 'analytics';
 
 interface Props {
   month: number;
@@ -13,7 +15,7 @@ interface Props {
 function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
   return (
     <div className="sticky top-0 z-20 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
-      <Labels className="absolute h-[2.25rem] w-[10.625rem]" />
+      <Labels className="absolute h-auto w-[14rem]" />
       <div className="w-[3.375rem]"></div>
       <div className="w-[3.375rem]"></div>
       <div className="w-[1.875rem]"></div>
@@ -34,10 +36,20 @@ function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
         <p className="font-apple text-[.875rem] text-sub-2 ">
           {changeStatus === 'loading' ? '저장 중...' : '저장 완료'}
         </p>
+        {shift?.shiftTypes.map((shiftType, index) => (
+          <div className="flex items-center" key={index}>
+            <ShiftBadge shiftType={shiftType} />
+            <p className="ml-2 font-apple text-base text-sub-2">{shiftType.name}</p>
+            <p className="font-apple text-base font-bold text-sub-2">({shiftType.shortName})</p>
+          </div>
+        ))}
         <Button
           type="outline"
           className="ml-auto h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
-          onClick={() => shift && shiftToExcel(month, shift)}
+          onClick={() => {
+            shift && shiftToExcel(month, shift);
+            sendEvent(event.clickExcelDownloadButton, 'excel download');
+          }}
         >
           엑셀로 저장하기
         </Button>

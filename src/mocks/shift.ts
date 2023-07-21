@@ -799,7 +799,7 @@ export const mockShift: Shift = {
     [
       {
         nurse: nurses[0],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -841,7 +841,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[1],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 0 },
           { reqShift: null, shift: 1 },
@@ -883,7 +883,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[2],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 0 },
           { reqShift: null, shift: 0 },
@@ -925,7 +925,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[3],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 3 },
           { reqShift: null, shift: 3 },
@@ -967,7 +967,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[4],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 1 },
           { reqShift: null, shift: 0 },
@@ -1009,7 +1009,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[5],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 0 },
           { reqShift: null, shift: 1 },
@@ -1053,7 +1053,7 @@ export const mockShift: Shift = {
     [
       {
         nurse: nurses[6],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 1 },
           { reqShift: null, shift: 1 },
@@ -1095,7 +1095,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[7],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1137,7 +1137,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[8],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 3 },
           { reqShift: null, shift: 0 },
@@ -1179,7 +1179,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[9],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1221,7 +1221,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[10],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 1 },
           { reqShift: null, shift: 3 },
@@ -1265,7 +1265,7 @@ export const mockShift: Shift = {
     [
       {
         nurse: nurses[11],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1307,7 +1307,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[12],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 0 },
           { reqShift: null, shift: 3 },
@@ -1349,7 +1349,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[13],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1391,7 +1391,7 @@ export const mockShift: Shift = {
       },
       {
         nurse: nurses[14],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 3 },
           { reqShift: null, shift: 0 },
@@ -1434,7 +1434,7 @@ export const mockShift: Shift = {
 
       {
         nurse: nurses[15],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1477,7 +1477,7 @@ export const mockShift: Shift = {
 
       {
         nurse: nurses[16],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },
@@ -1521,7 +1521,7 @@ export const mockShift: Shift = {
     [
       {
         nurse: nurses[17],
-        carry: 0,
+        carried: 0,
         lastShiftTypeIndexList: [
           { reqShift: null, shift: 2 },
           { reqShift: null, shift: 2 },

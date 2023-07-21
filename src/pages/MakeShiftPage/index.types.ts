@@ -70,6 +70,7 @@ interface MakeShiftPageActions {
   changeFocus: (focus: Focus | null) => void;
   changeFocusedShift: (shiftTypeIndex: number) => void;
   setIsNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateCarry: (nurseId: number, value: number) => void;
 }
 
 interface MakeShiftPageHook {

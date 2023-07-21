@@ -1,4 +1,5 @@
 import axiosInstance from './client';
+import qs from 'qs';
 
 interface NursesList {
   nurses: Nurse[];
@@ -26,7 +27,6 @@ export const addNurseInWard = async (wardId: number) =>
 export const deleteNurseInWard = async (nurseId: number) =>
   (await axiosInstance.delete('/nurses/' + nurseId)).data;
 
-
 export const updateNurseShiftType = async (
   nurseId: number,
   nurseShiftTypeId: number,
@@ -34,3 +34,15 @@ export const updateNurseShiftType = async (
 ) =>
   (await axiosInstance.patch('/nurses/' + nurseId + '/shift-types/' + nurseShiftTypeId, change))
     .data;
+
+export const updateNurseCarry = async (
+  year: number,
+  month: number,
+  nurseId: number,
+  value: number
+) =>
+  (
+    await axiosInstance.patch<null>(`/nurses/${nurseId}/carried?${qs.stringify({ year, month })}`, {
+      value,
+    })
+  ).data;

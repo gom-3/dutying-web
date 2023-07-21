@@ -4,6 +4,7 @@ import { koToEn } from '@libs/util/koToEn';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
 import { getWard } from '@libs/api/ward';
+import { updateNurseCarry } from '@libs/api/nurse';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year] = useState(new Date().getFullYear());
@@ -89,9 +90,43 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
           context.history === undefined
         )
           return;
-        console.log('error');
-        queryClient.setQueryData(['shift'], context.oldShift);
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
         setHistories(histories.filter((history) => history !== context.history));
+      },
+    }
+  );
+  const { mutate: updateCarryQuery } = useMutation(
+    ({ nurseId, value }: { nurseId: number; value: number }) =>
+      updateNurseCarry(year, month, nurseId, value),
+    {
+      onMutate: async ({ nurseId, value }) => {
+        await queryClient.cancelQueries(['shift']);
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+
+        if (!oldShift) return;
+
+        queryClient.setQueryData<Shift>(shiftQueryKey, {
+          ...oldShift,
+          levelNurses: oldShift.levelNurses.map((rows) =>
+            rows.map((row) =>
+              row.nurse.nurseId === nurseId
+                ? {
+                    ...row,
+                    carried: value,
+                  }
+                : row
+            )
+          ),
+        });
+
+        return { oldShift };
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: shiftQueryKey });
+      },
+      onError: (_, __, context) => {
+        if (context === undefined || context.oldShift === undefined) return;
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
       },
     }
   );
@@ -285,6 +320,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       changeFocusedShift,
       changeFocus: setFocus,
       setIsNurseTabOpen,
+      updateCarry: (nurseId: number, value: number) => updateCarryQuery({ nurseId, value }),
     },
   };
 };
