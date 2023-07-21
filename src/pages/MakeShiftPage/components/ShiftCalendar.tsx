@@ -5,6 +5,7 @@ import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
+import TextField from '@components/TextField';
 
 interface Props {
   month: number;
@@ -17,6 +18,7 @@ interface Props {
   foldLevel: (level: number) => void;
   selectNurse: (nurse: Nurse) => void;
   setNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateCarry: MakeShiftPageActions['updateCarry'];
 }
 
 export default function ShiftCalendar({
@@ -30,6 +32,7 @@ export default function ShiftCalendar({
   foldLevel,
   selectNurse,
   setNurseTabOpen,
+  updateCarry,
 }: Props) {
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -108,7 +111,7 @@ export default function ShiftCalendar({
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
               onClick={() => {
-                sendEvent(event.clickFoldButton, 'close');
+                sendEvent(event.clickFoldLevelButton, 'close');
                 foldLevel(level);
               }}
             >
@@ -122,13 +125,17 @@ export default function ShiftCalendar({
                   <FoldDutyIcon
                     className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                     onClick={() => {
-                      sendEvent(event.clickFoldButton, 'open');
+                      sendEvent(event.clickFoldLevelButton, 'open');
                       foldLevel(level);
                     }}
                   />
                 </div>
                 {rows.map((row, rowIndex) => (
-                  <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
+                  <div
+                    key={rowIndex}
+                    className={`flex h-[3.25rem] items-center gap-[1.25rem]
+                  ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}`}
+                  >
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div
                       className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
@@ -140,7 +147,19 @@ export default function ShiftCalendar({
                       {row.nurse.name}
                     </div>
                     <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
-                      {row.carry}
+                      <TextField
+                        className="text-md h-[1.875rem] w-[1.875rem] p-0 text-center text-sub-1"
+                        value={row.carried}
+                        onClick={(e) => {
+                          e.currentTarget.select();
+                        }}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                          if (/[0-9]+/.test(e.target.value)) {
+                            updateCarry(row.nurse.nurseId, parseInt(e.target.value));
+                          }
+                        }}
+                      />
                     </div>
                     <div className="flex w-[5.625rem] gap-[.125rem]">
                       {row.lastShiftTypeIndexList.map(({ shift: current }, j) => (
@@ -165,7 +184,7 @@ export default function ShiftCalendar({
                         return (
                           <div
                             key={j}
-                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-start px-[.25rem] ${
+                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >

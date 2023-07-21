@@ -17,7 +17,7 @@ export type CreateWardRequest = Pick<
   | 'levelDivision'
 > & { hospitalName: string };
 
-export type CreateShiftTypeRequest = Omit<ShiftType, 'shiftTypeId' | 'wardId'|'hotkey'>;
+export type CreateShiftTypeRequest = Omit<ShiftType, 'shiftTypeId' | 'wardId' | 'hotkey'>;
 export type CreateShiftTypeListRequest = CreateShiftTypeRequest[];
 
 const useCreateWard = () => {

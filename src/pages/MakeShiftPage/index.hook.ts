@@ -4,6 +4,9 @@ import { koToEn } from '@libs/util/koToEn';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
 import { getWard } from '@libs/api/ward';
+import { updateNurseCarry } from '@libs/api/nurse';
+import { match } from 'ts-pattern';
+import { event, sendEvent } from 'analytics';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year] = useState(new Date().getFullYear());
@@ -80,6 +83,17 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
           ),
         });
 
+        sendEvent(
+          event.changeShift,
+          `${history.nurse.name} / ${history.focus.day + 1}일 | ` +
+            match(history)
+              .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
+              .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
+              .otherwise(
+                () => `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+              )
+        );
+
         return { oldShift, history };
       },
       onError: (_, __, context) => {
@@ -89,9 +103,43 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
           context.history === undefined
         )
           return;
-        console.log('error');
-        queryClient.setQueryData(['shift'], context.oldShift);
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
         setHistories(histories.filter((history) => history !== context.history));
+      },
+    }
+  );
+  const { mutate: updateCarryQuery } = useMutation(
+    ({ nurseId, value }: { nurseId: number; value: number }) =>
+      updateNurseCarry(year, month, nurseId, value),
+    {
+      onMutate: async ({ nurseId, value }) => {
+        await queryClient.cancelQueries(['shift']);
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+
+        if (!oldShift) return;
+
+        queryClient.setQueryData<Shift>(shiftQueryKey, {
+          ...oldShift,
+          levelNurses: oldShift.levelNurses.map((rows) =>
+            rows.map((row) =>
+              row.nurse.nurseId === nurseId
+                ? {
+                    ...row,
+                    carried: value,
+                  }
+                : row
+            )
+          ),
+        });
+
+        return { oldShift };
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: shiftQueryKey });
+      },
+      onError: (_, __, context) => {
+        if (context === undefined || context.oldShift === undefined) return;
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
       },
     }
   );
@@ -131,7 +179,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       },
       singleNight: {
         isActive: true,
-        regExp: new RegExp(`(?<!2)2(?!2)`, 'g'),
+        regExp: new RegExp(`(?<!(2|x))2(?!(2|x))`, 'g'),
         message: `단일 나이트 근무는 권장되지 않습니다.`,
         type: 'bad',
       },
@@ -166,14 +214,13 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
         const row = level[j];
         for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
           const option = checkFaultOptions[key];
-          const str = row.shiftTypeIndexList
-            .map((x) => (x.shift === null ? 'x' : x.shift))
-            .join('');
+          let str = row.shiftTypeIndexList.map((x) => (x.shift === null ? 'x' : x.shift)).join('');
+          str = 'x' + str + 'x'; // 단일 나이트 검사를 위한 처리
           // eslint-disable-next-line no-constant-condition
           while (true) {
             const match = option.regExp.exec(str);
             if (match === null) break;
-            const focus = { level: i, row: j, day: match.index };
+            const focus = { level: i, row: j, day: match.index - 1 };
 
             newFaults.set(Object.values(focus).join(), {
               type: option.type,
@@ -285,6 +332,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
       changeFocusedShift,
       changeFocus: setFocus,
       setIsNurseTabOpen,
+      updateCarry: (nurseId: number, value: number) => updateCarryQuery({ nurseId, value }),
     },
   };
 };

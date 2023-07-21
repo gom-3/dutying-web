@@ -11,5 +11,66 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function () {
+        var w = window;
+        if (w.ChannelIO) {
+          return w.console.error('ChannelIO script included twice.');
+        }
+        var ch = function () {
+          ch.c(arguments);
+        };
+        ch.q = [];
+        ch.c = function (args) {
+          ch.q.push(args);
+        };
+        w.ChannelIO = ch;
+        function l() {
+          if (w.ChannelIOInitialized) {
+            return;
+          }
+          w.ChannelIOInitialized = true;
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+          var x = document.getElementsByTagName('script')[0];
+          if (x.parentNode) {
+            x.parentNode.insertBefore(s, x);
+          }
+        }
+        if (document.readyState === 'complete') {
+          l();
+        } else {
+          w.addEventListener('DOMContentLoaded', l);
+          w.addEventListener('load', l);
+        }
+      })();
+
+      ChannelIO('boot', {
+        pluginKey: '%VITE_CHANNEL_TALK_PLUGIN_KEY%',
+      });
+    </script>
+    <script>
+      (function (m, a, z, e) {
+        var s, t;
+        try {
+          t = m.sessionStorage.getItem('maze-us');
+        } catch (err) {}
+
+        if (!t) {
+          t = new Date().getTime();
+          try {
+            m.sessionStorage.setItem('maze-us', t);
+          } catch (err) {}
+        }
+
+        s = a.createElement('script');
+        s.src = z + '?t=' + t + '&apiKey=' + e;
+        s.async = true;
+        a.getElementsByTagName('head')[0].appendChild(s);
+        m.mazeUniversalSnippetApiKey = e;
+      })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '%VITE_MAZE_KEY%');
+    </script>
   </body>
 </html>

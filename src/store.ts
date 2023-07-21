@@ -13,16 +13,16 @@ interface State {
 
 export const useStore = create<State>()(
   devtools(
-      (set) => ({
-        account: {
-          nurseId: 1,
-          wardId: 2,
-        },
-        setAccount: (account: User) => set(() => ({ account })),
-      }),
-      {
-        name: 'store',
-      }
+    (set) => ({
+      account: {
+        nurseId: 1,
+        wardId: 2,
+      },
+      setAccount: (account: User) => set(() => ({ account })),
+    }),
+    {
+      name: 'store',
+    }
   )
 );
 

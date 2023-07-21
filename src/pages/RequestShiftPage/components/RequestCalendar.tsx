@@ -21,7 +21,6 @@ export default function RequestCalendar({
   isEditable,
   focus,
   foldedLevels,
-  selectedNurse,
   handleFocusChange,
   foldLevel,
 }: Props) {
@@ -89,7 +88,7 @@ export default function RequestCalendar({
               key={level}
               className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
               onClick={() => {
-                sendEvent(event.clickFoldButton, 'close');
+                sendEvent(event.clickFoldLevelButton, 'close at request');
                 foldLevel(level);
               }}
             >
@@ -103,7 +102,7 @@ export default function RequestCalendar({
                     <FoldDutyIcon
                       className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                       onClick={() => {
-                        sendEvent(event.clickFoldButton, 'open');
+                        sendEvent(event.clickFoldLevelButton, 'open at request');
                         foldLevel(level);
                       }}
                     />
@@ -112,8 +111,8 @@ export default function RequestCalendar({
                 {rows.map((row, rowIndex) => (
                   <div
                     key={rowIndex}
-                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] hover:bg-main-4 ${
-                      selectedNurse?.nurseId === row.nurse.nurseId && 'bg-main-4'
+                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
+                      focus?.row === rowIndex && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>

@@ -3,7 +3,7 @@ import ShiftBadge from '@components/ShiftBadge';
 interface Props {
   focusedDayInfo: DayInfo;
 }
-function Tooltip({ focusedDayInfo }: Props) {
+function Overay({ focusedDayInfo }: Props) {
   return (
     <div
       className="absolute z-20 flex flex-col items-center"
@@ -37,4 +37,4 @@ function Tooltip({ focusedDayInfo }: Props) {
   );
 }
 
-export default Tooltip;
+export default Overay;
