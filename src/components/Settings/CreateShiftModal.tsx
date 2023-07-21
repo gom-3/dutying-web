@@ -18,10 +18,10 @@ function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
     startTime: '00:00',
     endTime: '00:00',
     color: '#FFFFFF',
-    isDefault: false,
+    // isDefault: false,
     isOff: false,
     shortName: '',
-    hotkey: [],
+    // hotkey: [],
   };
   const [writeShift, setWriteShift] = useState(initValue);
 
@@ -46,7 +46,7 @@ function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
           <h1 className="flex-1 font-apple text-[1.75rem] font-semibold text-[#150B3C]">
             {shiftType ? '근무•휴가 수정하기' : '근무•휴가 추가하기'}
           </h1>
-          <CancelIcon className="h-[1.875rem] w-[1.875rem]" />
+          <CancelIcon className="cursor-pointer h-[1.875rem] w-[1.875rem]" onClick={() => setOpen(false)} />
         </div>
         <div className="mt-[1.875rem] flex">
           <div

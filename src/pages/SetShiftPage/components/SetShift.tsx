@@ -1,48 +1,39 @@
-import { PenIcon, PlusIcon } from '@assets/svg';
-import TextField from '@components/TextField';
-import TimeInput from '@components/TimeInput';
-import CreateShiftModal from './CreateShiftModal';
+import { ExitIcon, PenIcon, PlusIcon } from '@assets/svg';
+import CreateShiftModal from '@components/Settings/CreateShiftModal';
 import { useState } from 'react';
-import {
-  CreateShiftTypeListRequest,
-  CreateShiftTypeRequest,
-} from '@pages/OnboardingPage/components/useCreateWard';
+import { CreateShiftTypeRequest } from '@pages/OnboardingPage/components/useCreateWard';
 
 interface ContentsProps {
-  shiftTypeList: CreateShiftTypeListRequest;
-  setShiftTypeList: (shiftTypeList: CreateShiftTypeListRequest) => void;
+  shiftTypeList: ShiftType[];
+  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
+  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
+  removeShiftType: (shiftTypeId: number) => void;
+  setShiftTypeList: (shiftTypeList: ShiftType[]) => void;
 }
 
-function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
+function SetShift({
+  shiftTypeList,
+  setShiftTypeList,
+  addShiftType,
+  editShiftType,
+}: ContentsProps) {
   const [openModal, setOpenModal] = useState(false);
+  const [id, setId] = useState(0);
   const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
-
-  const handleChangeShift = (
-    shiftType: CreateShiftTypeRequest,
-    shiftIndex: number,
-    key: keyof CreateShiftTypeRequest,
-    value: string
-  ) => {
-    setShiftTypeList(
-      shiftTypeList.map((_, i) => (i === shiftIndex ? { ...shiftType, [key]: value } : _))
-    );
-  };
 
   const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
     if (editShift) {
-      setShiftTypeList(
-        shiftTypeList.map((_, i) => (i === shiftTypeList.indexOf(editShift) ? shiftType : _))
-      );
+      editShiftType(id, shiftType);
       setEditShift(null);
     } else {
-      setShiftTypeList([...shiftTypeList, shiftType]);
+      addShiftType(shiftType);
     }
     setOpenModal(false);
   };
 
-  // const handleDeleteShift = (shiftIndex: number) => {
-  //   setShiftTypeList(shiftTypeList.filter((_, i) => i !== shiftIndex));
-  // };
+  const handleDeleteShift = (shiftIndex: number) => {
+    setShiftTypeList(shiftTypeList.filter((_, i) => i !== shiftIndex));
+  };
 
   return (
     <div className="relative h-fit rounded-[1.25rem]">
@@ -59,40 +50,23 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
             {shiftType.name}
           </div>
           <div className="flex flex-1 items-center justify-center">
-            <TextField
-              className="h-[4rem] w-[4rem] px-0 text-center font-poppins text-[2.25rem] font-normal text-sub-2.5"
-              value={shiftType.shortName}
-              onChange={(e) =>
-                handleChangeShift(
-                  shiftType,
-                  index,
-                  'shortName',
-                  e.target.value.slice(0, 1).toUpperCase()
-                )
-              }
-            />
+            <div className="h-[4rem] w-[4rem] px-0 text-center font-poppins text-[2.25rem] font-normal text-sub-2.5">
+              {shiftType.shortName}
+            </div>
           </div>
           <div className="flex flex-[3] items-center justify-center gap-[1.125rem] text-sub-2.5">
             {shiftType.isOff ? (
               <p className="font-poppins text-[2.25rem]">-</p>
             ) : (
-              <>
-                <TimeInput
-                  className="h-[4rem] w-[9.375rem] text-center"
-                  initTime={shiftType.startTime}
-                  onTimeChange={(value) =>
-                    handleChangeShift(shiftType, index, 'startTime', value || '')
-                  }
-                />
-                <p className="font-poppins text-[2.25rem]">~</p>
-                <TimeInput
-                  className="h-[4rem] w-[9.375rem] text-center"
-                  initTime={shiftType.endTime}
-                  onTimeChange={(value) =>
-                    handleChangeShift(shiftType, index, 'endTime', value || '')
-                  }
-                />
-              </>
+              <div className="flex">
+                <div className="h-[4rem] w-[9.375rem] text-center font-poppins text-[2.25rem]">
+                  {shiftType.startTime}
+                </div>
+                <p className="ml-[1rem] mr-[1rem] font-poppins text-[2.25rem]">~</p>
+                <div className="h-[4rem] w-[9.375rem] text-center font-poppins text-[2.25rem]">
+                  {shiftType.endTime}
+                </div>
+              </div>
             )}
           </div>
           <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
@@ -106,7 +80,6 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
               className="absolute translate-x-[100%] translate-y-[50%] opacity-0"
               type="color"
               value={shiftType.color}
-              onChange={(e) => handleChangeShift(shiftType, index, 'color', e.target.value)}
             />
           </div>
           <div className="flex flex-1 justify-end">
@@ -115,21 +88,22 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
                 className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                 onClick={() => {
                   setEditShift(shiftType);
+                  setId(shiftType.shiftTypeId);
                   setOpenModal(true);
                 }}
               />
-              {/* {!shiftType.isDefault && (
+              {!shiftType.isDefault && (
                 <ExitIcon
                   className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                   onClick={() => handleDeleteShift(index)}
                 />
-              )} */}
+              )}
             </div>
           </div>
         </div>
       ))}
       <div
-        className="absolute bottom-[-3rem] flex cursor-pointer items-center gap-[1.25rem]"
+        className="bottom-[-3rem] flex cursor-pointer items-center gap-[1.25rem]"
         onClick={() => {
           setEditShift(null);
           setOpenModal(true);
