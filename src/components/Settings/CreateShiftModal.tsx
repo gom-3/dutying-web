@@ -15,10 +15,10 @@ interface Props {
 function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
   const initValue: CreateShiftTypeRequest = {
     name: '',
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '00:00:00',
+    endTime: '00:00:00',
     color: '#FFFFFF',
-    // isDefault: false,
+    isDefault: false,
     isOff: false,
     shortName: '',
     // hotkey: [],

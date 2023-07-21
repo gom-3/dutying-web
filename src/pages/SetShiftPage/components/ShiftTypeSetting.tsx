@@ -1,7 +1,6 @@
 import { CreateShiftTypeRequest } from '@libs/api/shift';
 import SetShift from './SetShift';
 import 'index.css';
-import { useState } from 'react';
 
 interface Props {
   shiftTypeList: ShiftType[];
@@ -16,7 +15,6 @@ const ShiftTypeSetting = ({
   editShiftType,
   removeShiftType,
 }: Props) => {
-  const [_, setShiftTypeList] = useState<ShiftType[]>();
   return (
     <div className="mb-[1.5625rem] rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center justify-between">
@@ -33,9 +31,6 @@ const ShiftTypeSetting = ({
       <div>
         <SetShift
           shiftTypeList={shiftTypeList}
-          setShiftTypeList={(shiftTypeList) => {
-            setShiftTypeList(shiftTypeList.map((x) => ({ ...x, wardId: 1, shiftTypeId: 1 })));
-          }}
           addShiftType={addShiftType}
           editShiftType={editShiftType}
           removeShiftType={removeShiftType}

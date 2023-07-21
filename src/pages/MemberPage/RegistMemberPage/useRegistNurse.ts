@@ -18,8 +18,6 @@ const useRegistNurse = () => {
 
   const {account} = useAccount();
 
-  console.log(account.wardId);
-
   const { data } = useQuery(['nurses', account.wardId], () => getNursesByWardId(account.wardId));
 
   const { mutate: updateNurseMutate } = useMutation(
