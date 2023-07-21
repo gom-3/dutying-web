@@ -8,12 +8,10 @@ interface ContentsProps {
   addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
   editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
   removeShiftType: (shiftTypeId: number) => void;
-  setShiftTypeList: (shiftTypeList: ShiftType[]) => void;
 }
 
 function SetShift({
   shiftTypeList,
-  setShiftTypeList,
   addShiftType,
   editShiftType,
   removeShiftType,
