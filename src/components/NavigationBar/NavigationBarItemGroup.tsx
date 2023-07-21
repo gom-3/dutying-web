@@ -1,11 +1,11 @@
 import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
-import { SHIFT, MEMBER, HOME } from '@libs/constant/path';
+import { SHIFT, MEMBER } from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
-  HomeIcon,
-  HomeIconSelected,
+  // HomeIcon,
+  // HomeIconSelected,
   InjectorIcon,
   InjectorIconSelected,
   NurseIcon,
@@ -15,12 +15,12 @@ import {
 } from '@assets/svg';
 
 const items = [
-  {
-    path: HOME,
-    icon: HomeIcon,
-    selectedIcon: HomeIconSelected,
-    text: '홈',
-  },
+  // {
+  //   path: HOME,
+  //   icon: HomeIcon,
+  //   selectedIcon: HomeIconSelected,
+  //   text: '홈',
+  // },
   {
     path: SHIFT.MAKE,
     icon: DutyIcon,
