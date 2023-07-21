@@ -25,7 +25,7 @@ function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
         />
         {shift && <p className="font-poppins text-2xl text-main-1">{month}월</p>}
         <NextIcon
-          onClick={() => changeMonth('prev')}
+          onClick={() => changeMonth('next')}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
         <p className="font-apple text-[.875rem] text-main-1 ">

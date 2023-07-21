@@ -71,11 +71,11 @@ export default function ShiftCalendar({
           <div className="w-[5.625rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             전달 근무
           </div>
-          <div className="flex w-[69.5rem] rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
+          <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
                   j === focus?.day && 'rounded-full bg-main-1 text-white'
                 }`}
               >
@@ -142,7 +142,7 @@ export default function ShiftCalendar({
                         />
                       ))}
                     </div>
-                    <div className="flex h-full w-[69.5rem] px-[1rem]">
+                    <div className="flex h-full  px-[1rem]">
                       {row.shiftTypeIndexList.map(({ reqShift: request, shift: current }, j) => {
                         const isSaturday = shift.days[j].dayType === 'saturday';
                         const isSunday =
@@ -156,7 +156,7 @@ export default function ShiftCalendar({
                         return (
                           <div
                             key={j}
-                            className={`group relative flex h-full flex-1 items-center justify-start px-[.25rem] ${
+                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-start px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >
