@@ -1,4 +1,5 @@
 import axiosInstance from './client';
+import qs from 'qs';
 
 export const getShiftTypes = async (wardId: number) =>
   (await axiosInstance.get<ShiftType[]>(`/wards/${wardId}/shift-types`)).data;
@@ -26,5 +27,28 @@ export const updateShiftType = async (
     await axiosInstance.put<ShiftType>(
       `/wards/${wardId}/shift-types/${shiftTypeId}`,
       createShiftTypeRequest
+    )
+  ).data;
+
+export const getShift = async (wardId: number, year: number, month: number) =>
+  (await axiosInstance.get<Shift>(`/wards/${wardId}/duty?${qs.stringify({ year, month })}`)).data;
+
+export const updateShift = async (
+  year: number,
+  month: number,
+  day: number,
+  nurseId: number,
+  shiftTypeId: number | null
+) =>
+  (
+    await axiosInstance.patch<null>(`/shifts?${qs.stringify({ nurseId, year, month, day })}`, {
+      shiftTypeId,
+    })
+  ).data;
+
+export const getRequestShift = async (wardId: number, year: number, month: number) =>
+  (
+    await axiosInstance.get<RequestShift>(
+      `/wards/${wardId}/req-duty?${qs.stringify({ year, month })}`
     )
   ).data;

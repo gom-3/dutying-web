@@ -51,7 +51,8 @@ type Fault = {
   length: number;
 };
 
-interface MakeShiftPageViewModelState {
+interface MakeShiftPageState {
+  month: number;
   shift: Shift | undefined;
   focus: Focus | null;
   faults: Map<string, Fault>;
@@ -62,12 +63,13 @@ interface MakeShiftPageViewModelState {
   changeStatus: 'error' | 'success' | 'loading' | 'idle';
 }
 
-interface MakeShiftPageViewModelActions {
+interface MakeShiftPageActions {
   foldLevel: (level: Nurse['level']) => void;
+  changeMonth: (type: 'prev' | 'next') => void;
   changeFocus: (focus: Focus | null) => void;
   changeFocusedShift: (shiftTypeIndex: number) => void;
 }
 
-interface MakeShiftPageViewModel {
-  (): { state: MakeShiftPageViewModelState; actions: MakeShiftPageViewModelActions };
+interface MakeShiftPageHook {
+  (): { state: MakeShiftPageState; actions: MakeShiftPageActions };
 }
