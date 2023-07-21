@@ -18,6 +18,7 @@ interface RequestShiftPageState {
   requestShift: RequestShift | undefined;
   focus: Focus | null;
   foldedLevels: boolean[] | null;
+  changeStatus: 'error' | 'success' | 'loading' | 'idle';
 }
 
 interface RequestShiftPageActions {

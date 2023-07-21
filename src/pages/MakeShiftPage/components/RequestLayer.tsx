@@ -8,7 +8,7 @@ interface Props {
 function RequestLayer({ isAccept, request }: Props) {
   return (
     <div
-      className={`absolute left-[.0625rem] z-10 flex h-[2.125rem] w-[2.125rem] justify-center rounded-[.5625rem] border-[.125rem]
+      className={`absolute left-[.0938rem] z-10 flex h-[2.125rem] w-[2.125rem] justify-center rounded-[.5625rem] border-[.125rem]
         ${isAccept ? 'border-[#06E738] bg-[#06e73833]' : 'border-[#0027F4] bg-[#0027f433]'}
       `}
     >

@@ -52,3 +52,16 @@ export const getRequestShift = async (wardId: number, year: number, month: numbe
       `/wards/${wardId}/req-duty?${qs.stringify({ year, month })}`
     )
   ).data;
+
+export const updateRequestShift = async (
+  year: number,
+  month: number,
+  day: number,
+  nurseId: number,
+  shiftTypeId: number | null
+) =>
+  (
+    await axiosInstance.patch<null>(`/req-shifts?${qs.stringify({ nurseId, year, month, day })}`, {
+      shiftTypeId,
+    })
+  ).data;

@@ -8,7 +8,7 @@ function FaultLayer({ fault }: Props) {
       style={{
         width: `calc(2.125rem + 2.25rem * ${fault.length - 1})`,
       }}
-      className={`absolute left-[.0625rem] z-10 h-[2.125rem] rounded-[.5625rem] border-[.125rem]
+      className={`absolute left-[.0938rem] z-10 h-[2.125rem] rounded-[.5625rem] border-[.125rem]
         ${
           fault.type === 'wrong'
             ? 'border-[#FF0000] bg-[#ff000033]'

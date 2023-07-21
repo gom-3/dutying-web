@@ -15,7 +15,9 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
   return (
     <div
       className={`mt-[3.125rem] flex w-[10.0625rem] cursor-pointer flex-col items-center`}
-      onClick={() => navigate(path)}
+      onClick={() => {
+        navigate(path);
+      }}
     >
       {isSelected ? (
         <SelectedIcon className="h-[2.8125rem] w-[2.8125rem]" />
