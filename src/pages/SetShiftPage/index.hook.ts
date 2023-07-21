@@ -1,7 +1,13 @@
-import { CreateShiftTypeRequest, createShiftType, deleteShiftType, updateShiftType } from "@libs/api/shift";
-import { EditWardRequest, editWard, getWard } from "@libs/api/ward";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import {
+  CreateShiftTypeRequest,
+  createShiftType,
+  deleteShiftType,
+  updateShiftType,
+} from '@libs/api/shift';
+import { EditWardRequest, editWard, getWard } from '@libs/api/ward';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useAccount } from 'store';
 
 type ModalType = '숙련도' | '연속근무';
 
@@ -10,15 +16,15 @@ const SetShiftPageHook = () => {
   const [currentModal, setCurrentModal] = useState<'숙련도' | '연속근무'>('숙련도');
 
   const queryClient = useQueryClient();
-  const wardId = 1;
+  const { account } = useAccount();
 
-  const { data: ward } = useQuery(['wardSettings', wardId], () => getWard(wardId));
+  const { data: ward } = useQuery(['wardSettings', account.wardId], () => getWard(account.wardId));
   const { mutate: editWardMutate } = useMutation(
     ({ wardId, editWardDTO }: { wardId: number; editWardDTO: EditWardRequest }) =>
       editWard(wardId, editWardDTO),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['wardSettings', wardId]);
+        queryClient.invalidateQueries(['wardSettings', account.wardId]);
       },
       onError: (error) => {
         console.log(error);
@@ -36,7 +42,7 @@ const SetShiftPageHook = () => {
     }) => createShiftType(wardId, createShiftTypeRequest),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['wardSettings', wardId]);
+        queryClient.invalidateQueries(['wardSettings', account.wardId]);
       },
     }
   );
@@ -52,7 +58,7 @@ const SetShiftPageHook = () => {
     }) => updateShiftType(wardId, shiftTypeId, createShiftTypeRequest),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['wardSettings', wardId]);
+        queryClient.invalidateQueries(['wardSettings', account.wardId]);
       },
     }
   );
@@ -61,7 +67,7 @@ const SetShiftPageHook = () => {
       deleteShiftType(wardId, shiftTypeId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['wardSettings', wardId]);
+        queryClient.invalidateQueries(['wardSettings', account.wardId]);
       },
     }
   );
@@ -71,18 +77,15 @@ const SetShiftPageHook = () => {
   };
 
   const addShiftType = (createShiftTypeRequest: CreateShiftTypeRequest) => {
-    createShiftTypeMutate({ wardId, createShiftTypeRequest });
+    createShiftTypeMutate({ wardId: account.wardId, createShiftTypeRequest });
   };
 
-  const editShiftType = (
-    shiftTypeId: number,
-    createShiftTypeRequest: CreateShiftTypeRequest
-  ) => {
-    updateShiftTypeMutate({ wardId, shiftTypeId, createShiftTypeRequest });
+  const editShiftType = (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => {
+    updateShiftTypeMutate({ wardId: account.wardId, shiftTypeId, createShiftTypeRequest });
   };
 
   const removeShiftType = (shiftTypeId: number) => {
-    deleteShiftTypeMutate({ wardId, shiftTypeId });
+    deleteShiftTypeMutate({ wardId: account.wardId, shiftTypeId });
   };
 
   const handleClickPenIcon = (step: ModalType) => {
@@ -94,20 +97,20 @@ const SetShiftPageHook = () => {
     setIsModalOpen(false);
   };
   return {
-    state:{
+    state: {
       isModalOpen,
       currentModal,
-      ward
+      ward,
     },
-    actions:{
+    actions: {
       editWardSetting,
       closeModal,
       handleClickPenIcon,
       removeShiftType,
       editShiftType,
-      addShiftType
-    }
-  }
+      addShiftType,
+    },
+  };
 };
 
 export default SetShiftPageHook;

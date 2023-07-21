@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 
 type User = {
   nurseId: number;
@@ -13,18 +13,16 @@ interface State {
 
 export const useStore = create<State>()(
   devtools(
-    persist(
       (set) => ({
         account: {
           nurseId: 1,
-          wardId: 1,
+          wardId: 2,
         },
         setAccount: (account: User) => set(() => ({ account })),
       }),
       {
         name: 'store',
       }
-    )
   )
 );
 
