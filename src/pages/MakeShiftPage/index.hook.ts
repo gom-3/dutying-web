@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { koToEn } from '@libs/util/koToEn';
@@ -64,7 +63,7 @@ const checkFaultOptions: CheckFaultOptions = {
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(6);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
@@ -243,7 +242,6 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   };
 
   useEffect(() => {
-    console.log(shift);
     checkShift();
   }, [shift]);
 

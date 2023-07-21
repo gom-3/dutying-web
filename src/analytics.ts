@@ -1,6 +1,7 @@
 import ReactGA from 'react-ga4';
 import ReactPixel from 'react-facebook-pixel';
-import { createInstance } from '@hackler/react-sdk';
+import { logEvent } from 'firebase/analytics';
+import { analytics, hackleClient } from 'initializeApp';
 
 interface Event {
   category: string;
@@ -19,8 +20,6 @@ export const event = {
 };
 
 export const sendEvent = (event: Event, label?: string) => {
-  const hackleClient = createInstance(import.meta.env.VITE_HACKLE_SDK_KEY);
-
   ReactGA.event({
     category: event.category,
     action: event.action,
@@ -28,4 +27,5 @@ export const sendEvent = (event: Event, label?: string) => {
   });
   ReactPixel.trackCustom(event.action, { label });
   hackleClient.track({ key: event.action, properties: { label } });
+  logEvent(analytics, event.action, { label });
 };
