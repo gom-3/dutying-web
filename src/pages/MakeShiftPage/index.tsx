@@ -27,7 +27,7 @@ const MakeShiftPage = () => {
         setNurseTabOpen={setIsNurseTabOpen}
         selectNurse={selectNurse}
       />
-      <div className="sticky bottom-0 z-10 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[6.5rem]">
+      <div className="sticky bottom-0 z-20 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[6.5rem]">
         <CountDutyByDay focus={focus} shift={shift} />
         <Panel histories={histories} faults={faults} />
       </div>

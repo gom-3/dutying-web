@@ -12,7 +12,7 @@ interface Props {
 
 function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
   return (
-    <div className="sticky top-0 z-10 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
+    <div className="sticky top-0 z-20 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Labels className="absolute h-[2.25rem] w-[10.625rem]" />
       <div className="w-[3.375rem]"></div>
       <div className="w-[3.375rem]"></div>

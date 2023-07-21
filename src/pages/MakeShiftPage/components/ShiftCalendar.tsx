@@ -61,7 +61,7 @@ export default function ShiftCalendar({
 
   return foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
-      <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
+      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             구분
@@ -194,7 +194,7 @@ export default function ShiftCalendar({
                                   : shift.shiftTypes[current]
                               }
                               isOnlyRequest={current === null && request !== null}
-                              className={`cursor-pointer ${
+                              className={`z-10 cursor-pointer ${
                                 isFocused && 'outline outline-[.125rem] outline-main-1'
                               }`}
                               forwardRef={
