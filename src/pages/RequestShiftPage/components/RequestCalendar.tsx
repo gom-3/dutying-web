@@ -21,7 +21,6 @@ export default function RequestCalendar({
   isEditable,
   focus,
   foldedLevels,
-  selectedNurse,
   handleFocusChange,
   foldLevel,
 }: Props) {
@@ -112,8 +111,8 @@ export default function RequestCalendar({
                 {rows.map((row, rowIndex) => (
                   <div
                     key={rowIndex}
-                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] hover:bg-main-4 ${
-                      selectedNurse?.nurseId === row.nurse.nurseId && 'bg-main-4'
+                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
+                      focus?.row === rowIndex && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>

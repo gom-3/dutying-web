@@ -1,5 +1,6 @@
 import { event, sendEvent } from 'analytics';
 import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
 
 interface Props {
@@ -8,10 +9,16 @@ interface Props {
 }
 
 function Panel({ faults, histories }: Props) {
+  const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('faults');
 
   return (
-    <div className="mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-shadow-1">
+    <div
+      className={twMerge(
+        'mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-shadow-1',
+        open && 'absolute bottom-0 right-0 h-[300%] max-h-[calc(50vh)]'
+      )}
+    >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
           className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 ${
@@ -62,8 +69,11 @@ function Panel({ faults, histories }: Props) {
               </p>
             ))}
       </div>
-      <div className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3">
-        더보기
+      <div
+        className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? '닫기' : '펼치기'}
       </div>
     </div>
   );
