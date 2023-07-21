@@ -1,24 +1,29 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
+import { FoldDutyIcon } from '@assets/svg';
+import { event, sendEvent } from 'analytics';
 
 interface Props {
   month: number;
   requestShift: RequestShift;
   selectedNurse: Nurse | null;
   focus?: Focus | null;
+  foldedLevels: RequestShiftPageState['foldedLevels'];
   isEditable?: boolean;
   handleFocusChange?: (focus: Focus | null) => void;
+  foldLevel: RequestShiftPageActions['foldLevel'];
 }
 
-export default function DutyCalendar({
+export default function RequestCalendar({
   month,
   requestShift,
   isEditable,
   focus,
-  handleFocusChange,
+  foldedLevels,
   selectedNurse,
+  handleFocusChange,
+  foldLevel,
 }: Props) {
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,24 +53,22 @@ export default function DutyCalendar({
     }
   }, [focus]);
 
-  return (
+  return foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             숙련도
           </div>
-          <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             이름
           </div>
-          <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            연동
-          </div>
-          <div className="flex w-[69.5rem] rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
+
+          <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
             {requestShift.days.map((item, j) => (
               <p
                 key={j}
-                className={`flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
                   j === focus?.day && 'rounded-full bg-main-1 text-white'
                 }`}
               >
@@ -77,15 +80,34 @@ export default function DutyCalendar({
         </div>
       </div>
       <div
-        className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
         {requestShift.levelNurses.map((rows, level) => {
-          return (
+          return foldedLevels[level] ? (
+            <div
+              key={level}
+              className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
+              onClick={() => {
+                sendEvent(event.clickFoldButton, 'close');
+                foldLevel(level);
+              }}
+            >
+              <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
+            </div>
+          ) : (
             <div key={level} className="flex gap-[1.25rem]">
               <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                 <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
-                  {level}
+                  <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
+                    <FoldDutyIcon
+                      className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
+                      onClick={() => {
+                        sendEvent(event.clickFoldButton, 'open');
+                        foldLevel(level);
+                      }}
+                    />
+                  </div>
                 </div>
                 {rows.map((row, rowIndex) => (
                   <div
@@ -95,13 +117,10 @@ export default function DutyCalendar({
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
-                    <div className="w-[3.375rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
+                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
                       {row.nurse.name}
                     </div>
-                    <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
-                      <UnlinkedIcon className="h-[1.5rem] w-[1.5rem]" />
-                    </div>
-                    <div className="flex h-full w-[69.5rem] px-[1rem]">
+                    <div className="flex h-full px-[1rem]">
                       {row.shiftTypeIndexList.map(({ reqShift }, j) => {
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
@@ -115,7 +134,7 @@ export default function DutyCalendar({
                         return (
                           <div
                             key={j}
-                            className={`flex h-full flex-1 items-center px-[.25rem] ${
+                            className={`flex h-full w-[2.25rem] flex-1 items-center px-[.25rem] ${
                               isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
                             } ${j === focus?.day && 'bg-main-4'}`}
                           >
@@ -129,9 +148,7 @@ export default function DutyCalendar({
                                 });
                               }}
                               shiftType={
-                                reqShift != null
-                                  ? requestShift.shiftTypes.find((x) => x.shiftTypeId === reqShift)
-                                  : null
+                                reqShift !== null ? requestShift.shiftTypes[reqShift] : null
                               }
                               className={`cursor-pointer ${
                                 isFocused && 'outline outline-[.0625rem] outline-main-1'
@@ -154,5 +171,5 @@ export default function DutyCalendar({
         })}
       </div>
     </div>
-  );
+  ) : null;
 }

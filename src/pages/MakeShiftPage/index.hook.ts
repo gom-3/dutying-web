@@ -125,7 +125,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
                       day === focus.day
                         ? {
                             ...oldShiftTypeIndex,
-                            shift: newShiftTypeIndex === undefined ? null : newShiftTypeIndex,
+                            shift: newShiftTypeIndex === -1 ? null : newShiftTypeIndex,
                           }
                         : oldShiftTypeIndex
                     ),
@@ -243,6 +243,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
   };
 
   useEffect(() => {
+    console.log(shift);
     checkShift();
   }, [shift]);
 

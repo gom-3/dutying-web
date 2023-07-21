@@ -112,7 +112,6 @@ export default function ShiftCalendar({
                 foldLevel(level);
               }}
             >
-              {/* <p className="font-poppins text-base text-sub-2.5">{level}</p> */}
               <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
             </div>
           ) : (
@@ -132,7 +131,7 @@ export default function ShiftCalendar({
                   <div key={rowIndex} className="flex h-[3.25rem] items-center gap-[1.25rem]">
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div
-                      className="w-[3.375rem] shrink-0 cursor-pointer text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
+                      className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                       onClick={() => {
                         setNurseTabOpen(true);
                         selectNurse(row.nurse);
