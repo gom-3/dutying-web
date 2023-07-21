@@ -16,6 +16,7 @@ function SetShift({
   setShiftTypeList,
   addShiftType,
   editShiftType,
+  removeShiftType,
 }: ContentsProps) {
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState(0);
@@ -31,8 +32,8 @@ function SetShift({
     setOpenModal(false);
   };
 
-  const handleDeleteShift = (shiftIndex: number) => {
-    setShiftTypeList(shiftTypeList.filter((_, i) => i !== shiftIndex));
+  const handleDeleteShift = (shiftTypeId: number) => {
+    removeShiftType(shiftTypeId);
   };
 
   return (
@@ -95,7 +96,7 @@ function SetShift({
               {!shiftType.isDefault && (
                 <ExitIcon
                   className="h-[2.25rem] w-[2.25rem] cursor-pointer"
-                  onClick={() => handleDeleteShift(index)}
+                  onClick={() => handleDeleteShift(shiftType.shiftTypeId)}
                 />
               )}
             </div>

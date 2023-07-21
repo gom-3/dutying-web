@@ -16,6 +16,7 @@ const ShiftTypeSetting = ({
   editShiftType,
   removeShiftType,
 }: Props) => {
+  console.log(shiftTypeList);
   const [_, setShiftTypeList] = useState<ShiftType[]>();
   return (
     <div className="mb-[1.5625rem] rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
