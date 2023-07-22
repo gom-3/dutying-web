@@ -35,7 +35,7 @@ type Shift = {
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */
-type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holyday' | 'workday' };
+type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holiday' | 'workday' };
 
 /** 근무표 한줄에 해당하는 데이터 */
 type Row = {

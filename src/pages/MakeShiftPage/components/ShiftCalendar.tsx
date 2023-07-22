@@ -176,7 +176,7 @@ export default function ShiftCalendar({
                           const isSaturday = shift.days[j].dayType === 'saturday';
                           const isSunday =
                             shift.days[j].dayType === 'sunday' ||
-                            shift.days[j].dayType === 'holyday';
+                            shift.days[j].dayType === 'holiday';
                           const isFocused =
                             focus &&
                             level === focus.level &&

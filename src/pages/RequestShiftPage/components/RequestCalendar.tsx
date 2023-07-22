@@ -124,7 +124,7 @@ export default function RequestCalendar({
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
                           requestShift.days[j].dayType === 'sunday' ||
-                          requestShift.days[j].dayType === 'holyday';
+                          requestShift.days[j].dayType === 'holiday';
                         const isFocused =
                           focus &&
                           level === focus.level &&
