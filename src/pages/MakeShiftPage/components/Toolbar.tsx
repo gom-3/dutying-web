@@ -36,7 +36,7 @@ function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
         <p className="font-apple text-[.875rem] text-sub-2 ">
           {changeStatus === 'loading' ? '저장 중...' : '저장 완료'}
         </p>
-        <div className="flex w-[400px] gap-2 overflow-x-scroll scrollbar-hide">
+        <div className="flex gap-2 overflow-x-scroll scrollbar-hide">
           {shift?.shiftTypes.map((shiftType, index) => (
             <div className="flex shrink-0 items-center" key={index}>
               <ShiftBadge shiftType={shiftType} />
