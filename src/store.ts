@@ -15,8 +15,8 @@ export const useStore = create<State>()(
   devtools(
     (set) => ({
       account: {
-        nurseId: 1,
-        wardId: 2,
+        nurseId: 22,
+        wardId: 3,
       },
       setAccount: (account: User) => set(() => ({ account })),
     }),
