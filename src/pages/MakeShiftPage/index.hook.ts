@@ -10,7 +10,7 @@ import { event, sendEvent } from 'analytics';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [month, setMonth] = useState(new Date().getMonth() + 2);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
