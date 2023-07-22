@@ -25,7 +25,7 @@ const useRegistNurse = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['nurses', account.wardId]);
-        queryClient.invalidateQueries(['shift', account.wardId, 2023, 7]);
+        queryClient.invalidateQueries(['shift', account.wardId, 2023, 8]);
       },
       onError: (error) => {
         console.log(error);
