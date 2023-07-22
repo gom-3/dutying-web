@@ -10,7 +10,7 @@ import { event, sendEvent } from 'analytics';
 
 const useMakeShiftPageHook: MakeShiftPageHook = () => {
   const [year] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 2);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [focus, setFocus] = useState<Focus | null>(null);
   const [focusedDayInfo] = useState<DayInfo | null>(null);
   const [foldedLevels, setFoldedLevels] = useState<boolean[] | null>(null);
@@ -184,7 +184,7 @@ const useMakeShiftPageHook: MakeShiftPageHook = () => {
         type: 'bad',
       },
       maxContinuousOff: {
-        isActive: true,
+        isActive: false,
         regExp: new RegExp(`3{4,}`, 'g'),
         message: `OFF가 연속 3일을 초과했습니다.`,
         type: 'bad',
