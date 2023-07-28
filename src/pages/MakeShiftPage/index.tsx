@@ -5,12 +5,16 @@ import Panel from './components/Panel';
 import EditNurseTab from '../MemberPage/RegistMemberPage/components/Editor';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
 import { useState } from 'react';
+import useEditShift from 'hooks/useEditShift';
 
 const MakeShiftPage = () => {
   const { nurse, selectNurse, updateNurse, updateNurseShift } = useRegistNurse();
+  const {
+    state: { shiftStatus },
+  } = useEditShift();
   const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
 
-  return (
+  return shiftStatus === 'success' ? (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
       <Toolbar />
       <ShiftCalendar isEditable setNurseTabOpen={setIsNurseTabOpen} selectNurse={selectNurse} />
@@ -28,7 +32,7 @@ const MakeShiftPage = () => {
         />
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default MakeShiftPage;

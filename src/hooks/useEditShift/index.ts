@@ -44,13 +44,17 @@ const useEditShift = () => {
 
   const shiftQueryKey = ['shift', account.wardId, year, month];
   const { data: ward } = useQuery(['ward', account.wardId], () => getWard(account.wardId));
-  const { data: shift } = useQuery(shiftQueryKey, () => getShift(account.wardId, year, month), {
-    onSuccess: (data) =>
-      setState(
-        'foldedLevels',
-        data.levelNurses.map(() => false)
-      ),
-  });
+  const { data: shift, status: shiftStatus } = useQuery(
+    shiftQueryKey,
+    () => getShift(account.wardId, year, month),
+    {
+      onSuccess: (data) =>
+        setState(
+          'foldedLevels',
+          data.levelNurses.map(() => false)
+        ),
+    }
+  );
   const { mutate: mutateShift, status: changeStatus } = useMutation(
     ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) =>
       updateShift(
@@ -229,6 +233,7 @@ const useEditShift = () => {
       focusedDayInfo,
       foldedLevels,
       changeStatus,
+      shiftStatus,
     },
     actions: {
       foldLevel,
