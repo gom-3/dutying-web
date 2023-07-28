@@ -1,12 +1,10 @@
-interface Props {
-  month: number;
-  requestShift: RequestShift;
-  selectedNurse: Nurse | null;
-  changeStatus: 'loading' | 'error' | 'idle' | 'success';
-  setSelectedNurse: (nurse: Nurse | null) => void;
-}
+import useRequestShift from 'hooks/useRequestShift';
 
-function Toolbar({ month, changeStatus }: Props) {
+function Toolbar() {
+  const {
+    state: { month, changeStatus },
+  } = useRequestShift();
+
   return (
     <div className="sticky top-0 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <div className="w-[3.375rem]"></div>

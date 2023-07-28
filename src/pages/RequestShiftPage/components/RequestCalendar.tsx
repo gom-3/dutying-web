@@ -3,30 +3,21 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import { FoldDutyIcon } from '@assets/svg';
 import { event, sendEvent } from 'analytics';
+import useRequestShift from 'hooks/useRequestShift';
 
 interface Props {
-  month: number;
-  requestShift: RequestShift;
-  selectedNurse: Nurse | null;
-  focus?: Focus | null;
-  foldedLevels: boolean[] | null;
   isEditable?: boolean;
-  handleFocusChange?: (focus: Focus | null) => void;
-  foldLevel: (level: Nurse['level']) => void;
 }
 
-export default function RequestCalendar({
-  month,
-  requestShift,
-  isEditable,
-  focus,
-  foldedLevels,
-  handleFocusChange,
-  foldLevel,
-}: Props) {
+export default function RequestCalendar({ isEditable }: Props) {
+  const {
+    state: { focus, requestShift, foldedLevels, month },
+    actions: { changeFocus, foldLevel },
+  } = useRequestShift();
+
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const clickAwayRef = useOnclickOutside(() => isEditable && handleFocusChange?.(null));
+  const clickAwayRef = useOnclickOutside(() => isEditable && changeFocus?.(null));
 
   useEffect(() => {
     if (focus) {
@@ -52,7 +43,7 @@ export default function RequestCalendar({
     }
   }, [focus]);
 
-  return foldedLevels ? (
+  return requestShift && foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -112,7 +103,7 @@ export default function RequestCalendar({
                   <div
                     key={rowIndex}
                     className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
-                      focus?.row === rowIndex && 'bg-main-4'
+                      focus?.row === rowIndex && focus.level === level && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
@@ -140,7 +131,7 @@ export default function RequestCalendar({
                             <ShiftBadge
                               key={j}
                               onClick={() => {
-                                handleFocusChange?.({
+                                changeFocus?.({
                                   level: level,
                                   day: j,
                                   row: rowIndex,

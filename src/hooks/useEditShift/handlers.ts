@@ -2,7 +2,7 @@ import { koToEn } from '@libs/util/koToEn';
 
 export const moveFocusByKeydown = (
   e: KeyboardEvent,
-  shift: Shift,
+  shift: Shift | RequestShift,
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {

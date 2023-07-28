@@ -86,9 +86,9 @@ const useEditShift = () => {
         };
         setState('histories', [...histories, history]);
 
-        const newShiftTypeIndex = oldShift.shiftTypes.findIndex(
-          (x) => x.shiftTypeId === shiftTypeId
-        );
+        const newShiftTypeIndex = shiftTypeId
+          ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+          : null;
 
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
