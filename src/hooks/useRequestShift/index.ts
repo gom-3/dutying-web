@@ -5,7 +5,7 @@ import { useAccount } from 'store';
 import { koToEn } from '@libs/util/koToEn';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { keydownEventMapper, moveFocusByKeydown } from 'hooks/useEditShift/handlers';
+import { keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
 import { produce } from 'immer';
 
 const useRequestShift = () => {

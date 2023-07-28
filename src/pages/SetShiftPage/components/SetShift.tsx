@@ -1,21 +1,20 @@
 import { ExitIcon, PenIcon, PlusIcon } from '@assets/svg';
-import CreateShiftModal from '@components/Settings/CreateShiftModal';
+import CreateShiftModal from '@pages/RegisterWardPage/components/CreateShiftModal';
 import { useState } from 'react';
-import { CreateShiftTypeRequest } from '@pages/OnboardingPage/components/useCreateWard';
 
 interface ContentsProps {
   shiftTypeList: ShiftType[];
-  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
-  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
+  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequestDTO) => void;
+  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequestDTO) => void;
   removeShiftType: (shiftTypeId: number) => void;
 }
 
 function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType }: ContentsProps) {
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState(0);
-  const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
+  const [editShift, setEditShift] = useState<CreateShiftTypeRequestDTO | null>(null);
 
-  const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
+  const handleWriteShift = (shiftType: CreateShiftTypeRequestDTO) => {
     if (editShift) {
       editShiftType(id, shiftType);
       setEditShift(null);

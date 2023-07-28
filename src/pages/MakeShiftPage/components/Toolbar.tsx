@@ -3,7 +3,7 @@ import Button from '@components/Button';
 import ShiftBadge from '@components/ShiftBadge';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
 import { event, sendEvent } from 'analytics';
-import useEditShift from 'hooks/useEditShift';
+import useEditShift from '@hooks/useEditShift';
 
 function Toolbar() {
   const {

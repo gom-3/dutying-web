@@ -53,6 +53,12 @@
       "@mocks": [
         "mocks"
       ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@hooks": [
+        "hooks"
+      ],
       "@types/*": [
         "types/*"
       ],

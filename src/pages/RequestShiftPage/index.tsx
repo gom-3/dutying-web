@@ -1,6 +1,6 @@
 import Toolbar from './components/Toolbar';
 import RequestCalendar from './components/RequestCalendar';
-import useRequestShift from 'hooks/useRequestShift';
+import useRequestShift from '@hooks/useRequestShift';
 
 const RequestPage = () => {
   const {

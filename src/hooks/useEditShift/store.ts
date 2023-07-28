@@ -18,7 +18,7 @@ interface Store extends State {
   setState: (key: keyof State, value: any) => void;
 }
 
-export const useEditShiftStore = create<Store>()(
+const useEditShiftStore = create<Store>()(
   devtools((set, get) => ({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
@@ -28,11 +28,13 @@ export const useEditShiftStore = create<Store>()(
     histories: [],
     faults: new Map(),
     checkFaultOptions: null,
-    setState: (state, value) =>
+    setState: (key, value) =>
       set(
         produce(get(), (draft) => {
-          draft[state] = value;
+          draft[key] = value;
         })
       ),
   }))
 );
+
+export default useEditShiftStore;

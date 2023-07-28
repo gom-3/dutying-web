@@ -4,8 +4,8 @@ import ShiftCalendar from './components/ShiftCalendar';
 import Panel from './components/Panel';
 import EditNurseTab from '../MemberPage/RegistMemberPage/components/Editor';
 import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
-import useEditShift from 'hooks/useEditShift';
 import { useState } from 'react';
+import useEditShift from '@hooks/useEditShift';
 
 const MakeShiftPage = () => {
   const { nurse, selectNurse, updateNurse, updateNurseShift } = useRegistNurse();

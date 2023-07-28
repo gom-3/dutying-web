@@ -1,16 +1,13 @@
 import Button from '@components/Button';
-import { Step } from './useCreateWard';
 import { useNavigate } from 'react-router';
 import { HOME } from '@libs/constant/path';
+import useCreateWard from '@hooks/useCreateWard';
 
-interface Props {
-  steps: Step[];
-  currentStep: number;
-  isFilled: boolean;
-  setCurrentStep: (step: number) => void;
-}
-
-function Actions({ steps, currentStep, isFilled, setCurrentStep }: Props) {
+function Actions() {
+  const {
+    state: { steps, currentStep, isFilled },
+    actions: { changeCurrentStep },
+  } = useCreateWard();
   const navigate = useNavigate();
 
   return (
@@ -19,7 +16,7 @@ function Actions({ steps, currentStep, isFilled, setCurrentStep }: Props) {
         <Button
           type="outline"
           className="h-[5rem] w-[11.4375rem] "
-          onClick={() => setCurrentStep(currentStep - 1)}
+          onClick={() => changeCurrentStep(currentStep - 1)}
         >
           이전
         </Button>
@@ -28,7 +25,7 @@ function Actions({ steps, currentStep, isFilled, setCurrentStep }: Props) {
         <Button
           className="h-[5rem] w-[11.4375rem]"
           disabled={!isFilled}
-          onClick={() => setCurrentStep(currentStep + 1)}
+          onClick={() => changeCurrentStep(currentStep + 1)}
         >
           다음
         </Button>

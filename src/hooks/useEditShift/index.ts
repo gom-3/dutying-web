@@ -7,8 +7,8 @@ import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
-import { useEditShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
+import useEditShiftStore from './store';
 import {
   checkShift,
   keydownEventMapper,

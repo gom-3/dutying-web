@@ -1,4 +1,4 @@
-import useRequestShift from 'hooks/useRequestShift';
+import useRequestShift from '@hooks/useRequestShift';
 
 function Toolbar() {
   const {

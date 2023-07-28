@@ -6,7 +6,7 @@ import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
 import TextField from '@components/TextField';
-import useEditShift from 'hooks/useEditShift';
+import useEditShift from '@hooks/useEditShift';
 
 interface Props {
   isEditable?: boolean;

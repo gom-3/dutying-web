@@ -1,5 +1,5 @@
 import { event, sendEvent } from 'analytics';
-import useEditShift from 'hooks/useEditShift';
+import useEditShift from '@hooks/useEditShift';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';

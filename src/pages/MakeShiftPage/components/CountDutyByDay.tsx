@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import useEditShift from '@hooks/useEditShift';
 import { mockShiftStandard } from '@mocks/shift';
-import useEditShift from 'hooks/useEditShift';
 
 function CountDutyByDay() {
   const {

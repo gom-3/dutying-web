@@ -1,33 +1,14 @@
 import { ONBOARDING } from '@libs/constant/path';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-
-export type Step = {
-  name: string;
-  contents: JSX.Element;
-  description: JSX.Element | null;
-};
-
-type CreateAccountRequestDTO = Pick<
-  Account,
-  'name' | 'gender' | 'birthday' | 'phoneNum' | 'employmentDate' | 'isWorker'
->;
+import useCreateAccountStore from './store';
+import { shallow } from 'zustand/shallow';
 
 const useCreateAccount = () => {
-  // 추후 server state로 변경
-  const [account, setAccount] = useState<CreateAccountRequestDTO>({
-    name: '',
-    gender: '여',
-    birthday: '',
-    phoneNum: '',
-    employmentDate: '',
-    isWorker: true,
-  });
-  const [isFilled, setIsFilled] = useState<boolean>(false);
-  const [error, setError] = useState<{
-    key: keyof CreateAccountRequestDTO;
-    message: string;
-  } | null>(null);
+  const [account, isFilled, error, setState] = useCreateAccountStore(
+    (state) => [state.account, state.isFilled, state.error, state.setState],
+    shallow
+  );
   const navigate = useNavigate();
 
   /** 인풋값이 상태에 반영될 수 있는지 체크하며 업데이트 합니다. */
@@ -49,21 +30,24 @@ const useCreateAccount = () => {
         if (value.length > 10) return;
       }
     }
-    setAccount({ ...account, [key]: value });
+    setState('account', { ...account, [key]: value });
   };
 
   /** 서버에 제출하기 전 검토를 합니다. */
   const validate = () => {
     if (!/^[가-힣|A-Z|a-z]{2,10}$/.test(account.name)) {
-      setIsFilled(false);
-      setError({ key: 'name', message: '이름은 2~10자에 숫자나 특수문자를 사용할 수 없습니다.' });
+      setState('isFilled', false);
+      setState('error', {
+        key: 'name',
+        message: '이름은 2~10자에 숫자나 특수문자를 사용할 수 없습니다.',
+      });
       return false;
     }
     if (
       !/^(19[0-9][0-9]|20\d{2}).(0[0-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/.test(account.birthday)
     ) {
-      setIsFilled(false);
-      setError({ key: 'birthday', message: '연도 형식을 지켜주세요.' });
+      setState('isFilled', false);
+      setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
       return false;
     }
     if (
@@ -71,22 +55,22 @@ const useCreateAccount = () => {
         account.employmentDate
       )
     ) {
-      setIsFilled(false);
-      setError({ key: 'birthday', message: '연도 형식을 지켜주세요.' });
+      setState('isFilled', false);
+      setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
       return false;
     }
     if (!/(\d{3})-(\d{4})-(\d{4})/.test(account.phoneNum)) {
-      setIsFilled(false);
-      setError({ key: 'name', message: '전화번호 형식을 지켜주세요.' });
+      setState('isFilled', false);
+      setState('error', { key: 'name', message: '전화번호 형식을 지켜주세요.' });
       return false;
     }
     if (account.gender !== '여' && account.gender !== '남') {
-      setIsFilled(false);
-      setError({ key: 'name', message: '여, 남만 선택 가능합니다.' });
+      setState('isFilled', false);
+      setState('error', { key: 'name', message: '여, 남만 선택 가능합니다.' });
       return false;
     }
-    setIsFilled(true);
-    setError(null);
+    setState('isFilled', true);
+    setState('error', null);
     return true;
   };
 
@@ -99,11 +83,15 @@ const useCreateAccount = () => {
   };
 
   return {
-    account,
-    isFilled,
-    error,
-    handleChangeAccount,
-    handleCreateAccount,
+    state: {
+      account,
+      isFilled,
+      error,
+    },
+    actions: {
+      handleChangeAccount,
+      handleCreateAccount,
+    },
   };
 };
 
