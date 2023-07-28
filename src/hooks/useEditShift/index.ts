@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
@@ -7,13 +7,14 @@ import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
+import { useEditShiftStore } from './store';
+import { shallow } from 'zustand/shallow';
 import {
   checkShift,
   keydownEventMapper,
   moveFocusByKeydown,
   updateCheckFaultOption,
 } from './handlers';
-import { useEditShiftStore } from './store';
 
 const useEditShift = () => {
   const [
@@ -26,24 +27,27 @@ const useEditShift = () => {
     faults,
     checkFaultOptions,
     setState,
-  ] = useEditShiftStore((state) => [
-    state.year,
-    state.month,
-    state.focus,
-    state.focusedDayInfo,
-    state.foldedLevels,
-    state.histories,
-    state.faults,
-    state.checkFaultOptions,
-    state.setState,
-  ]);
-
+  ] = useEditShiftStore(
+    (state) => [
+      state.year,
+      state.month,
+      state.focus,
+      state.focusedDayInfo,
+      state.foldedLevels,
+      state.histories,
+      state.faults,
+      state.checkFaultOptions,
+      state.setState,
+    ],
+    shallow
+  );
   const { account } = useAccount();
 
   const queryClient = useQueryClient();
 
+  const wardQueryKey = ['ward', account.wardId];
   const shiftQueryKey = ['shift', account.wardId, year, month];
-  const { data: ward } = useQuery(['ward', account.wardId], () => getWard(account.wardId));
+  const { data: ward } = useQuery(wardQueryKey, () => getWard(account.wardId));
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
     () => getShift(account.wardId, year, month),
@@ -154,59 +158,71 @@ const useEditShift = () => {
     }
   );
 
-  const changeMonth = (type: 'prev' | 'next') => {
-    if (type === 'prev') {
-      // if (month === 1) {
-      //   setMonth(12);
-      //   setYear(year - 1);
-      // } else {
-      //   setMonth(month - 1);
-      // }
-      if (month === 7) return;
-      else setState('month', month - 1);
-    } else if (type === 'next') {
-      // if (month === 12) {
-      //   setMonth(1);
-      //   setYear(year + 1);
-      // } else {
-      //   setMonth(month + 1);
-      // }
-      if (month === 8) return;
-      else setState('month', month + 1);
-    }
-  };
+  const changeMonth = useCallback(
+    (type: 'prev' | 'next') => {
+      if (type === 'prev') {
+        // if (month === 1) {
+        //   setMonth(12);
+        //   setYear(year - 1);
+        // } else {
+        //   setMonth(month - 1);
+        // }
+        if (month === 7) return;
+        else setState('month', month - 1);
+      } else if (type === 'next') {
+        // if (month === 12) {
+        //   setMonth(1);
+        //   setYear(year + 1);
+        // } else {
+        //   setMonth(month + 1);
+        // }
+        if (month === 8) return;
+        else setState('month', month + 1);
+      }
+    },
+    [month, year]
+  );
 
-  const changeFocusedShift = (shiftTypeId: number | null) => {
-    if (
-      !focus ||
-      !shift ||
-      shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift ===
-        shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
-    )
-      return;
-    mutateShift({ shift, focus, shiftTypeId });
-  };
+  const changeFocusedShift = useCallback(
+    (shiftTypeId: number | null) => {
+      if (
+        !focus ||
+        !shift ||
+        shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift ===
+          shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+      )
+        return;
+      mutateShift({ shift, focus, shiftTypeId });
+    },
+    [focus, shift]
+  );
 
-  const foldLevel = (level: Nurse['level']) => {
-    if (!shift || !foldedLevels) return;
-    setState(
-      'foldedLevels',
-      foldedLevels.map((x, index) => (index === level ? !x : x))
-    );
-  };
+  const foldLevel = useCallback(
+    (level: Nurse['level']) => {
+      if (!shift || !foldedLevels) return;
+      setState(
+        'foldedLevels',
+        foldedLevels.map((x, index) => (index === level ? !x : x))
+      );
+    },
+    [shift, foldedLevels]
+  );
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!focus || !shift) return;
-    moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => setState('focus', focus));
-    keydownEventMapper(
-      e,
-      ...shift.shiftTypes.map((shiftType) => ({
-        keys: [shiftType.shortName],
-        callback: () => changeFocusedShift(shiftType.shiftTypeId),
-      })),
-      { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
-    );
-  };
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!focus || !shift) return;
+      moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => setState('focus', focus));
+      keydownEventMapper(
+        e,
+        ...shift.shiftTypes.map((shiftType) => ({
+          keys: [shiftType.shortName],
+          callback: () => changeFocusedShift(shiftType.shiftTypeId),
+        })),
+        { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+      );
+    },
+    [shift, focus]
+  );
 
   useEffect(() => {
     if (ward) setState('checkFaultOptions', updateCheckFaultOption(ward));
@@ -221,7 +237,7 @@ const useEditShift = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focus, shift]);
+  }, [focus, shift, handleKeyDown]);
 
   return {
     state: {
