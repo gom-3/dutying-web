@@ -6,34 +6,19 @@ import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
 import TextField from '@components/TextField';
+import useEditShift from 'hooks/useEditShift';
 
 interface Props {
-  month: number;
-  shift: Shift;
-  faults: Map<string, Fault>;
   isEditable?: boolean;
-  focus?: Focus | null;
-  foldedLevels: boolean[] | null;
-  changeFocus?: (focus: Focus | null) => void;
-  foldLevel: (level: number) => void;
   selectNurse: (nurse: Nurse) => void;
   setNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  updateCarry: MakeShiftPageActions['updateCarry'];
 }
 
-export default function ShiftCalendar({
-  month,
-  shift,
-  focus,
-  faults,
-  foldedLevels,
-  isEditable,
-  changeFocus,
-  foldLevel,
-  selectNurse,
-  setNurseTabOpen,
-  updateCarry,
-}: Props) {
+export default function ShiftCalendar({ isEditable, selectNurse, setNurseTabOpen }: Props) {
+  const {
+    state: { month, shift, focus, faults, foldedLevels },
+    actions: { changeFocus, foldLevel, updateCarry },
+  } = useEditShift();
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => isEditable && changeFocus?.(null));
@@ -62,7 +47,7 @@ export default function ShiftCalendar({
     }
   }, [focus]);
 
-  return foldedLevels ? (
+  return shift && foldedLevels ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -82,9 +67,8 @@ export default function ShiftCalendar({
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
-                  j === focus?.day && 'rounded-full bg-main-1 text-white'
-                }`}
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 
+                ${j === focus?.day && 'rounded-full bg-main-1 text-white'}`}
               >
                 {j === focus?.day ? month + '/' : ''}
                 {item.day}
@@ -107,7 +91,7 @@ export default function ShiftCalendar({
       >
         {shift.levelNurses.map((rows, level) => {
           return rows.length ? (
-            foldedLevels[level] ? (
+            shift && foldedLevels[level] ? (
               <div
                 key={level}
                 className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
@@ -186,9 +170,9 @@ export default function ShiftCalendar({
                           return (
                             <div
                               key={j}
-                              className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] ${
-                                isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
-                              } ${j === focus?.day && 'bg-main-4'}`}
+                              className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
+                              ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''} 
+                              ${j === focus?.day && 'bg-main-4'}`}
                             >
                               {fault && <FaultLayer fault={fault} />}
                               {request !== null && current !== null && (
@@ -214,9 +198,8 @@ export default function ShiftCalendar({
                                     : shift.shiftTypes[current]
                                 }
                                 isOnlyRequest={current === null && request !== null}
-                                className={`z-10 cursor-pointer ${
-                                  isFocused && 'outline outline-[.125rem] outline-main-1'
-                                }`}
+                                className={`z-10 cursor-pointer 
+                                ${isFocused && 'outline outline-[.125rem] outline-main-1'}`}
                                 forwardRef={
                                   isFocused
                                     ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)

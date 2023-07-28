@@ -1,14 +1,13 @@
 import { event, sendEvent } from 'analytics';
+import useEditShift from 'hooks/useEditShift';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
 
-interface Props {
-  faults: Map<string, Fault>;
-  histories: EditHistory[];
-}
-
-function Panel({ faults, histories }: Props) {
+function Panel() {
+  const {
+    state: { faults, histories },
+  } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('faults');
 
@@ -21,9 +20,8 @@ function Panel({ faults, histories }: Props) {
     >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 ${
-            currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'
-          }`}
+          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
+          ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
             sendEvent(event.clickFaultTab);
@@ -32,9 +30,8 @@ function Panel({ faults, histories }: Props) {
           문제점
         </div>
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] ${
-            currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'
-          }`}
+          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
+          ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
             sendEvent(event.clickHistoryTab);

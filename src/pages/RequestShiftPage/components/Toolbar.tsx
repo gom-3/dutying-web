@@ -2,7 +2,7 @@ interface Props {
   month: number;
   requestShift: RequestShift;
   selectedNurse: Nurse | null;
-  changeStatus: RequestShiftPageState['changeStatus'];
+  changeStatus: 'loading' | 'error' | 'idle' | 'success';
   setSelectedNurse: (nurse: Nurse | null) => void;
 }
 

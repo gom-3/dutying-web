@@ -2,17 +2,15 @@ import { Labels, NextIcon, PrevIcon } from '@assets/svg';
 import Button from '@components/Button';
 import ShiftBadge from '@components/ShiftBadge';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
-import { MutationStatus } from '@tanstack/react-query';
 import { event, sendEvent } from 'analytics';
+import useEditShift from 'hooks/useEditShift';
 
-interface Props {
-  month: number;
-  shift: Shift | undefined;
-  changeStatus: MutationStatus;
-  changeMonth: MakeShiftPageActions['changeMonth'];
-}
+function Toolbar() {
+  const {
+    state: { month, shift, changeStatus },
+    actions: { changeMonth },
+  } = useEditShift();
 
-function Toolbar({ month, shift, changeStatus, changeMonth }: Props) {
   return (
     <div className="sticky top-0 z-20 flex h-[6.125rem] w-full items-center gap-[1.25rem] bg-[#FDFCFE] pt-[1.875rem]">
       <Labels className="absolute h-auto w-[15rem]" />

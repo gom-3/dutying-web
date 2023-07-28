@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-interface Focus {
+type Focus = {
   level: number;
   day: number;
   row: number;
-}
+};
 
-interface DayInfo {
+type DayInfo = {
   countByShiftList: { count: number; shiftType: ShiftType }[];
   month: number;
   day: number;
   nurse: Nurse;
   message: string;
-}
+};
 
-interface EditHistory {
+type EditHistory = {
   nurse: Nurse;
   focus: Focus;
   prevShiftType: ShiftType | null;
   nextShiftType: ShiftType | null;
   dateString: string;
-}
+};
 
 type FaultType =
   | 'twoOffAfterNight' // NOD | NOE
@@ -51,28 +51,4 @@ type Fault = {
   length: number;
 };
 
-interface MakeShiftPageState {
-  month: number;
-  shift: Shift | undefined;
-  focus: Focus | null;
-  faults: Map<string, Fault>;
-  histories: EditHistory[];
-  focusedDayInfo: DayInfo | null;
-  foldedLevels: boolean[] | null;
-  shiftStatus: 'error' | 'success' | 'loading';
-  changeStatus: 'error' | 'success' | 'loading' | 'idle';
-  isNurseTabOpen: boolean;
-}
-
-interface MakeShiftPageActions {
-  foldLevel: (level: Nurse['level']) => void;
-  changeMonth: (type: 'prev' | 'next') => void;
-  changeFocus: (focus: Focus | null) => void;
-  changeFocusedShift: (shiftTypeIndex: number) => void;
-  setIsNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  updateCarry: (nurseId: number, value: number) => void;
-}
-
-interface MakeShiftPageHook {
-  (): { state: MakeShiftPageState; actions: MakeShiftPageActions };
-}
+type Faults = Map<string, Fault>;

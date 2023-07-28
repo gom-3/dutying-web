@@ -9,10 +9,10 @@ interface Props {
   requestShift: RequestShift;
   selectedNurse: Nurse | null;
   focus?: Focus | null;
-  foldedLevels: RequestShiftPageState['foldedLevels'];
+  foldedLevels: boolean[] | null;
   isEditable?: boolean;
   handleFocusChange?: (focus: Focus | null) => void;
-  foldLevel: RequestShiftPageActions['foldLevel'];
+  foldLevel: (level: Nurse['level']) => void;
 }
 
 export default function RequestCalendar({

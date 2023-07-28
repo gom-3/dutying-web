@@ -4,7 +4,7 @@ import { getRequestShift, updateRequestShift } from '@libs/api/shift';
 import { useAccount } from 'store';
 import { koToEn } from '@libs/util/koToEn';
 
-const useRequestShiftPageHook: RequestShiftPageHook = () => {
+const useRequestShiftPageHook = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   // @TODO 현재 달로 수정
   const [month, setMonth] = useState(8);
@@ -89,7 +89,7 @@ const useRequestShiftPageHook: RequestShiftPageHook = () => {
     setFoldedLevels(foldedLevels.map((x, index) => (index === level ? !x : x)));
   };
 
-  const changeMonth: MakeShiftPageActions['changeMonth'] = (type) => {
+  const changeMonth = (type: 'prev' | 'next') => {
     if (type === 'prev') {
       if (month === 1) {
         setMonth(12);
