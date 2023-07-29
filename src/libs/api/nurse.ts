@@ -10,13 +10,8 @@ export type updateNurseShiftTypeRequest = {
   isPrefer?: boolean;
 };
 
-export const getNurses = async () => {
-  const response: NursesList = await axiosInstance.get('/nurses');
-  return response.nurses;
-};
-
 export const getNursesByWardId = async (wardId: number) =>
-  (await axiosInstance.get<NursesList>('/wards/' + wardId + '/nurses')).data;
+  (await axiosInstance.get<NursesList>('/wards/' + wardId + '/nurses')).data.nurses;
 
 export const updateNurse = async (nurseId: number, updatedNurse: Nurse) =>
   (await axiosInstance.patch<Nurse>('/nurses/' + nurseId, updatedNurse)).data;

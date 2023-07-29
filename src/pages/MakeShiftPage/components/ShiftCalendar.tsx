@@ -7,14 +7,17 @@ import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
 import TextField from '@components/TextField';
 import useEditShift from '@hooks/useEditShift';
+import useEditNurse from '@hooks/useEditNurse';
 
 interface Props {
   isEditable?: boolean;
-  selectNurse: (nurse: Nurse) => void;
   setNurseTabOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ShiftCalendar({ isEditable, selectNurse, setNurseTabOpen }: Props) {
+export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
+  const {
+    actions: { selectNurse },
+  } = useEditNurse();
   const {
     state: { month, shift, focus, faults, foldedLevels },
     actions: { changeFocus, foldLevel, updateCarry },
@@ -126,7 +129,7 @@ export default function ShiftCalendar({ isEditable, selectNurse, setNurseTabOpen
                         className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                         onClick={() => {
                           setNurseTabOpen(true);
-                          selectNurse(row.nurse);
+                          selectNurse(row.nurse.nurseId);
                         }}
                       >
                         {row.nurse.name}
