@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useCreateWardStore from './store';
 import { shallow } from 'zustand/shallow';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
 
 const useCreateWard = () => {
   const [steps, currentStep, ward, shiftTypes, isFilled, error, setState] = useCreateWardStore(
@@ -41,7 +42,7 @@ const useCreateWard = () => {
       changeWard: (key: keyof CreateWardRequestDTO, value: string | number) => {
         setState('ward', { ...ward, [key]: value });
       },
-      changeShiftTypes: (shiftTypes: CreateShiftTypesRequestDTO) =>
+      changeShiftTypes: (shiftTypes: CreateShiftTypeRequest[]) =>
         setState('shiftTypes', shiftTypes),
     },
   };

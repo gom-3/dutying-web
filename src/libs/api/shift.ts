@@ -21,12 +21,12 @@ export const deleteShiftType = async (wardId: number, shiftTypeId: number) =>
 export const updateShiftType = async (
   wardId: number,
   shiftTypeId: number,
-  createShiftTypeRequest: CreateShiftTypeRequest
+  updateShiftTypeequest: CreateShiftTypeRequest
 ) =>
   (
     await axiosInstance.put<ShiftType>(
       `/wards/${wardId}/shift-types/${shiftTypeId}`,
-      createShiftTypeRequest
+      updateShiftTypeequest
     )
   ).data;
 

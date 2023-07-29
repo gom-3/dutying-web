@@ -1,42 +1,36 @@
+import { useEffect, useState } from 'react';
 import { CancelIcon } from '@assets/svg';
 import Button from '@components/Button';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
-import { CreateShiftTypeRequest } from '@pages/OnboardingPage/components/useCreateWard';
-import { useEffect, useState } from 'react';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
 
 interface Props {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  shiftType: CreateShiftTypeRequest | null;
+  close: () => void;
   onSubmit: (shiftType: CreateShiftTypeRequest) => void;
-  shiftType?: CreateShiftTypeRequest | null;
 }
 
-function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
-  const initValue: CreateShiftTypeRequest = {
+function CreateShiftModal({ open, close, onSubmit, shiftType }: Props) {
+  const initialValue = {
     name: '',
     startTime: '00:00',
     endTime: '00:00',
     color: '#FFFFFF',
-    isDefault: false,
     isOff: false,
     shortName: '',
-    // hotkey: [],
   };
-  const [writeShift, setWriteShift] = useState(initValue);
+  const [writeShift, setWriteShift] = useState(shiftType || initialValue);
 
   useEffect(() => {
-    if (shiftType) setWriteShift(shiftType);
-  }, [shiftType]);
-
-  useEffect(() => {
-    if (open === false) setWriteShift(initValue);
+    if (open === false) setWriteShift(initialValue);
   }, [open]);
 
   return open ? (
     <div
       className="fixed left-0 top-0 z-50 h-screen w-screen bg-[#00000066]"
-      onClick={() => setOpen(false)}
+      onClick={() => close()}
     >
       <div
         className="absolute left-[50%] top-[50%]  h-[41.375rem] w-[44.375rem] translate-x-[-50%] translate-y-[-50%] rounded-[1.25rem] bg-white px-[2.625rem] py-[2.1875rem]"
@@ -48,7 +42,7 @@ function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
           </h1>
           <CancelIcon
             className="h-[1.875rem] w-[1.875rem] cursor-pointer"
-            onClick={() => setOpen(false)}
+            onClick={() => close()}
           />
         </div>
         <div className="mt-[1.875rem] flex">
@@ -126,7 +120,10 @@ function CreateShiftModal({ open, setOpen, onSubmit, shiftType }: Props) {
         <Button
           className="absolute bottom-[1.875rem] right-[2.8125rem] h-[2.5rem] w-[4.6875rem] text-[1.25rem] font-semibold"
           type="outline"
-          onClick={() => onSubmit(writeShift)}
+          onClick={() => {
+            onSubmit(writeShift);
+            close();
+          }}
         >
           저장
         </Button>

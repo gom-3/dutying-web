@@ -34,7 +34,6 @@ const useCreateAccountStore = create<Store>()(
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
-              const a = draft[key];
               draft[key] = value;
             })
           ),

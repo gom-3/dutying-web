@@ -2,12 +2,13 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
 
 interface State {
   steps: string[];
   currentStep: number;
   ward: CreateWardRequestDTO;
-  shiftTypes: CreateShiftTypesRequestDTO;
+  shiftTypes: CreateShiftTypeRequest[];
   isFilled: boolean;
   error: CreateWardRequestDTOValidationError;
 }
@@ -34,7 +35,6 @@ const initialState: State = {
       shortName: 'O',
       startTime: '00:00',
       endTime: '00:00',
-      isDefault: true,
       isOff: true,
       color: '#465B7A',
     },
@@ -43,7 +43,6 @@ const initialState: State = {
       shortName: 'D',
       startTime: '07:00',
       endTime: '15:00',
-      isDefault: true,
       isOff: false,
       color: '#4DC2AD',
     },
@@ -52,7 +51,6 @@ const initialState: State = {
       shortName: 'E',
       startTime: '15:00',
       endTime: '23:00',
-      isDefault: true,
       isOff: false,
       color: '#FF8BA5',
     },
@@ -61,7 +59,6 @@ const initialState: State = {
       shortName: 'N',
       startTime: '23:00',
       endTime: '07:00',
-      isDefault: true,
       isOff: false,
       color: '#3580FF',
     },

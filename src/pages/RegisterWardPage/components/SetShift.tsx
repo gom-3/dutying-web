@@ -4,6 +4,7 @@ import TimeInput from '@components/TimeInput';
 import CreateShiftModal from './CreateShiftModal';
 import { useState } from 'react';
 import useCreateWard from '@hooks/useCreateWard';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
 
 function SetShift() {
   const {
@@ -11,12 +12,12 @@ function SetShift() {
     actions: { changeShiftTypes },
   } = useCreateWard();
   const [openModal, setOpenModal] = useState(false);
-  const [editShift, setEditShift] = useState<CreateShiftTypeRequestDTO | null>(null);
+  const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
 
   const handleChangeShift = (
-    shiftType: CreateShiftTypeRequestDTO,
+    shiftType: CreateShiftTypeRequest,
     shiftIndex: number,
-    key: keyof CreateShiftTypeRequestDTO,
+    key: keyof CreateShiftTypeRequest,
     value: string
   ) => {
     changeShiftTypes(
@@ -24,7 +25,7 @@ function SetShift() {
     );
   };
 
-  const handleWriteShift = (shiftType: CreateShiftTypeRequestDTO) => {
+  const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
     if (editShift) {
       changeShiftTypes(
         shiftTypes.map((_, i) => (i === shiftTypes.indexOf(editShift) ? shiftType : _))
@@ -137,7 +138,7 @@ function SetShift() {
       <CreateShiftModal
         shiftType={editShift}
         open={openModal}
-        setOpen={setOpenModal}
+        close={() => setOpenModal(false)}
         onSubmit={handleWriteShift}
       />
     </div>

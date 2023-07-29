@@ -9,7 +9,4 @@ type CreateWardRequestDTO = Pick<
   | 'levelDivision'
 > & { hospitalName: string };
 
-type CreateShiftTypeRequestDTO = Omit<ShiftType, 'shiftTypeId' | 'wardId' | 'hotkey'>;
-type CreateShiftTypesRequestDTO = CreateShiftTypeRequestDTO[];
-
 type CreateWardRequestDTOValidationError = { step: number; message: string } | null;

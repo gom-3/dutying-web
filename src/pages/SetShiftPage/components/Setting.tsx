@@ -3,16 +3,11 @@ import 'index.css';
 
 interface Props {
   name: string;
-  value: string;
-  step: '숙련도' | '연속근무';
-  edit: (step: '숙련도' | '연속근무') => void;
+  value: string | number;
+  handleClick: () => void;
 }
 
-const Setting = ({ name, value, step, edit }: Props) => {
-  const handleClickPenIcon = () => {
-    edit(step);
-  };
-
+const Setting = ({ name, value, handleClick }: Props) => {
   return (
     <div className="mb-[1.5625rem] flex items-center justify-between rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center">
@@ -21,7 +16,7 @@ const Setting = ({ name, value, step, edit }: Props) => {
       </div>
       <div className="flex items-center">
         <div className="mr-[1.875rem] font-poppins text-[2rem] text-main-1">{value}</div>
-        <PenIcon className="w-[2.45rem] cursor-pointer" onClick={handleClickPenIcon} />
+        <PenIcon className="w-[2.45rem] cursor-pointer" onClick={handleClick} />
       </div>
     </div>
   );
