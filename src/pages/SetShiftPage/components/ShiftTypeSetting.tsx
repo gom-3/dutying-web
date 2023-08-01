@@ -1,20 +1,11 @@
-import { CreateShiftTypeRequest } from '@libs/api/shift';
+import useEditWard from '@hooks/useEditWard';
 import SetShift from './SetShift';
-import 'index.css';
 
-interface Props {
-  shiftTypeList: ShiftType[];
-  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
-  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
-  removeShiftType: (hiftTypeId: number) => void;
-}
+const ShiftTypeSetting = () => {
+  const {
+    state: { ward },
+  } = useEditWard();
 
-const ShiftTypeSetting = ({
-  shiftTypeList,
-  addShiftType,
-  editShiftType,
-  removeShiftType,
-}: Props) => {
   return (
     <div className="mb-[1.5625rem] rounded-[1.25rem] bg-white px-[1.25rem] py-[1.875rem] shadow-shadow-1">
       <div className="flex items-center justify-between">
@@ -24,17 +15,12 @@ const ShiftTypeSetting = ({
         </div>
         <div className="flex items-center">
           <div className="mr-[1.875rem] font-poppins text-[2rem] text-main-1">
-            {shiftTypeList.map((x) => x.shortName).join(' ')}
+            {ward?.shiftTypes.map((x) => x.shortName).join(' ')}
           </div>
         </div>
       </div>
       <div>
-        <SetShift
-          shiftTypeList={shiftTypeList}
-          addShiftType={addShiftType}
-          editShiftType={editShiftType}
-          removeShiftType={removeShiftType}
-        />
+        <SetShift />
       </div>
     </div>
   );

@@ -3,17 +3,14 @@ import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
 import CreateShiftModal from './CreateShiftModal';
 import { useState } from 'react';
-import {
-  CreateShiftTypeListRequest,
-  CreateShiftTypeRequest,
-} from '@pages/OnboardingPage/components/useCreateWard';
+import useCreateWard from '@hooks/useCreateWard';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
 
-interface ContentsProps {
-  shiftTypeList: CreateShiftTypeListRequest;
-  setShiftTypeList: (shiftTypeList: CreateShiftTypeListRequest) => void;
-}
-
-function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
+function SetShift() {
+  const {
+    state: { shiftTypes },
+    actions: { changeShiftTypes },
+  } = useCreateWard();
   const [openModal, setOpenModal] = useState(false);
   const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
 
@@ -23,19 +20,19 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
     key: keyof CreateShiftTypeRequest,
     value: string
   ) => {
-    setShiftTypeList(
-      shiftTypeList.map((_, i) => (i === shiftIndex ? { ...shiftType, [key]: value } : _))
+    changeShiftTypes(
+      shiftTypes.map((_, i) => (i === shiftIndex ? { ...shiftType, [key]: value } : _))
     );
   };
 
   const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
     if (editShift) {
-      setShiftTypeList(
-        shiftTypeList.map((_, i) => (i === shiftTypeList.indexOf(editShift) ? shiftType : _))
+      changeShiftTypes(
+        shiftTypes.map((_, i) => (i === shiftTypes.indexOf(editShift) ? shiftType : _))
       );
       setEditShift(null);
     } else {
-      setShiftTypeList([...shiftTypeList, shiftType]);
+      changeShiftTypes([...shiftTypes, shiftType]);
     }
     setOpenModal(false);
   };
@@ -53,7 +50,7 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">색상</p>
         <p className="flex-1"></p>
       </div>
-      {shiftTypeList.map((shiftType, index) => (
+      {shiftTypes.map((shiftType, index) => (
         <div key={index} className="flex h-[9.1875rem] items-center">
           <div className="flex flex-[2] items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
             {shiftType.name}
@@ -141,7 +138,7 @@ function SetShift({ shiftTypeList, setShiftTypeList }: ContentsProps) {
       <CreateShiftModal
         shiftType={editShift}
         open={openModal}
-        setOpen={setOpenModal}
+        close={() => setOpenModal(false)}
         onSubmit={handleWriteShift}
       />
     </div>

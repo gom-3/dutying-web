@@ -1,28 +1,26 @@
-import { ExitIcon, PenIcon, PlusIcon } from '@assets/svg';
-import CreateShiftModal from '@components/Settings/CreateShiftModal';
 import { useState } from 'react';
-import { CreateShiftTypeRequest } from '@pages/OnboardingPage/components/useCreateWard';
+import useEditWard from '@hooks/useEditWard';
+import { ExitIcon, PenIcon, PlusIcon } from '@assets/svg';
+import { CreateShiftTypeRequest } from '@libs/api/shift';
+import CreateShiftModal from '@pages/RegisterWardPage/components/CreateShiftModal';
 
-interface ContentsProps {
-  shiftTypeList: ShiftType[];
-  addShiftType: (createShiftTypeRequest: CreateShiftTypeRequest) => void;
-  editShiftType: (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => void;
-  removeShiftType: (shiftTypeId: number) => void;
-}
+function SetShift() {
+  const {
+    state: { ward },
+    actions: { addShiftType, editShiftType, removeShiftType },
+  } = useEditWard();
 
-function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType }: ContentsProps) {
-  const [openModal, setOpenModal] = useState(false);
-  const [id, setId] = useState(0);
-  const [editShift, setEditShift] = useState<CreateShiftTypeRequest | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [editShift, setEditShift] = useState<ShiftType | null>(null);
 
-  const handleWriteShift = (shiftType: CreateShiftTypeRequest) => {
-    if (editShift) {
-      editShiftType(id, shiftType);
+  const handleWriteShift = (shiftType: CreateShiftTypeRequest, shiftTypeId?: number) => {
+    if (shiftTypeId) {
+      editShiftType(shiftTypeId, shiftType);
       setEditShift(null);
     } else {
       addShiftType(shiftType);
     }
-    setOpenModal(false);
+    setEditShift(null);
   };
 
   const handleDeleteShift = (shiftTypeId: number) => {
@@ -38,7 +36,7 @@ function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType 
         <p className="flex-1 text-center font-apple text-[1.5rem] text-sub-2.5">색상</p>
         <p className="flex-1"></p>
       </div>
-      {shiftTypeList.map((shiftType, index) => (
+      {ward?.shiftTypes.map((shiftType, index) => (
         <div key={index} className="flex h-[9.1875rem] items-center">
           <div className="flex flex-[2] items-center justify-center font-poppins text-[2.25rem] text-sub-2.5">
             {shiftType.name}
@@ -73,7 +71,7 @@ function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType 
               id={`color_picker_${index}`}
               className="absolute translate-x-[100%] translate-y-[50%] opacity-0"
               type="color"
-              value={shiftType.color}
+              defaultValue={shiftType.color}
             />
           </div>
           <div className="flex flex-1 justify-end">
@@ -82,7 +80,6 @@ function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType 
                 className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                 onClick={() => {
                   setEditShift(shiftType);
-                  setId(shiftType.shiftTypeId);
                   setOpenModal(true);
                 }}
               />
@@ -107,10 +104,13 @@ function SetShift({ shiftTypeList, addShiftType, editShiftType, removeShiftType 
         <p className="font-apple text-[1.25rem] text-sub-2.5">새로운 근무/휴가 추가하기</p>
       </div>
       <CreateShiftModal
-        shiftType={editShift}
         open={openModal}
-        setOpen={setOpenModal}
-        onSubmit={handleWriteShift}
+        close={() => {
+          setEditShift(null);
+          setOpenModal(false);
+        }}
+        shiftType={editShift}
+        onSubmit={(shiftType) => handleWriteShift(shiftType, editShift?.shiftTypeId)}
       />
     </div>
   );

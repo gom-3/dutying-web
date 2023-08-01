@@ -2,46 +2,25 @@ import Toolbar from './components/Toolbar';
 import CountDutyByDay from './components/CountDutyByDay';
 import ShiftCalendar from './components/ShiftCalendar';
 import Panel from './components/Panel';
-import useMakeShiftPageHook from './index.hook';
 import EditNurseTab from '../MemberPage/RegistMemberPage/components/Editor';
-import useRegistNurse from '@pages/MemberPage/RegistMemberPage/useRegistNurse';
+import { useState } from 'react';
+import useEditShift from '@hooks/useEditShift';
 
 const MakeShiftPage = () => {
   const {
-    state: { month, shift, focus, foldedLevels, changeStatus, faults, histories, isNurseTabOpen },
-    actions: { changeFocus, foldLevel, changeMonth, setIsNurseTabOpen, updateCarry },
-  } = useMakeShiftPageHook();
-  const { nurse, selectNurse, updateNurse, updateNurseShift } = useRegistNurse();
+    state: { shiftStatus },
+  } = useEditShift();
+  const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
 
-  return shift ? (
+  return shiftStatus === 'success' ? (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
-      <Toolbar month={month} shift={shift} changeStatus={changeStatus} changeMonth={changeMonth} />
-      <ShiftCalendar
-        month={month}
-        shift={shift}
-        faults={faults}
-        focus={focus}
-        foldedLevels={foldedLevels}
-        changeFocus={changeFocus}
-        foldLevel={foldLevel}
-        isEditable
-        setNurseTabOpen={setIsNurseTabOpen}
-        selectNurse={selectNurse}
-        updateCarry={updateCarry}
-      />
+      <Toolbar />
+      <ShiftCalendar isEditable setNurseTabOpen={setIsNurseTabOpen} />
       <div className="sticky bottom-0 z-20 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[6.5rem]">
-        <CountDutyByDay focus={focus} shift={shift} />
-        <Panel histories={histories} faults={faults} />
+        <CountDutyByDay />
+        <Panel />
       </div>
-      {isNurseTabOpen && (
-        <EditNurseTab
-          close={() => setIsNurseTabOpen(false)}
-          isFixed
-          nurse={nurse}
-          updateNurse={updateNurse}
-          updateNurseShift={updateNurseShift}
-        />
-      )}
+      {isNurseTabOpen && <EditNurseTab close={() => setIsNurseTabOpen(false)} isFixed />}
     </div>
   ) : null;
 };

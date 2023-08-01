@@ -1,11 +1,14 @@
 import { CheckedIcon, FullLogo, LogoSymbolFill, UncheckedIcon } from '@assets/svg';
-import useCreateAccount from './components/useCreateAccount';
 import TextField from '@components/TextField';
 import Button from '@components/Button';
 import Select from '@components/Select';
+import useCreateAccount from '@hooks/useCreateAccount';
 
 function SetAccount() {
-  const { account, isFilled, handleChangeAccount, handleCreateAccount } = useCreateAccount();
+  const {
+    state: { account, isFilled },
+    actions: { handleChangeAccount, handleCreateAccount },
+  } = useCreateAccount();
 
   return (
     <div className="mx-auto flex h-full w-[52%] flex-col items-center bg-[#FDFCFE] pt-[7.6875rem]">

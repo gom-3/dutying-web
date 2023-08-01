@@ -40,12 +40,14 @@ export const event = {
 };
 
 export const sendEvent = (event: Event, label?: string) => {
-  ReactGA.event({
-    category: event.category,
-    action: event.action,
-    label,
-  });
-  ReactPixel.trackCustom(event.action, { label });
-  hackleClient.track({ key: event.action, properties: { label } });
-  logEvent(analytics, event.action, { label });
+  if (import.meta.env.PROD) {
+    ReactGA.event({
+      category: event.category,
+      action: event.action,
+      label,
+    });
+    ReactPixel.trackCustom(event.action, { label });
+    hackleClient.track({ key: event.action, properties: { label } });
+    analytics && logEvent(analytics, event.action, { label });
+  }
 };
