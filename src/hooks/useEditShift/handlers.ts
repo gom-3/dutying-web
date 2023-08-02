@@ -6,13 +6,12 @@ export const moveFocusByKeydown = (
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const { level, day, row } = focus;
-  const levelCnt = shift.levelNurses.length;
-  const rowCnt = shift.levelNurses[level].length;
+  const flatNurses = shift.levelNurses.flatMap<{ nurse: Nurse }>((x) => x).map((x) => x.nurse);
+  const { day, nurse } = focus;
   const dayCnt = shift.days.length;
-  let newLevel = level;
+  const nurseIndex = flatNurses.findIndex((x) => x.nurseId === nurse.nurseId);
+  let newNurse = nurse;
   let newDay = day;
-  let newRow = row;
 
   if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
     e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
@@ -21,64 +20,58 @@ export const moveFocusByKeydown = (
   switch (e.key) {
     case 'ArrowLeft': {
       if (day === 0) {
-        if (row === 0) {
-          newLevel = level === 0 ? levelCnt - 1 : level - 1;
+        if (nurseIndex === 0) {
           newDay = dayCnt - 1;
-          newRow = shift.levelNurses[newLevel].length - 1;
+          newNurse = flatNurses[flatNurses.length - 1];
         } else {
+          newNurse = flatNurses[nurseIndex - 1];
           newDay = dayCnt - 1;
-          newRow = row - 1;
         }
       } else {
         newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
-        newRow = row;
       }
       break;
     }
     case 'ArrowRight': {
       if (day === dayCnt - 1) {
-        if (row === rowCnt - 1) {
-          newLevel = level === levelCnt - 1 ? 0 : level + 1;
+        if (nurseIndex === flatNurses.length - 1) {
+          newNurse = flatNurses[0];
           newDay = 0;
-          newRow = 0;
         } else {
-          newRow = row + 1;
+          newNurse = flatNurses[nurseIndex + 1];
           newDay = 0;
         }
       } else {
         newDay = e.ctrlKey || e.metaKey ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
-        newRow = row;
       }
       break;
     }
     case 'ArrowUp': {
-      if (row === 0) {
-        newLevel = level === 0 ? levelCnt - 1 : level - 1;
+      if (nurseIndex === 0) {
+        newNurse = flatNurses[flatNurses.length - 1];
         newDay = day;
-        newRow = shift.levelNurses[newLevel].length - 1;
       } else {
+        newNurse = e.ctrlKey || e.metaKey ? flatNurses[0] : flatNurses[nurseIndex - 1];
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
       }
       break;
     }
     case 'ArrowDown': {
-      if (row === rowCnt - 1) {
-        newLevel = level === levelCnt - 1 ? 0 : level + 1;
+      if (nurseIndex === flatNurses.length - 1) {
+        newNurse = flatNurses[0];
         newDay = day;
-        newRow = 0;
       } else {
+        newNurse =
+          e.ctrlKey || e.metaKey ? flatNurses[flatNurses.length - 1] : flatNurses[nurseIndex + 1];
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? rowCnt - 1 : row + 1;
       }
       break;
     }
   }
 
   setFocus({
-    level: newLevel,
     day: newDay,
-    row: newRow,
+    nurse: newNurse,
   });
 };
 
@@ -172,8 +165,7 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
           faults.set(Object.values(focus).join(), {
             type: option.type,
             faultType: key,
-            nurse: row.nurse,
-            focus,
+            focus: { nurse: row.nurse, day: match.index - 1 },
             message: option.message,
             matchString: match[0]
               .split('')

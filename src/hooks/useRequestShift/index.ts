@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRequestShift, updateRequestShift } from '@libs/api/shift';
@@ -42,7 +43,7 @@ const useRequestShift = () => {
         year,
         month,
         requestShift.days[focus.day].day,
-        requestShift.levelNurses[focus.level][focus.row].nurse.nurseId,
+        focus.nurse.nurseId,
         shiftTypeId
       ),
     {
@@ -58,8 +59,11 @@ const useRequestShift = () => {
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].reqShift =
-              newShiftTypeIndex;
+            draft.levelNurses
+              .flatMap((x) => x)
+              .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[
+              focus.day
+            ].reqShift = newShiftTypeIndex;
           })
         );
 
@@ -108,8 +112,10 @@ const useRequestShift = () => {
     if (
       !focus ||
       !requestShift ||
-      requestShift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].reqShift ===
-        requestShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+      requestShift.levelNurses
+        .flatMap((x) => x)
+        .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[focus.day]
+        .reqShift === requestShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
     )
       return;
     focusedShiftChange({ requestShift, focus, shiftTypeId });

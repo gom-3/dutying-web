@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
 
 interface State {
@@ -8,7 +8,7 @@ interface State {
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
-  histories: EditHistory[];
+  editHistory: EditHistory;
   faults: Faults;
   checkFaultOptions: CheckFaultOptions | null;
 }
@@ -19,22 +19,31 @@ interface Store extends State {
 }
 
 const useEditShiftStore = create<Store>()(
-  devtools((set, get) => ({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
-    focus: null,
-    focusedDayInfo: null,
-    foldedLevels: null,
-    histories: [],
-    faults: new Map(),
-    checkFaultOptions: null,
-    setState: (key, value) =>
-      set(
-        produce(get(), (draft) => {
-          draft[key] = value;
-        })
-      ),
-  }))
+  devtools(
+    persist(
+      (set, get) => ({
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        focus: null,
+        focusedDayInfo: null,
+        foldedLevels: null,
+        editHistory: [],
+        historyIndex: 0,
+        faults: new Map(),
+        checkFaultOptions: null,
+        setState: (key, value) =>
+          set(
+            produce(get(), (draft) => {
+              draft[key] = value;
+            })
+          ),
+      }),
+      {
+        name: 'useEditShiftStore',
+        partialize: ({ editHistory }: Store) => ({ editHistory }),
+      }
+    )
+  )
 );
 
 export default useEditShiftStore;

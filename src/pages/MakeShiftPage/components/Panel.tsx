@@ -47,7 +47,7 @@ function Panel() {
                 key={index}
                 className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
               >
-                {fault.nurse.name} / {fault.focus.day + 1}일: {fault.message}
+                {fault.focus.nurse.name} / {fault.focus.day + 1}일: {fault.message}
               </p>
             ))
           : [...histories].reverse().map((history, index) => (
@@ -55,7 +55,7 @@ function Panel() {
                 key={index}
                 className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
               >
-                {history.nurse.name} / {history.focus.day + 1}일 |{' '}
+                {history.focus.nurse.name} / {history.focus.day + 1}일 |{' '}
                 {match(history)
                   .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
                   .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
