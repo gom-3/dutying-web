@@ -27,7 +27,7 @@ const useEditShiftStore = create<Store>()(
         focus: null,
         focusedDayInfo: null,
         foldedLevels: null,
-        editHistory: [],
+        editHistory: new Map(),
         historyIndex: 0,
         faults: new Map(),
         checkFaultOptions: null,
@@ -40,6 +40,32 @@ const useEditShiftStore = create<Store>()(
       }),
       {
         name: 'useEditShiftStore',
+        storage: {
+          getItem: (name) => {
+            const str = localStorage.getItem(name);
+            if (!str) return null;
+            const { state } = JSON.parse(str);
+            return {
+              state: {
+                ...state,
+                editHistory: new Map(state.editHistory),
+              },
+            };
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setItem: (name, newValue: any) => {
+            // functions cannot be JSON encoded
+            const str = JSON.stringify({
+              state: {
+                ...newValue.state,
+                editHistory: Array.from(newValue.state.editHistory.entries()),
+              },
+            });
+            localStorage.setItem(name, str);
+          },
+          removeItem: (name) => localStorage.removeItem(name),
+        },
+
         partialize: ({ editHistory }: Store) => ({ editHistory }),
       }
     )

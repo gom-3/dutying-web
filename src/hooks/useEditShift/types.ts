@@ -12,14 +12,18 @@ type DayInfo = {
   message: string;
 };
 
-type EditHistory = {
-  year: number;
-  month: number;
-  focus: Focus;
-  prevShiftType: ShiftType | null;
-  nextShiftType: ShiftType | null;
-  dateString: string;
-}[];
+type EditHistory = Map<
+  string,
+  {
+    current: number;
+    history: {
+      focus: Focus;
+      prevShiftType: ShiftType | null;
+      nextShiftType: ShiftType | null;
+      dateString: string;
+    }[];
+  }
+>;
 
 type FaultType =
   | 'twoOffAfterNight' // NOD | NOE

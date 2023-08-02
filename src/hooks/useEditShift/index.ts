@@ -71,6 +71,7 @@ const useEditShift = () => {
           day,
         } = focus;
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+        const oldEditHistory = editHistory;
 
         if (!oldShift) return;
         const oldShiftTypeIndex = oldShift.levelNurses
@@ -85,7 +86,16 @@ const useEditShift = () => {
           nextShiftType: oldShift.shiftTypes.find((x) => x.shiftTypeId === shiftTypeId) || null,
           dateString: new Date().toLocaleString(),
         };
-        setState('editHistory', [...editHistory, edit]);
+        setState(
+          'editHistory',
+          produce(oldEditHistory, (draft) => {
+            if (draft.get(year + '' + month)) {
+              draft.get(year + '' + month)!.history.push(edit);
+            } else {
+              draft.set(year + '' + month, { current: 0, history: [edit] });
+            }
+          })
+        );
 
         const newShiftTypeIndex = shiftTypeId
           ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
@@ -112,16 +122,17 @@ const useEditShift = () => {
               )
         );
 
-        return { oldShift, edit };
+        return { oldShift, oldEditHistory };
       },
       onError: (_, __, context) => {
-        if (context === undefined || context.oldShift === undefined || context.edit === undefined)
+        if (
+          context === undefined ||
+          context.oldShift === undefined ||
+          context.oldEditHistory === undefined
+        )
           return;
         queryClient.setQueryData(shiftQueryKey, context.oldShift);
-        setState(
-          'editHistory',
-          editHistory.filter((x) => x !== context.edit)
-        );
+        setState('editHistory', context.oldEditHistory);
       },
     }
   );
@@ -245,7 +256,7 @@ const useEditShift = () => {
       shift,
       focus,
       faults,
-      histories: editHistory.filter((x) => x.month === month && x.year === year),
+      histories: editHistory.get(year + '' + month),
       focusedDayInfo,
       foldedLevels,
       changeStatus,

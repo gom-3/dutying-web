@@ -50,7 +50,8 @@ function Panel() {
                 {fault.focus.nurse.name} / {fault.focus.day + 1}일: {fault.message}
               </p>
             ))
-          : [...histories].reverse().map((history, index) => (
+          : histories &&
+            [...histories.history].reverse().map((history, index) => (
               <p
                 key={index}
                 className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
