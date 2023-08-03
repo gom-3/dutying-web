@@ -7,6 +7,7 @@ import { match } from 'ts-pattern';
 function Panel() {
   const {
     state: { faults, histories },
+    actions: { moveHistory },
   } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('faults');
@@ -51,21 +52,36 @@ function Panel() {
               </p>
             ))
           : histories &&
-            [...histories.history].reverse().map((history, index) => (
-              <p
-                key={index}
-                className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
-              >
-                {history.focus.nurse.name} / {history.focus.day + 1}일 |{' '}
-                {match(history)
-                  .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
-                  .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
-                  .otherwise(
-                    () =>
-                      `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+            [...histories.history].reverse().map((history, index) => {
+              const isPast = histories.history.length - index - 1 > histories.current;
+              return (
+                <p
+                  key={index}
+                  className={twMerge(
+                    'cursor-pointer border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none',
+                    isPast ? 'text-sub-3' : 'text-sub-2'
                   )}
-              </p>
-            ))}
+                  onClick={() =>
+                    moveHistory(histories.history.length - index - 1 - histories.current)
+                  }
+                >
+                  {history.focus.nurse.name} / {history.focus.day + 1}일 |{' '}
+                  {match(history)
+                    .with(
+                      { prevShiftType: null },
+                      () => `추가 → ${history.nextShiftType?.shortName}`
+                    )
+                    .with(
+                      { nextShiftType: null },
+                      () => `${history.prevShiftType?.shortName} → 삭제`
+                    )
+                    .otherwise(
+                      () =>
+                        `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+                    )}
+                </p>
+              );
+            })}
       </div>
       <div
         className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"

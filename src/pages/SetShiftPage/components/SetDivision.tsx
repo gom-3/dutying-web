@@ -6,7 +6,6 @@ function SetDivision() {
     actions: { changeTempWard },
   } = useEditWard();
 
-  console.log(tempWard);
   return tempWard ? (
     <div className="mx-auto h-full w-[80%] pt-[4.375rem]">
       <p className="font-apple text-[1.5rem] text-sub-2">

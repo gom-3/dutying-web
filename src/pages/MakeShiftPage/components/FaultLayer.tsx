@@ -27,7 +27,7 @@ function FaultLayer({ fault, children }: Props) {
       </div>
       <div className="invisible absolute bottom-[-1.625rem] z-30 whitespace-nowrap rounded-md bg-white px-2 py-1 font-apple text-sm text-sub-1 shadow-shadow-1 group-hover:visible">
         <div
-          className="absolute top-[-0.375rem] h-0 w-0"
+          className="absolute left-[50%] top-[-0.375rem] h-0 w-0 translate-x-[-50%]"
           style={{
             borderTop: '.625rem solid none',
             borderLeft: '.4375rem solid transparent',

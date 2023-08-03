@@ -65,7 +65,6 @@ const useEditShiftStore = create<Store>()(
           },
           removeItem: (name) => localStorage.removeItem(name),
         },
-
         partialize: ({ editHistory }: Store) => ({ editHistory }),
       }
     )

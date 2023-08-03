@@ -80,7 +80,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
           </div>
         </div>
         <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
-          {shift.shiftTypes.map((shiftType, index) => (
+          {shift.shiftTypes.slice(0, 4).map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
@@ -141,11 +141,11 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           onClick={(e) => {
                             e.currentTarget.select();
                           }}
-                          onChange={(e) => {
-                            console.log(e.target.value);
-                            if (/[0-9]+/.test(e.target.value)) {
-                              updateCarry(row.nurse.nurseId, parseInt(e.target.value));
-                            }
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowUp')
+                              updateCarry(row.nurse.nurseId, row.carried + 1);
+                            if (e.key === 'ArrowDown')
+                              updateCarry(row.nurse.nurseId, row.carried - 1);
                           }}
                         />
                       </div>
@@ -215,7 +215,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                 <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                   {rows.map((row, i) => (
                     <div key={i} className="flex h-[3.25rem] items-center">
-                      {shift.shiftTypes.map((_, index) => (
+                      {shift.shiftTypes.slice(0, 4).map((_, index) => (
                         <div
                           key={index}
                           className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"

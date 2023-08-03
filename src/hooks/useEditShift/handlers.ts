@@ -68,11 +68,12 @@ export const moveFocusByKeydown = (
       break;
     }
   }
-
-  setFocus({
-    day: newDay,
-    nurse: newNurse,
-  });
+  if (newDay != day || newNurse != nurse) {
+    setFocus({
+      day: newDay,
+      nurse: newNurse,
+    });
+  }
 };
 
 export const keydownEventMapper = (
