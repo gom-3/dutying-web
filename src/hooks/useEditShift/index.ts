@@ -192,6 +192,16 @@ const useEditShift = () => {
           shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
       )
         return;
+
+      const { reqShift: request, shift: current } =
+        shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day];
+      if (
+        request != null &&
+        request === current &&
+        !confirm('신청 근무입니다 정말 바꾸시겠습니까?')
+      )
+        return;
+
       mutateShift({ shift, focus, shiftTypeId });
     },
     [focus, shift]
