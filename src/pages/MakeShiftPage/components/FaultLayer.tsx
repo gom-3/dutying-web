@@ -12,13 +12,14 @@ function FaultLayer({ fault, children }: Props) {
         style={{
           width: `calc(2.125rem + 2.25rem * ${fault.length - 1})`,
         }}
-        className={`group absolute left-[.0625rem] z-10 h-[2.125rem] rounded-[.5625rem] border-[.125rem]
-        ${
-          fault.type === 'wrong'
-            ? 'border-[#FF0000] bg-[#ff000033]'
-            : 'border-[#F88600] bg-[#f8860033]'
-        }
-      `}
+        className={`group absolute left-[.0625rem] z-10 h-[2.125rem] rounded-[.5625rem] border-[.125rem] border-[#FF0000] bg-[#ff000033]`}
+        // className={`group absolute left-[.0625rem] z-10 h-[2.125rem] rounded-[.5625rem] border-[.125rem]
+        //   ${
+        //     fault.type === 'wrong'
+        //       ? 'border-[#FF0000] bg-[#ff000033]'
+        //       : 'border-[#F88600] bg-[#f8860033]'
+        //   }
+        // `}
       >
         <FaultDotIcon className="absolute right-0 top-[-0.85rem] h-[.75rem] w-[.75rem]" />
         {children}
