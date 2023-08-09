@@ -1,5 +1,5 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { FoldDutyIcon } from '@assets/svg';
+import { DragIcon, FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
@@ -19,7 +19,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     actions: { selectNurse },
   } = useEditNurse();
   const {
-    state: { month, shift, focus, faults, foldedLevels },
+    state: { shift, focus, faults, foldedLevels },
     actions: { changeFocus, foldLevel, updateCarry },
   } = useEditShift();
   const focusedCellRef = useRef<HTMLElement>(null);
@@ -55,7 +55,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            구분
+            {/* 구분 */}
           </div>
           <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             이름
@@ -71,9 +71,23 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
               <p
                 key={j}
                 className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 
-                ${j === focus?.day && 'rounded-full bg-main-1 text-white'}`}
+                  ${
+                    item.dayType === 'saturday'
+                      ? j === focus?.day
+                        ? 'rounded-full bg-[#436DFF] text-white'
+                        : 'text-[#436DFF]'
+                      : item.dayType === 'sunday' || item.dayType === 'holiday'
+                      ? j === focus?.day
+                        ? 'rounded-full bg-[#FF4A80] text-white'
+                        : 'text-[#FF4A80]'
+                      : item.dayType === 'workday'
+                      ? j === focus?.day
+                        ? 'rounded-full bg-main-1 text-white'
+                        : 'text-main-1'
+                      : ''
+                  }
+                `}
               >
-                {j === focus?.day ? month + '/' : ''}
                 {item.day}
               </p>
             ))}
@@ -89,7 +103,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
         </div>
       </div>
       <div
-        className="m-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
+        className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pt-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
         {shift.levelNurses.map((rows, level) => {
@@ -97,7 +111,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
             shift && foldedLevels[level] ? (
               <div
                 key={level}
-                className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
+                className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
                 onClick={() => {
                   sendEvent(event.clickFoldLevelButton, 'close');
                   foldLevel(level);
@@ -107,9 +121,8 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
               </div>
             ) : (
               <div key={level} className="flex gap-[1.25rem]">
-                <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-                  <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
-                    {/* {level} */}
+                <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
+                  <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
                     <FoldDutyIcon
                       className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                       onClick={() => {
@@ -122,9 +135,14 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                     <div
                       key={rowIndex}
                       className={`flex h-[3.25rem] items-center gap-[1.25rem]
-                  ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}`}
+                  ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}
+                  ${rowIndex === 0 && 'rounded-t-[1.25rem]'}
+                  ${rowIndex === rows.length - 1 && 'rounded-b-[1.25rem]'}
+                  `}
                     >
-                      <div className="w-[3.375rem] shrink-0"></div>
+                      <div className="relative w-[2.125rem] shrink-0">
+                        <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
+                      </div>
                       <div
                         className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                         onClick={() => {

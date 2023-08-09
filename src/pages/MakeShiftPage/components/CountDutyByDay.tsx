@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import useEditShift from '@hooks/useEditShift';
-import { mockShiftStandard } from '@mocks/shift';
 
 function CountDutyByDay() {
   const {
     state: { focus, shift },
   } = useEditShift();
-  const [dutyStandard] = useState(mockShiftStandard);
 
   return (
     shift && (
@@ -24,18 +21,6 @@ function CountDutyByDay() {
               style={{ backgroundColor: shiftType.color }}
             >
               {shiftType.shortName}
-            </div>
-            <div className="flex w-[3.4375rem] items-center justify-center gap-[.3125rem] font-apple text-[.875rem] text-sub-3">
-              평일
-              <span className="font-poppins text-[1.25rem] text-sub-2">
-                {dutyStandard.workday[index + 1]}
-              </span>
-            </div>
-            <div className="flex w-[3.4375rem] items-center justify-center gap-[.3125rem] font-apple text-[.875rem] text-sub-3">
-              주말
-              <span className="font-poppins text-[1.25rem] text-sub-2">
-                {dutyStandard.weekend[index + 1]}
-              </span>
             </div>
             <div className="flex h-full px-[1rem] text-center">
               {shift.days.map((_date, i) => (
