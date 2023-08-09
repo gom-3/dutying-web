@@ -1,4 +1,4 @@
-import { ChatIcon } from '@assets/svg';
+import { ChatIcon, RequestCheckIcon, RequestSlashIcon } from '@assets/svg';
 
 interface Props {
   request: ShiftType;
@@ -13,6 +13,11 @@ function RequestLayer({ isAccept, request }: Props) {
         ${isAccept ? 'border-[#06E738] bg-[#06e73833]' : 'border-[#0027F4] bg-[#0027f433]'}
       `}
       >
+        {isAccept ? (
+          <RequestCheckIcon className="absolute right-0 top-[-0.85rem] h-[.75rem] w-[.75rem]" />
+        ) : (
+          <RequestSlashIcon className="absolute right-0 top-[-0.85rem] h-[.75rem] w-[.75rem]" />
+        )}
         {!isAccept && (
           <div className="invisible relative top-[-1.3125rem] z-[1] flex justify-center group-hover:visible">
             <ChatIcon className="absolute h-[1.25rem] w-[1.0625rem]" fill={request.color} />
