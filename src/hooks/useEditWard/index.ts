@@ -61,6 +61,7 @@ const useEditWard = () => {
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(getWardQueryKey);
+        await queryClient.invalidateQueries(['shift']);
         setState('tempWard', ward);
       },
     }

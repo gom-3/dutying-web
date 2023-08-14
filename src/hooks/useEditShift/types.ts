@@ -22,15 +22,13 @@ type EditHistory = {
 };
 
 type FaultType =
-  | 'twoOffAfterNight' // NOD | NOE
+  | 'offAfterNight' // NOD | NOE
   | 'ed' // ED
   | 'maxContinuousWork' // DDDEEE
   | 'maxContinuousNight' // NNNN
   | 'minNightInterval' // NOON
-  | 'singleNight' // ONO
-  | 'maxContinuousOff' // OOOO
-  | 'pongdang' // EOEO | DODO
-  | 'noeeod'; // NOE | EOD
+  | 'minContinuousNight' // ONO
+  | 'noNightBeforeReqOff'; // EOEO | DODO
 
 type CheckFaultOptions = {
   [key in FaultType]: {

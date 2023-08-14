@@ -95,58 +95,52 @@ export const keydownEventMapper = (
 
 export const updateCheckFaultOption = (ward: Ward) => {
   return {
-    twoOffAfterNight: {
+    offAfterNight: {
       isActive: true,
-      regExp: new RegExp(`2([01]|3[012])`, 'g'),
+      regExp: new RegExp(`n([de]|o[den])`, 'g'),
       message: `나이트 근무 후 2일 이상 OFF를 권장합니다.`,
       type: 'wrong',
     },
     ed: {
       isActive: true,
-      regExp: new RegExp(`10`, 'g'),
-      message: `E 근무 후 D 근무는 권장되지 않습니다.`,
+      regExp: new RegExp(`(ed|nd|ne|nod)`, 'g'),
+      message: `ND/ED/NE/NOD 형태의 근무는 권장되지 않습니다.`,
       type: 'wrong',
     },
     maxContinuousWork: {
       isActive: true,
-      regExp: new RegExp(`(?<=[^012])[012]{${ward.maxContinuousWork + 1},}(?=[^012])`, 'g'),
+      regExp: new RegExp(`(?<=[^den])[den]{${ward.maxContinuousWork + 1},}(?=[^den])`, 'g'),
       message: `근무는 연속 ${ward.maxContinuousWork}일을 초과할 수 없습니다.`,
       type: 'wrong',
     },
     maxContinuousNight: {
       isActive: true,
-      regExp: new RegExp(`2{${ward.maxContinuousNight + 1},}`, 'g'),
+      regExp: new RegExp(`n{${ward.maxContinuousNight + 1},}`, 'g'),
       message: `나이트 근무가 연속 ${ward.maxContinuousNight}일을 초과했습니다`,
       type: 'wrong',
     },
     minNightInterval: {
       isActive: true,
-      regExp: new RegExp(`2[^2]{1,${ward.minNightInterval - 1}}2`, 'g'),
+      regExp: new RegExp(`n[^n]{e,${ward.minNightInterval - 1}}n`, 'g'),
       message: `나이트 간격이 최소 ${ward.minNightInterval}일 이상이어야 합니다.`,
       type: 'wrong',
     },
-    singleNight: {
+    minContinuousNight: {
       isActive: true,
-      regExp: new RegExp(`(?<!(2|x))2(?!(2|x))`, 'g'),
+      regExp: new RegExp(`(?<!(n|-))n(?!(n|-))`, 'g'),
       message: `단일 나이트 근무는 권장되지 않습니다.`,
-      type: 'bad',
-    },
-    maxContinuousOff: {
-      isActive: false,
-      regExp: new RegExp(`3{4,}`, 'g'),
-      message: `OFF가 연속 3일을 초과했습니다.`,
-      type: 'bad',
-    },
-    pongdang: {
-      isActive: true,
-      regExp: new RegExp(`(3030|0303|1313|3131)`, 'g'),
-      message: `퐁당퐁당 근무입니다.`,
       type: 'bad',
     },
     noeeod: {
       isActive: true,
-      regExp: new RegExp(`130`, 'g'),
+      regExp: new RegExp(`eod`, 'g'),
       message: `EOD 형태의 근무는 권장되지 않습니다.`,
+      type: 'bad',
+    },
+    noNightBeforeReqOff: {
+      isActive: true,
+      regExp: new RegExp(`nO`, 'g'),
+      message: `신청 오프 전날에는 나이트 근무를 권장하지 않습니다.`,
       type: 'bad',
     },
   } as CheckFaultOptions;
@@ -161,8 +155,16 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
       const row = level[j];
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
-        let str = row.shiftTypeIndexList.map((x) => (x.shift === null ? 'x' : x.shift)).join('');
-        str = 'x' + str + 'x'; // 단일 나이트 검사를 위한 처리
+        let str = row.shiftTypeIndexList
+          .map((x) =>
+            x.shift === null
+              ? '-'
+              : x.shift === x.reqShift
+              ? shift.shiftTypes[x.shift].shortName.toUpperCase()
+              : shift.shiftTypes[x.shift].shortName.toLowerCase()
+          )
+          .join('');
+        str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const match = option.regExp.exec(str);
@@ -175,11 +177,7 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
             nurse: row.nurse,
             focus,
             message: option.message,
-            matchString: match[0]
-              .split('')
-              .map((x) => (x === 'x' ? '-' : shift.shiftTypes[Number(x)].shortName))
-              .map((x) => (x === '/' ? 'O' : x))
-              .join(''),
+            matchString: match[0],
             length: match[0].length,
           });
         }

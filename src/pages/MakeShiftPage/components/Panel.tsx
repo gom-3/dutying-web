@@ -21,7 +21,7 @@ function Panel() {
     >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
+          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
@@ -31,14 +31,19 @@ function Panel() {
           기록
         </div>
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
+          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
           ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
             sendEvent(event.clickHistoryTab);
           }}
         >
-          문제점
+          <p className="relative">
+            문제점
+            <span className="absolute right-0 top-0 flex h-[.875rem] w-[.875rem] translate-x-[100%] items-center justify-center rounded-full bg-main-2 font-apple text-[.625rem] text-white">
+              {[...faults.values()].length}
+            </span>
+          </p>
         </div>
       </div>
       <div className="flex flex-1 flex-col overflow-y-scroll scrollbar-hide">
