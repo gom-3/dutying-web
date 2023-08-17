@@ -76,7 +76,7 @@ const useEditShift = () => {
         year,
         month,
         shift.days[focus.day].day,
-        shift.divisionNumNurses[focus.level][focus.row].nurse.nurseId,
+        shift.divisionNumNurses[focus.level][focus.row].shiftNurse.nurseId,
         shiftTypeId
       ),
     {
@@ -89,7 +89,7 @@ const useEditShift = () => {
           oldShift.divisionNumNurses[focus.level][focus.row].wardShiftList[focus.day];
 
         const history: EditHistory = {
-          nurse: oldShift.divisionNumNurses[focus.level][focus.row].nurse,
+          nurse: oldShift.divisionNumNurses[focus.level][focus.row].shiftNurse,
           focus,
           prevShiftType:
             oldShiftTypeIndex !== null ? oldShift.wardShiftTypes[oldShiftTypeIndex] : null,
@@ -154,7 +154,7 @@ const useEditShift = () => {
           produce(oldShift, (draft) => {
             const nurse = draft.divisionNumNurses
               .flatMap((rows) => rows)
-              .find((row) => row.nurse.nurseId === nurseId);
+              .find((row) => row.shiftNurse.nurseId === nurseId);
             if (nurse) nurse.carried = value;
           })
         );

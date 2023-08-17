@@ -3,7 +3,7 @@ import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
 import CreateShiftModal from './CreateShiftModal';
 import { useState } from 'react';
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 import { CreateShiftTypeRequest } from '@libs/api/shift';
 
 function SetShift() {

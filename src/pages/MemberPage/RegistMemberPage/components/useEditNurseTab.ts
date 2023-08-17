@@ -15,8 +15,8 @@ const useEditNurseTab = (nurse: Nurse, closeTab: () => void) => {
 
   /** 가능 근무, 선호 근무 체크리스트 업데이트 */
   useEffect(() => {
-    const updatedWorkAvailable: ShiftType[] = [];
-    const updatedWorkPrefer: ShiftType[] = [];
+    const updatedWorkAvailable: WardShiftType[] = [];
+    const updatedWorkPrefer: WardShiftType[] = [];
 
     for (const key in availChecked) {
       if (availChecked[key] === true) {

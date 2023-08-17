@@ -5,7 +5,6 @@ import { produce } from 'immer';
 
 interface State {
   selectedNurseId: number | null;
-  groupedNurses: Nurse[][] | null;
 }
 
 interface Store extends State {
@@ -14,7 +13,6 @@ interface Store extends State {
 
 const initialState: State = {
   selectedNurseId: null,
-  groupedNurses: null,
 };
 
 const useEditNurseStore = create<Store>()(

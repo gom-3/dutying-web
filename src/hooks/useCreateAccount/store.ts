@@ -17,10 +17,7 @@ const initialState: State = {
   account: {
     name: '',
     gender: '여',
-    birthday: '',
     phoneNum: '',
-    employmentDate: '',
-    isWorker: true,
   },
   isFilled: false,
   error: null,

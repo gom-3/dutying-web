@@ -40,7 +40,7 @@ function SetAccount() {
               ]}
             />
           </div>
-          <div className="flex-[4]">
+          {/* <div className="flex-[4]">
             <p className="mb-[.9375rem] font-apple text-[1.25rem] text-sub-3">생일</p>
             <TextField
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
@@ -48,7 +48,7 @@ function SetAccount() {
               placeholder="1999.01.01"
               onChange={(e) => handleChangeAccount('birthday', e.target.value)}
             />
-          </div>
+          </div> */}
           <div className="flex-[5]">
             <p className="mb-[.9375rem] font-apple text-[1.25rem] text-sub-3">전화 번호</p>
             <TextField
@@ -60,15 +60,15 @@ function SetAccount() {
           </div>
         </div>
         <div className="my-[2.9375rem] h-[.0625rem] w-[calc(100%+8.75rem)] translate-x-[-4.375rem] bg-sub-4.5" />
-        <div className="w-[40%]">
+        {/* <div className="w-[40%]">
           <p className="mb-[.9375rem] font-apple text-[1.25rem] text-sub-3">입사 연도</p>
           <TextField
             className="h-[3.75rem] py-[1.0625rem] text-center font-apple text-[1.5rem] font-medium text-sub-1"
             placeholder="YYYY.MM.DD"
-            value={account.employmentDate}
+            value={account}
             onChange={(e) => handleChangeAccount('employmentDate', e.target.value)}
           />
-        </div>
+        </div> */}
         <div className="mt-[1.8125rem] flex w-full">
           <div className="flex flex-1 items-center gap-[4.375rem]">
             <div>

@@ -1,4 +1,4 @@
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 
 function Stepper() {
   const {

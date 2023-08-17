@@ -1,5 +1,5 @@
 import TextField from '@components/TextField';
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 
 function SetWard() {
   const {

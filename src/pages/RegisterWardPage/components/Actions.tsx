@@ -1,7 +1,7 @@
 import Button from '@components/Button';
 import { useNavigate } from 'react-router';
 import { HOME } from '@libs/constant/path';
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 
 function Actions() {
   const {

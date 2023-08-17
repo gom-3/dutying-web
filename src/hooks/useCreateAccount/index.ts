@@ -24,12 +24,12 @@ const useCreateAccount = () => {
         if (value.length > 13) return;
       }
     }
-    if (key === 'birthday' || key === 'employmentDate') {
-      if (/![d|.]/.test(value as string)) return;
-      if (typeof value === 'string') {
-        if (value.length > 10) return;
-      }
-    }
+    // if (key === 'birthday' || key === 'employmentDate') {
+    //   if (/![d|.]/.test(value as string)) return;
+    //   if (typeof value === 'string') {
+    //     if (value.length > 10) return;
+    //   }
+    // }
     setState('account', { ...account, [key]: value });
   };
 
@@ -43,22 +43,22 @@ const useCreateAccount = () => {
       });
       return false;
     }
-    if (
-      !/^(19[0-9][0-9]|20\d{2}).(0[0-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/.test(account.birthday)
-    ) {
-      setState('isFilled', false);
-      setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
-      return false;
-    }
-    if (
-      !/^(19[0-9][0-9]|20\d{2}).(0[0-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/.test(
-        account.employmentDate
-      )
-    ) {
-      setState('isFilled', false);
-      setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
-      return false;
-    }
+    // if (
+    //   !/^(19[0-9][0-9]|20\d{2}).(0[0-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/.test(account.birthday)
+    // ) {
+    //   setState('isFilled', false);
+    //   setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
+    //   return false;
+    // }
+    // if (
+    //   !/^(19[0-9][0-9]|20\d{2}).(0[0-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/.test(
+    //     account.employmentDate
+    //   )
+    // ) {
+    //   setState('isFilled', false);
+    //   setState('error', { key: 'birthday', message: '연도 형식을 지켜주세요.' });
+    //   return false;
+    // }
     if (!/(\d{3})-(\d{4})-(\d{4})/.test(account.phoneNum)) {
       setState('isFilled', false);
       setState('error', { key: 'name', message: '전화번호 형식을 지켜주세요.' });

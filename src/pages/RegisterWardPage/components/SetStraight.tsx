@@ -1,5 +1,5 @@
 import Select from '@components/Select';
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 
 function SetStraight() {
   const {

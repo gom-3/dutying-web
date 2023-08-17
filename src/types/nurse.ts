@@ -19,14 +19,6 @@ type Nurse = {
   name: string;
   /** 간호사 전화번호 */
   phoneNum: string | null;
-  /** 간호사 숙련도
-   * @example
-   * 숙련도 구분이 3일 때
-   * 1 : 액팅 간호사(1-2년차)
-   * 2 : 서브 차지 간호사(3-5년차)
-   * 3 : 차지 간호사(5년 이상)
-   * */
-  level: number;
   /** 간호사 연동 여부 */
   isConnected: boolean;
   /** 근무 리스트 */
@@ -37,6 +29,8 @@ type Nurse = {
     isPossible: boolean;
     isPreferred: boolean;
   }[];
+  /**근무표에 들어가는 사람인가? */
+  isWorker: boolean;
   /**근무표 제작 권한 */
   isDutyManager: boolean;
   /**병동 관리 권한 */
@@ -45,4 +39,7 @@ type Nurse = {
   gender: string;
   /**입사날짜 */
   employmentDate: string;
+  workStartDate: string;
+  workEndDate: string;
+  memo: string;
 };

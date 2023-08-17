@@ -174,7 +174,7 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
           faults.set(Object.values(focus).join(), {
             type: option.type,
             faultType: key,
-            nurse: row.nurse,
+            nurse: row.shiftNurse,
             focus,
             message: option.message,
             matchString: match[0],

@@ -1,6 +1,6 @@
 import { FullLogo, LogoSymbolFill } from '@assets/svg';
 import Actions from './components/Actions';
-import useCreateWard from '@hooks/useCreateWard';
+import useCreateWard from '@hooks/useRequestShift/useCreateWard';
 import { match } from 'ts-pattern';
 import SetWard from './components/SetWard';
 import Stepper from './components/Stepper';

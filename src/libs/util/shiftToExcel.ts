@@ -65,7 +65,7 @@ export const shiftToExcel = (month: number, shift: Shift) => {
 
   flatRows.map((dutyRow) =>
     worksheet.addRow({
-      name: dutyRow.nurse.name,
+      name: dutyRow.shiftNurse.name,
       lastShift: dutyRow.lastWardShiftList
         .map((current) => (current !== null ? shift.wardShiftTypes[current].shortName : ''))
         .join(''),

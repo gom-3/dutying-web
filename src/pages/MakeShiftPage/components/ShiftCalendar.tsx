@@ -147,10 +147,10 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                         className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                         onClick={() => {
                           setNurseTabOpen(true);
-                          selectNurse(row.nurse.nurseId);
+                          selectNurse(row.shiftNurse.nurseId);
                         }}
                       >
-                        {row.nurse.name}
+                        {row.shiftNurse.name}
                       </div>
                       <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
                         <TextField
@@ -162,7 +162,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           onChange={(e) => {
                             console.log(e.target.value);
                             if (/[0-9]+/.test(e.target.value)) {
-                              updateCarry(row.nurse.nurseId, parseInt(e.target.value));
+                              updateCarry(row.shiftNurse.nurseId, parseInt(e.target.value));
                             }
                           }}
                         />

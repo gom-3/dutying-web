@@ -6,7 +6,7 @@ type Focus = {
 };
 
 type DayInfo = {
-  countByShiftList: { count: number; shiftType: ShiftType }[];
+  countByShiftList: { count: number; shiftType: WardShiftType }[];
   month: number;
   day: number;
   nurse: Nurse;
@@ -16,19 +16,19 @@ type DayInfo = {
 type EditHistory = {
   nurse: Nurse;
   focus: Focus;
-  prevShiftType: ShiftType | null;
-  nextShiftType: ShiftType | null;
+  prevShiftType: WardShiftType | null;
+  nextShiftType: WardShiftType | null;
   dateString: string;
 };
 
 type FaultType =
-  | 'offAfterNight' // NOD | NOE
-  | 'ed' // ED
-  | 'maxContinuousWork' // DDDEEE
-  | 'maxContinuousNight' // NNNN
-  | 'minNightInterval' // NOON
-  | 'minContinuousNight' // ONO
-  | 'noNightBeforeReqOff'; // EOEO | DODO
+  | 'maxContinuousWork'
+  | 'minNightInterval'
+  | 'maxContinuousNight'
+  | 'minContinuousNight'
+  | 'minOffAssignAfterNight'
+  | 'excludeCertainWorkTypes'
+  | 'excludeNightBeforeReqOff';
 
 type CheckFaultOptions = {
   [key in FaultType]: {

@@ -11,7 +11,7 @@ function SetShift() {
   } = useEditWard();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [editShift, setEditShift] = useState<ShiftType | null>(null);
+  const [editShift, setEditShift] = useState<WardShiftType | null>(null);
 
   const handleWriteShift = (shiftType: CreateShiftTypeRequest, shiftTypeId?: number) => {
     if (shiftTypeId) {
