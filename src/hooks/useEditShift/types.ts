@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 type Focus = {
-  level: number;
+  nurse: Nurse;
   day: number;
-  row: number;
 };
 
 type DayInfo = {
@@ -13,13 +12,18 @@ type DayInfo = {
   message: string;
 };
 
-type EditHistory = {
-  nurse: Nurse;
-  focus: Focus;
-  prevShiftType: ShiftType | null;
-  nextShiftType: ShiftType | null;
-  dateString: string;
-};
+type EditHistory = Map<
+  string,
+  {
+    current: number;
+    history: {
+      focus: Focus;
+      prevShiftType: ShiftType | null;
+      nextShiftType: ShiftType | null;
+      dateString: string;
+    }[];
+  }
+>;
 
 type FaultType =
   | 'twoOffAfterNight' // NOD | NOE
@@ -44,7 +48,6 @@ type CheckFaultOptions = {
 type Fault = {
   type: 'wrong' | 'bad';
   faultType: FaultType;
-  nurse: Nurse;
   message: string;
   focus: Focus;
   matchString: string;

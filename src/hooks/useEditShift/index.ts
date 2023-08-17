@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
@@ -16,14 +17,14 @@ import {
   updateCheckFaultOption,
 } from './handlers';
 
-const useEditShift = () => {
+const useEditShift = (activeEffect = false) => {
   const [
     year,
     month,
     focus,
     focusedDayInfo,
     foldedLevels,
-    histories,
+    editHistory,
     faults,
     checkFaultOptions,
     setState,
@@ -34,7 +35,7 @@ const useEditShift = () => {
       state.focus,
       state.focusedDayInfo,
       state.foldedLevels,
-      state.histories,
+      state.editHistory,
       state.faults,
       state.checkFaultOptions,
       state.setState,
@@ -61,30 +62,44 @@ const useEditShift = () => {
   );
   const { mutate: mutateShift, status: changeStatus } = useMutation(
     ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) =>
-      updateShift(
-        year,
-        month,
-        shift.days[focus.day].day,
-        shift.levelNurses[focus.level][focus.row].nurse.nurseId,
-        shiftTypeId
-      ),
+      updateShift(year, month, shift.days[focus.day].day, focus.nurse.nurseId, shiftTypeId),
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
+        const {
+          nurse: { nurseId, name },
+          day,
+        } = focus;
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+        const oldEditHistory = editHistory;
 
         if (!oldShift) return;
-        const oldShiftTypeIndex =
-          oldShift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift;
+        const oldShiftTypeIndex = oldShift.levelNurses
+          .flatMap((x) => x)
+          .find((x) => x.nurse.nurseId === nurseId)!.shiftTypeIndexList[day].shift;
 
-        const history: EditHistory = {
-          nurse: oldShift.levelNurses[focus.level][focus.row].nurse,
+        const edit = {
+          year,
+          month,
           focus,
           prevShiftType: oldShiftTypeIndex !== null ? oldShift.shiftTypes[oldShiftTypeIndex] : null,
           nextShiftType: oldShift.shiftTypes.find((x) => x.shiftTypeId === shiftTypeId) || null,
           dateString: new Date().toLocaleString(),
         };
-        setState('histories', [...histories, history]);
+
+        setState(
+          'editHistory',
+          produce(oldEditHistory, (draft) => {
+            const histories = draft.get(year + '' + month);
+            if (histories) {
+              histories.history = histories.history.slice(0, histories.current + 1);
+              histories.history.push(edit);
+              histories.current = histories.history.length - 1;
+            } else {
+              draft.set(year + '' + month, { current: 0, history: [edit] });
+            }
+          })
+        );
 
         const newShiftTypeIndex = shiftTypeId
           ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
@@ -93,36 +108,35 @@ const useEditShift = () => {
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift =
+            draft.levelNurses
+              .flatMap((x) => x)
+              .find((x) => x.nurse.nurseId === nurseId)!.shiftTypeIndexList[day].shift =
               newShiftTypeIndex;
           })
         );
 
         sendEvent(
           event.changeShift,
-          `${history.nurse.name} / ${history.focus.day + 1}일 | ` +
-            match(history)
-              .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
-              .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
+          `${name} / ${day + 1}일 | ` +
+            match(edit)
+              .with({ prevShiftType: null }, () => `추가 → ${edit.nextShiftType?.shortName}`)
+              .with({ nextShiftType: null }, () => `${edit.prevShiftType?.shortName} → 삭제`)
               .otherwise(
-                () => `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+                () => `${edit.prevShiftType?.shortName} → ${edit.nextShiftType?.shortName}`
               )
         );
 
-        return { oldShift, history };
+        return { oldShift, oldEditHistory };
       },
       onError: (_, __, context) => {
         if (
           context === undefined ||
           context.oldShift === undefined ||
-          context.history === undefined
+          context.oldEditHistory === undefined
         )
           return;
         queryClient.setQueryData(shiftQueryKey, context.oldShift);
-        setState(
-          'histories',
-          histories.filter((history) => history !== context.history)
-        );
+        setState('editHistory', context.oldEditHistory);
       },
     }
   );
@@ -188,13 +202,15 @@ const useEditShift = () => {
       if (
         !focus ||
         !shift ||
-        shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].shift ===
+        shift.levelNurses.flatMap((x) => x).find((x) => x.nurse.nurseId === focus.nurse.nurseId)!
+          .shiftTypeIndexList[focus.day].shift ===
           shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
       )
         return;
 
-      const { reqShift: request, shift: current } =
-        shift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day];
+      const { reqShift: request, shift: current } = shift.levelNurses
+        .flatMap((x) => x)
+        .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[focus.day];
       if (
         request != null &&
         request === current &&
@@ -218,8 +234,88 @@ const useEditShift = () => {
     [shift, foldedLevels]
   );
 
+  const moveHistory = (diff: number) => {
+    if (diff === 0) return;
+    if (!editHistory.get(year + '' + month)) return;
+    const { current, history } = editHistory.get(year + '' + month)!;
+    const changesMap = new Map<string, number | null>();
+
+    let lastFocus = focus!;
+    if (diff < 0) {
+      let tempDiff = 0;
+      while (tempDiff !== diff) {
+        const edit = history[current + tempDiff];
+        if (!edit) {
+          diff = tempDiff;
+          break;
+        }
+        changesMap.set(
+          edit.focus.nurse.nurseId + '/' + edit.focus.day,
+          edit.prevShiftType === null ? null : edit.prevShiftType.shiftTypeId
+        );
+        lastFocus = edit.focus;
+        tempDiff--;
+      }
+    } else if (diff > 0) {
+      let tempDiff = 0;
+      while (tempDiff !== diff) {
+        const edit = history[current + tempDiff + 1];
+        if (!edit) {
+          diff = tempDiff;
+          break;
+        }
+        changesMap.set(
+          edit.focus.nurse.nurseId + '/' + edit.focus.day,
+          edit.nextShiftType === null ? null : edit.nextShiftType.shiftTypeId
+        );
+        lastFocus = edit.focus;
+        tempDiff++;
+      }
+    }
+
+    const changes = Array.from(changesMap.keys()).map((key) => ({
+      nurseId: parseInt(key.split('/')[0]),
+      day: parseInt(key.split('/')[1]),
+      shiftTypeId: changesMap.get(key) as number | null,
+    }));
+
+    setState('focus', lastFocus);
+
+    setState(
+      'editHistory',
+      produce(editHistory, (draft) => {
+        draft.get(year + '' + month)!.current += diff;
+      })
+    );
+
+    if (shift) {
+      queryClient.setQueryData(
+        shiftQueryKey,
+        produce(shift, (draft) => {
+          changes.forEach((change) => {
+            draft.levelNurses
+              .flatMap((x) => x)
+              .find((x) => x.nurse.nurseId === change.nurseId)!.shiftTypeIndexList[
+              change.day
+            ].shift =
+              change.shiftTypeId === null
+                ? null
+                : shift.shiftTypes.findIndex((x) => x.shiftTypeId === change.shiftTypeId);
+          });
+        })
+      );
+    }
+  };
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        if (e.shiftKey) {
+          moveHistory(1);
+        } else {
+          moveHistory(-1);
+        }
+      }
       if (!focus || !shift) return;
       moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => setState('focus', focus));
       keydownEventMapper(
@@ -231,23 +327,24 @@ const useEditShift = () => {
         { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
       );
     },
-    [shift, focus]
+    [shift, focus, editHistory]
   );
 
   useEffect(() => {
-    if (ward) setState('checkFaultOptions', updateCheckFaultOption(ward));
-  }, [ward]);
+    if (activeEffect && ward) setState('checkFaultOptions', updateCheckFaultOption(ward));
+  }, [activeEffect, ward]);
 
   useEffect(() => {
-    if (shift && checkFaultOptions) setState('faults', checkShift(shift, checkFaultOptions));
-  }, [shift, checkFaultOptions]);
+    if (activeEffect && shift && checkFaultOptions)
+      setState('faults', checkShift(shift, checkFaultOptions));
+  }, [activeEffect, shift, checkFaultOptions]);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    if (activeEffect) document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focus, shift, handleKeyDown]);
+  }, [activeEffect, focus, shift, editHistory, handleKeyDown]);
 
   return {
     state: {
@@ -255,7 +352,7 @@ const useEditShift = () => {
       shift,
       focus,
       faults,
-      histories,
+      histories: editHistory.get(year + '' + month),
       focusedDayInfo,
       foldedLevels,
       changeStatus,
@@ -266,6 +363,7 @@ const useEditShift = () => {
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
       updateCarry: (nurseId: number, value: number) => mutateCarry({ nurseId, value }),
+      moveHistory,
     },
   };
 };

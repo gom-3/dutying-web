@@ -11,6 +11,9 @@ import { useEffect } from 'react';
 import { initializeApp as initializeFirebaseApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { createInstance } from '@hackler/react-sdk';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 // Firebase 관련 초기화
 const firebaseConfig = {
