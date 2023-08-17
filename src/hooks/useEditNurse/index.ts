@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAccount } from 'store';
 import {
   updateNurse as patchNurse,
   updateNurseShiftType,
@@ -8,6 +7,7 @@ import {
 import useEditNurseStore from './store';
 import { shallow } from 'zustand/shallow';
 import { addNurseIntoShiftTeam, getShiftTeams, removeNurseFromShiftTeam } from '@libs/api/ward';
+import useGlobalStore from 'store';
 
 const useEditNurse = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -15,13 +15,13 @@ const useEditNurse = () => {
     shallow
   );
 
-  const {
-    account: { wardId },
-  } = useAccount();
+  const { wardId } = useGlobalStore();
 
   const queryClient = useQueryClient();
   const getNursesQueryKey = ['nurses', wardId];
-  const { data: shiftTeams } = useQuery(getNursesQueryKey, () => getShiftTeams(wardId));
+  const { data: shiftTeams } = useQuery(getNursesQueryKey, () =>
+    wardId === null ? null : getShiftTeams(wardId)
+  );
 
   const { mutate: updateNurseMutate } = useMutation(
     (nurse: Nurse) => patchNurse(nurse.nurseId, nurse),
@@ -36,18 +36,20 @@ const useEditNurse = () => {
 
   const { mutate: addNurseMutate } = useMutation(
     (shiftTeamId: number) =>
-      addNurseIntoShiftTeam(wardId, shiftTeamId, {
-        name: `간호사${Math.floor(Math.random() * 10000)}`,
-        phoneNum: '010-1234-5678',
-        gender: '여',
-        isWorker: true,
-        employmentDate: '2023-08-01',
-        isDutyManager: false,
-        isWardManager: false,
-        memo: '해당 간호사에 대한 메모입니다.',
-        workStartDate: '2023-08-01',
-        workEndDate: '2023-12-31',
-      }),
+      wardId === null
+        ? null
+        : addNurseIntoShiftTeam(wardId, shiftTeamId, {
+            name: `간호사${Math.floor(Math.random() * 10000)}`,
+            phoneNum: '010-1234-5678',
+            gender: '여',
+            isWorker: true,
+            employmentDate: '2023-08-01',
+            isDutyManager: false,
+            isWardManager: false,
+            memo: '해당 간호사에 대한 메모입니다.',
+            workStartDate: '2023-08-01',
+            workEndDate: '2023-12-31',
+          }),
     {
       onSuccess: () => queryClient.invalidateQueries(getNursesQueryKey),
       onError: (error) => {

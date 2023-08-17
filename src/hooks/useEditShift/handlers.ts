@@ -6,13 +6,14 @@ export const moveFocusByKeydown = (
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const { level, day, row } = focus;
-  const levelCnt = shift.divisionShiftNurses.length;
-  const rowCnt = shift.divisionShiftNurses[level].length;
+  const flatNurses = shift.divisionShiftNurses
+    .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
+    .map((x) => x.shiftNurse);
+  const { day, shiftNurseId } = focus;
   const dayCnt = shift.days.length;
-  let newLevel = level;
+  const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
+  let newNurseId = shiftNurseId;
   let newDay = day;
-  let newRow = row;
 
   if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
     e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
@@ -21,65 +22,67 @@ export const moveFocusByKeydown = (
   switch (e.key) {
     case 'ArrowLeft': {
       if (day === 0) {
-        if (row === 0) {
-          newLevel = level === 0 ? levelCnt - 1 : level - 1;
+        if (nurseIndex === 0) {
           newDay = dayCnt - 1;
-          newRow = shift.divisionShiftNurses[newLevel].length - 1;
+          newNurseId = flatNurses[flatNurses.length - 1].shiftNurseId;
         } else {
+          newNurseId = flatNurses[nurseIndex - 1].shiftNurseId;
           newDay = dayCnt - 1;
-          newRow = row - 1;
         }
       } else {
         newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
-        newRow = row;
       }
       break;
     }
     case 'ArrowRight': {
       if (day === dayCnt - 1) {
-        if (row === rowCnt - 1) {
-          newLevel = level === levelCnt - 1 ? 0 : level + 1;
+        if (nurseIndex === flatNurses.length - 1) {
+          newNurseId = flatNurses[0].shiftNurseId;
           newDay = 0;
-          newRow = 0;
         } else {
-          newRow = row + 1;
+          newNurseId = flatNurses[nurseIndex + 1].shiftNurseId;
           newDay = 0;
         }
       } else {
         newDay = e.ctrlKey || e.metaKey ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
-        newRow = row;
       }
       break;
     }
     case 'ArrowUp': {
-      if (row === 0) {
-        newLevel = level === 0 ? levelCnt - 1 : level - 1;
+      if (nurseIndex === 0) {
+        newNurseId = flatNurses[flatNurses.length - 1].shiftNurseId;
         newDay = day;
-        newRow = shift.divisionShiftNurses[newLevel].length - 1;
       } else {
+        newNurseId =
+          e.ctrlKey || e.metaKey
+            ? flatNurses[0].shiftNurseId
+            : flatNurses[nurseIndex - 1].shiftNurseId;
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
       }
       break;
     }
     case 'ArrowDown': {
-      if (row === rowCnt - 1) {
-        newLevel = level === levelCnt - 1 ? 0 : level + 1;
+      if (nurseIndex === flatNurses.length - 1) {
+        newNurseId = flatNurses[0].shiftNurseId;
         newDay = day;
-        newRow = 0;
       } else {
+        newNurseId =
+          e.ctrlKey || e.metaKey
+            ? flatNurses[flatNurses.length - 1].shiftNurseId
+            : flatNurses[nurseIndex + 1].shiftNurseId;
         newDay = day;
-        newRow = e.ctrlKey || e.metaKey ? rowCnt - 1 : row + 1;
       }
       break;
     }
   }
-
-  setFocus({
-    level: newLevel,
-    day: newDay,
-    row: newRow,
-  });
+  if (newDay != day || newNurseId != shiftNurseId) {
+    setFocus({
+      day: newDay,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      shiftNurseName: findNurse(shift, shiftNurseId)!.name,
+      shiftNurseId: newNurseId,
+    });
+  }
 };
 
 export const keydownEventMapper = (
@@ -151,9 +154,9 @@ export const checkShift = (
   const faults: Map<string, Fault> = new Map();
 
   for (let i = 0; i < shift.divisionShiftNurses.length; i++) {
-    const level = shift.divisionShiftNurses[i];
-    for (let j = 0; j < level.length; j++) {
-      const row = level[j];
+    const division = shift.divisionShiftNurses[i];
+    for (let j = 0; j < division.length; j++) {
+      const row = division[j];
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
         let str = row.wardShiftList
@@ -170,12 +173,12 @@ export const checkShift = (
         while (true) {
           const match = option.regExp.exec(str);
           if (match === null) break;
-          const focus = { level: i, row: j, day: match.index - 1 };
+          const focus: Focus = { shiftNurseId: row.shiftNurse.shiftNurseId, day: match.index - 1 };
 
           faults.set(Object.values(focus).join(), {
             type: option.type,
             faultType: key,
-            nurse: row.shiftNurse.nurseInfo,
+            nurseName: row.shiftNurse.nurseInfo.name,
             focus,
             message: option.message,
             matchString: match[0],
@@ -187,4 +190,12 @@ export const checkShift = (
   }
 
   return faults;
+};
+
+export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => {
+  return (
+    shift.divisionShiftNurses
+      .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
+      .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
+  );
 };

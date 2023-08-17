@@ -8,6 +8,7 @@ import { RestoreIcon } from '@assets/svg';
 function Panel() {
   const {
     state: { faults, histories },
+    actions: { moveHistory },
   } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('histories');
@@ -53,15 +54,19 @@ function Panel() {
                 key={index}
                 className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
               >
-                {fault.nurse.name} / {fault.focus.day + 1}일: {fault.message}
+                {fault.focus.shiftNurseName} / {fault.focus.day + 1}일: {fault.message}
               </p>
             ))
-          : [...histories].reverse().map((history, index) => (
+          : histories &&
+            [...histories.history].reverse().map((history, index) => (
               <div
                 key={index}
                 className="flex gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
+                onClick={() =>
+                  moveHistory(histories.history.length - index - 1 - histories.current)
+                }
               >
-                {history.nurse.name} / {history.focus.day + 1}일
+                {history.focus.shiftNurseName} / {history.focus.day + 1}일
                 <div className="h-full w-[.0313rem] bg-sub-3" />
                 {match(history)
                   .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)

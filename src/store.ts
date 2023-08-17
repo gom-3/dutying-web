@@ -1,9 +1,10 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 interface State {
-  account: User | null;
-  setState: (account: User) => void;
+  nurseId: number | null;
+  wardId: number | null;
 }
 
 interface Store extends State {
@@ -11,20 +12,26 @@ interface Store extends State {
   setState: (key: keyof State, value: any) => void;
 }
 
-export const useStore = create<Store>()(
+const useGlobalStore = create<Store>()(
   devtools(
-    (set) => ({
-      account: {
+    persist(
+      (set, get) => ({
         nurseId: 1,
         wardId: 1,
-      },
-      setState: (account: User) => set(() => ({ account })),
-    }),
-    {
-      name: 'store',
-    }
+        setState: (key, value) =>
+          set(
+            produce(get(), (draft) => {
+              draft[key] = value;
+            })
+          ),
+      }),
+      {
+        name: 'store',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        partialize: ({ setState, ...state }: Store) => state,
+      }
+    )
   )
 );
 
-export const useAccount = () =>
-  useStore((state) => ({ account: state.account, setState: state.setState }));
+export default useGlobalStore;

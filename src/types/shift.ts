@@ -32,7 +32,7 @@ type RequestShift = {
   shiftTypes: WardShiftType[];
   /** 숙련도별로 묶은 근무 데이터 */
   divisionShiftNurses: {
-    nurse: Nurse;
+    shiftNurse: ShiftNurse;
     /** 이월 @example 1 */
     carry: number;
     /** 이번달 근무 정보, 근무 유형의 index 배열 형식이다. */

@@ -103,12 +103,12 @@ export default function RequestCalendar({ isEditable }: Props) {
                   <div
                     key={rowIndex}
                     className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
-                      focus?.row === rowIndex && focus.level === level && 'bg-main-4'
+                      focus?.shiftNurse.nurseId === row.shiftNurse.nurseId && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
-                      {row.nurse.name}
+                      {row.shiftNurse.name}
                     </div>
                     <div className="flex h-full px-[1rem]">
                       {row.wardReqShiftList.map((reqShift, j) => {
@@ -117,10 +117,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                           requestShift.days[j].dayType === 'sunday' ||
                           requestShift.days[j].dayType === 'holiday';
                         const isFocused =
-                          focus &&
-                          level === focus.level &&
-                          focus.day === j &&
-                          focus.row === rowIndex;
+                          focus?.shiftNurse.nurseId === row.shiftNurse.nurseId && focus.day === j;
                         return (
                           <div
                             key={j}
@@ -132,9 +129,8 @@ export default function RequestCalendar({ isEditable }: Props) {
                               key={j}
                               onClick={() => {
                                 changeFocus?.({
-                                  level: level,
+                                  shiftNurse: row.shiftNurse,
                                   day: j,
-                                  row: rowIndex,
                                 });
                               }}
                               shiftType={

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 type Focus = {
-  level: number;
+  shiftNurseName: string;
+  shiftNurseId: number;
   day: number;
-  row: number;
 };
 
 type DayInfo = {
@@ -13,14 +13,19 @@ type DayInfo = {
   message: string;
 };
 
-type EditHistory = {
-  shiftTeamId: number;
-  nurse: Nurse;
-  focus: Focus;
-  prevShiftType: WardShiftType | null;
-  nextShiftType: WardShiftType | null;
-  dateString: string;
-};
+type EditHistory = Map<
+  string,
+  {
+    current: number;
+    history: {
+      nurseName: string;
+      focus: Focus;
+      prevShiftType: WardShiftType | null;
+      nextShiftType: WardShiftType | null;
+      dateString: string;
+    }[];
+  }
+>;
 
 type FaultType =
   | 'maxContinuousWork'
@@ -43,8 +48,8 @@ type CheckFaultOptions = {
 type Fault = {
   type: 'wrong' | 'bad';
   faultType: FaultType;
-  nurse: Nurse;
   message: string;
+  nurseName: string;
   focus: Focus;
   matchString: string;
   length: number;

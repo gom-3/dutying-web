@@ -94,7 +94,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
           </div>
         </div>
         <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
-          {shift.wardShiftTypes.map((shiftType, index) => (
+          {shift.wardShiftTypes.slice(0, 4).map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
@@ -135,10 +135,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                     <div
                       key={rowIndex}
                       className={`flex h-[3.25rem] items-center gap-[1.25rem]
-                        ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}
-                        ${rowIndex === 0 && 'rounded-t-[1.25rem]'}
-                        ${rowIndex === rows.length - 1 && 'rounded-b-[1.25rem]'}
-                      `}
+                         ${focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'}`}
                     >
                       <div className="relative w-[2.125rem] shrink-0">
                         <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
@@ -159,11 +156,11 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           onClick={(e) => {
                             e.currentTarget.select();
                           }}
-                          onChange={(e) => {
-                            console.log(e.target.value);
-                            if (/[0-9]+/.test(e.target.value)) {
-                              updateCarry(row.shiftNurse.shiftNurseId, parseInt(e.target.value));
-                            }
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowUp')
+                              updateCarry(row.shiftNurse.shiftNurseId, row.shiftNurse.carried + 1);
+                            if (e.key === 'ArrowDown')
+                              updateCarry(row.shiftNurse.shiftNurseId, row.shiftNurse.carried - 1);
                           }}
                         />
                       </div>
@@ -184,10 +181,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                             shift.days[j].dayType === 'sunday' ||
                             shift.days[j].dayType === 'holiday';
                           const isFocused =
-                            focus &&
-                            level === focus.level &&
-                            focus.day === j &&
-                            focus.row === rowIndex;
+                            focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
                           const fault = faults.get(`${level},${rowIndex},${j}`);
                           return (
                             <div
@@ -207,9 +201,9 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                 key={j}
                                 onClick={() => {
                                   changeFocus?.({
-                                    level: level,
+                                    shiftNurseName: row.shiftNurse.name,
+                                    shiftNurseId: row.shiftNurse.shiftNurseId,
                                     day: j,
-                                    row: rowIndex,
                                   });
                                 }}
                                 shiftType={
@@ -238,7 +232,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                 <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                   {rows.map((row, i) => (
                     <div key={i} className="flex h-[3.25rem] items-center">
-                      {shift.wardShiftTypes.map((_, index) => (
+                      {shift?.wardShiftTypes.slice(0, 4).map((_, index) => (
                         <div
                           key={index}
                           className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"

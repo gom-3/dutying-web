@@ -9,7 +9,7 @@ import useEditShift from '@hooks/useEditShift';
 const MakeShiftPage = () => {
   const {
     state: { shiftStatus },
-  } = useEditShift();
+  } = useEditShift(true);
   const [isNurseTabOpen, setIsNurseTabOpen] = useState(false);
 
   return shiftStatus === 'success' ? (

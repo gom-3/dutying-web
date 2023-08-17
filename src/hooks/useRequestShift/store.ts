@@ -17,7 +17,7 @@ interface Store extends State {
 export const useRequestShiftStore = create<Store>()(
   devtools((set, get) => ({
     year: new Date().getFullYear(),
-    month: new Date().getMonth() + 2,
+    month: new Date().getMonth() + 1,
     focus: null,
     foldedLevels: null,
     setState: (state, value) =>
