@@ -9,7 +9,7 @@ type Shift = {
   /** 해당 근무표의 근무유형 리스트 */
   wardShiftTypes: WardShiftType[];
   /** 숙련도별로 묶은 근무 데이터 */
-  divisionNumNurses: Row[][];
+  divisionShiftNurses: Row[][];
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */
@@ -31,7 +31,7 @@ type RequestShift = {
   /** 해당 근무표의 근무유형 리스트 */
   shiftTypes: WardShiftType[];
   /** 숙련도별로 묶은 근무 데이터 */
-  divisionNumNurses: {
+  divisionShiftNurses: {
     nurse: Nurse;
     /** 이월 @example 1 */
     carry: number;

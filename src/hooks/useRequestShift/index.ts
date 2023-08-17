@@ -24,7 +24,7 @@ const useRequestShift = () => {
       onSuccess: (data) =>
         setState(
           'foldedLevels',
-          data.divisionNumNurses.map(() => false)
+          data.divisionShiftNurses.map(() => false)
         ),
     }
   );
@@ -42,7 +42,7 @@ const useRequestShift = () => {
         year,
         month,
         requestShift.days[focus.day].day,
-        requestShift.divisionNumNurses[focus.level][focus.row].nurse.nurseId,
+        requestShift.divisionShiftNurses[focus.level][focus.row].nurse.nurseId,
         shiftTypeId
       ),
     {
@@ -58,7 +58,7 @@ const useRequestShift = () => {
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.divisionNumNurses[focus.level][focus.row].wardReqShiftList[focus.day] =
+            draft.divisionShiftNurses[focus.level][focus.row].wardReqShiftList[focus.day] =
               newShiftTypeIndex;
           })
         );
@@ -108,7 +108,7 @@ const useRequestShift = () => {
     if (
       !focus ||
       !requestShift ||
-      requestShift.divisionNumNurses[focus.level][focus.row].wardReqShiftList[focus.day] ===
+      requestShift.divisionShiftNurses[focus.level][focus.row].wardReqShiftList[focus.day] ===
         requestShift.shiftTypes.findIndex((x) => x.wardShiftTypeId === shiftTypeId)
     )
       return;

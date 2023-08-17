@@ -7,8 +7,8 @@ export const moveFocusByKeydown = (
   setFocus: (focus: Focus) => void
 ) => {
   const { level, day, row } = focus;
-  const levelCnt = shift.divisionNumNurses.length;
-  const rowCnt = shift.divisionNumNurses[level].length;
+  const levelCnt = shift.divisionShiftNurses.length;
+  const rowCnt = shift.divisionShiftNurses[level].length;
   const dayCnt = shift.days.length;
   let newLevel = level;
   let newDay = day;
@@ -24,7 +24,7 @@ export const moveFocusByKeydown = (
         if (row === 0) {
           newLevel = level === 0 ? levelCnt - 1 : level - 1;
           newDay = dayCnt - 1;
-          newRow = shift.divisionNumNurses[newLevel].length - 1;
+          newRow = shift.divisionShiftNurses[newLevel].length - 1;
         } else {
           newDay = dayCnt - 1;
           newRow = row - 1;
@@ -55,7 +55,7 @@ export const moveFocusByKeydown = (
       if (row === 0) {
         newLevel = level === 0 ? levelCnt - 1 : level - 1;
         newDay = day;
-        newRow = shift.divisionNumNurses[newLevel].length - 1;
+        newRow = shift.divisionShiftNurses[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -93,64 +93,65 @@ export const keydownEventMapper = (
   });
 };
 
-export const updateCheckFaultOption = (ward: Ward) => {
+export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFaultOptions => {
   return {
-    offAfterNight: {
-      isActive: true,
-      regExp: new RegExp(`n([de]|o[den])`, 'g'),
-      message: `나이트 근무 후 2일 이상 OFF를 권장합니다.`,
-      type: 'wrong',
-    },
-    ed: {
-      isActive: true,
-      regExp: new RegExp(`(ed|nd|ne|nod)`, 'g'),
-      message: `ND/ED/NE/NOD 형태의 근무는 권장되지 않습니다.`,
-      type: 'wrong',
-    },
     maxContinuousWork: {
-      isActive: true,
-      regExp: new RegExp(`(?<=[^den])[den]{${ward.maxContinuousWork + 1},}(?=[^den])`, 'g'),
-      message: `근무는 연속 ${ward.maxContinuousWork}일을 초과할 수 없습니다.`,
       type: 'wrong',
-    },
-    maxContinuousNight: {
-      isActive: true,
-      regExp: new RegExp(`n{${ward.maxContinuousNight + 1},}`, 'g'),
-      message: `나이트 근무가 연속 ${ward.maxContinuousNight}일을 초과했습니다`,
-      type: 'wrong',
+      isActive: wardConstraint.maxContinuousWork,
+      regExp: new RegExp(
+        `(?<=[^den])[den]{${wardConstraint.maxContinuousWorkVal + 1},}(?=[^den])`,
+        'g'
+      ),
+      message: `근무는 연속 ${wardConstraint.maxContinuousWork}일을 초과할 수 없습니다.`,
     },
     minNightInterval: {
-      isActive: true,
-      regExp: new RegExp(`n[^n]{e,${ward.minNightInterval - 1}}n`, 'g'),
-      message: `나이트 간격이 최소 ${ward.minNightInterval}일 이상이어야 합니다.`,
       type: 'wrong',
+      isActive: wardConstraint.minNightInterval,
+      regExp: new RegExp(`n[^n]{e,${wardConstraint.minNightIntervalVal - 1}}n`, 'g'),
+      message: `나이트 간격이 최소 ${wardConstraint.minNightInterval}일 이상이어야 합니다.`,
+    },
+    maxContinuousNight: {
+      type: 'wrong',
+      isActive: wardConstraint.maxContinuousNight,
+      regExp: new RegExp(`n{${wardConstraint.maxContinuousNightVal + 1},}`, 'g'),
+      message: `나이트 근무가 연속 ${wardConstraint.maxContinuousNight}일을 초과했습니다`,
     },
     minContinuousNight: {
-      isActive: true,
+      type: 'bad',
+      isActive: wardConstraint.minContinuousNight,
       regExp: new RegExp(`(?<!(n|-))n(?!(n|-))`, 'g'),
       message: `단일 나이트 근무는 권장되지 않습니다.`,
-      type: 'bad',
     },
-    noeeod: {
-      isActive: true,
-      regExp: new RegExp(`eod`, 'g'),
-      message: `EOD 형태의 근무는 권장되지 않습니다.`,
+    minOffAssignAfterNight: {
       type: 'bad',
+      isActive: wardConstraint.minOffAssignAfterNight,
+      regExp: new RegExp(`n([de]|o{0,${wardConstraint.minOffAssignAfterNightVal - 1}}[den])`, 'g'),
+      message: `나이트 근무 후 ${wardConstraint.minOffAssignAfterNightVal}일 이상 OFF를 권장합니다.`,
     },
-    noNightBeforeReqOff: {
-      isActive: true,
+    excludeCertainWorkTypes: {
+      type: 'bad',
+      isActive: wardConstraint.excludeCertainWorkTypes,
+      regExp: new RegExp(`(ed|nd|ne|nod)`, 'g'),
+      message: `ND/ED/NE/NOD 형태의 근무는 권장되지 않습니다.`,
+    },
+    excludeNightBeforeReqOff: {
+      type: 'bad',
+      isActive: wardConstraint.excludeNightBeforeReqOff,
       regExp: new RegExp(`nO`, 'g'),
       message: `신청 오프 전날에는 나이트 근무를 권장하지 않습니다.`,
-      type: 'bad',
     },
-  } as CheckFaultOptions;
+  };
 };
 
-export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) => {
+export const checkShift = (
+  shift: Shift,
+  checkFaultOptions: CheckFaultOptions,
+  wardShiftTypeMap: Map<number, WardShiftType>
+) => {
   const faults: Map<string, Fault> = new Map();
 
-  for (let i = 0; i < shift.divisionNumNurses.length; i++) {
-    const level = shift.divisionNumNurses[i];
+  for (let i = 0; i < shift.divisionShiftNurses.length; i++) {
+    const level = shift.divisionShiftNurses[i];
     for (let j = 0; j < level.length; j++) {
       const row = level[j];
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
@@ -160,8 +161,8 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
             x === null
               ? '-'
               : x === row.wardReqShiftList[index]
-              ? shift.wardShiftTypes[x].shortName.toUpperCase()
-              : shift.wardShiftTypes[x].shortName.toLowerCase()
+              ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
+              : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
           )
           .join('');
         str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
@@ -174,7 +175,7 @@ export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) =
           faults.set(Object.values(focus).join(), {
             type: option.type,
             faultType: key,
-            nurse: row.shiftNurse,
+            nurse: row.shiftNurse.nurseInfo,
             focus,
             message: option.message,
             matchString: match[0],

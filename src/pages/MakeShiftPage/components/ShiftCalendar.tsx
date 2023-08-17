@@ -19,7 +19,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     actions: { selectNurse },
   } = useEditNurse();
   const {
-    state: { shift, focus, faults, foldedLevels },
+    state: { shift, focus, faults, foldedLevels, wardShiftTypeMap },
     actions: { changeFocus, foldLevel, updateCarry },
   } = useEditShift();
   const focusedCellRef = useRef<HTMLElement>(null);
@@ -50,7 +50,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     }
   }, [focus]);
 
-  return shift && foldedLevels ? (
+  return shift && foldedLevels && wardShiftTypeMap ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -106,7 +106,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
         className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pt-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {shift.divisionNumNurses.map((rows, level) => {
+        {shift.divisionShiftNurses.map((rows, level) => {
           return rows.length ? (
             shift && foldedLevels[level] ? (
               <div
@@ -135,10 +135,10 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                     <div
                       key={rowIndex}
                       className={`flex h-[3.25rem] items-center gap-[1.25rem]
-                  ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}
-                  ${rowIndex === 0 && 'rounded-t-[1.25rem]'}
-                  ${rowIndex === rows.length - 1 && 'rounded-b-[1.25rem]'}
-                  `}
+                        ${focus?.row === rowIndex && focus.level === level && 'bg-main-4'}
+                        ${rowIndex === 0 && 'rounded-t-[1.25rem]'}
+                        ${rowIndex === rows.length - 1 && 'rounded-b-[1.25rem]'}
+                      `}
                     >
                       <div className="relative w-[2.125rem] shrink-0">
                         <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
@@ -147,7 +147,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                         className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                         onClick={() => {
                           setNurseTabOpen(true);
-                          selectNurse(row.shiftNurse.nurseId);
+                          selectNurse(row.shiftNurse.nurseInfo.nurseId);
                         }}
                       >
                         {row.shiftNurse.name}
@@ -155,14 +155,14 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                       <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
                         <TextField
                           className="text-md h-[1.875rem] w-[1.875rem] p-0 text-center text-sub-1"
-                          value={row.carried}
+                          value={row.shiftNurse.carried}
                           onClick={(e) => {
                             e.currentTarget.select();
                           }}
                           onChange={(e) => {
                             console.log(e.target.value);
                             if (/[0-9]+/.test(e.target.value)) {
-                              updateCarry(row.shiftNurse.nurseId, parseInt(e.target.value));
+                              updateCarry(row.shiftNurse.shiftNurseId, parseInt(e.target.value));
                             }
                           }}
                         />
@@ -171,7 +171,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                         {row.lastWardShiftList.map((current, j) => (
                           <ShiftBadge
                             key={j}
-                            shiftType={current != null ? shift.wardShiftTypes[current] : null}
+                            shiftType={current != null ? wardShiftTypeMap.get(current) : null}
                             className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
                           />
                         ))}
@@ -217,7 +217,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                     ? request === null
                                       ? null
                                       : shift.wardShiftTypes[request]
-                                    : shift.wardShiftTypes[current]
+                                    : wardShiftTypeMap.get(current)
                                 }
                                 isOnlyRequest={current === null && request !== null}
                                 className={`z-10 cursor-pointer 
@@ -251,7 +251,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           row.wardShiftList.filter(
                             (current, i) =>
                               current &&
-                              shift.wardShiftTypes[current].isOff &&
+                              wardShiftTypeMap.get(current)?.isOff &&
                               shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
                           ).length
                         }

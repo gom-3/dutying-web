@@ -93,7 +93,7 @@ export const mockRequestShift: RequestShift = {
     { day: 30, dayType: 'workday' },
   ],
   shiftTypes: mockShiftTypeList,
-  divisionNumNurses: [
+  divisionShiftNurses: [
     [
       {
         nurse: nurses[0],
@@ -795,7 +795,7 @@ export const mockShift: Shift = {
     { day: 30, dayType: 'workday' },
   ],
   wardShiftTypes: mockShiftTypeList,
-  divisionNumNurses: [
+  divisionShiftNurses: [
     [
       {
         shiftNurse: nurses[0],

@@ -1,24 +1,24 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-type User = {
-  nurseId: number;
-  wardId: number;
-};
-
 interface State {
-  account: User;
-  setAccount: (account: User) => void;
+  account: User | null;
+  setState: (account: User) => void;
 }
 
-export const useStore = create<State>()(
+interface Store extends State {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setState: (key: keyof State, value: any) => void;
+}
+
+export const useStore = create<Store>()(
   devtools(
     (set) => ({
       account: {
         nurseId: 1,
         wardId: 1,
       },
-      setAccount: (account: User) => set(() => ({ account })),
+      setState: (account: User) => set(() => ({ account })),
     }),
     {
       name: 'store',
@@ -27,4 +27,4 @@ export const useStore = create<State>()(
 );
 
 export const useAccount = () =>
-  useStore((state) => ({ account: state.account, setAccount: state.setAccount }));
+  useStore((state) => ({ account: state.account, setState: state.setState }));

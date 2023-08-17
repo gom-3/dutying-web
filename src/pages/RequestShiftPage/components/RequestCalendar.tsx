@@ -73,7 +73,7 @@ export default function RequestCalendar({ isEditable }: Props) {
         className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {requestShift.divisionNumNurses.map((rows, level) => {
+        {requestShift.divisionShiftNurses.map((rows, level) => {
           return foldedLevels[level] ? (
             <div
               key={level}

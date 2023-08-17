@@ -31,7 +31,7 @@ function CountDutyByDay() {
                   }`}
                 >
                   {
-                    shift.divisionNumNurses
+                    shift.divisionShiftNurses
                       .flatMap((row) => row)
                       .filter((item) => item.wardShiftList[i] === index).length
                   }

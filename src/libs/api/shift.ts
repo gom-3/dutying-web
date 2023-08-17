@@ -30,10 +30,10 @@ export const updateShiftType = async (
     )
   ).data;
 
-export const getShift = async (wardId: number, teamId: number, year: number, month: number) =>
+export const getShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
     await axiosInstance.get<Shift>(
-      `/wards/${wardId}/shift-teams/${teamId}/duty?${qs.stringify({ year, month })}`
+      `/wards/${wardId}/shift-teams/${shiftTeamId}/duty?${qs.stringify({ year, month })}`
     )
   ).data;
 

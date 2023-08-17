@@ -1,7 +1,7 @@
 import * as Excel from 'exceljs';
 
 export const shiftToExcel = (month: number, shift: Shift) => {
-  const flatRows = shift.divisionNumNurses.flatMap((row) => row);
+  const flatRows = shift.divisionShiftNurses.flatMap((row) => row);
 
   const workbook = new Excel.Workbook();
   const worksheet = workbook.addWorksheet(`${month}월 근무표`);
@@ -67,10 +67,10 @@ export const shiftToExcel = (month: number, shift: Shift) => {
     worksheet.addRow({
       name: dutyRow.shiftNurse.name,
       lastShift: dutyRow.lastWardShiftList
-        .map((current) => (current !== null ? shift.wardShiftTypes[current].shortName : ''))
+        .map((current) => (current !== null ? shift.wardShiftTypeMap.get(current).shortName : ''))
         .join(''),
       ...dutyRow.wardShiftList.reduce((acc, current, index) => {
-        acc[index + 1] = current != null ? shift.wardShiftTypes[current].shortName : '';
+        acc[index + 1] = current != null ? shift.wardShiftTypeMap.get(current).shortName : '';
         return acc;
       }, {} as { [key: string]: string }),
       ...shift.wardShiftTypes.reduce((acc, shiftType, index) => {

@@ -14,6 +14,7 @@ type DayInfo = {
 };
 
 type EditHistory = {
+  shiftTeamId: number;
   nurse: Nurse;
   focus: Focus;
   prevShiftType: WardShiftType | null;

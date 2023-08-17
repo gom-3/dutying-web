@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
 import { useAccount } from 'store';
-import { getWard } from '@libs/api/ward';
+import { getWard, getWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -16,7 +16,7 @@ import {
   updateCheckFaultOption,
 } from './handlers';
 
-const useEditShift = () => {
+const useEditShift = (activeEffect: boolean) => {
   const [
     year,
     month,
@@ -26,6 +26,7 @@ const useEditShift = () => {
     histories,
     faults,
     checkFaultOptions,
+    wardShiftTypeMap,
     setState,
   ] = useEditShiftStore(
     (state) => [
@@ -37,6 +38,7 @@ const useEditShift = () => {
       state.histories,
       state.faults,
       state.checkFaultOptions,
+      state.wardShiftTypeMap,
       state.setState,
     ],
     shallow
@@ -45,18 +47,29 @@ const useEditShift = () => {
 
   const queryClient = useQueryClient();
 
-  const wardQueryKey = ['ward', account.wardId];
-  const shiftQueryKey = ['shift', account.wardId, year, month];
-  const { data: ward } = useQuery(wardQueryKey, () => getWard(account.wardId));
+  const wardQueryKey = ['ward', account?.wardId];
+  const shiftQueryKey = ['shift', account?.wardId, year, month];
+  const { data: wardConstraint } = useQuery([
+    'wardConstraint',
+    () => account && getWardConstraint(wardId),
+  ]);
+  const { data: ward } = useQuery(wardQueryKey, () => account && getWard(account.wardId));
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getShift(account.wardId, 3, year, month),
+    () => account && getShift(account.wardId, 3, year, month),
     {
-      onSuccess: (data) =>
+      onSuccess: (data) => {
         setState(
           'foldedLevels',
-          data.divisionNumNurses.map(() => false)
-        ),
+          data.divisionShiftNurses.map(() => false)
+        );
+
+        const wardShiftTypeMap = new Map<number, WardShiftType>();
+        data.wardShiftTypes.forEach((wardShiftType) => {
+          wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
+        });
+        setState('wardShiftTypeMap', wardShiftTypeMap);
+      },
     }
   );
   const { mutate: mutateShift, status: changeStatus } = useMutation(
@@ -76,7 +89,7 @@ const useEditShift = () => {
         year,
         month,
         shift.days[focus.day].day,
-        shift.divisionNumNurses[focus.level][focus.row].shiftNurse.nurseId,
+        shift.divisionShiftNurses[focus.level][focus.row].shiftNurse.shiftNurseId,
         shiftTypeId
       ),
     {
@@ -84,30 +97,25 @@ const useEditShift = () => {
         await queryClient.cancelQueries(['shift']);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
-        if (!oldShift) return;
-        const oldShiftTypeIndex =
-          oldShift.divisionNumNurses[focus.level][focus.row].wardShiftList[focus.day];
+        if (!oldShift || !wardShiftTypeMap) return;
+        const oldShiftTypeId =
+          oldShift.divisionShiftNurses[focus.level][focus.row].wardShiftList[focus.day];
 
         const history: EditHistory = {
-          nurse: oldShift.divisionNumNurses[focus.level][focus.row].shiftNurse,
+          nurse: oldShift.divisionShiftNurses[focus.level][focus.row].shiftNurse.nurseInfo,
           focus,
           prevShiftType:
-            oldShiftTypeIndex !== null ? oldShift.wardShiftTypes[oldShiftTypeIndex] : null,
-          nextShiftType:
-            oldShift.wardShiftTypes.find((x) => x.wardShiftTypeId === shiftTypeId) || null,
+            oldShiftTypeId !== null ? wardShiftTypeMap.get(oldShiftTypeId) || null : null,
+          nextShiftType: shiftTypeId !== null ? wardShiftTypeMap.get(shiftTypeId) || null : null,
           dateString: new Date().toLocaleString(),
         };
         setState('histories', [...histories, history]);
 
-        const newShiftTypeIndex = shiftTypeId
-          ? oldShift.wardShiftTypes.findIndex((x) => x.wardShiftTypeId === shiftTypeId)
-          : null;
-
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.divisionNumNurses[focus.level][focus.row].wardShiftList[focus.day] =
-              newShiftTypeIndex;
+            draft.divisionShiftNurses[focus.level][focus.row].wardShiftList[focus.day] =
+              shiftTypeId;
           })
         );
 
@@ -140,10 +148,10 @@ const useEditShift = () => {
     }
   );
   const { mutate: mutateCarry } = useMutation(
-    ({ nurseId, value }: { nurseId: number; value: number }) =>
-      updateNurseCarry(year, month, nurseId, value),
+    ({ shiftNurseId, value }: { shiftNurseId: number; value: number }) =>
+      updateNurseCarry(shiftNurseId, value),
     {
-      onMutate: async ({ nurseId, value }) => {
+      onMutate: async ({ shiftNurseId, value }) => {
         await queryClient.cancelQueries(['shift']);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
@@ -152,9 +160,9 @@ const useEditShift = () => {
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
           produce(oldShift, (draft) => {
-            const nurse = draft.divisionNumNurses
+            const nurse = draft.divisionShiftNurses
               .flatMap((rows) => rows)
-              .find((row) => row.shiftNurse.nurseId === nurseId);
+              .find((row) => row.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse;
             if (nurse) nurse.carried = value;
           })
         );
@@ -202,13 +210,12 @@ const useEditShift = () => {
         !ward ||
         !focus ||
         !shift ||
-        shift.divisionNumNurses[focus.level][focus.row].wardShiftList[focus.day] ===
-          shift.wardShiftTypes.findIndex((x) => x.wardShiftTypeId === shiftTypeId)
+        shift.divisionShiftNurses[focus.level][focus.row].wardShiftList[focus.day] === shiftTypeId
       )
         return;
 
-      const current = shift.divisionNumNurses[focus.level][focus.row].wardShiftList[focus.day];
-      const request = shift.divisionNumNurses[focus.level][focus.row].wardReqShiftList[focus.day];
+      const current = shift.divisionShiftNurses[focus.level][focus.row].wardShiftList[focus.day];
+      const request = shift.divisionShiftNurses[focus.level][focus.row].wardReqShiftList[focus.day];
       if (
         request != null &&
         request === current &&
@@ -222,7 +229,7 @@ const useEditShift = () => {
   );
 
   const foldLevel = useCallback(
-    (level: Nurse['level']) => {
+    (level: number) => {
       if (!shift || !foldedLevels) return;
       setState(
         'foldedLevels',
@@ -249,15 +256,17 @@ const useEditShift = () => {
   );
 
   useEffect(() => {
-    if (ward) setState('checkFaultOptions', updateCheckFaultOption(ward));
-  }, [ward]);
+    if (activeEffect && wardShiftTypeMap)
+      setState('checkFaultOptions', updateCheckFaultOption(wardConstraint));
+  }, [wardShiftTypeMap]);
 
   useEffect(() => {
-    if (shift && checkFaultOptions) setState('faults', checkShift(shift, checkFaultOptions));
+    if (activeEffect && shift && checkFaultOptions && wardShiftTypeMap)
+      setState('faults', checkShift(shift, checkFaultOptions, wardShiftTypeMap));
   }, [shift, checkFaultOptions]);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    if (activeEffect) document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -274,12 +283,13 @@ const useEditShift = () => {
       foldedLevels,
       changeStatus,
       shiftStatus,
+      wardShiftTypeMap,
     },
     actions: {
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
-      updateCarry: (nurseId: number, value: number) => mutateCarry({ nurseId, value }),
+      updateCarry: (shiftNurseId: number, value: number) => mutateCarry({ shiftNurseId, value }),
     },
   };
 };
