@@ -3,6 +3,7 @@ import useEditShift from '@hooks/useEditShift';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
+import { RestoreIcon } from '@assets/svg';
 
 function Panel() {
   const {
@@ -10,7 +11,7 @@ function Panel() {
     actions: { moveHistory },
   } = useEditShift();
   const [open, setOpen] = useState(false);
-  const [currentTab, setCurrentTab] = useState('faults');
+  const [currentTab, setCurrentTab] = useState('histories');
 
   return (
     <div
@@ -22,23 +23,23 @@ function Panel() {
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
           className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
-          ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
-          onClick={() => {
-            setCurrentTab('faults');
-            sendEvent(event.clickFaultTab);
-          }}
-        >
-          문제점
-        </div>
-        <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
-            sendEvent(event.clickHistoryTab);
+            sendEvent(event.clickFaultTab);
           }}
         >
           기록
+        </div>
+        <div
+          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
+          ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
+          onClick={() => {
+            setCurrentTab('faults');
+            sendEvent(event.clickHistoryTab);
+          }}
+        >
+          문제점
         </div>
       </div>
       <div className="flex flex-1 flex-col overflow-y-scroll scrollbar-hide">
@@ -52,36 +53,26 @@ function Panel() {
               </p>
             ))
           : histories &&
-            [...histories.history].reverse().map((history, index) => {
-              const isPast = histories.history.length - index - 1 > histories.current;
-              return (
-                <p
-                  key={index}
-                  className={twMerge(
-                    'cursor-pointer border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none',
-                    isPast ? 'text-sub-3' : 'text-sub-2'
+            [...histories.history].reverse().map((history, index) => (
+              <p
+                key={index}
+                className="flex gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
+                onClick={() =>
+                  moveHistory(histories.history.length - index - 1 - histories.current)
+                }
+              >
+                {history.focus.nurse.name} / {history.focus.day + 1}일
+                <div className="h-full w-[.0313rem] bg-sub-3" />
+                {match(history)
+                  .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
+                  .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
+                  .otherwise(
+                    () =>
+                      `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
                   )}
-                  onClick={() =>
-                    moveHistory(histories.history.length - index - 1 - histories.current)
-                  }
-                >
-                  {history.focus.nurse.name} / {history.focus.day + 1}일 |{' '}
-                  {match(history)
-                    .with(
-                      { prevShiftType: null },
-                      () => `추가 → ${history.nextShiftType?.shortName}`
-                    )
-                    .with(
-                      { nextShiftType: null },
-                      () => `${history.prevShiftType?.shortName} → 삭제`
-                    )
-                    .otherwise(
-                      () =>
-                        `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
-                    )}
-                </p>
-              );
-            })}
+                <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
+              </p>
+            ))}
       </div>
       <div
         className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"

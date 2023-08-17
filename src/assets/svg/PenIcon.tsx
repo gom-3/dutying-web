@@ -6,10 +6,10 @@ const SvgPenIcon = (props: SVGProps<SVGSVGElement>) => (
     height={36}
     viewBox="0 0 36 36"
     fill="none"
+    stroke="#CEB6FF"
     {...props}
   >
     <path
-      stroke="#CEB6FF"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

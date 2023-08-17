@@ -16,7 +16,7 @@ const MakeShiftPage = () => {
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
       <Toolbar />
       <ShiftCalendar isEditable setNurseTabOpen={setIsNurseTabOpen} />
-      <div className="sticky bottom-0 z-20 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[6.5rem]">
+      <div className="sticky bottom-0 z-20 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[15.9375rem]">
         <CountDutyByDay />
         <Panel />
       </div>
