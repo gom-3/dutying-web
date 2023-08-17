@@ -109,7 +109,7 @@ function Toolbar() {
               />
             </div>
             <div className="flex h-[3.625rem] items-center justify-center gap-[1.25rem]">
-              {shift?.shiftTypes.map((shiftType, index) => (
+              {shift?.wardShiftTypes.map((shiftType, index) => (
                 <div key={index} className="flex items-center gap-[.3125rem]">
                   <ShiftBadge key={index} shiftType={shiftType} />
                   <p className="font-apple text-[.875rem] text-sub-2">

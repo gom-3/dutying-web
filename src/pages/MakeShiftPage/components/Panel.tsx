@@ -57,7 +57,7 @@ function Panel() {
               </p>
             ))
           : [...histories].reverse().map((history, index) => (
-              <p
+              <div
                 key={index}
                 className="flex gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
               >
@@ -71,7 +71,7 @@ function Panel() {
                       `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
                   )}
                 <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
-              </p>
+              </div>
             ))}
       </div>
       <div

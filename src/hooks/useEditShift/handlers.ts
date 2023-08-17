@@ -7,8 +7,8 @@ export const moveFocusByKeydown = (
   setFocus: (focus: Focus) => void
 ) => {
   const { level, day, row } = focus;
-  const levelCnt = shift.levelNurses.length;
-  const rowCnt = shift.levelNurses[level].length;
+  const levelCnt = shift.divisionNumNurses.length;
+  const rowCnt = shift.divisionNumNurses[level].length;
   const dayCnt = shift.days.length;
   let newLevel = level;
   let newDay = day;
@@ -24,7 +24,7 @@ export const moveFocusByKeydown = (
         if (row === 0) {
           newLevel = level === 0 ? levelCnt - 1 : level - 1;
           newDay = dayCnt - 1;
-          newRow = shift.levelNurses[newLevel].length - 1;
+          newRow = shift.divisionNumNurses[newLevel].length - 1;
         } else {
           newDay = dayCnt - 1;
           newRow = row - 1;
@@ -55,7 +55,7 @@ export const moveFocusByKeydown = (
       if (row === 0) {
         newLevel = level === 0 ? levelCnt - 1 : level - 1;
         newDay = day;
-        newRow = shift.levelNurses[newLevel].length - 1;
+        newRow = shift.divisionNumNurses[newLevel].length - 1;
       } else {
         newDay = day;
         newRow = e.ctrlKey || e.metaKey ? 0 : row - 1;
@@ -149,19 +149,19 @@ export const updateCheckFaultOption = (ward: Ward) => {
 export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) => {
   const faults: Map<string, Fault> = new Map();
 
-  for (let i = 0; i < shift.levelNurses.length; i++) {
-    const level = shift.levelNurses[i];
+  for (let i = 0; i < shift.divisionNumNurses.length; i++) {
+    const level = shift.divisionNumNurses[i];
     for (let j = 0; j < level.length; j++) {
       const row = level[j];
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
-        let str = row.shiftTypeIndexList
-          .map((x) =>
-            x.shift === null
+        let str = row.wardShiftList
+          .map((x, index) =>
+            x === null
               ? '-'
-              : x.shift === x.reqShift
-              ? shift.shiftTypes[x.shift].shortName.toUpperCase()
-              : shift.shiftTypes[x.shift].shortName.toLowerCase()
+              : x === row.wardReqShiftList[index]
+              ? shift.wardShiftTypes[x].shortName.toUpperCase()
+              : shift.wardShiftTypes[x].shortName.toLowerCase()
           )
           .join('');
         str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리

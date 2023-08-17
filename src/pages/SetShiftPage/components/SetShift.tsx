@@ -86,7 +86,7 @@ function SetShift() {
               {!shiftType.isDefault && (
                 <ExitIcon
                   className="h-[2.25rem] w-[2.25rem] cursor-pointer"
-                  onClick={() => handleDeleteShift(shiftType.shiftTypeId)}
+                  onClick={() => handleDeleteShift(shiftType.wardShiftTypeId)}
                 />
               )}
             </div>
@@ -110,7 +110,7 @@ function SetShift() {
           setOpenModal(false);
         }}
         shiftType={editShift}
-        onSubmit={(shiftType) => handleWriteShift(shiftType, editShift?.shiftTypeId)}
+        onSubmit={(shiftType) => handleWriteShift(shiftType, editShift?.wardShiftTypeId)}
       />
     </div>
   );

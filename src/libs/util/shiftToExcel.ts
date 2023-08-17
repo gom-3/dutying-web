@@ -1,7 +1,7 @@
 import * as Excel from 'exceljs';
 
 export const shiftToExcel = (month: number, shift: Shift) => {
-  const flatRows = shift.levelNurses.flatMap((row) => row);
+  const flatRows = shift.divisionNumNurses.flatMap((row) => row);
 
   const workbook = new Excel.Workbook();
   const worksheet = workbook.addWorksheet(`${month}월 근무표`);
@@ -18,7 +18,7 @@ export const shiftToExcel = (month: number, shift: Shift) => {
       width: 3,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
     })) as Excel.Column[]),
-    ...(shift.shiftTypes.map((x) => ({
+    ...(shift.wardShiftTypes.map((x) => ({
       key: x.shortName,
       width: 8,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
@@ -41,7 +41,7 @@ export const shiftToExcel = (month: number, shift: Shift) => {
       acc[index + 1] = day.day;
       return acc;
     }, {} as { [key: string]: number }),
-    ...shift.shiftTypes.reduce((acc, shiftType) => {
+    ...shift.wardShiftTypes.reduce((acc, shiftType) => {
       acc[shiftType.shortName] = shiftType.shortName;
       return acc;
     }, {} as { [key: string]: string }),
@@ -66,31 +66,31 @@ export const shiftToExcel = (month: number, shift: Shift) => {
   flatRows.map((dutyRow) =>
     worksheet.addRow({
       name: dutyRow.nurse.name,
-      lastShift: dutyRow.lastShiftTypeIndexList
-        .map(({ shift: current }) => (current !== null ? shift.shiftTypes[current].shortName : ''))
+      lastShift: dutyRow.lastWardShiftList
+        .map((current) => (current !== null ? shift.wardShiftTypes[current].shortName : ''))
         .join(''),
-      ...dutyRow.shiftTypeIndexList.reduce((acc, { shift: current }, index) => {
-        acc[index + 1] = current != null ? shift.shiftTypes[current].shortName : '';
+      ...dutyRow.wardShiftList.reduce((acc, current, index) => {
+        acc[index + 1] = current != null ? shift.wardShiftTypes[current].shortName : '';
         return acc;
       }, {} as { [key: string]: string }),
-      ...shift.shiftTypes.reduce((acc, shiftType, index) => {
-        acc[shiftType.shortName] = dutyRow.shiftTypeIndexList.filter(
-          ({ shift: current }) => current === index
+      ...shift.wardShiftTypes.reduce((acc, shiftType, index) => {
+        acc[shiftType.shortName] = dutyRow.wardShiftList.filter(
+          (current) => current === index
         ).length;
         return acc;
       }, {} as { [key: string]: number }),
-      WO: dutyRow.shiftTypeIndexList.filter(
-        ({ shift: current }, i) =>
+      WO: dutyRow.wardShiftList.filter(
+        (current, i) =>
           current === 3 && shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
       ).length,
     })
   );
 
-  shift.shiftTypes.map((shiftType, index) => {
+  shift.wardShiftTypes.map((shiftType, index) => {
     worksheet.addRow({
       lastShift: shiftType.name,
       ...shift.days.reduce((acc, _, i) => {
-        acc[i + 1] = flatRows.filter((item) => item.shiftTypeIndexList[i].shift === index).length;
+        acc[i + 1] = flatRows.filter((item) => item.wardShiftList[i] === index).length;
         return acc;
       }, {} as { [key: string]: number }),
     });

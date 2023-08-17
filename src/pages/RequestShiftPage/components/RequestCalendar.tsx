@@ -73,7 +73,7 @@ export default function RequestCalendar({ isEditable }: Props) {
         className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {requestShift.levelNurses.map((rows, level) => {
+        {requestShift.divisionNumNurses.map((rows, level) => {
           return foldedLevels[level] ? (
             <div
               key={level}
@@ -111,7 +111,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                       {row.nurse.name}
                     </div>
                     <div className="flex h-full px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ reqShift }, j) => {
+                      {row.wardReqShiftList.map((reqShift, j) => {
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
                           requestShift.days[j].dayType === 'sunday' ||

@@ -36,7 +36,7 @@ function SetShiftType() {
               className="h-[2rem] w-[2rem] rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
               value={shiftType.shortName}
               onChange={(e) =>
-                editShiftType(shiftType.shiftTypeId, {
+                editShiftType(shiftType.wardShiftTypeId, {
                   ...shiftType,
                   shortName: e.target.value.slice(0, 1).toUpperCase(),
                 })
@@ -52,7 +52,7 @@ function SetShiftType() {
                   className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
                   initTime={shiftType.startTime}
                   onTimeChange={(value) =>
-                    editShiftType(shiftType.shiftTypeId, { ...shiftType, startTime: value })
+                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, startTime: value })
                   }
                 />
                 <p className="font-poppins text-[1.25rem]">~</p>
@@ -60,7 +60,7 @@ function SetShiftType() {
                   className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
                   initTime={shiftType.endTime}
                   onTimeChange={(value) =>
-                    editShiftType(shiftType.shiftTypeId, { ...shiftType, endTime: value })
+                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, endTime: value })
                   }
                 />
               </>
@@ -78,7 +78,7 @@ function SetShiftType() {
               type="color"
               value={shiftType.color}
               onChange={(e) =>
-                editShiftType(shiftType.shiftTypeId, { ...shiftType, color: e.target.value })
+                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, color: e.target.value })
               }
             />
           </div>
@@ -87,7 +87,7 @@ function SetShiftType() {
             {!shiftType.isDefault && (
               <ExitIcon
                 className="h-[2.25rem] w-[2.25rem] cursor-pointer"
-                onClick={() => handleDeleteShift(shiftType.shiftTypeId)}
+                onClick={() => handleDeleteShift(shiftType.wardShiftTypeId)}
               />
             )}
           </div>

@@ -14,7 +14,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
   if (weeks.length > 0) {
     currentMonth = weeks[2][2].getMonth();
   }
-  const shiftTypeIndexList = mockShift.levelNurses[0][0].shiftTypeIndexList;
+  const wardShiftList = mockShift.divisionNumNurses[0][0].wardShiftList;
 
   return (
     <table className="h-[24.375rem] w-full">
@@ -54,7 +54,7 @@ const MonthlyCalendarTable = ({ weeks, selectedWeek }: Props) => {
                     </div>
                     <ShiftCircle
                       translucent={!isCurrentMonth}
-                      id={shiftTypeIndexList[day.getDate() - 1]?.shift}
+                      id={wardShiftList[day.getDate() - 1]}
                     />
                   </td>
                 );

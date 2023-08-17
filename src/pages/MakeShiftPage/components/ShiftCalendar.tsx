@@ -94,7 +94,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
           </div>
         </div>
         <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
-          {shift.shiftTypes.map((shiftType, index) => (
+          {shift.wardShiftTypes.map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
@@ -106,7 +106,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
         className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pt-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {shift.levelNurses.map((rows, level) => {
+        {shift.divisionNumNurses.map((rows, level) => {
           return rows.length ? (
             shift && foldedLevels[level] ? (
               <div
@@ -168,16 +168,17 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                         />
                       </div>
                       <div className="flex w-[5.625rem] gap-[.125rem]">
-                        {row.lastShiftTypeIndexList.map(({ shift: current }, j) => (
+                        {row.lastWardShiftList.map((current, j) => (
                           <ShiftBadge
                             key={j}
-                            shiftType={current != null ? shift.shiftTypes[current] : null}
+                            shiftType={current != null ? shift.wardShiftTypes[current] : null}
                             className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
                           />
                         ))}
                       </div>
                       <div className="flex h-full  px-[1rem]">
-                        {row.shiftTypeIndexList.map(({ reqShift: request, shift: current }, j) => {
+                        {row.wardShiftList.map((current, j) => {
+                          const request = row.wardReqShiftList[j];
                           const isSaturday = shift.days[j].dayType === 'saturday';
                           const isSunday =
                             shift.days[j].dayType === 'sunday' ||
@@ -199,7 +200,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                               {request !== null && current !== null && (
                                 <RequestLayer
                                   isAccept={request === current}
-                                  request={shift.shiftTypes[request]}
+                                  request={shift.wardShiftTypes[request]}
                                 />
                               )}
                               <ShiftBadge
@@ -215,8 +216,8 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                   current === null
                                     ? request === null
                                       ? null
-                                      : shift.shiftTypes[request]
-                                    : shift.shiftTypes[current]
+                                      : shift.wardShiftTypes[request]
+                                    : shift.wardShiftTypes[current]
                                 }
                                 isOnlyRequest={current === null && request !== null}
                                 className={`z-10 cursor-pointer 
@@ -237,20 +238,20 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                 <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                   {rows.map((row, i) => (
                     <div key={i} className="flex h-[3.25rem] items-center">
-                      {shift.shiftTypes.map((_, index) => (
+                      {shift.wardShiftTypes.map((_, index) => (
                         <div
                           key={index}
                           className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                         >
-                          {row.shiftTypeIndexList.filter(({ shift }) => shift === index).length}
+                          {row.wardShiftList.filter((current) => current === index).length}
                         </div>
                       ))}
                       <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
                         {
-                          row.shiftTypeIndexList.filter(
-                            ({ shift: current }, i) =>
+                          row.wardShiftList.filter(
+                            (current, i) =>
                               current &&
-                              shift.shiftTypes[current].isOff &&
+                              shift.wardShiftTypes[current].isOff &&
                               shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
                           ).length
                         }

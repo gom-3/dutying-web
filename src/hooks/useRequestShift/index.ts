@@ -24,7 +24,7 @@ const useRequestShift = () => {
       onSuccess: (data) =>
         setState(
           'foldedLevels',
-          data.levelNurses.map(() => false)
+          data.divisionNumNurses.map(() => false)
         ),
     }
   );
@@ -42,7 +42,7 @@ const useRequestShift = () => {
         year,
         month,
         requestShift.days[focus.day].day,
-        requestShift.levelNurses[focus.level][focus.row].nurse.nurseId,
+        requestShift.divisionNumNurses[focus.level][focus.row].nurse.nurseId,
         shiftTypeId
       ),
     {
@@ -52,13 +52,13 @@ const useRequestShift = () => {
 
         if (!oldShift) return;
         const newShiftTypeIndex = shiftTypeId
-          ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+          ? oldShift.shiftTypes.findIndex((x) => x.wardShiftTypeId === shiftTypeId)
           : null;
 
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].reqShift =
+            draft.divisionNumNurses[focus.level][focus.row].wardReqShiftList[focus.day] =
               newShiftTypeIndex;
           })
         );
@@ -108,8 +108,8 @@ const useRequestShift = () => {
     if (
       !focus ||
       !requestShift ||
-      requestShift.levelNurses[focus.level][focus.row].shiftTypeIndexList[focus.day].reqShift ===
-        requestShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+      requestShift.divisionNumNurses[focus.level][focus.row].wardReqShiftList[focus.day] ===
+        requestShift.shiftTypes.findIndex((x) => x.wardShiftTypeId === shiftTypeId)
     )
       return;
     focusedShiftChange({ requestShift, focus, shiftTypeId });
@@ -124,7 +124,7 @@ const useRequestShift = () => {
         keys: [shiftType.shortName],
         callback: () => {
           if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-            changeFocusedShift(shiftType.shiftTypeId);
+            changeFocusedShift(shiftType.wardShiftTypeId);
           }
         },
       })),

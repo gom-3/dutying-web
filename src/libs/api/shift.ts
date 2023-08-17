@@ -30,19 +30,26 @@ export const updateShiftType = async (
     )
   ).data;
 
-export const getShift = async (wardId: number, year: number, month: number) =>
-  (await axiosInstance.get<Shift>(`/wards/${wardId}/duty?${qs.stringify({ year, month })}`)).data;
+export const getShift = async (wardId: number, teamId: number, year: number, month: number) =>
+  (
+    await axiosInstance.get<Shift>(
+      `/wards/${wardId}/shift-teams/${teamId}/duty?${qs.stringify({ year, month })}`
+    )
+  ).data;
 
 export const updateShift = async (
+  wardId: number,
   year: number,
   month: number,
   day: number,
-  nurseId: number,
-  shiftTypeId: number | null
+  shiftNurseId: number,
+  wardShiftTypeId: number | null
 ) =>
   (
-    await axiosInstance.patch<null>(`/shifts?${qs.stringify({ nurseId, year, month, day })}`, {
-      shiftTypeId,
+    await axiosInstance.patch<null>(`/wards/${wardId}/shifts`, {
+      shiftNurseId,
+      date: `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
+      wardShiftTypeId,
     })
   ).data;
 
