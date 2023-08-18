@@ -31,6 +31,10 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     if (open === false) setWriteShift(initialValue);
   }, [open]);
 
+  useEffect(() => {
+    if (shiftType) setWriteShift(shiftType);
+  }, [shiftType]);
+
   return open
     ? createPortal(
         <div
@@ -125,16 +129,18 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
               </div>
             </div>
             <div className="flex">
-              <Button
-                className="absolute bottom-[1.875rem] right-[7.9375rem] h-[2.5rem] w-[4.6875rem] text-[1.25rem] font-semibold"
-                type="outline"
-                onClick={() => {
-                  onDelete();
-                  close();
-                }}
-              >
-                삭제
-              </Button>
+              {shiftType && (
+                <Button
+                  className="absolute bottom-[1.875rem] right-[7.9375rem] h-[2.5rem] w-[4.6875rem] border-sub-2.5 text-[1.25rem] font-semibold text-sub-2.5"
+                  type="outline"
+                  onClick={() => {
+                    onDelete();
+                    close();
+                  }}
+                >
+                  삭제
+                </Button>
+              )}
               <Button
                 className="absolute bottom-[1.875rem] right-[2.625rem] h-[2.5rem] w-[4.6875rem] text-[1.25rem] font-semibold"
                 type="outline"

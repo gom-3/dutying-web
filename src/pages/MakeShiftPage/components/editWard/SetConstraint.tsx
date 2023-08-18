@@ -48,7 +48,7 @@ const SetConstraint = () => {
                   최대
                   <Select
                     value={value!}
-                    options={[3, 4, 5]}
+                    options={[3, 4, 5, 6]}
                     onChange={(e) => {
                       updateConstraint({
                         ...wardConstraint,
@@ -56,14 +56,14 @@ const SetConstraint = () => {
                       });
                     }}
                     className="w-[4.125rem]"
-                  />{' '}
+                  />
                   일&nbsp;
                   <span className="underline">이하</span>
                 </div>
               ))
               .with('maxContinuousNight', () => (
                 <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
-                  최대{' '}
+                  최대
                   <Select
                     value={value!}
                     options={[3, 4, 5]}
@@ -74,17 +74,17 @@ const SetConstraint = () => {
                       });
                     }}
                     className="w-[4.125rem]"
-                  />{' '}
+                  />
                   일&nbsp;
                   <span className="underline">이하</span>
                 </div>
               ))
               .with('minContinuousNight', () => (
                 <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
-                  최소{' '}
+                  최소
                   <Select
                     value={value!}
-                    options={[3, 4, 5]}
+                    options={[2, 3, 4, 5]}
                     onChange={(e) => {
                       updateConstraint({
                         ...wardConstraint,
@@ -92,17 +92,17 @@ const SetConstraint = () => {
                       });
                     }}
                     className="w-[4.125rem]"
-                  />{' '}
+                  />
                   일&nbsp;
                   <span className="underline">이상</span>
                 </div>
               ))
               .with('minNightInterval', () => (
                 <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
-                  최대{' '}
+                  최소
                   <Select
                     value={value!}
-                    options={[3, 4, 5]}
+                    options={[3, 4, 5, 6, 7]}
                     onChange={(e) => {
                       updateConstraint({
                         ...wardConstraint,
@@ -110,17 +110,16 @@ const SetConstraint = () => {
                       });
                     }}
                     className="w-[4.125rem]"
-                  />{' '}
+                  />
                   일&nbsp;
-                  <span className="underline">이하</span>
+                  <span className="underline">이상</span>
                 </div>
               ))
               .with('minOffAssignAfterNight', () => (
                 <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
-                  최대{' '}
                   <Select
                     value={value!}
-                    options={[3, 4, 5]}
+                    options={[2, 3]}
                     onChange={(e) => {
                       updateConstraint({
                         ...wardConstraint,
@@ -128,7 +127,7 @@ const SetConstraint = () => {
                       });
                     }}
                     className="w-[4.125rem]"
-                  />{' '}
+                  />
                   일&nbsp;
                 </div>
               ))

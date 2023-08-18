@@ -112,7 +112,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
     minNightInterval: {
       type: 'wrong',
       isActive: wardConstraint.minNightInterval,
-      regExp: new RegExp(`n[^n]{e,${wardConstraint.minNightIntervalVal - 1}}n`, 'g'),
+      regExp: new RegExp(`n[^n]{1,${wardConstraint.minNightIntervalVal - 1}}n`, 'g'),
       message: `나이트 간격이 최소 ${wardConstraint.minNightIntervalVal}일 이상이어야 합니다.`,
       value: wardConstraint.minNightIntervalVal,
       label: '나이트 간격',
@@ -129,7 +129,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
       type: 'bad',
       isActive: wardConstraint.minContinuousNight,
       regExp: new RegExp(
-        `(?<!(n|-))n{0,${wardConstraint.minContinuousNightVal - 1}}(?!(n|-))`,
+        `(?<!(n|-))n{1,${wardConstraint.minContinuousNightVal - 1}}(?!(n|-))`,
         'g'
       ),
       message: `나이트 근무는 최소 ${wardConstraint.minContinuousNightVal}일 이상 배정해야 합니다.`,
@@ -139,7 +139,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
     minOffAssignAfterNight: {
       type: 'bad',
       isActive: wardConstraint.minOffAssignAfterNight,
-      regExp: new RegExp(`n([de]|o{0,${wardConstraint.minOffAssignAfterNightVal - 1}}[den])`, 'g'),
+      regExp: new RegExp(`n([de]|o{1,${wardConstraint.minOffAssignAfterNightVal - 1}}[den])`, 'g'),
       message: `나이트 근무 후 ${wardConstraint.minOffAssignAfterNightVal}일 이상 OFF를 권장합니다.`,
       value: wardConstraint.minOffAssignAfterNightVal,
       label: '나이트 근무 후 오프 배정',
