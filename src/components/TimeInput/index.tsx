@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface Props
@@ -74,6 +74,10 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
       }
     }
   };
+
+  useEffect(() => {
+    if (initTime) setTime(initTime);
+  }, [initTime]);
 
   return (
     <input

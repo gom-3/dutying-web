@@ -2,30 +2,31 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRequestShift, updateRequestShift } from '@libs/api/shift';
-import { useAccount } from 'store';
 import { koToEn } from '@libs/util/koToEn';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
+import { findNurse, keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
 import { produce } from 'immer';
+import useGlobalStore from 'store';
 
 const useRequestShift = () => {
   const [year, month, focus, foldedLevels, setState] = useRequestShiftStore(
     (state) => [state.year, state.month, state.focus, state.foldedLevels, state.setState],
     shallow
   );
-  const { account } = useAccount();
+  const { wardId } = useGlobalStore();
 
   const queryClient = useQueryClient();
-  const requestShiftQueryKey = ['requestShift', account.nurseId, year, month];
+  const requestShiftQueryKey = ['requestShift', wardId, year, month];
   const { data: requestShift, status: shiftStatus } = useQuery(
     requestShiftQueryKey,
-    () => getRequestShift(account.wardId, year, month),
+    () => getRequestShift(wardId!, year, month),
     {
+      enabled: wardId !== null,
       onSuccess: (data) =>
         setState(
           'foldedLevels',
-          data.levelNurses.map(() => false)
+          data.divisionShiftNurses.map(() => false)
         ),
     }
   );
@@ -43,7 +44,7 @@ const useRequestShift = () => {
         year,
         month,
         requestShift.days[focus.day].day,
-        focus.nurse.nurseId,
+        findNurse(requestShift, focus.shiftNurseId)!.shiftNurseId,
         shiftTypeId
       ),
     {
@@ -52,18 +53,15 @@ const useRequestShift = () => {
         const oldShift = queryClient.getQueryData<RequestShift>(requestShiftQueryKey);
 
         if (!oldShift) return;
-        const newShiftTypeIndex = shiftTypeId
-          ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
-          : null;
 
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.levelNurses
+            draft.divisionShiftNurses
               .flatMap((x) => x)
-              .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[
+              .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardReqShiftList[
               focus.day
-            ].reqShift = newShiftTypeIndex;
+            ] = shiftTypeId;
           })
         );
 
@@ -82,7 +80,7 @@ const useRequestShift = () => {
     }
   );
 
-  const foldLevel = (level: Nurse['level']) => {
+  const foldLevel = (level: number) => {
     if (!requestShift || !foldedLevels) return;
     setState(
       'foldedLevels',
@@ -112,10 +110,11 @@ const useRequestShift = () => {
     if (
       !focus ||
       !requestShift ||
-      requestShift.levelNurses
+      requestShift.divisionShiftNurses
         .flatMap((x) => x)
-        .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[focus.day]
-        .reqShift === requestShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+        .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardReqShiftList[
+        focus.day
+      ] === shiftTypeId
     )
       return;
     focusedShiftChange({ requestShift, focus, shiftTypeId });
@@ -130,7 +129,7 @@ const useRequestShift = () => {
         keys: [shiftType.shortName],
         callback: () => {
           if (shiftType.shortName.toUpperCase() === koToEn(e.key).toUpperCase() && focus) {
-            changeFocusedShift(shiftType.shiftTypeId);
+            changeFocusedShift(shiftType.wardShiftTypeId);
           }
         },
       })),

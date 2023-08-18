@@ -6,18 +6,16 @@ interface Props {
 
 const ShiftSelect = ({ mode }: Props) => {
   const {
-    state: { nurses, selectedNurseId },
+    state: { selectedNurse },
     actions: { updateNurseShift },
   } = useEditNurse();
 
-  const nurseShiftTypes = nurses
-    ? nurses.find((nurse) => nurse.nurseId === selectedNurseId)?.nurseShiftTypes
-    : null;
+  const nurseShiftTypes = selectedNurse?.nurseShiftTypes;
 
   const handleOnClick = (i: number) => {
-    if (!nurseShiftTypes || !selectedNurseId) return;
-    updateNurseShift(selectedNurseId, nurseShiftTypes[i].nurseShiftTypeId, {
-      [mode]: !nurseShiftTypes[i][mode],
+    if (!selectedNurse) return;
+    updateNurseShift(selectedNurse.nurseId, selectedNurse.nurseShiftTypes[i].nurseShiftTypeId, {
+      [mode]: !selectedNurse.nurseShiftTypes[i][mode],
     });
   };
 

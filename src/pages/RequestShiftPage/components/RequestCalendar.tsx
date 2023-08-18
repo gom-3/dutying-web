@@ -73,7 +73,7 @@ export default function RequestCalendar({ isEditable }: Props) {
         className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {requestShift.levelNurses.map((rows, level) => {
+        {requestShift.divisionShiftNurses.map((rows, level) => {
           return foldedLevels[level] ? (
             <div
               key={level}
@@ -103,21 +103,21 @@ export default function RequestCalendar({ isEditable }: Props) {
                   <div
                     key={rowIndex}
                     className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
-                      focus?.nurse.nurseId === row.nurse.nurseId && 'bg-main-4'
+                      focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
                     <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
-                      {row.nurse.name}
+                      {row.shiftNurse.name}
                     </div>
                     <div className="flex h-full px-[1rem]">
-                      {row.shiftTypeIndexList.map(({ reqShift }, j) => {
+                      {row.wardReqShiftList.map((reqShift, j) => {
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
                           requestShift.days[j].dayType === 'sunday' ||
                           requestShift.days[j].dayType === 'holiday';
                         const isFocused =
-                          focus?.nurse.nurseId === row.nurse.nurseId && focus.day === j;
+                          focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
                         return (
                           <div
                             key={j}
@@ -129,7 +129,8 @@ export default function RequestCalendar({ isEditable }: Props) {
                               key={j}
                               onClick={() => {
                                 changeFocus?.({
-                                  nurse: row.nurse,
+                                  shiftNurseId: row.shiftNurse.shiftNurseId,
+                                  shiftNurseName: row.shiftNurse.name,
                                   day: j,
                                 });
                               }}

@@ -1,43 +1,54 @@
 import axiosInstance from './client';
-import qs from 'qs';
-
-interface NursesList {
-  nurses: Nurse[];
-}
 
 export type updateNurseShiftTypeRequest = {
   isPossible?: boolean;
   isPrefer?: boolean;
 };
 
-export const getNursesByWardId = async (wardId: number) =>
-  (await axiosInstance.get<NursesList>('/wards/' + wardId + '/nurses')).data.nurses;
+const getNurse = async (nurseId: number) =>
+  (await axiosInstance.get<Nurse>(`/nurses/${nurseId}`)).data;
 
-export const updateNurse = async (nurseId: number, updatedNurse: Nurse) =>
-  (await axiosInstance.patch<Nurse>('/nurses/' + nurseId, updatedNurse)).data;
+const updateNurse = async (
+  nurseId: number,
+  updatedNurse: Pick<
+    Nurse,
+    | 'name'
+    | 'phoneNum'
+    | 'gender'
+    | 'isWorker'
+    | 'isDutyManager'
+    | 'isWardManager'
+    | 'employmentDate'
+    | 'workStartDate'
+    | 'workEndDate'
+    | 'memo'
+  >
+) => (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, updatedNurse)).data;
 
-export const addNurseInWard = async (wardId: number) =>
-  (await axiosInstance.post<Nurse>('/wards/' + wardId + '/nurses')).data;
+const connectNurse = async (nurseId: number) =>
+  (await axiosInstance.post(`/nurses/${nurseId}/connect`)).data;
 
-export const deleteNurseInWard = async (nurseId: number) =>
-  (await axiosInstance.delete('/nurses/' + nurseId)).data;
+const unConnectNurse = async (nurseId: number) =>
+  (await axiosInstance.delete(`/nurses/${nurseId}/connect`)).data;
 
-export const updateNurseShiftType = async (
+const updateNurseShiftType = async (
   nurseId: number,
   nurseShiftTypeId: number,
   change: updateNurseShiftTypeRequest
-) =>
-  (await axiosInstance.patch('/nurses/' + nurseId + '/shift-types/' + nurseShiftTypeId, change))
-    .data;
+) => (await axiosInstance.patch(`/nurses/${nurseId}/shift-types/${nurseShiftTypeId}`, change)).data;
 
-export const updateNurseCarry = async (
-  year: number,
-  month: number,
-  nurseId: number,
-  value: number
-) =>
+const updateNurseCarry = async (shiftNurseId: number, value: number) =>
   (
-    await axiosInstance.patch<null>(`/nurses/${nurseId}/carried?${qs.stringify({ year, month })}`, {
+    await axiosInstance.patch<null>(`/${shiftNurseId}/carried`, {
       value,
     })
   ).data;
+
+export {
+  getNurse,
+  updateNurse,
+  connectNurse,
+  unConnectNurse,
+  updateNurseShiftType,
+  updateNurseCarry,
+};

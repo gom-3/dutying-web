@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 
 interface Props
   extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  shiftType: ShiftType | null | undefined;
+  shiftType: WardShiftType | null | undefined;
   forwardRef?: Ref<HTMLDivElement>;
   isOnlyRequest?: boolean;
 }

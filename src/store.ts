@@ -1,32 +1,37 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-type User = {
-  nurseId: number;
-  wardId: number;
-};
-
 interface State {
-  account: User;
-  setAccount: (account: User) => void;
+  nurseId: number | null;
+  wardId: number | null;
 }
 
-export const useStore = create<State>()(
+interface Store extends State {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setState: (key: keyof State, value: any) => void;
+}
+
+const useGlobalStore = create<Store>()(
   devtools(
     persist(
-      (set) => ({
-        account: {
-          nurseId: 1,
-          wardId: 1,
-        },
-        setAccount: (account: User) => set(() => ({ account })),
+      (set, get) => ({
+        nurseId: 1,
+        wardId: 1,
+        setState: (key, value) =>
+          set(
+            produce(get(), (draft) => {
+              draft[key] = value;
+            })
+          ),
       }),
       {
         name: 'store',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        partialize: ({ setState, ...state }: Store) => state,
       }
     )
   )
 );
 
-export const useAccount = () =>
-  useStore((state) => ({ account: state.account, setAccount: state.setAccount }));
+export default useGlobalStore;

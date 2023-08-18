@@ -6,11 +6,13 @@ export const moveFocusByKeydown = (
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const flatNurses = shift.levelNurses.flatMap<{ nurse: Nurse }>((x) => x).map((x) => x.nurse);
-  const { day, nurse } = focus;
+  const flatNurses = shift.divisionShiftNurses
+    .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
+    .map((x) => x.shiftNurse);
+  const { day, shiftNurseId } = focus;
   const dayCnt = shift.days.length;
-  const nurseIndex = flatNurses.findIndex((x) => x.nurseId === nurse.nurseId);
-  let newNurse = nurse;
+  const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
+  let newNurseId = shiftNurseId;
   let newDay = day;
 
   if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
@@ -22,9 +24,9 @@ export const moveFocusByKeydown = (
       if (day === 0) {
         if (nurseIndex === 0) {
           newDay = dayCnt - 1;
-          newNurse = flatNurses[flatNurses.length - 1];
+          newNurseId = flatNurses[flatNurses.length - 1].shiftNurseId;
         } else {
-          newNurse = flatNurses[nurseIndex - 1];
+          newNurseId = flatNurses[nurseIndex - 1].shiftNurseId;
           newDay = dayCnt - 1;
         }
       } else {
@@ -35,10 +37,10 @@ export const moveFocusByKeydown = (
     case 'ArrowRight': {
       if (day === dayCnt - 1) {
         if (nurseIndex === flatNurses.length - 1) {
-          newNurse = flatNurses[0];
+          newNurseId = flatNurses[0].shiftNurseId;
           newDay = 0;
         } else {
-          newNurse = flatNurses[nurseIndex + 1];
+          newNurseId = flatNurses[nurseIndex + 1].shiftNurseId;
           newDay = 0;
         }
       } else {
@@ -48,30 +50,37 @@ export const moveFocusByKeydown = (
     }
     case 'ArrowUp': {
       if (nurseIndex === 0) {
-        newNurse = flatNurses[flatNurses.length - 1];
+        newNurseId = flatNurses[flatNurses.length - 1].shiftNurseId;
         newDay = day;
       } else {
-        newNurse = e.ctrlKey || e.metaKey ? flatNurses[0] : flatNurses[nurseIndex - 1];
+        newNurseId =
+          e.ctrlKey || e.metaKey
+            ? flatNurses[0].shiftNurseId
+            : flatNurses[nurseIndex - 1].shiftNurseId;
         newDay = day;
       }
       break;
     }
     case 'ArrowDown': {
       if (nurseIndex === flatNurses.length - 1) {
-        newNurse = flatNurses[0];
+        newNurseId = flatNurses[0].shiftNurseId;
         newDay = day;
       } else {
-        newNurse =
-          e.ctrlKey || e.metaKey ? flatNurses[flatNurses.length - 1] : flatNurses[nurseIndex + 1];
+        newNurseId =
+          e.ctrlKey || e.metaKey
+            ? flatNurses[flatNurses.length - 1].shiftNurseId
+            : flatNurses[nurseIndex + 1].shiftNurseId;
         newDay = day;
       }
       break;
     }
   }
-  if (newDay != day || newNurse != nurse) {
+  if (newDay != day || newNurseId != shiftNurseId) {
     setFocus({
       day: newDay,
-      nurse: newNurse,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      shiftNurseName: findNurse(shift, shiftNurseId)!.name,
+      shiftNurseId: newNurseId,
     });
   }
 };
@@ -87,98 +96,131 @@ export const keydownEventMapper = (
   });
 };
 
-export const updateCheckFaultOption = (ward: Ward) => {
+export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFaultOptions => {
   return {
-    twoOffAfterNight: {
-      isActive: true,
-      regExp: new RegExp(`2([01]|3[012])`, 'g'),
-      message: `나이트 근무 후 2일 이상 OFF를 권장합니다.`,
-      type: 'wrong',
-    },
-    ed: {
-      isActive: true,
-      regExp: new RegExp(`10`, 'g'),
-      message: `E 근무 후 D 근무는 권장되지 않습니다.`,
-      type: 'wrong',
-    },
     maxContinuousWork: {
-      isActive: true,
-      regExp: new RegExp(`(?<=[^012])[012]{${ward.maxContinuousWork + 1},}(?=[^012])`, 'g'),
-      message: `근무는 연속 ${ward.maxContinuousWork}일을 초과할 수 없습니다.`,
       type: 'wrong',
-    },
-    maxContinuousNight: {
-      isActive: true,
-      regExp: new RegExp(`2{${ward.maxContinuousNight + 1},}`, 'g'),
-      message: `나이트 근무가 연속 ${ward.maxContinuousNight}일을 초과했습니다`,
-      type: 'wrong',
+      isActive: wardConstraint.maxContinuousWork,
+      regExp: new RegExp(
+        `(?<=[^den])[den]{${wardConstraint.maxContinuousWorkVal + 1},}(?=[^den])`,
+        'g'
+      ),
+      message: `근무는 연속 ${wardConstraint.maxContinuousWorkVal}일을 초과할 수 없습니다.`,
+      value: wardConstraint.maxContinuousWorkVal,
+      label: '연속 근무 수',
     },
     minNightInterval: {
-      isActive: true,
-      regExp: new RegExp(`2[^2]{1,${ward.minNightInterval - 1}}2`, 'g'),
-      message: `나이트 간격이 최소 ${ward.minNightInterval}일 이상이어야 합니다.`,
       type: 'wrong',
+      isActive: wardConstraint.minNightInterval,
+      regExp: new RegExp(`n[^n]{1,${wardConstraint.minNightIntervalVal - 1}}n`, 'g'),
+      message: `나이트 간격이 최소 ${wardConstraint.minNightIntervalVal}일 이상이어야 합니다.`,
+      value: wardConstraint.minNightIntervalVal,
+      label: '나이트 간격',
     },
-    singleNight: {
-      isActive: true,
-      regExp: new RegExp(`(?<!(2|x))2(?!(2|x))`, 'g'),
-      message: `단일 나이트 근무는 권장되지 않습니다.`,
+    maxContinuousNight: {
+      type: 'wrong',
+      isActive: wardConstraint.maxContinuousNight,
+      regExp: new RegExp(`n{${wardConstraint.maxContinuousNightVal + 1},}`, 'g'),
+      message: `나이트 근무가 연속 ${wardConstraint.maxContinuousNightVal}일을 초과했습니다`,
+      value: wardConstraint.maxContinuousNightVal,
+      label: '연속 나이트',
+    },
+    minContinuousNight: {
       type: 'bad',
+      isActive: wardConstraint.minContinuousNight,
+      regExp: new RegExp(
+        `(?<!(n|-))n{1,${wardConstraint.minContinuousNightVal - 1}}(?!(n|-))`,
+        'g'
+      ),
+      message: `나이트 근무는 최소 ${wardConstraint.minContinuousNightVal}일 이상 배정해야 합니다.`,
+      value: wardConstraint.minContinuousNightVal,
+      label: '연속 나이트',
     },
-    maxContinuousOff: {
-      isActive: false,
-      regExp: new RegExp(`3{4,}`, 'g'),
-      message: `OFF가 연속 3일을 초과했습니다.`,
+    minOffAssignAfterNight: {
       type: 'bad',
+      isActive: wardConstraint.minOffAssignAfterNight,
+      regExp: new RegExp(`n([de]|o{1,${wardConstraint.minOffAssignAfterNightVal - 1}}[den])`, 'g'),
+      message: `나이트 근무 후 ${wardConstraint.minOffAssignAfterNightVal}일 이상 OFF를 권장합니다.`,
+      value: wardConstraint.minOffAssignAfterNightVal,
+      label: '나이트 근무 후 오프 배정',
     },
-    pongdang: {
-      isActive: true,
-      regExp: new RegExp(`(3030|0303|1313|3131)`, 'g'),
-      message: `퐁당퐁당 근무입니다.`,
+    excludeCertainWorkTypes: {
       type: 'bad',
+      isActive: wardConstraint.excludeCertainWorkTypes,
+      regExp: new RegExp(`(ed|nd|ne|nod)`, 'g'),
+      message: `ND/ED/NE/NOD 형태의 근무는 권장되지 않습니다.`,
+      value: null,
+      label: 'ND / ED / NE / NOD 근무 형태 불가능',
     },
-    noeeod: {
-      isActive: true,
-      regExp: new RegExp(`130`, 'g'),
-      message: `EOD 형태의 근무는 권장되지 않습니다.`,
+    excludeNightBeforeReqOff: {
       type: 'bad',
+      isActive: wardConstraint.excludeNightBeforeReqOff,
+      regExp: new RegExp(`nO`, 'g'),
+      message: `신청 오프 전날에는 나이트 근무를 권장하지 않습니다.`,
+      value: null,
+      label: '신청 오프 전날에는 나이트 근무 불가능',
     },
-  } as CheckFaultOptions;
+  };
 };
 
-export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions) => {
+export const checkShift = (
+  shift: Shift,
+  checkFaultOptions: CheckFaultOptions,
+  wardShiftTypeMap: Map<number, WardShiftType>
+) => {
   const faults: Map<string, Fault> = new Map();
 
-  for (let i = 0; i < shift.levelNurses.length; i++) {
-    const level = shift.levelNurses[i];
-    for (let j = 0; j < level.length; j++) {
-      const row = level[j];
+  for (let i = 0; i < shift.divisionShiftNurses.length; i++) {
+    const division = shift.divisionShiftNurses[i];
+    for (let j = 0; j < division.length; j++) {
+      const row = division[j];
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
-        let str = row.shiftTypeIndexList.map((x) => (x.shift === null ? 'x' : x.shift)).join('');
-        str = 'x' + str + 'x'; // 단일 나이트 검사를 위한 처리
+        if (option.isActive === false) continue;
+        let str = row.wardShiftList
+          .map((x, index) =>
+            x === null
+              ? '-'
+              : x === row.wardReqShiftList[index]
+              ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
+              : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
+          )
+          .join('');
+        str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const match = option.regExp.exec(str);
           if (match === null) break;
-          const focus = { level: i, row: j, day: match.index - 1 };
+          const focus: Focus = {
+            shiftNurseId: row.shiftNurse.shiftNurseId,
+            shiftNurseName: row.shiftNurse.name,
+            day: match.index - 1,
+          };
 
-          faults.set(Object.values(focus).join(), {
-            type: option.type,
-            faultType: key,
-            focus: { nurse: row.nurse, day: match.index - 1 },
-            message: option.message,
-            matchString: match[0]
-              .split('')
-              .map((x) => (x === 'x' ? '-' : shift.shiftTypes[Number(x)].shortName))
-              .map((x) => (x === '/' ? 'O' : x))
-              .join(''),
-            length: match[0].length,
-          });
+          faults.set(
+            Object.values({ shiftNurseId: focus.shiftNurseId, day: focus.day }).join(','),
+            {
+              type: option.type,
+              faultType: key,
+              nurseName: row.shiftNurse.nurseInfo.name,
+              focus,
+              message: option.message,
+              matchString: match[0],
+              length: match[0].length,
+            }
+          );
         }
       }
     }
   }
 
   return faults;
+};
+
+export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => {
+  return (
+    shift.divisionShiftNurses
+      .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
+      .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
+  );
 };

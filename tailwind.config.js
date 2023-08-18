@@ -8,6 +8,7 @@ export default {
       },
       colors: {
         'text-1': '#150B3C',
+        'main-bg': '#FDFCFE',
         'main-1': '#844AFF',
         'main-2': '#B08BFF',
         'main-3': '#CEB6FF',

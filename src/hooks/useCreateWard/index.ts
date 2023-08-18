@@ -1,24 +1,26 @@
 import { useEffect } from 'react';
 import useCreateWardStore from './store';
 import { shallow } from 'zustand/shallow';
-import { CreateShiftTypeRequest } from '@libs/api/shift';
+import { CreateShiftTypeDTO } from '@libs/api/shift';
+import { CreateWardDTO } from '@libs/api/ward';
 
 const useCreateWard = () => {
-  const [steps, currentStep, ward, shiftTypes, isFilled, error, setState] = useCreateWardStore(
-    (state) => [
-      state.steps,
-      state.currentStep,
-      state.ward,
-      state.shiftTypes,
-      state.isFilled,
-      state.error,
-      state.setState,
-    ],
-    shallow
-  );
+  const [steps, currentStep, createWardDTO, shiftTypes, isFilled, error, setState] =
+    useCreateWardStore(
+      (state) => [
+        state.steps,
+        state.currentStep,
+        state.createWardDTO,
+        state.shiftTypes,
+        state.isFilled,
+        state.error,
+        state.setState,
+      ],
+      shallow
+    );
 
   useEffect(() => {
-    if (Object.values(ward).includes('')) {
+    if (Object.values(createWardDTO).includes('')) {
       setState('isFilled', false);
       setState('error', { currentStep, message: '빈 값을 채워주세요' });
       return;
@@ -26,24 +28,23 @@ const useCreateWard = () => {
       setState('isFilled', true);
       setState('error', null);
     }
-  }, [ward, currentStep]);
+  }, [createWardDTO, currentStep]);
 
   return {
     state: {
       steps,
       currentStep,
-      ward,
+      createWardDTO,
       shiftTypes,
       isFilled,
       error,
     },
     actions: {
       changeCurrentStep: (step: number) => setState('currentStep', step),
-      changeWard: (key: keyof CreateWardRequestDTO, value: string | number) => {
-        setState('ward', { ...ward, [key]: value });
+      changeWard: (key: keyof CreateWardDTO, value: string | number) => {
+        setState('createWardDTO', { ...createWardDTO, [key]: value });
       },
-      changeShiftTypes: (shiftTypes: CreateShiftTypeRequest[]) =>
-        setState('shiftTypes', shiftTypes),
+      changeShiftTypes: (shiftTypes: CreateShiftTypeDTO[]) => setState('shiftTypes', shiftTypes),
     },
   };
 };

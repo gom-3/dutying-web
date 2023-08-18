@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 type Focus = {
-  nurse: Nurse;
+  shiftNurseName: string;
+  shiftNurseId: number;
   day: number;
 };
 
 type DayInfo = {
-  countByShiftList: { count: number; shiftType: ShiftType }[];
+  countByShiftList: { count: number; shiftType: WardShiftType }[];
   month: number;
   day: number;
   nurse: Nurse;
@@ -17,31 +18,32 @@ type EditHistory = Map<
   {
     current: number;
     history: {
+      nurseName: string;
       focus: Focus;
-      prevShiftType: ShiftType | null;
-      nextShiftType: ShiftType | null;
+      prevShiftType: WardShiftType | null;
+      nextShiftType: WardShiftType | null;
       dateString: string;
     }[];
   }
 >;
 
 type FaultType =
-  | 'twoOffAfterNight' // NOD | NOE
-  | 'ed' // ED
-  | 'maxContinuousWork' // DDDEEE
-  | 'maxContinuousNight' // NNNN
-  | 'minNightInterval' // NOON
-  | 'singleNight' // ONO
-  | 'maxContinuousOff' // OOOO
-  | 'pongdang' // EOEO | DODO
-  | 'noeeod'; // NOE | EOD
+  | 'maxContinuousWork'
+  | 'minNightInterval'
+  | 'maxContinuousNight'
+  | 'minContinuousNight'
+  | 'minOffAssignAfterNight'
+  | 'excludeCertainWorkTypes'
+  | 'excludeNightBeforeReqOff';
 
 type CheckFaultOptions = {
   [key in FaultType]: {
     type: 'wrong' | 'bad';
+    label: string;
     isActive: boolean;
     regExp: RegExp;
     message: string;
+    value: number | null;
   };
 };
 
@@ -49,6 +51,7 @@ type Fault = {
   type: 'wrong' | 'bad';
   faultType: FaultType;
   message: string;
+  nurseName: string;
   focus: Focus;
   matchString: string;
   length: number;

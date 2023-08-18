@@ -5,19 +5,14 @@ type Account = {
   nurseId: number | null;
   /** 소속된 병동 ID */
   wardId: number | null;
+  shiftTeamId: number;
   email: string;
   name: string;
-  createdAt: string;
+  gender: string;
+  phoneNum: string;
   modifiedAt: string;
   /** 계정 삭제 여부 */
   isDeleted: boolean;
-  /** 교대근무에 참여하는가? */
-  isWorker: boolean;
-  phoneNum: string;
-  gender: string;
-  birthday: string;
-  /** 입사 날짜 */
-  employmentDate: string;
   /** 병동 관리자 여부 */
   isManager: boolean;
   /** 온보딩 중 상태 */

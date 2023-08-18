@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { DragIcon, FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
@@ -19,7 +20,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     actions: { selectNurse },
   } = useEditNurse();
   const {
-    state: { shift, focus, faults, foldedLevels },
+    state: { shift, focus, faults, foldedLevels, wardShiftTypeMap },
     actions: { changeFocus, foldLevel, updateCarry },
   } = useEditShift();
   const focusedCellRef = useRef<HTMLElement>(null);
@@ -50,7 +51,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     }
   }, [focus]);
 
-  return shift && foldedLevels ? (
+  return shift && foldedLevels && wardShiftTypeMap ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -94,7 +95,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
           </div>
         </div>
         <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
-          {shift.shiftTypes.slice(0, 4).map((shiftType, index) => (
+          {shift.wardShiftTypes.slice(0, 4).map((shiftType, index) => (
             <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
               {shiftType.shortName}
             </div>
@@ -106,7 +107,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
         className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pt-[1.25rem] scrollbar-hide"
         ref={containerRef}
       >
-        {shift.levelNurses.map((rows, level) => {
+        {shift.divisionShiftNurses.map((rows, level) => {
           return rows.length ? (
             shift && foldedLevels[level] ? (
               <div
@@ -135,7 +136,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                     <div
                       key={rowIndex}
                       className={`flex h-[3.25rem] items-center gap-[1.25rem]
-                         ${focus?.nurse.nurseId === row.nurse.nurseId && 'bg-main-4'}`}
+                         ${focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'}`}
                     >
                       <div className="relative w-[2.125rem] shrink-0">
                         <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
@@ -144,44 +145,46 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                         className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
                         onClick={() => {
                           setNurseTabOpen(true);
-                          selectNurse(row.nurse.nurseId);
+                          selectNurse(row.shiftNurse.nurseInfo.nurseId);
                         }}
                       >
-                        {row.nurse.name}
+                        {row.shiftNurse.name}
                       </div>
                       <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
                         <TextField
+                          readOnly
                           className="text-md h-[1.875rem] w-[1.875rem] p-0 text-center text-sub-1"
-                          value={row.carried}
+                          value={row.shiftNurse.carried}
                           onClick={(e) => {
                             e.currentTarget.select();
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'ArrowUp')
-                              updateCarry(row.nurse.nurseId, row.carried + 1);
+                              updateCarry(row.shiftNurse.shiftNurseId, row.shiftNurse.carried + 1);
                             if (e.key === 'ArrowDown')
-                              updateCarry(row.nurse.nurseId, row.carried - 1);
+                              updateCarry(row.shiftNurse.shiftNurseId, row.shiftNurse.carried - 1);
                           }}
                         />
                       </div>
                       <div className="flex w-[5.625rem] gap-[.125rem]">
-                        {row.lastShiftTypeIndexList.map(({ shift: current }, j) => (
+                        {row.lastWardShiftList.map((current, j) => (
                           <ShiftBadge
                             key={j}
-                            shiftType={current != null ? shift.shiftTypes[current] : null}
+                            shiftType={current != null ? wardShiftTypeMap.get(current) : null}
                             className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
                           />
                         ))}
                       </div>
                       <div className="flex h-full  px-[1rem]">
-                        {row.shiftTypeIndexList.map(({ reqShift: request, shift: current }, j) => {
+                        {row.wardShiftList.map((current, j) => {
+                          const request = row.wardReqShiftList[j];
                           const isSaturday = shift.days[j].dayType === 'saturday';
                           const isSunday =
                             shift.days[j].dayType === 'sunday' ||
                             shift.days[j].dayType === 'holiday';
                           const isFocused =
-                            focus?.nurse.nurseId === row.nurse.nurseId && focus.day === j;
-                          const fault = faults.get(`${level},${rowIndex},${j}`);
+                            focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
+                          const fault = faults.get(`${row.shiftNurse.shiftNurseId},${j}`);
                           return (
                             <div
                               key={j}
@@ -193,14 +196,15 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                               {request !== null && current !== null && (
                                 <RequestLayer
                                   isAccept={request === current}
-                                  request={shift.shiftTypes[request]}
+                                  request={wardShiftTypeMap.get(request)!}
                                 />
                               )}
                               <ShiftBadge
                                 key={j}
                                 onClick={() => {
                                   changeFocus?.({
-                                    nurse: row.nurse,
+                                    shiftNurseName: row.shiftNurse.name,
+                                    shiftNurseId: row.shiftNurse.shiftNurseId,
                                     day: j,
                                   });
                                 }}
@@ -208,8 +212,8 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                   current === null
                                     ? request === null
                                       ? null
-                                      : shift.shiftTypes[request]
-                                    : shift.shiftTypes[current]
+                                      : wardShiftTypeMap.get(request)
+                                    : wardShiftTypeMap.get(current)
                                 }
                                 isOnlyRequest={current === null && request !== null}
                                 className={`z-10 cursor-pointer 
@@ -230,20 +234,20 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                 <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                   {rows.map((row, i) => (
                     <div key={i} className="flex h-[3.25rem] items-center">
-                      {shift.shiftTypes.slice(0, 4).map((_, index) => (
+                      {shift?.wardShiftTypes.slice(0, 4).map((_, index) => (
                         <div
                           key={index}
                           className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                         >
-                          {row.shiftTypeIndexList.filter(({ shift }) => shift === index).length}
+                          {row.wardShiftList.filter((current) => current === index).length}
                         </div>
                       ))}
                       <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
                         {
-                          row.shiftTypeIndexList.filter(
-                            ({ shift: current }, i) =>
+                          row.wardShiftList.filter(
+                            (current, i) =>
                               current &&
-                              shift.shiftTypes[current].isOff &&
+                              wardShiftTypeMap.get(current)?.isOff &&
                               shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
                           ).length
                         }

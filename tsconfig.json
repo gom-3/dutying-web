@@ -47,12 +47,6 @@
       "@libs": [
         "libs"
       ],
-      "@mocks/*": [
-        "mocks/*"
-      ],
-      "@mocks": [
-        "mocks"
-      ],
       "@hooks/*": [
         "hooks/*"
       ],

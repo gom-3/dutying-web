@@ -2,8 +2,8 @@
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
-import { useAccount } from 'store';
-import { getWard } from '@libs/api/ward';
+import useGlobalStore from 'store';
+import { getShiftTeams, getWard, getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -12,6 +12,7 @@ import { shallow } from 'zustand/shallow';
 import useEditShiftStore from './store';
 import {
   checkShift,
+  findNurse,
   keydownEventMapper,
   moveFocusByKeydown,
   updateCheckFaultOption,
@@ -21,69 +22,125 @@ const useEditShift = (activeEffect = false) => {
   const [
     year,
     month,
+    currentShiftTeam,
     focus,
     focusedDayInfo,
     foldedLevels,
     editHistory,
     faults,
     checkFaultOptions,
+    wardShiftTypeMap,
     setState,
   ] = useEditShiftStore(
     (state) => [
       state.year,
       state.month,
+      state.currentShiftTeam,
       state.focus,
       state.focusedDayInfo,
       state.foldedLevels,
       state.editHistory,
       state.faults,
       state.checkFaultOptions,
+      state.wardShiftTypeMap,
       state.setState,
     ],
     shallow
   );
-  const { account } = useAccount();
+  const { wardId } = useGlobalStore();
 
   const queryClient = useQueryClient();
 
-  const wardQueryKey = ['ward', account.wardId];
-  const shiftQueryKey = ['shift', account.wardId, year, month];
-  const { data: ward } = useQuery(wardQueryKey, () => getWard(account.wardId));
+  const wardQueryKey = ['ward', wardId];
+  const shiftQueryKey = ['shift', wardId, year, month];
+  const shiftTeamQueryKey = ['shiftTeams', wardId];
+  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
+
+  useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
+    enabled: currentShiftTeam === null && wardId != null,
+    onSuccess: (data) => {
+      setState('currentShiftTeam', data[0]);
+    },
+  });
+
+  const { data: wardConstraint } = useQuery(
+    wardConstraintQueryKey,
+    () => getWardConstraint(wardId!, currentShiftTeam!.shiftTeamId),
+    {
+      enabled: wardId !== null && currentShiftTeam !== null,
+    }
+  );
+  const { mutate: updateWardConstraintMutate } = useMutation(
+    ({
+      wardId,
+      shiftTeamId,
+      constraint,
+    }: {
+      wardId: number;
+      shiftTeamId: number;
+      constraint: WardConstraint;
+    }) => updateWardConstraint(wardId, shiftTeamId, constraint),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(wardConstraintQueryKey);
+      },
+    }
+  );
+
+  const { data: ward } = useQuery(wardQueryKey, () => getWard(wardId!), {
+    enabled: wardId !== null,
+  });
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getShift(account.wardId, year, month),
+    () => getShift(wardId!, currentShiftTeam!.shiftTeamId, year, month),
     {
-      onSuccess: (data) =>
+      enabled: wardId !== null && currentShiftTeam !== null,
+      onSuccess: (data) => {
+        if (data === null) return;
         setState(
           'foldedLevels',
-          data.levelNurses.map(() => false)
-        ),
+          data.divisionShiftNurses.map(() => false)
+        );
+
+        const wardShiftTypeMap = new Map<number, WardShiftType>();
+        data.wardShiftTypes.forEach((wardShiftType) => {
+          wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
+        });
+        setState('wardShiftTypeMap', wardShiftTypeMap);
+      },
     }
   );
   const { mutate: mutateShift, status: changeStatus } = useMutation(
-    ({ shift, focus, shiftTypeId }: { shift: Shift; focus: Focus; shiftTypeId: number | null }) =>
-      updateShift(year, month, shift.days[focus.day].day, focus.nurse.nurseId, shiftTypeId),
+    ({
+      wardId,
+      shift,
+      focus,
+      shiftTypeId,
+    }: {
+      wardId: number;
+      shift: Shift;
+      focus: Focus;
+      shiftTypeId: number | null;
+    }) =>
+      updateShift(wardId, year, month, shift.days[focus.day].day, focus.shiftNurseId, shiftTypeId),
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
-        const {
-          nurse: { nurseId, name },
-          day,
-        } = focus;
+        const { shiftNurseId, day } = focus;
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
         const oldEditHistory = editHistory;
 
-        if (!oldShift) return;
-        const oldShiftTypeIndex = oldShift.levelNurses
+        if (!oldShift || !wardShiftTypeMap) return;
+        const oldShiftTypeId = oldShift.divisionShiftNurses
           .flatMap((x) => x)
-          .find((x) => x.nurse.nurseId === nurseId)!.shiftTypeIndexList[day].shift;
+          .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)!.wardShiftList[focus.day];
 
         const edit = {
-          year,
-          month,
+          nurseName: findNurse(oldShift, focus.shiftNurseId)!.name,
           focus,
-          prevShiftType: oldShiftTypeIndex !== null ? oldShift.shiftTypes[oldShiftTypeIndex] : null,
-          nextShiftType: oldShift.shiftTypes.find((x) => x.shiftTypeId === shiftTypeId) || null,
+          prevShiftType:
+            oldShiftTypeId !== null ? wardShiftTypeMap.get(oldShiftTypeId) || null : null,
+          nextShiftType: shiftTypeId !== null ? wardShiftTypeMap.get(shiftTypeId) || null : null,
           dateString: new Date().toLocaleString(),
         };
 
@@ -101,17 +158,14 @@ const useEditShift = (activeEffect = false) => {
           })
         );
 
-        const newShiftTypeIndex = shiftTypeId
-          ? oldShift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
-          : null;
-
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.levelNurses
+            draft.divisionShiftNurses
               .flatMap((x) => x)
-              .find((x) => x.nurse.nurseId === nurseId)!.shiftTypeIndexList[day].shift =
-              newShiftTypeIndex;
+              .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardShiftList[
+              focus.day
+            ] = shiftTypeId;
           })
         );
 
@@ -141,10 +195,10 @@ const useEditShift = (activeEffect = false) => {
     }
   );
   const { mutate: mutateCarry } = useMutation(
-    ({ nurseId, value }: { nurseId: number; value: number }) =>
-      updateNurseCarry(year, month, nurseId, value),
+    ({ shiftNurseId, value }: { shiftNurseId: number; value: number }) =>
+      updateNurseCarry(shiftNurseId, value),
     {
-      onMutate: async ({ nurseId, value }) => {
+      onMutate: async ({ shiftNurseId, value }) => {
         await queryClient.cancelQueries(['shift']);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
@@ -153,9 +207,9 @@ const useEditShift = (activeEffect = false) => {
         queryClient.setQueryData<Shift>(
           shiftQueryKey,
           produce(oldShift, (draft) => {
-            const nurse = draft.levelNurses
+            const nurse = draft.divisionShiftNurses
               .flatMap((rows) => rows)
-              .find((row) => row.nurse.nurseId === nurseId);
+              .find((row) => row.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse;
             if (nurse) nurse.carried = value;
           })
         );
@@ -200,17 +254,23 @@ const useEditShift = (activeEffect = false) => {
   const changeFocusedShift = useCallback(
     (shiftTypeId: number | null) => {
       if (
+        !ward ||
         !focus ||
         !shift ||
-        shift.levelNurses.flatMap((x) => x).find((x) => x.nurse.nurseId === focus.nurse.nurseId)!
-          .shiftTypeIndexList[focus.day].shift ===
-          shift.shiftTypes.findIndex((x) => x.shiftTypeId === shiftTypeId)
+        shift.divisionShiftNurses
+          .flatMap((x) => x)
+          .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardShiftList[
+          focus.day
+        ] === shiftTypeId
       )
         return;
 
-      const { reqShift: request, shift: current } = shift.levelNurses
+      const current = shift.divisionShiftNurses
         .flatMap((x) => x)
-        .find((x) => x.nurse.nurseId === focus.nurse.nurseId)!.shiftTypeIndexList[focus.day];
+        .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardShiftList[focus.day];
+      const request = shift.divisionShiftNurses
+        .flatMap((x) => x)
+        .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardReqShiftList[focus.day];
       if (
         request != null &&
         request === current &&
@@ -218,13 +278,13 @@ const useEditShift = (activeEffect = false) => {
       )
         return;
 
-      mutateShift({ shift, focus, shiftTypeId });
+      mutateShift({ wardId: ward.wardId, shift, focus, shiftTypeId });
     },
     [focus, shift]
   );
 
   const foldLevel = useCallback(
-    (level: Nurse['level']) => {
+    (level: number) => {
       if (!shift || !foldedLevels) return;
       setState(
         'foldedLevels',
@@ -250,8 +310,8 @@ const useEditShift = (activeEffect = false) => {
           break;
         }
         changesMap.set(
-          edit.focus.nurse.nurseId + '/' + edit.focus.day,
-          edit.prevShiftType === null ? null : edit.prevShiftType.shiftTypeId
+          edit.focus.shiftNurseId + '/' + edit.focus.day,
+          edit.prevShiftType === null ? null : edit.prevShiftType.wardShiftTypeId
         );
         lastFocus = edit.focus;
         tempDiff--;
@@ -265,8 +325,8 @@ const useEditShift = (activeEffect = false) => {
           break;
         }
         changesMap.set(
-          edit.focus.nurse.nurseId + '/' + edit.focus.day,
-          edit.nextShiftType === null ? null : edit.nextShiftType.shiftTypeId
+          edit.focus.shiftNurseId + '/' + edit.focus.day,
+          edit.nextShiftType === null ? null : edit.nextShiftType.wardShiftTypeId
         );
         lastFocus = edit.focus;
         tempDiff++;
@@ -274,7 +334,7 @@ const useEditShift = (activeEffect = false) => {
     }
 
     const changes = Array.from(changesMap.keys()).map((key) => ({
-      nurseId: parseInt(key.split('/')[0]),
+      shiftNurseId: parseInt(key.split('/')[0]),
       day: parseInt(key.split('/')[1]),
       shiftTypeId: changesMap.get(key) as number | null,
     }));
@@ -293,14 +353,11 @@ const useEditShift = (activeEffect = false) => {
         shiftQueryKey,
         produce(shift, (draft) => {
           changes.forEach((change) => {
-            draft.levelNurses
+            draft.divisionShiftNurses
               .flatMap((x) => x)
-              .find((x) => x.nurse.nurseId === change.nurseId)!.shiftTypeIndexList[
+              .find((x) => x.shiftNurse.shiftNurseId === change.shiftNurseId)!.wardShiftList[
               change.day
-            ].shift =
-              change.shiftTypeId === null
-                ? null
-                : shift.shiftTypes.findIndex((x) => x.shiftTypeId === change.shiftTypeId);
+            ] = change.shiftTypeId;
           });
         })
       );
@@ -320,9 +377,9 @@ const useEditShift = (activeEffect = false) => {
       moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => setState('focus', focus));
       keydownEventMapper(
         e,
-        ...shift.shiftTypes.map((shiftType) => ({
+        ...shift.wardShiftTypes.map((shiftType) => ({
           keys: [shiftType.shortName],
-          callback: () => changeFocusedShift(shiftType.shiftTypeId),
+          callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
         })),
         { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
       );
@@ -331,12 +388,13 @@ const useEditShift = (activeEffect = false) => {
   );
 
   useEffect(() => {
-    if (activeEffect && ward) setState('checkFaultOptions', updateCheckFaultOption(ward));
-  }, [activeEffect, ward]);
+    if (activeEffect && wardConstraint)
+      setState('checkFaultOptions', updateCheckFaultOption(wardConstraint));
+  }, [activeEffect, wardConstraint]);
 
   useEffect(() => {
-    if (activeEffect && shift && checkFaultOptions)
-      setState('faults', checkShift(shift, checkFaultOptions));
+    if (activeEffect && shift && checkFaultOptions && wardShiftTypeMap)
+      setState('faults', checkShift(shift, checkFaultOptions, wardShiftTypeMap));
   }, [activeEffect, shift, checkFaultOptions]);
 
   useEffect(() => {
@@ -357,13 +415,24 @@ const useEditShift = (activeEffect = false) => {
       foldedLevels,
       changeStatus,
       shiftStatus,
+      checkFaultOptions,
+      wardShiftTypeMap,
+      wardConstraint,
     },
     actions: {
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
-      updateCarry: (nurseId: number, value: number) => mutateCarry({ nurseId, value }),
+      updateCarry: (shiftNurseId: number, value: number) => mutateCarry({ shiftNurseId, value }),
       moveHistory,
+      updateConstraint: (constraint: WardConstraint) =>
+        wardId &&
+        currentShiftTeam &&
+        updateWardConstraintMutate({
+          wardId,
+          shiftTeamId: currentShiftTeam.shiftTeamId,
+          constraint,
+        }),
     },
   };
 };

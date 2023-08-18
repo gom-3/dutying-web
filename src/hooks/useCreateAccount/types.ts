@@ -4,7 +4,4 @@ type CreateAccountRequestDTOValidationError = {
   message: string;
 } | null;
 
-type CreateAccountRequestDTO = Pick<
-  Account,
-  'name' | 'gender' | 'birthday' | 'phoneNum' | 'employmentDate' | 'isWorker'
->;
+type CreateAccountRequestDTO = Pick<Account, 'name' | 'gender' | 'phoneNum'>;

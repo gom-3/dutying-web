@@ -1,7 +1,7 @@
 import { ChatIcon, RequestCheckIcon, RequestSlashIcon } from '@assets/svg';
 
 interface Props {
-  request: ShiftType;
+  request: WardShiftType;
   isAccept: boolean;
 }
 

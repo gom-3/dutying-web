@@ -22,7 +22,7 @@ function Panel() {
     >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
+          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
@@ -32,14 +32,19 @@ function Panel() {
           기록
         </div>
         <div
-          className={`flex flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
+          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
           ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
             sendEvent(event.clickHistoryTab);
           }}
         >
-          문제점
+          <p className="relative">
+            문제점
+            <span className="absolute right-0 top-0 flex h-[.875rem] w-[.875rem] translate-x-[100%] items-center justify-center rounded-full bg-main-2 font-apple text-[.625rem] text-white">
+              {[...faults.values()].length}
+            </span>
+          </p>
         </div>
       </div>
       <div className="flex flex-1 flex-col overflow-y-scroll scrollbar-hide">
@@ -49,19 +54,19 @@ function Panel() {
                 key={index}
                 className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
               >
-                {fault.focus.nurse.name} / {fault.focus.day + 1}일: {fault.message}
+                {fault.focus.shiftNurseName} / {fault.focus.day + 1}일: {fault.message}
               </p>
             ))
           : histories &&
             [...histories.history].reverse().map((history, index) => (
-              <p
+              <div
                 key={index}
                 className="flex gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
                 onClick={() =>
                   moveHistory(histories.history.length - index - 1 - histories.current)
                 }
               >
-                {history.focus.nurse.name} / {history.focus.day + 1}일
+                {history.focus.shiftNurseName} / {history.focus.day + 1}일
                 <div className="h-full w-[.0313rem] bg-sub-3" />
                 {match(history)
                   .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
@@ -71,7 +76,7 @@ function Panel() {
                       `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
                   )}
                 <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
-              </p>
+              </div>
             ))}
       </div>
       <div

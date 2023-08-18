@@ -5,12 +5,14 @@ import { produce } from 'immer';
 interface State {
   year: number;
   month: number;
+  currentShiftTeam: ShiftTeam | null;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
   editHistory: EditHistory;
   faults: Faults;
   checkFaultOptions: CheckFaultOptions | null;
+  wardShiftTypeMap: Map<number, WardShiftType> | null;
 }
 
 interface Store extends State {
@@ -25,12 +27,14 @@ const useEditShiftStore = create<Store>()(
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
         focus: null,
+        currentShiftTeam: null,
         focusedDayInfo: null,
         foldedLevels: null,
         editHistory: new Map(),
         historyIndex: 0,
         faults: new Map(),
         checkFaultOptions: null,
+        wardShiftTypeMap: null,
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
