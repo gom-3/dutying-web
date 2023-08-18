@@ -24,8 +24,8 @@ import SetShiftType from './editWard/SetShiftType';
 
 function Toolbar() {
   const {
-    state: { month, shift, changeStatus },
-    actions: { changeMonth },
+    state: { month, shift, changeStatus, showLayer },
+    actions: { changeMonth, toggleLayer },
   } = useEditShift();
 
   const [openInfo, setOpenInfo] = useState(false);
@@ -125,29 +125,62 @@ function Toolbar() {
       )}
 
       <div className="ml-[3.125rem] flex gap-[.25rem]">
-        <div className="flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-white px-[.625rem]">
+        <div
+          className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
+            showLayer.fault ? 'white' : 'bg-sub-5'
+          }`}
+          onClick={() => toggleLayer('fault')}
+        >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#FF0000] bg-[#ff000033]`}
           >
             <FaultDotIcon className="absolute right-[-0.1875rem] top-[-0.5rem] h-[.4rem] w-[.4rem]" />
           </div>
-          <p className="font-apple text-[.75rem] text-sub-2">잘못된 근무</p>
+          <p
+            className={`select-none font-apple text-[.75rem] ${
+              showLayer.fault ? 'text-sub-2' : 'text-sub-3'
+            }`}
+          >
+            잘못된 근무
+          </p>
         </div>
-        <div className="flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-white px-[.625rem]">
+        <div
+          className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
+            showLayer.check ? 'white' : 'bg-sub-5'
+          }`}
+          onClick={() => toggleLayer('check')}
+        >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#06E738] bg-[#06e73833]`}
           >
             <RequestCheckIcon className="absolute right-[-0.1875rem] top-[-0.5rem] h-[.4rem] w-[.4rem]" />
           </div>
-          <p className="font-apple text-[.75rem] text-sub-2">신청 근무 반영</p>
+          <p
+            className={`select-none font-apple text-[.75rem] ${
+              showLayer.check ? 'text-sub-2' : 'text-sub-3'
+            }`}
+          >
+            신청 근무 반영
+          </p>
         </div>
-        <div className="flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-white px-[.625rem]">
+        <div
+          className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
+            showLayer.slash ? 'white' : 'bg-sub-5'
+          }`}
+          onClick={() => toggleLayer('slash')}
+        >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#0027F4] bg-[#0027f433]`}
           >
             <RequestSlashIcon className="absolute right-[-0.1875rem] top-[-0.5rem] h-[.4rem] w-[.4rem]" />
           </div>
-          <p className="font-apple text-[.75rem] text-sub-2">신청 근무 미반영</p>
+          <p
+            className={`select-none font-apple text-[.75rem] ${
+              showLayer.slash ? 'text-sub-2' : 'text-sub-3'
+            }`}
+          >
+            신청 근무 미반영
+          </p>
         </div>
       </div>
 

@@ -20,7 +20,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     actions: { selectNurse },
   } = useEditNurse();
   const {
-    state: { shift, focus, faults, foldedLevels, wardShiftTypeMap },
+    state: { shift, focus, faults, foldedLevels, wardShiftTypeMap, showLayer },
     actions: { changeFocus, foldLevel, updateCarry },
   } = useEditShift();
   const focusedCellRef = useRef<HTMLElement>(null);
@@ -192,11 +192,13 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                               ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''} 
                               ${j === focus?.day && 'bg-main-4'}`}
                             >
-                              {fault && <FaultLayer fault={fault} />}
+                              {showLayer.fault && fault && <FaultLayer fault={fault} />}
                               {request !== null && current !== null && (
                                 <RequestLayer
                                   isAccept={request === current}
                                   request={wardShiftTypeMap.get(request)!}
+                                  showCheck={showLayer.check}
+                                  showSlash={showLayer.slash}
                                 />
                               )}
                               <ShiftBadge
