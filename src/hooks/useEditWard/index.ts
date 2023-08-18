@@ -7,33 +7,22 @@ import {
   deleteShiftType,
   updateShiftType,
 } from '@libs/api/shift';
-import useEditWardStore from './store';
-import { shallow } from 'zustand/shallow';
 import useGlobalStore from 'store';
 
 const useEditWard = () => {
-  const [tempWard, setState] = useEditWardStore(
-    (state) => [state.tempWard, state.setState],
-    shallow
-  );
-
   const { wardId } = useGlobalStore();
 
-  const getWardQueryKey = ['wardSettings', wardId];
+  const getWardQueryKey = ['ward', wardId];
   const queryClient = useQueryClient();
   const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
-    onSuccess: (ward) => {
-      if (!tempWard) setState('tempWard', ward);
-    },
   });
   const { mutate: updateWardMutate } = useMutation(
     ({ wardId, editWardDTO }: { wardId: number; editWardDTO: EditWardDTO }) =>
       editWard(wardId, editWardDTO),
     {
-      onSuccess: async (data) => {
+      onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
-        setState('tempWard', data);
       },
       onError: (error) => {
         console.log(error);
@@ -46,9 +35,8 @@ const useEditWard = () => {
     ({ wardId, createShiftTypeDTO }: { wardId: number; createShiftTypeDTO: CreateShiftTypeDTO }) =>
       createShiftType(wardId, createShiftTypeDTO),
     {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(getWardQueryKey);
-        setState('tempWard', ward);
+      onSuccess: () => {
+        queryClient.invalidateQueries(getWardQueryKey);
       },
     }
   );
@@ -64,10 +52,9 @@ const useEditWard = () => {
       createShiftTypeDTO: CreateShiftTypeDTO;
     }) => updateShiftType(wardId, shiftTypeId, createShiftTypeDTO),
     {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(getWardQueryKey);
-        await queryClient.invalidateQueries(['shift']);
-        setState('tempWard', ward);
+      onSuccess: () => {
+        queryClient.invalidateQueries(getWardQueryKey);
+        queryClient.invalidateQueries(['shift']);
       },
     }
   );
@@ -75,9 +62,8 @@ const useEditWard = () => {
     ({ wardId, shiftTypeId }: { wardId: number; shiftTypeId: number }) =>
       deleteShiftType(wardId, shiftTypeId),
     {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(getWardQueryKey);
-        setState('tempWard', ward);
+      onSuccess: () => {
+        queryClient.invalidateQueries(getWardQueryKey);
       },
     }
   );
@@ -98,19 +84,8 @@ const useEditWard = () => {
     if (wardId) deleteShiftTypeMutate({ wardId, shiftTypeId });
   };
 
-  const changeTempWard = (key: keyof Ward, value: string | number) => {
-    setState('tempWard', { ...tempWard, [key]: value });
-  };
-
-  const synchronizeTempWard = () => {
-    setState('tempWard', ward);
-  };
-
   return {
     state: {
-      /** 실제 설정에 반영되기 전의 임시 상태 */
-      tempWard,
-      /** 실제 DB에 반영된 상태 */
       ward,
     },
     actions: {
@@ -118,8 +93,6 @@ const useEditWard = () => {
       removeShiftType,
       editShiftType,
       addShiftType,
-      changeTempWard,
-      synchronizeTempWard,
     },
   };
 };

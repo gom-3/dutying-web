@@ -58,7 +58,9 @@ function Toolbar() {
       <Button
         type="outline"
         className="flex h-[2.5rem] w-[7.9375rem] items-center justify-center rounded-[3.125rem] border-[.0313rem] border-main-2 bg-main-4 text-base font-normal"
-        onClick={() => setCurrentSetup('constraint')}
+        onClick={() =>
+          currentSetup === null ? setCurrentSetup('constraint') : setCurrentSetup(null)
+        }
       >
         <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-main-1" />
         설정 편집
@@ -69,8 +71,8 @@ function Toolbar() {
             <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
               <div
                 className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
-              ${currentSetup === 'constraint' ? 'bg-white text-main-1' : 'text-sub-3'}
-            `}
+        ${currentSetup === 'constraint' ? 'bg-white text-main-1' : 'text-sub-3'}
+      `}
                 onClick={() => setCurrentSetup('constraint')}
               >
                 제약 조건
@@ -81,8 +83,8 @@ function Toolbar() {
               />
               <div
                 className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
-              ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
-            `}
+        ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
+      `}
                 onClick={() => setCurrentSetup('shiftType')}
               >
                 근무 형태

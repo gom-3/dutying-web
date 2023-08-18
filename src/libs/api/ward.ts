@@ -11,31 +11,6 @@ export type EditWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
 const editWard = async (wardId: number, ward: EditWardDTO) =>
   (await axiosInstance.patch<Ward>(`/wards/${wardId}`, ward)).data;
 
-// 병동 근무유형 관련
-/** PUT    `/wards/${wardId}/shift-types/${shiftTypeId}` */
-const updateShiftType = async (
-  wardId: number,
-  shiftTypeId: number,
-  shiftType: Pick<
-    WardShiftType,
-    'name' | 'shortName' | 'startTime' | 'endTime' | 'color' | 'isOff' | 'isDefault'
-  >
-) =>
-  (await axiosInstance.put<WardShiftType>(`/wards/${wardId}/shift-types/${shiftTypeId}`, shiftType))
-    .data;
-
-/** DELETE `/wards/${wardId}/shift-types/${shiftTypeId}` */
-const deleteShiftType = async (wardId: number, shiftTypeId: number) =>
-  (await axiosInstance.delete(`/wards/${wardId}/shift-types/${shiftTypeId}`)).data;
-
-/** GET    `/wards/${wardId}/shift-types` */
-const getShiftTypes = async (wardId: number) =>
-  (await axiosInstance.get<WardShiftType[]>(`/wards/${wardId}/shift-types`)).data;
-
-/** POST   `/wards/${wardId}/shift-types` */
-const createShiftType = async (wardId: number, shiftType: WardShiftType) =>
-  (await axiosInstance.post<WardShiftType>(`/wards/${wardId}/shift-types`, shiftType)).data;
-
 // 병동 근무팀 간호사
 /** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses` */
 const getShiftTeamNurses = async (wardId: number, shiftTeamId: number) =>
@@ -110,7 +85,7 @@ const getWardConstraint = async (wardId: number, shiftTeamId: number) =>
   ).data;
 
 /** PATCH  `/wards/${wardId}/shift-teams/${shiftTeamId}/constraint` */
-const editWardConstraint = async (
+const updateWardConstraint = async (
   wardId: number,
   shiftTeamId: number,
   constraint: WardConstraint
@@ -194,10 +169,6 @@ const editReqShift = async (
   ).data;
 
 export {
-  updateShiftType,
-  deleteShiftType,
-  getShiftTypes,
-  createShiftType,
   getShiftTeamNurses,
   addNurseIntoShiftTeam,
   removeNurseFromShiftTeam,
@@ -207,7 +178,7 @@ export {
   deleteShiftTeam,
   editShiftTeam,
   getWardConstraint,
-  editWardConstraint,
+  updateWardConstraint,
   getWard,
   createWrad,
   editWard,

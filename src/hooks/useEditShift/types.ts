@@ -39,9 +39,11 @@ type FaultType =
 type CheckFaultOptions = {
   [key in FaultType]: {
     type: 'wrong' | 'bad';
+    label: string;
     isActive: boolean;
     regExp: RegExp;
     message: string;
+    value: number | null;
   };
 };
 

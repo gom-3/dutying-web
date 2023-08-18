@@ -152,6 +152,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                       </div>
                       <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
                         <TextField
+                          readOnly
                           className="text-md h-[1.875rem] w-[1.875rem] p-0 text-center text-sub-1"
                           value={row.shiftNurse.carried}
                           onClick={(e) => {

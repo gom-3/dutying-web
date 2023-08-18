@@ -1,4 +1,3 @@
-import 'index.css';
 import NavigationBarItem from './NavigationBarItem';
 import { SHIFT, MEMBER } from '@libs/constant/path';
 import {
@@ -6,8 +5,6 @@ import {
   DutyIconSelected,
   // HomeIcon,
   // HomeIconSelected,
-  InjectorIcon,
-  InjectorIconSelected,
   NurseIcon,
   NurseIconSelected,
   RequestIcon,
@@ -38,12 +35,6 @@ const items = [
     icon: NurseIcon,
     selectedIcon: NurseIconSelected,
     text: '간호사 관리',
-  },
-  {
-    path: SHIFT.SETUP,
-    icon: InjectorIcon,
-    selectedIcon: InjectorIconSelected,
-    text: '근무 설정',
   },
 ];
 

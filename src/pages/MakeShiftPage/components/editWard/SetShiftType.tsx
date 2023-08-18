@@ -1,15 +1,28 @@
 import useEditWard from '@hooks/useEditWard';
-import { ExitIcon, PenIcon, PlusIcon } from '@assets/svg';
+import { PenIcon, PlusIcon } from '@assets/svg';
 import TimeInput from '@components/TimeInput';
 import TextField from '@components/TextField';
+import { useState } from 'react';
+import CreateShiftModal from './CreateWardModal';
+import { CreateShiftTypeDTO } from '@libs/api/shift';
+
 function SetShiftType() {
   const {
     state: { ward },
-    actions: { editShiftType, removeShiftType },
+    actions: { editShiftType, removeShiftType, addShiftType },
   } = useEditWard();
 
-  const handleDeleteShift = (shiftTypeId: number) => {
-    removeShiftType(shiftTypeId);
+  const [openModal, setOpenModal] = useState(false);
+  const [tempShiftType, setTempShiftType] = useState<WardShiftType | null>(null);
+
+  const handleWriteShift = (shiftType: CreateShiftTypeDTO, shiftTypeId?: number) => {
+    if (shiftTypeId) {
+      editShiftType(shiftTypeId, shiftType);
+      setTempShiftType(null);
+    } else {
+      addShiftType(shiftType);
+    }
+    setTempShiftType(null);
   };
 
   return (
@@ -19,7 +32,8 @@ function SetShiftType() {
         <p className="flex-1">약자</p>
         <p className="flex-[3]">근무 시간</p>
         <p className="flex-1">색상</p>
-        <p className="flex-[2]">유형</p>
+        <p className="flex-1">유형</p>
+        <p className="flex-1">수정</p>
       </div>
       {ward?.wardShiftTypes.map((shiftType, index) => (
         <div
@@ -74,7 +88,7 @@ function SetShiftType() {
             />
             <input
               id={`color_picker_${index}`}
-              className="absolute translate-x-[100%] translate-y-[50%] opacity-0"
+              className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
               type="color"
               value={shiftType.color}
               onChange={(e) =>
@@ -82,21 +96,48 @@ function SetShiftType() {
               }
             />
           </div>
-          <div className="flex flex-[2] justify-center">
-            <PenIcon className="h-[2.25rem] w-[2.25rem] cursor-pointer" />
-            {!shiftType.isDefault && (
-              <ExitIcon
-                className="h-[2.25rem] w-[2.25rem] cursor-pointer"
-                onClick={() => handleDeleteShift(shiftType.wardShiftTypeId)}
-              />
-            )}
+          <div className="flex flex-1 justify-center">
+            <div
+              className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
+              onClick={() =>
+                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, isOff: !shiftType.isOff })
+              }
+            >
+              {shiftType.isOff ? '휴가' : '근무'}
+            </div>
+          </div>
+          <div className="flex flex-1 justify-center">
+            <PenIcon
+              className="h-[2.25rem] w-[2.25rem] cursor-pointer"
+              onClick={() => {
+                setTempShiftType(shiftType);
+                setOpenModal(true);
+              }}
+            />
           </div>
         </div>
       ))}
-      <div className="mb-[1.625rem] mt-[.25rem] flex cursor-pointer items-center justify-end gap-[.4375rem] pr-[2.5rem]">
-        <PlusIcon className="h-[1.25rem] w-[1.25rem]" />
-        <p className="font-apple text-[.875rem] text-main-2">새로운 근무/휴가 추가하기</p>
+      <div className="mb-[1.625rem] mt-[.25rem] flex items-center justify-end  pr-[2.5rem]">
+        <div
+          className="flex cursor-pointer gap-[.4375rem]"
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        >
+          <PlusIcon className="h-[1.25rem] w-[1.25rem]" />
+          <p className="font-apple text-[.875rem] text-main-2">새로운 근무/휴가 추가하기</p>
+        </div>
       </div>
+      <CreateShiftModal
+        open={openModal}
+        close={() => {
+          setTempShiftType(null);
+          setOpenModal(false);
+        }}
+        shiftType={tempShiftType}
+        onSubmit={(shiftType) => handleWriteShift(shiftType, tempShiftType?.wardShiftTypeId)}
+        onDelete={() => tempShiftType && removeShiftType(tempShiftType?.wardShiftTypeId)}
+      />
     </div>
   );
 }

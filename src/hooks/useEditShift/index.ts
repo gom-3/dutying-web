@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
 import useGlobalStore from 'store';
-import { getShiftTeams, getWard, getWardConstraint } from '@libs/api/ward';
+import { getShiftTeams, getWard, getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -53,19 +53,40 @@ const useEditShift = (activeEffect = false) => {
 
   const wardQueryKey = ['ward', wardId];
   const shiftQueryKey = ['shift', wardId, year, month];
-  useQuery(['shiftTeams', wardId], () => getShiftTeams(wardId!), {
+  const shiftTeamQueryKey = ['shiftTeams', wardId];
+  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
+
+  useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: currentShiftTeam === null && wardId != null,
     onSuccess: (data) => {
       setState('currentShiftTeam', data[0]);
     },
   });
+
   const { data: wardConstraint } = useQuery(
-    ['wardConstraint'],
+    wardConstraintQueryKey,
     () => getWardConstraint(wardId!, currentShiftTeam!.shiftTeamId),
     {
       enabled: wardId !== null && currentShiftTeam !== null,
     }
   );
+  const { mutate: updateWardConstraintMutate } = useMutation(
+    ({
+      wardId,
+      shiftTeamId,
+      constraint,
+    }: {
+      wardId: number;
+      shiftTeamId: number;
+      constraint: WardConstraint;
+    }) => updateWardConstraint(wardId, shiftTeamId, constraint),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(wardConstraintQueryKey);
+      },
+    }
+  );
+
   const { data: ward } = useQuery(wardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
@@ -394,7 +415,9 @@ const useEditShift = (activeEffect = false) => {
       foldedLevels,
       changeStatus,
       shiftStatus,
+      checkFaultOptions,
       wardShiftTypeMap,
+      wardConstraint,
     },
     actions: {
       foldLevel,
@@ -402,6 +425,14 @@ const useEditShift = (activeEffect = false) => {
       changeFocus: (focus: Focus | null) => setState('focus', focus),
       updateCarry: (shiftNurseId: number, value: number) => mutateCarry({ shiftNurseId, value }),
       moveHistory,
+      updateConstraint: (constraint: WardConstraint) =>
+        wardId &&
+        currentShiftTeam &&
+        updateWardConstraintMutate({
+          wardId,
+          shiftTeamId: currentShiftTeam.shiftTeamId,
+          constraint,
+        }),
     },
   };
 };
