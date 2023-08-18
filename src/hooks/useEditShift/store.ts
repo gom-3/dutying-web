@@ -13,6 +13,11 @@ interface State {
   faults: Faults;
   checkFaultOptions: CheckFaultOptions | null;
   wardShiftTypeMap: Map<number, WardShiftType> | null;
+  showLayer: {
+    fault: boolean;
+    check: boolean;
+    slash: boolean;
+  };
 }
 
 interface Store extends State {
@@ -35,6 +40,11 @@ const useEditShiftStore = create<Store>()(
         faults: new Map(),
         checkFaultOptions: null,
         wardShiftTypeMap: null,
+        showLayer: {
+          check: true,
+          fault: true,
+          slash: true,
+        },
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
@@ -69,7 +79,7 @@ const useEditShiftStore = create<Store>()(
           },
           removeItem: (name) => localStorage.removeItem(name),
         },
-        partialize: ({ editHistory }: Store) => ({ editHistory }),
+        partialize: ({ editHistory, showLayer }: Store) => ({ editHistory, showLayer }),
       }
     )
   )

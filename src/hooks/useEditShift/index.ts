@@ -30,6 +30,7 @@ const useEditShift = (activeEffect = false) => {
     faults,
     checkFaultOptions,
     wardShiftTypeMap,
+    showLayer,
     setState,
   ] = useEditShiftStore(
     (state) => [
@@ -43,6 +44,7 @@ const useEditShift = (activeEffect = false) => {
       state.faults,
       state.checkFaultOptions,
       state.wardShiftTypeMap,
+      state.showLayer,
       state.setState,
     ],
     shallow
@@ -418,6 +420,7 @@ const useEditShift = (activeEffect = false) => {
       checkFaultOptions,
       wardShiftTypeMap,
       wardConstraint,
+      showLayer,
     },
     actions: {
       foldLevel,
@@ -432,6 +435,11 @@ const useEditShift = (activeEffect = false) => {
           wardId,
           shiftTeamId: currentShiftTeam.shiftTeamId,
           constraint,
+        }),
+      toggleLayer: (key: 'fault' | 'check' | 'slash') =>
+        setState('showLayer', {
+          ...showLayer,
+          [key]: !showLayer[key],
         }),
     },
   };
