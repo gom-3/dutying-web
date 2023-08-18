@@ -2,10 +2,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { produce } from 'immer';
-import { WardResponse } from '@libs/api/ward';
 
 interface State {
-  tempWard: WardResponse | null;
+  tempWard: Ward | null;
 }
 
 interface Store extends State {

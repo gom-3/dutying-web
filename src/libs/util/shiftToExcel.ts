@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as Excel from 'exceljs';
 
 export const shiftToExcel = (month: number, shift: Shift) => {
@@ -67,10 +68,17 @@ export const shiftToExcel = (month: number, shift: Shift) => {
     worksheet.addRow({
       name: dutyRow.shiftNurse.name,
       lastShift: dutyRow.lastWardShiftList
-        .map((current) => (current !== null ? shift.wardShiftTypeMap.get(current).shortName : ''))
+        .map((current) =>
+          current !== null
+            ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName
+            : ''
+        )
         .join(''),
       ...dutyRow.wardShiftList.reduce((acc, current, index) => {
-        acc[index + 1] = current != null ? shift.wardShiftTypeMap.get(current).shortName : '';
+        acc[index + 1] =
+          current != null
+            ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName
+            : '';
         return acc;
       }, {} as { [key: string]: string }),
       ...shift.wardShiftTypes.reduce((acc, shiftType, index) => {

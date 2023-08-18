@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { DragIcon, FoldDutyIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
@@ -182,7 +183,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                             shift.days[j].dayType === 'holiday';
                           const isFocused =
                             focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
-                          const fault = faults.get(`${level},${rowIndex},${j}`);
+                          const fault = faults.get(`${row.shiftNurse.shiftNurseId},${j}`);
                           return (
                             <div
                               key={j}
@@ -194,7 +195,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                               {request !== null && current !== null && (
                                 <RequestLayer
                                   isAccept={request === current}
-                                  request={shift.wardShiftTypes[request]}
+                                  request={wardShiftTypeMap.get(request)!}
                                 />
                               )}
                               <ShiftBadge
@@ -210,7 +211,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                   current === null
                                     ? request === null
                                       ? null
-                                      : shift.wardShiftTypes[request]
+                                      : wardShiftTypeMap.get(request)
                                     : wardShiftTypeMap.get(current)
                                 }
                                 isOnlyRequest={current === null && request !== null}

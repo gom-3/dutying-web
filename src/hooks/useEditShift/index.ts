@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
 import useGlobalStore from 'store';
-import { getWard, getWardConstraint } from '@libs/api/ward';
+import { getShiftTeams, getWard, getWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -53,9 +53,15 @@ const useEditShift = (activeEffect = false) => {
 
   const wardQueryKey = ['ward', wardId];
   const shiftQueryKey = ['shift', wardId, year, month];
+  useQuery(['shiftTeams', wardId], () => getShiftTeams(wardId!), {
+    enabled: currentShiftTeam === null && wardId != null,
+    onSuccess: (data) => {
+      setState('currentShiftTeam', data[0]);
+    },
+  });
   const { data: wardConstraint } = useQuery(
     ['wardConstraint'],
-    () => getWardConstraint(wardId!, currentShiftTeam!),
+    () => getWardConstraint(wardId!, currentShiftTeam!.shiftTeamId),
     {
       enabled: wardId !== null && currentShiftTeam !== null,
     }
@@ -65,7 +71,7 @@ const useEditShift = (activeEffect = false) => {
   });
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getShift(wardId!, currentShiftTeam!, year, month),
+    () => getShift(wardId!, currentShiftTeam!.shiftTeamId, year, month),
     {
       enabled: wardId !== null && currentShiftTeam !== null,
       onSuccess: (data) => {

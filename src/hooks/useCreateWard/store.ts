@@ -2,13 +2,14 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
-import { CreateShiftTypeRequest } from '@libs/api/shift';
+import { CreateShiftTypeDTO } from '@libs/api/shift';
+import { CreateWardDTO } from '@libs/api/ward';
 
 interface State {
   steps: string[];
   currentStep: number;
-  ward: CreateWardRequestDTO;
-  shiftTypes: CreateShiftTypeRequest[];
+  createWardDTO: CreateWardDTO;
+  shiftTypes: CreateShiftTypeDTO[];
   isFilled: boolean;
   error: CreateWardRequestDTOValidationError;
 }
@@ -20,14 +21,9 @@ interface Store extends State {
 const initialState: State = {
   steps: ['1 병동 • 간호사 정보', '2 숙련도 구분', '3 연속 근무', '4 근무 형태'],
   currentStep: 0,
-  ward: {
+  createWardDTO: {
     name: '',
     hospitalName: '',
-    nurseCnt: 20,
-    minNightInterval: 7,
-    maxContinuousWork: 5,
-    maxContinuousNight: 3,
-    levelDivision: 4,
   },
   shiftTypes: [
     {

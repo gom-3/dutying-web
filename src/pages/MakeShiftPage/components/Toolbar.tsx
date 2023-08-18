@@ -19,8 +19,8 @@ import useEditShift from '@hooks/useEditShift';
 import { useState } from 'react';
 import Draggable from 'react-draggable';
 import ShiftBadge from '@components/ShiftBadge';
-import SetConstraint from './SetConstraint';
-import SetShiftType from './SetShiftType';
+import SetConstraint from './editWard/SetConstraint';
+import SetShiftType from './editWard/SetShiftType';
 
 function Toolbar() {
   const {

@@ -2,8 +2,6 @@ import { LOGIN } from '@libs/constant/path';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { setAccessToken } from '@libs/api/client';
-// import { useAccount } from 'store';
-// import { getAccountMe } from '@libs/api/account';
 import { TailSpin } from 'react-loader-spinner';
 import qs from 'qs';
 

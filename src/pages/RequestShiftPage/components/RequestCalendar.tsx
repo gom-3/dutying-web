@@ -103,7 +103,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                   <div
                     key={rowIndex}
                     className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
-                      focus?.shiftNurse.nurseId === row.shiftNurse.nurseId && 'bg-main-4'
+                      focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'
                     }`}
                   >
                     <div className="w-[3.375rem] shrink-0"></div>
@@ -117,7 +117,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                           requestShift.days[j].dayType === 'sunday' ||
                           requestShift.days[j].dayType === 'holiday';
                         const isFocused =
-                          focus?.shiftNurse.nurseId === row.shiftNurse.nurseId && focus.day === j;
+                          focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
                         return (
                           <div
                             key={j}
@@ -129,7 +129,8 @@ export default function RequestCalendar({ isEditable }: Props) {
                               key={j}
                               onClick={() => {
                                 changeFocus?.({
-                                  shiftNurse: row.shiftNurse,
+                                  shiftNurseId: row.shiftNurse.shiftNurseId,
+                                  shiftNurseName: row.shiftNurse.name,
                                   day: j,
                                 });
                               }}

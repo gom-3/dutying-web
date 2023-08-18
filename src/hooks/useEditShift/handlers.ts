@@ -173,17 +173,24 @@ export const checkShift = (
         while (true) {
           const match = option.regExp.exec(str);
           if (match === null) break;
-          const focus: Focus = { shiftNurseId: row.shiftNurse.shiftNurseId, day: match.index - 1 };
+          const focus: Focus = {
+            shiftNurseId: row.shiftNurse.shiftNurseId,
+            shiftNurseName: row.shiftNurse.name,
+            day: match.index - 1,
+          };
 
-          faults.set(Object.values(focus).join(), {
-            type: option.type,
-            faultType: key,
-            nurseName: row.shiftNurse.nurseInfo.name,
-            focus,
-            message: option.message,
-            matchString: match[0],
-            length: match[0].length,
-          });
+          faults.set(
+            Object.values({ shiftNurseId: focus.shiftNurseId, day: focus.day }).join(','),
+            {
+              type: option.type,
+              faultType: key,
+              nurseName: row.shiftNurse.nurseInfo.name,
+              focus,
+              message: option.message,
+              matchString: match[0],
+              length: match[0].length,
+            }
+          );
         }
       }
     }

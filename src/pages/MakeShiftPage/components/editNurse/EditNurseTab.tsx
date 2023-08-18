@@ -1,5 +1,4 @@
 import { ChangeEvent } from 'react';
-import LevelSelect from './LevelSelect';
 import ShiftSelect from './ShiftSelect';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import useEditNurse from '@hooks/useEditNurse';
@@ -9,7 +8,7 @@ type Props = {
   close?: () => void;
 };
 
-const Editor = ({ isFixed, close }: Props) => {
+const EditNurseTab = ({ isFixed, close }: Props) => {
   const {
     state: { selectedNurse },
     actions: { updateNurse },
@@ -51,13 +50,6 @@ const Editor = ({ isFixed, close }: Props) => {
           <div className="h-[.3125rem] w-full bg-sub-5" />
           <div className="relative flex h-[7.875rem] w-full items-center justify-center">
             <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
-              숙련도
-            </div>
-            <LevelSelect devide={3} />
-          </div>
-          <div className="h-[.3125rem] w-full bg-sub-5" />
-          <div className="relative flex h-[7.875rem] w-full items-center justify-center">
-            <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
               가능 근무
             </div>
             <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
@@ -81,4 +73,4 @@ const Editor = ({ isFixed, close }: Props) => {
   );
 };
 
-export default Editor;
+export default EditNurseTab;

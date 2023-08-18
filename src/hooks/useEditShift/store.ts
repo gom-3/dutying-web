@@ -5,7 +5,7 @@ import { produce } from 'immer';
 interface State {
   year: number;
   month: number;
-  currentShiftTeam: number | null;
+  currentShiftTeam: ShiftTeam | null;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;

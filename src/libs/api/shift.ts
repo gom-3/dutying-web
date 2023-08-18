@@ -4,14 +4,11 @@ import qs from 'qs';
 export const getShiftTypes = async (wardId: number) =>
   (await axiosInstance.get<WardShiftType[]>(`/wards/${wardId}/shift-types`)).data;
 
-export type CreateShiftTypeRequest = Pick<
+export type CreateShiftTypeDTO = Pick<
   WardShiftType,
   'name' | 'shortName' | 'color' | 'startTime' | 'endTime' | 'isOff'
 >;
-export const createShiftType = async (
-  wardId: number,
-  createShiftTypeRequest: CreateShiftTypeRequest
-) =>
+export const createShiftType = async (wardId: number, createShiftTypeRequest: CreateShiftTypeDTO) =>
   (await axiosInstance.post<WardShiftType>(`/wards/${wardId}/shift-types`, createShiftTypeRequest))
     .data;
 
@@ -21,7 +18,7 @@ export const deleteShiftType = async (wardId: number, shiftTypeId: number) =>
 export const updateShiftType = async (
   wardId: number,
   shiftTypeId: number,
-  updateShiftTypeequest: CreateShiftTypeRequest
+  updateShiftTypeequest: CreateShiftTypeDTO
 ) =>
   (
     await axiosInstance.put<WardShiftType>(

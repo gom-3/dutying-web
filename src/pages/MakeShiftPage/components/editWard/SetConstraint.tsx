@@ -55,19 +55,19 @@ const SetConstraint = () => {
       isActive: true,
     },
     {
-      type: 'offAfterNight',
+      type: 'minOffAssignAfterNight',
       label: '나이트 근무 후 오프 배정',
       value: 2,
       isActive: true,
     },
     {
-      type: 'noNightBeforeReqOff',
+      type: 'excludeNightBeforeReqOff',
       label: '신청 오프 전날에는 나이트 근무 불가능',
       value: null,
       isActive: false,
     },
     {
-      type: 'ed',
+      type: 'excludeCertainWorkTypes',
       label: 'ND / ED / NE / NOD 근무 형태 불가능',
       value: null,
       isActive: true,
@@ -106,7 +106,7 @@ const SetConstraint = () => {
                 <span className="underline">이하</span>
               </div>
             ))
-            .with('offAfterNight', () => (
+            .with('minOffAssignAfterNight', () => (
               <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
                 최대 <Select value={value!} options={[3, 4, 5]} className="w-[4.125rem]" /> 일&nbsp;
               </div>

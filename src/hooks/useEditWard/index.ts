@@ -1,14 +1,15 @@
-import { useAccount } from 'store';
-import { EditWardRequest, WardResponse, editWard, getWard } from '@libs/api/ward';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { EditWardDTO, editWard, getWard } from '@libs/api/ward';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  CreateShiftTypeRequest,
+  CreateShiftTypeDTO,
   createShiftType,
   deleteShiftType,
   updateShiftType,
 } from '@libs/api/shift';
 import useEditWardStore from './store';
 import { shallow } from 'zustand/shallow';
+import useGlobalStore from 'store';
 
 const useEditWard = () => {
   const [tempWard, setState] = useEditWardStore(
@@ -16,19 +17,19 @@ const useEditWard = () => {
     shallow
   );
 
-  const {
-    account: { wardId },
-  } = useAccount();
+  const { wardId } = useGlobalStore();
 
   const getWardQueryKey = ['wardSettings', wardId];
   const queryClient = useQueryClient();
-  const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId), {
+  const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId!), {
+    enabled: wardId !== null,
     onSuccess: (ward) => {
       if (!tempWard) setState('tempWard', ward);
     },
   });
   const { mutate: updateWardMutate } = useMutation(
-    (editWardDTO: EditWardRequest) => editWard(wardId, editWardDTO),
+    ({ wardId, editWardDTO }: { wardId: number; editWardDTO: EditWardDTO }) =>
+      editWard(wardId, editWardDTO),
     {
       onSuccess: async (data) => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -40,9 +41,10 @@ const useEditWard = () => {
       },
     }
   );
+
   const { mutate: createShiftTypeMutate } = useMutation(
-    (createShiftTypeRequest: CreateShiftTypeRequest) =>
-      createShiftType(wardId, createShiftTypeRequest),
+    ({ wardId, createShiftTypeDTO }: { wardId: number; createShiftTypeDTO: CreateShiftTypeDTO }) =>
+      createShiftType(wardId, createShiftTypeDTO),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(getWardQueryKey);
@@ -50,14 +52,17 @@ const useEditWard = () => {
       },
     }
   );
+
   const { mutate: updateShiftTypeMutate } = useMutation(
     ({
+      wardId,
       shiftTypeId,
-      createShiftTypeRequest,
+      createShiftTypeDTO,
     }: {
+      wardId: number;
       shiftTypeId: number;
-      createShiftTypeRequest: CreateShiftTypeRequest;
-    }) => updateShiftType(wardId, shiftTypeId, createShiftTypeRequest),
+      createShiftTypeDTO: CreateShiftTypeDTO;
+    }) => updateShiftType(wardId, shiftTypeId, createShiftTypeDTO),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(getWardQueryKey);
@@ -67,7 +72,8 @@ const useEditWard = () => {
     }
   );
   const { mutate: deleteShiftTypeMutate } = useMutation(
-    (shiftTypeId: number) => deleteShiftType(wardId, shiftTypeId),
+    ({ wardId, shiftTypeId }: { wardId: number; shiftTypeId: number }) =>
+      deleteShiftType(wardId, shiftTypeId),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(getWardQueryKey);
@@ -76,23 +82,23 @@ const useEditWard = () => {
     }
   );
 
-  const editWardSetting = (editWardDTO: EditWardRequest) => {
-    updateWardMutate(editWardDTO);
+  const editWardSetting = (editWardDTO: EditWardDTO) => {
+    if (wardId) updateWardMutate({ wardId, editWardDTO });
   };
 
-  const addShiftType = (createShiftTypeRequest: CreateShiftTypeRequest) => {
-    createShiftTypeMutate(createShiftTypeRequest);
+  const addShiftType = (createShiftTypeDTO: CreateShiftTypeDTO) => {
+    if (wardId) createShiftTypeMutate({ wardId, createShiftTypeDTO });
   };
 
-  const editShiftType = (shiftTypeId: number, createShiftTypeRequest: CreateShiftTypeRequest) => {
-    updateShiftTypeMutate({ shiftTypeId, createShiftTypeRequest });
+  const editShiftType = (shiftTypeId: number, createShiftTypeDTO: CreateShiftTypeDTO) => {
+    if (wardId) updateShiftTypeMutate({ wardId, shiftTypeId, createShiftTypeDTO });
   };
 
   const removeShiftType = (shiftTypeId: number) => {
-    deleteShiftTypeMutate(shiftTypeId);
+    if (wardId) deleteShiftTypeMutate({ wardId, shiftTypeId });
   };
 
-  const changeTempWard = (key: keyof WardResponse, value: string | number) => {
+  const changeTempWard = (key: keyof Ward, value: string | number) => {
     setState('tempWard', { ...tempWard, [key]: value });
   };
 

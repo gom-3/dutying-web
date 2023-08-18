@@ -1,15 +1,15 @@
 import { HOME } from '@libs/constant/path';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import { useAccount } from 'store';
+import useGlobalStore from 'store';
 
 function NotAuthzLayout() {
   const navigate = useNavigate();
-  const { account } = useAccount();
+  const { nurseId } = useGlobalStore();
 
   useEffect(() => {
-    if (account) navigate(HOME);
-  }, [account]);
+    if (nurseId) navigate(HOME);
+  }, [nurseId]);
 
   return <Outlet />;
 }

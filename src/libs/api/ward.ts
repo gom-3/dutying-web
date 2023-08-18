@@ -3,10 +3,12 @@ import qs from 'qs';
 
 const getWard = async (wardId: number) => (await axiosInstance.get<Ward>(`/wards/${wardId}`)).data;
 
-const createWrad = async (accountId: number) =>
-  (await axiosInstance.post<Ward>(`/wards/accounts/${accountId}`)).data;
+export type CreateWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
+const createWrad = async (accountId: number, createWardDTO: CreateWardDTO) =>
+  (await axiosInstance.post<Ward>(`/wards/accounts/${accountId}`, createWardDTO)).data;
 
-const editWard = async (wardId: number, ward: Pick<Ward, 'name' | 'hospitalName'>) =>
+export type EditWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
+const editWard = async (wardId: number, ward: EditWardDTO) =>
   (await axiosInstance.patch<Ward>(`/wards/${wardId}`, ward)).data;
 
 // 병동 근무유형 관련

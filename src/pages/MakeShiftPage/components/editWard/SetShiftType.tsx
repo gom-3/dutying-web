@@ -21,11 +21,11 @@ function SetShiftType() {
         <p className="flex-1">색상</p>
         <p className="flex-[2]">유형</p>
       </div>
-      {ward?.shiftTypes.map((shiftType, index) => (
+      {ward?.wardShiftTypes.map((shiftType, index) => (
         <div
           key={index}
           className={`flex h-[4.625rem] items-center  border-b-[.0313rem] border-sub-4.5 ${
-            index === ward.shiftTypes.length - 1 && 'border-none'
+            index === ward.wardShiftTypes.length - 1 && 'border-none'
           }`}
         >
           <div className="flex flex-[2] items-center justify-center font-apple text-[1.25rem]">

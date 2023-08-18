@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   updateNurse as patchNurse,
@@ -19,9 +20,9 @@ const useEditNurse = () => {
 
   const queryClient = useQueryClient();
   const getNursesQueryKey = ['nurses', wardId];
-  const { data: shiftTeams } = useQuery(getNursesQueryKey, () =>
-    wardId === null ? null : getShiftTeams(wardId)
-  );
+  const { data: shiftTeams } = useQuery(['shiftTeams', wardId], () => getShiftTeams(wardId!), {
+    enabled: wardId != null,
+  });
 
   const { mutate: updateNurseMutate } = useMutation(
     (nurse: Nurse) => patchNurse(nurse.nurseId, nurse),
@@ -35,21 +36,19 @@ const useEditNurse = () => {
   );
 
   const { mutate: addNurseMutate } = useMutation(
-    (shiftTeamId: number) =>
-      wardId === null
-        ? null
-        : addNurseIntoShiftTeam(wardId, shiftTeamId, {
-            name: `간호사${Math.floor(Math.random() * 10000)}`,
-            phoneNum: '010-1234-5678',
-            gender: '여',
-            isWorker: true,
-            employmentDate: '2023-08-01',
-            isDutyManager: false,
-            isWardManager: false,
-            memo: '해당 간호사에 대한 메모입니다.',
-            workStartDate: '2023-08-01',
-            workEndDate: '2023-12-31',
-          }),
+    ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
+      addNurseIntoShiftTeam(wardId, shiftTeamId, {
+        name: `간호사${Math.floor(Math.random() * 10000)}`,
+        phoneNum: '010-1234-5678',
+        gender: '여',
+        isWorker: true,
+        employmentDate: '2023-08-01',
+        isDutyManager: false,
+        isWardManager: false,
+        memo: '해당 간호사에 대한 메모입니다.',
+        workStartDate: '2023-08-01',
+        workEndDate: '2023-12-31',
+      }),
     {
       onSuccess: () => queryClient.invalidateQueries(getNursesQueryKey),
       onError: (error) => {
@@ -60,7 +59,7 @@ const useEditNurse = () => {
   );
 
   const { mutate: deleteNurseMutate } = useMutation(
-    ({ nurseId, shiftTeamId }: { nurseId: number; shiftTeamId: number }) =>
+    ({ wardId, nurseId, shiftTeamId }: { wardId: number; nurseId: number; shiftTeamId: number }) =>
       removeNurseFromShiftTeam(wardId, shiftTeamId, nurseId),
     {
       onSuccess: () => queryClient.invalidateQueries(getNursesQueryKey),
@@ -90,9 +89,9 @@ const useEditNurse = () => {
       shiftTeams,
     },
     actions: {
-      addNurse: () => addNurseMutate(wardId),
+      addNurse: (shiftTeamId: number) => wardId && addNurseMutate({ wardId, shiftTeamId }),
       deleteNurse: (shiftTeamId: number, nurseId: number) =>
-        deleteNurseMutate({ nurseId, shiftTeamId }),
+        wardId && deleteNurseMutate({ wardId, nurseId, shiftTeamId }),
       selectNurse: (nurseId: number) => setState('selectedNurseId', nurseId),
       updateNurse: (nurse: Nurse) => updateNurseMutate(nurse),
       updateNurseShift: (
