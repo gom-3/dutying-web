@@ -54,14 +54,14 @@ const useEditShift = (activeEffect = false) => {
   const queryClient = useQueryClient();
 
   const wardQueryKey = ['ward', wardId];
-  const shiftQueryKey = ['shift', wardId, year, month];
+  const shiftQueryKey = ['shift', wardId, year, month, currentShiftTeam];
   const shiftTeamQueryKey = ['shiftTeams', wardId];
   const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
 
-  useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
+  const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: currentShiftTeam === null && wardId != null,
     onSuccess: (data) => {
-      setState('currentShiftTeam', data[0]);
+      if (currentShiftTeam === null) setState('currentShiftTeam', data[0]);
     },
   });
 
@@ -89,7 +89,7 @@ const useEditShift = (activeEffect = false) => {
     }
   );
 
-  const { data: ward } = useQuery(wardQueryKey, () => getWard(wardId!), {
+  useQuery(wardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
   const { data: shift, status: shiftStatus } = useQuery(
@@ -149,13 +149,16 @@ const useEditShift = (activeEffect = false) => {
         setState(
           'editHistory',
           produce(oldEditHistory, (draft) => {
-            const histories = draft.get(year + '' + month);
+            const histories = draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId);
             if (histories) {
               histories.history = histories.history.slice(0, histories.current + 1);
               histories.history.push(edit);
               histories.current = histories.history.length - 1;
             } else {
-              draft.set(year + '' + month, { current: 0, history: [edit] });
+              draft.set(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId, {
+                current: 0,
+                history: [edit],
+              });
             }
           })
         );
@@ -256,7 +259,7 @@ const useEditShift = (activeEffect = false) => {
   const changeFocusedShift = useCallback(
     (shiftTypeId: number | null) => {
       if (
-        !ward ||
+        !wardId ||
         !focus ||
         !shift ||
         shift.divisionShiftNurses
@@ -280,7 +283,7 @@ const useEditShift = (activeEffect = false) => {
       )
         return;
 
-      mutateShift({ wardId: ward.wardId, shift, focus, shiftTypeId });
+      mutateShift({ wardId, shift, focus, shiftTypeId });
     },
     [focus, shift]
   );
@@ -298,8 +301,10 @@ const useEditShift = (activeEffect = false) => {
 
   const moveHistory = (diff: number) => {
     if (diff === 0) return;
-    if (!editHistory.get(year + '' + month)) return;
-    const { current, history } = editHistory.get(year + '' + month)!;
+    if (!editHistory.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)) return;
+    const { current, history } = editHistory.get(
+      year + ',' + month + ',' + currentShiftTeam!.shiftTeamId
+    )!;
     const changesMap = new Map<string, number | null>();
 
     let lastFocus = focus!;
@@ -346,7 +351,7 @@ const useEditShift = (activeEffect = false) => {
     setState(
       'editHistory',
       produce(editHistory, (draft) => {
-        draft.get(year + '' + month)!.current += diff;
+        draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)!.current += diff;
       })
     );
 
@@ -383,7 +388,8 @@ const useEditShift = (activeEffect = false) => {
           keys: [shiftType.shortName],
           callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
         })),
-        { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+        { keys: ['Backspace'], callback: () => changeFocusedShift(null) },
+        { keys: ['/'], callback: () => changeFocusedShift(4) }
       );
     },
     [shift, focus, editHistory]
@@ -412,7 +418,7 @@ const useEditShift = (activeEffect = false) => {
       shift,
       focus,
       faults,
-      histories: editHistory.get(year + '' + month),
+      histories: editHistory.get(year + ',' + month + ',' + currentShiftTeam?.shiftTeamId),
       focusedDayInfo,
       foldedLevels,
       changeStatus,
@@ -421,6 +427,8 @@ const useEditShift = (activeEffect = false) => {
       wardShiftTypeMap,
       wardConstraint,
       showLayer,
+      currentShiftTeam,
+      shiftTeams,
     },
     actions: {
       foldLevel,
@@ -441,6 +449,7 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
+      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
     },
   };
 };

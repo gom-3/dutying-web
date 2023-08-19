@@ -202,7 +202,7 @@ export const checkShift = (
             {
               type: option.type,
               faultType: key,
-              nurseName: row.shiftNurse.nurseInfo.name,
+              nurseName: row.shiftNurse.name,
               focus,
               message: option.message,
               matchString: match[0],

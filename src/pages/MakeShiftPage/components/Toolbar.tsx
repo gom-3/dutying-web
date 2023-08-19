@@ -21,11 +21,12 @@ import Draggable from 'react-draggable';
 import ShiftBadge from '@components/ShiftBadge';
 import SetConstraint from './editWard/SetConstraint';
 import SetShiftType from './editWard/SetShiftType';
+import Select from '@components/Select';
 
 function Toolbar() {
   const {
-    state: { month, shift, changeStatus, showLayer },
-    actions: { changeMonth, toggleLayer },
+    state: { month, shift, changeStatus, showLayer, currentShiftTeam, shiftTeams },
+    actions: { changeMonth, toggleLayer, changeShiftTeam },
   } = useEditShift();
 
   const [openInfo, setOpenInfo] = useState(false);
@@ -198,9 +199,29 @@ function Toolbar() {
         <HistoryNextIcon className="h-[1.625rem] w-[1.625rem]" />
       </div>
 
+      <div>
+        {currentShiftTeam && (
+          <Select
+            value={currentShiftTeam?.shiftTeamId}
+            options={shiftTeams?.map((shiftTeam) => ({
+              label: shiftTeam.name,
+              value: shiftTeam.shiftTeamId,
+            }))}
+            className="ml-[1.875rem] h-[2.875rem] w-[10.5rem] font-apple text-[1.25rem] text-main-1"
+            selectClassName="outline-[.0938rem] outline-main-1"
+            onChange={(e) =>
+              changeShiftTeam(
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                shiftTeams!.find((shiftTeam) => shiftTeam.shiftTeamId === parseInt(e.target.value))!
+              )
+            }
+          />
+        )}
+      </div>
+
       <Button
         type="outline"
-        className="ml-[3.25rem] h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
+        className="ml-[1.25rem] h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
         onClick={() => {
           shift && shiftToExcel(month, shift);
           sendEvent(event.clickExcelDownloadButton, 'excel download');

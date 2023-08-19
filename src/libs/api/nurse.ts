@@ -39,7 +39,7 @@ const updateNurseShiftType = async (
 
 const updateNurseCarry = async (shiftNurseId: number, value: number) =>
   (
-    await axiosInstance.patch<null>(`/${shiftNurseId}/carried`, {
+    await axiosInstance.patch<null>(`/shift-nurses/${shiftNurseId}/carried`, {
       value,
     })
   ).data;

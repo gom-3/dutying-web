@@ -31,8 +31,6 @@ type WardConstraint = {
 type WardShiftType = {
   /** 근무 타입 id */
   wardShiftTypeId: number;
-  /** 병동 id */
-  wardId: number;
   /** 근무 형태의 이름이다. @example 데이 */
   name: string;
   /** 근무 형태의 약어이다. @example D */
@@ -47,7 +45,6 @@ type WardShiftType = {
   isDefault: boolean;
   /** 휴가 여부 */
   isOff: boolean;
-  hotkey: string[];
 };
 
 type ShiftNurse = {
@@ -59,7 +56,19 @@ type ShiftNurse = {
   /** 구분 내 인덱스 */
   priority: number;
   isWorker: true;
-  nurseInfo: Nurse;
+  nurseInfo: Pick<
+    Nurse,
+    | 'nurseId'
+    | 'accountId'
+    | 'isConnected'
+    | 'phoneNum'
+    | 'nurseShiftTypes'
+    | 'isDutyManager'
+    | 'isWardManager'
+    | 'gender'
+    | 'employmentDate'
+    | 'isDeleted'
+  >;
 };
 
 type ShiftTeam = {

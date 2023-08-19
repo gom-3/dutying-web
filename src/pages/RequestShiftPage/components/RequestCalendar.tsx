@@ -11,7 +11,7 @@ interface Props {
 
 export default function RequestCalendar({ isEditable }: Props) {
   const {
-    state: { focus, requestShift, foldedLevels, month },
+    state: { focus, requestShift, foldedLevels, month, wardShiftTypeMap },
     actions: { changeFocus, foldLevel },
   } = useRequestShift();
 
@@ -43,7 +43,7 @@ export default function RequestCalendar({ isEditable }: Props) {
     }
   }, [focus]);
 
-  return requestShift && foldedLevels ? (
+  return requestShift && foldedLevels && wardShiftTypeMap ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -112,6 +112,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                     </div>
                     <div className="flex h-full px-[1rem]">
                       {row.wardReqShiftList.map((reqShift, j) => {
+                        if (!requestShift.days[j]) return;
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
                           requestShift.days[j].dayType === 'sunday' ||
@@ -134,9 +135,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                                   day: j,
                                 });
                               }}
-                              shiftType={
-                                reqShift !== null ? requestShift.shiftTypes[reqShift] : null
-                              }
+                              shiftType={reqShift !== null ? wardShiftTypeMap.get(reqShift) : null}
                               className={`cursor-pointer ${
                                 isFocused && 'outline outline-[.0625rem] outline-main-1'
                               }`}
