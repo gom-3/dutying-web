@@ -11,7 +11,7 @@ interface Props {
 
 export default function RequestCalendar({ isEditable }: Props) {
   const {
-    state: { focus, requestShift, foldedLevels, month, wardShiftTypeMap },
+    state: { focus, requestShift, foldedLevels, wardShiftTypeMap },
     actions: { changeFocus, foldLevel },
   } = useRequestShift();
 
@@ -58,11 +58,24 @@ export default function RequestCalendar({ isEditable }: Props) {
             {requestShift.days.map((item, j) => (
               <p
                 key={j}
-                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 ${
-                  j === focus?.day && 'rounded-full bg-main-1 text-white'
-                }`}
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem]
+                ${
+                  item.dayType === 'saturday'
+                    ? j === focus?.day
+                      ? 'rounded-full bg-[#436DFF] text-white'
+                      : 'text-[#436DFF]'
+                    : item.dayType === 'sunday' || item.dayType === 'holiday'
+                    ? j === focus?.day
+                      ? 'rounded-full bg-[#FF4A80] text-white'
+                      : 'text-[#FF4A80]'
+                    : item.dayType === 'workday'
+                    ? j === focus?.day
+                      ? 'rounded-full bg-main-1 text-white'
+                      : 'text-sub-2.5'
+                    : ''
+                }
+              `}
               >
-                {j === focus?.day ? month + '/' : ''}
                 {item.day}
               </p>
             ))}

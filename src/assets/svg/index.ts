@@ -37,6 +37,7 @@ export { default as RequestIcon } from './RequestIcon';
 export { default as RequestIconSelected } from './RequestIconSelected';
 export { default as RequestSlashIcon } from './RequestSlashIcon';
 export { default as RestoreIcon } from './RestoreIcon';
+export { default as RestoreIconDisable } from './RestoreIconDisable';
 export { default as SaveCompleteIcon } from './SaveCompleteIcon';
 export { default as SavingIcon } from './SavingIcon';
 export { default as SelectboxArrowIcon } from './SelectboxArrowIcon';

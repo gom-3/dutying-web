@@ -71,7 +71,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem] text-sub-2.5 
+                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem]
                   ${
                     item.dayType === 'saturday'
                       ? j === focus?.day
@@ -84,7 +84,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                       : item.dayType === 'workday'
                       ? j === focus?.day
                         ? 'rounded-full bg-main-1 text-white'
-                        : 'text-main-1'
+                        : 'text-sub-2.5'
                       : ''
                   }
                 `}
