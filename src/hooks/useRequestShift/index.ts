@@ -3,10 +3,11 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { findNurse, keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
+import { keydownEventMapper } from '@hooks/useEditShift/handlers';
 import { produce } from 'immer';
 import useGlobalStore from 'store';
 import { getReqShift, getShiftTeams, updateReqShift } from '@libs/api/ward';
+import { findNurse, moveFocusByKeydown } from './handlers';
 
 const useRequestShift = () => {
   const [year, month, focus, currentShiftTeam, foldedLevels, wardShiftTypeMap, setState] =

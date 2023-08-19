@@ -89,7 +89,7 @@ const useEditShift = (activeEffect = false) => {
     }
   );
 
-  const { data: ward } = useQuery(wardQueryKey, () => getWard(wardId!), {
+  useQuery(wardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
   const { data: shift, status: shiftStatus } = useQuery(

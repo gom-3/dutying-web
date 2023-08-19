@@ -2,11 +2,11 @@ import { koToEn } from '@libs/util/koToEn';
 
 export const moveFocusByKeydown = (
   e: KeyboardEvent,
-  shift: Shift | RequestShift,
+  shift: Shift,
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const flatNurses = shift.divisionNumNurses
+  const flatNurses = shift.divisionShiftNurses
     .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
     .map((x) => x.shiftNurse);
   const { day, shiftNurseId } = focus;
@@ -217,9 +217,9 @@ export const checkShift = (
   return faults;
 };
 
-export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => {
+export const findNurse = (shift: Shift, shiftNurseId: number) => {
   return (
-    shift.divisionNumNurses
+    shift.divisionShiftNurses
       .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
       .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
   );
