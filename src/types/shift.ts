@@ -31,7 +31,7 @@ type RequestShift = {
   /** 해당 근무표의 근무유형 리스트 */
   wardShiftTypes: WardShiftType[];
   /** 구분된 근무 데이터 */
-  divisionNumNurses: {
+  divisionShiftNurses: {
     shiftNurse: ShiftNurse;
     /** 이월 @example 1 */
     carry: number;

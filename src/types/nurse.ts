@@ -25,7 +25,7 @@ type Nurse = {
   nurseShiftTypes: {
     nurseShiftTypeId: number;
     name: string;
-    shoftName: string;
+    shortName: string;
     isPossible: boolean;
     isPreferred: boolean;
   }[];
@@ -42,4 +42,5 @@ type Nurse = {
   workStartDate: string;
   workEndDate: string;
   memo: string;
+  isDeleted: boolean;
 };

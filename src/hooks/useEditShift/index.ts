@@ -149,13 +149,16 @@ const useEditShift = (activeEffect = false) => {
         setState(
           'editHistory',
           produce(oldEditHistory, (draft) => {
-            const histories = draft.get(year + '' + month);
+            const histories = draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId);
             if (histories) {
               histories.history = histories.history.slice(0, histories.current + 1);
               histories.history.push(edit);
               histories.current = histories.history.length - 1;
             } else {
-              draft.set(year + '' + month, { current: 0, history: [edit] });
+              draft.set(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId, {
+                current: 0,
+                history: [edit],
+              });
             }
           })
         );
@@ -298,8 +301,10 @@ const useEditShift = (activeEffect = false) => {
 
   const moveHistory = (diff: number) => {
     if (diff === 0) return;
-    if (!editHistory.get(year + '' + month)) return;
-    const { current, history } = editHistory.get(year + '' + month)!;
+    if (!editHistory.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)) return;
+    const { current, history } = editHistory.get(
+      year + ',' + month + ',' + currentShiftTeam!.shiftTeamId
+    )!;
     const changesMap = new Map<string, number | null>();
 
     let lastFocus = focus!;
@@ -346,7 +351,7 @@ const useEditShift = (activeEffect = false) => {
     setState(
       'editHistory',
       produce(editHistory, (draft) => {
-        draft.get(year + '' + month)!.current += diff;
+        draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)!.current += diff;
       })
     );
 
@@ -383,7 +388,8 @@ const useEditShift = (activeEffect = false) => {
           keys: [shiftType.shortName],
           callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
         })),
-        { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+        { keys: ['Backspace'], callback: () => changeFocusedShift(null) },
+        { keys: ['/'], callback: () => changeFocusedShift(4) }
       );
     },
     [shift, focus, editHistory]
@@ -412,7 +418,7 @@ const useEditShift = (activeEffect = false) => {
       shift,
       focus,
       faults,
-      histories: editHistory.get(year + '' + month),
+      histories: editHistory.get(year + ',' + month + ',' + currentShiftTeam?.shiftTeamId),
       focusedDayInfo,
       foldedLevels,
       changeStatus,

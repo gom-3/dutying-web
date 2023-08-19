@@ -3,11 +3,10 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { keydownEventMapper } from '@hooks/useEditShift/handlers';
+import { findNurse, keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
 import { produce } from 'immer';
 import useGlobalStore from 'store';
 import { getReqShift, getShiftTeams, updateReqShift } from '@libs/api/ward';
-import { findNurse, moveFocusByKeydown } from './handlers';
 
 const useRequestShift = () => {
   const [year, month, focus, currentShiftTeam, foldedLevels, wardShiftTypeMap, setState] =
@@ -44,7 +43,7 @@ const useRequestShift = () => {
         if (data === null) return;
         setState(
           'foldedLevels',
-          data.divisionNumNurses.map(() => false)
+          data.divisionShiftNurses.map(() => false)
         );
 
         const wardShiftTypeMap = new Map<number, WardShiftType>();
@@ -85,7 +84,7 @@ const useRequestShift = () => {
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
           produce(oldShift, (draft) => {
-            draft.divisionNumNurses
+            draft.divisionShiftNurses
               .flatMap((x) => x)
               .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardReqShiftList[
               focus.day
@@ -139,7 +138,7 @@ const useRequestShift = () => {
       !wardId ||
       !focus ||
       !requestShift ||
-      requestShift.divisionNumNurses
+      requestShift.divisionShiftNurses
         .flatMap((x) => x)
         .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardReqShiftList[
         focus.day
