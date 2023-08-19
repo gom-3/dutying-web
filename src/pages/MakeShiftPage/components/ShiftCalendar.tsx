@@ -159,6 +159,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                             e.currentTarget.select();
                           }}
                           onKeyDown={(e) => {
+                            e.preventDefault();
                             if (e.key === 'ArrowUp')
                               updateCarry(row.shiftNurse.shiftNurseId, row.shiftNurse.carried + 1);
                             if (e.key === 'ArrowDown')

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
 
 interface State {
@@ -7,6 +7,8 @@ interface State {
   month: number;
   focus: Focus | null;
   foldedLevels: boolean[] | null;
+  currentShiftTeam: ShiftTeam | null;
+  wardShiftTypeMap: Map<number, WardShiftType> | null;
 }
 
 interface Store extends State {
@@ -15,16 +17,28 @@ interface Store extends State {
 }
 
 export const useRequestShiftStore = create<Store>()(
-  devtools((set, get) => ({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
-    focus: null,
-    foldedLevels: null,
-    setState: (state, value) =>
-      set(
-        produce(get(), (draft) => {
-          draft[state] = value;
-        })
-      ),
-  }))
+  devtools(
+    persist(
+      (set, get) => ({
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        focus: null,
+        currentShiftTeam: null,
+        foldedLevels: null,
+        wardShiftTypeMap: null,
+        setState: (state, value) =>
+          set(
+            produce(get(), (draft) => {
+              draft[state] = value;
+            })
+          ),
+      }),
+      {
+        name: 'useRequestShiftStore',
+        partialize: ({ currentShiftTeam }: Store) => ({
+          currentShiftTeam,
+        }),
+      }
+    )
+  )
 );

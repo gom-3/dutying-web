@@ -100,7 +100,7 @@ const updateWardConstraint = async (
 /** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty` */
 const getReqShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
-    await axiosInstance.get<Shift>(
+    await axiosInstance.get<RequestShift>(
       `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty?${qs.stringify({ year, month })}`
     )
   ).data;
@@ -118,16 +118,18 @@ const getShift = async (wardId: number, shiftTeamId: number, year: number, month
  * PATCH  `/wards/${wardId}/shifts/list`
  * 근무 변경
  * */
-const editShift = async (
+const updateShift = async (
   wardId: number,
+  year: number,
+  month: number,
+  day: number,
   shiftNurseId: number,
-  date: string,
-  wardShiftTypeId: number
+  wardShiftTypeId: number | null
 ) =>
   (
-    await axiosInstance.patch(`/wards/${wardId}/shifts`, {
+    await axiosInstance.patch<null>(`/wards/${wardId}/shifts`, {
       shiftNurseId,
-      date,
+      date: `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
       wardShiftTypeId,
     })
   ).data;
@@ -136,7 +138,7 @@ const editShift = async (
  * PATCH  `/wards/${wardId}/shifts/list`
  * 여러 근무 변경
  * */
-const editShifts = async (
+const updateShifts = async (
   wardId: number,
   wardShifts: {
     shiftNurseId: number;
@@ -154,16 +156,18 @@ const editShifts = async (
  * PATCH  `/wards/${wardId}/shifts/list`
  * 신청 근무 변경
  * */
-const editReqShift = async (
+const updateReqShift = async (
   wardId: number,
+  year: number,
+  month: number,
+  day: number,
   shiftNurseId: number,
-  date: string,
-  wardShiftTypeId: number
+  wardShiftTypeId: number | null
 ) =>
   (
     await axiosInstance.patch(`/wards/${wardId}/req-shifts`, {
       shiftNurseId,
-      date,
+      date: `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
       wardShiftTypeId,
     })
   ).data;
@@ -184,7 +188,7 @@ export {
   editWard,
   getReqShift,
   getShift,
-  editShift,
-  editShifts,
-  editReqShift,
+  updateShift,
+  updateShifts,
+  updateReqShift,
 };

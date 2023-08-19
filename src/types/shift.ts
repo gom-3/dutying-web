@@ -8,7 +8,7 @@ type Shift = {
   days: Array<Day>;
   /** 해당 근무표의 근무유형 리스트 */
   wardShiftTypes: WardShiftType[];
-  /** 숙련도별로 묶은 근무 데이터 */
+  /** 구분된 근무 데이터 */
   divisionShiftNurses: Row[][];
 };
 
@@ -29,9 +29,9 @@ type RequestShift = {
   /** 이번달 근무표의 날짜들 */
   days: Array<Day>;
   /** 해당 근무표의 근무유형 리스트 */
-  shiftTypes: WardShiftType[];
-  /** 숙련도별로 묶은 근무 데이터 */
-  divisionShiftNurses: {
+  wardShiftTypes: WardShiftType[];
+  /** 구분된 근무 데이터 */
+  divisionNumNurses: {
     shiftNurse: ShiftNurse;
     /** 이월 @example 1 */
     carry: number;

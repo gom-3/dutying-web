@@ -204,7 +204,7 @@ function Toolbar() {
           <Select
             value={currentShiftTeam?.shiftTeamId}
             options={shiftTeams?.map((shiftTeam) => ({
-              label: shiftTeam.name + '팀',
+              label: shiftTeam.name,
               value: shiftTeam.shiftTeamId,
             }))}
             className="ml-[1.875rem] h-[2.875rem] w-[10.5rem] font-apple text-[1.25rem] text-main-1"

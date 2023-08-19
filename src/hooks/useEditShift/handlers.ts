@@ -6,7 +6,7 @@ export const moveFocusByKeydown = (
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const flatNurses = shift.divisionShiftNurses
+  const flatNurses = shift.divisionNumNurses
     .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
     .map((x) => x.shiftNurse);
   const { day, shiftNurseId } = focus;
@@ -219,7 +219,7 @@ export const checkShift = (
 
 export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => {
   return (
-    shift.divisionShiftNurses
+    shift.divisionNumNurses
       .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
       .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
   );

@@ -49,6 +49,9 @@ function SetShiftType() {
             <TextField
               className="h-[2rem] w-[2rem] rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
               value={shiftType.shortName}
+              onClick={(e) => {
+                e.currentTarget.select();
+              }}
               onChange={(e) =>
                 editShiftType(shiftType.wardShiftTypeId, {
                   ...shiftType,

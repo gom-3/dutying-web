@@ -256,7 +256,7 @@ const useEditShift = (activeEffect = false) => {
   const changeFocusedShift = useCallback(
     (shiftTypeId: number | null) => {
       if (
-        !ward ||
+        !wardId ||
         !focus ||
         !shift ||
         shift.divisionShiftNurses
@@ -280,7 +280,7 @@ const useEditShift = (activeEffect = false) => {
       )
         return;
 
-      mutateShift({ wardId: ward.wardId, shift, focus, shiftTypeId });
+      mutateShift({ wardId, shift, focus, shiftTypeId });
     },
     [focus, shift]
   );
