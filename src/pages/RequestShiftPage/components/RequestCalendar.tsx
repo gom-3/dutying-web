@@ -112,6 +112,7 @@ export default function RequestCalendar({ isEditable }: Props) {
                     </div>
                     <div className="flex h-full px-[1rem]">
                       {row.wardReqShiftList.map((reqShift, j) => {
+                        if (!requestShift.days[j]) return;
                         const isSaturday = requestShift.days[j].dayType === 'saturday';
                         const isSunday =
                           requestShift.days[j].dayType === 'sunday' ||

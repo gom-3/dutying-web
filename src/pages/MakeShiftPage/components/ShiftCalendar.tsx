@@ -237,12 +237,16 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                 <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
                   {rows.map((row, i) => (
                     <div key={i} className="flex h-[3.25rem] items-center">
-                      {shift?.wardShiftTypes.slice(0, 4).map((_, index) => (
+                      {shift?.wardShiftTypes.slice(0, 4).map((wardShiftType, index) => (
                         <div
                           key={index}
                           className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
                         >
-                          {row.wardShiftList.filter((current) => current === index).length}
+                          {
+                            row.wardShiftList.filter(
+                              (current) => current === wardShiftType.wardShiftTypeId
+                            ).length
+                          }
                         </div>
                       ))}
                       <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
