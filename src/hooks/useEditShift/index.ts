@@ -54,14 +54,14 @@ const useEditShift = (activeEffect = false) => {
   const queryClient = useQueryClient();
 
   const wardQueryKey = ['ward', wardId];
-  const shiftQueryKey = ['shift', wardId, year, month];
+  const shiftQueryKey = ['shift', wardId, year, month, currentShiftTeam];
   const shiftTeamQueryKey = ['shiftTeams', wardId];
   const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
 
-  useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
+  const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: currentShiftTeam === null && wardId != null,
     onSuccess: (data) => {
-      setState('currentShiftTeam', data[0]);
+      if (currentShiftTeam === null) setState('currentShiftTeam', data[0]);
     },
   });
 
@@ -421,6 +421,8 @@ const useEditShift = (activeEffect = false) => {
       wardShiftTypeMap,
       wardConstraint,
       showLayer,
+      currentShiftTeam,
+      shiftTeams,
     },
     actions: {
       foldLevel,
@@ -441,6 +443,7 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
+      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
     },
   };
 };
