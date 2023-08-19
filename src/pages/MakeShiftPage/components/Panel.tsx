@@ -3,7 +3,7 @@ import useEditShift from '@hooks/useEditShift';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
-import { RestoreIcon } from '@assets/svg';
+import { RestoreIcon, RestoreIconDisable } from '@assets/svg';
 
 function Panel() {
   const {
@@ -58,26 +58,41 @@ function Panel() {
               </p>
             ))
           : histories &&
-            [...histories.history].reverse().map((history, index) => (
-              <div
-                key={index}
-                className="flex gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
-                onClick={() =>
-                  moveHistory(histories.history.length - index - 1 - histories.current)
-                }
-              >
-                {history.focus.shiftNurseName} / {history.focus.day + 1}일
-                <div className="h-full w-[.0313rem] bg-sub-3" />
-                {match(history)
-                  .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
-                  .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
-                  .otherwise(
-                    () =>
-                      `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+            [...histories.history].reverse().map((history, index) => {
+              const isPrev = histories.history.length - index - 1 > histories.current;
+              return (
+                <div
+                  key={index}
+                  className={`flex cursor-pointer gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none ${
+                    isPrev ? 'text-sub-3' : 'text-sub-2'
+                  }`}
+                  onClick={() =>
+                    moveHistory(histories.history.length - index - 1 - histories.current)
+                  }
+                >
+                  {history.focus.shiftNurseName} / {history.focus.day + 1}일
+                  <div className="h-full w-[.0313rem] bg-sub-3" />
+                  {match(history)
+                    .with(
+                      { prevShiftType: null },
+                      () => `추가 → ${history.nextShiftType?.shortName}`
+                    )
+                    .with(
+                      { nextShiftType: null },
+                      () => `${history.prevShiftType?.shortName} → 삭제`
+                    )
+                    .otherwise(
+                      () =>
+                        `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+                    )}
+                  {isPrev ? (
+                    <RestoreIconDisable className="ml-auto h-[1.125rem] w-[1.125rem]" />
+                  ) : (
+                    <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
                   )}
-                <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
-              </div>
-            ))}
+                </div>
+              );
+            })}
       </div>
       <div
         className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"

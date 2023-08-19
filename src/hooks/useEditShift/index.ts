@@ -3,7 +3,14 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getShift, updateShift } from '@libs/api/shift';
 import useGlobalStore from 'store';
-import { getShiftTeams, getWard, getWardConstraint, updateWardConstraint } from '@libs/api/ward';
+import {
+  WardShiftsDTO,
+  getShiftTeams,
+  getWard,
+  getWardConstraint,
+  updateShifts,
+  updateWardConstraint,
+} from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -199,6 +206,57 @@ const useEditShift = (activeEffect = false) => {
       },
     }
   );
+  const { mutate: mutateShifts } = useMutation(
+    ({
+      wardId,
+      wardShiftsDTO,
+    }: {
+      wardId: number;
+      wardShiftsDTO: WardShiftsDTO;
+      lastFocus: Focus;
+      diff: number;
+    }) => updateShifts(wardId, wardShiftsDTO),
+    {
+      onMutate: async ({ wardShiftsDTO, lastFocus, diff }) => {
+        await queryClient.cancelQueries(['shift']);
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+        const oldEditHistory = editHistory;
+        const oldFocus = focus;
+
+        if (!oldShift) return;
+
+        queryClient.setQueryData<Shift>(
+          shiftQueryKey,
+          produce(oldShift, (draft) => {
+            wardShiftsDTO.forEach((wardShift) => {
+              draft.divisionShiftNurses
+                .flatMap((x) => x)
+                .find((x) => x.shiftNurse.shiftNurseId === wardShift.shiftNurseId)!.wardShiftList[
+                parseInt(wardShift.date.split('-')[2]) - 1
+              ] = wardShift.wardShiftTypeId;
+            });
+          })
+        );
+
+        setState('focus', lastFocus);
+
+        setState(
+          'editHistory',
+          produce(editHistory, (draft) => {
+            draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)!.current += diff;
+          })
+        );
+
+        return { oldShift, oldEditHistory, oldFocus };
+      },
+      onError: (_, __, context) => {
+        if (context === undefined || context.oldShift === undefined) return;
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
+        setState('editHistory', context.oldEditHistory);
+        setState('focus', context.oldFocus);
+      },
+    }
+  );
   const { mutate: mutateCarry } = useMutation(
     ({ shiftNurseId, value }: { shiftNurseId: number; value: number }) =>
       updateNurseCarry(shiftNurseId, value),
@@ -300,7 +358,7 @@ const useEditShift = (activeEffect = false) => {
   );
 
   const moveHistory = (diff: number) => {
-    if (diff === 0) return;
+    if (diff === 0 || !wardId) return;
     if (!editHistory.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)) return;
     const { current, history } = editHistory.get(
       year + ',' + month + ',' + currentShiftTeam!.shiftTeamId
@@ -317,7 +375,7 @@ const useEditShift = (activeEffect = false) => {
           break;
         }
         changesMap.set(
-          edit.focus.shiftNurseId + '/' + edit.focus.day,
+          edit.focus.shiftNurseId + ',' + (edit.focus.day + 1),
           edit.prevShiftType === null ? null : edit.prevShiftType.wardShiftTypeId
         );
         lastFocus = edit.focus;
@@ -332,7 +390,7 @@ const useEditShift = (activeEffect = false) => {
           break;
         }
         changesMap.set(
-          edit.focus.shiftNurseId + '/' + edit.focus.day,
+          edit.focus.shiftNurseId + ',' + (edit.focus.day + 1),
           edit.nextShiftType === null ? null : edit.nextShiftType.wardShiftTypeId
         );
         lastFocus = edit.focus;
@@ -340,35 +398,12 @@ const useEditShift = (activeEffect = false) => {
       }
     }
 
-    const changes = Array.from(changesMap.keys()).map((key) => ({
-      shiftNurseId: parseInt(key.split('/')[0]),
-      day: parseInt(key.split('/')[1]),
-      shiftTypeId: changesMap.get(key) as number | null,
+    const wardShiftsDTO: WardShiftsDTO = Array.from(changesMap.keys()).map((key) => ({
+      shiftNurseId: parseInt(key.split(',')[0]),
+      date: `${year}-${month.toString().padStart(2, '0')}-${key.split(',')[1].padStart(2, '0')}`,
+      wardShiftTypeId: changesMap.get(key) as number | null,
     }));
-
-    setState('focus', lastFocus);
-
-    setState(
-      'editHistory',
-      produce(editHistory, (draft) => {
-        draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)!.current += diff;
-      })
-    );
-
-    if (shift) {
-      queryClient.setQueryData(
-        shiftQueryKey,
-        produce(shift, (draft) => {
-          changes.forEach((change) => {
-            draft.divisionShiftNurses
-              .flatMap((x) => x)
-              .find((x) => x.shiftNurse.shiftNurseId === change.shiftNurseId)!.wardShiftList[
-              change.day
-            ] = change.shiftTypeId;
-          });
-        })
-      );
-    }
+    mutateShifts({ wardId, wardShiftsDTO, lastFocus, diff });
   };
 
   const handleKeyDown = useCallback(

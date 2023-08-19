@@ -138,16 +138,14 @@ const updateShift = async (
  * PATCH  `/wards/${wardId}/shifts/list`
  * 여러 근무 변경
  * */
-const updateShifts = async (
-  wardId: number,
-  wardShifts: {
-    shiftNurseId: number;
-    date: string;
-    wardShiftTypeId: number;
-  }[]
-) =>
+export type WardShiftsDTO = {
+  shiftNurseId: number;
+  date: string;
+  wardShiftTypeId: number | null;
+}[];
+const updateShifts = async (wardId: number, wardShifts: WardShiftsDTO) =>
   (
-    await axiosInstance.patch(`/wards/${wardId}/shifts`, {
+    await axiosInstance.patch(`/wards/${wardId}/shifts/list`, {
       wardShifts,
     })
   ).data;
