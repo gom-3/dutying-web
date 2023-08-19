@@ -1,11 +1,14 @@
 import { FoldIcon, MenuIcon } from '@assets/svg';
-import 'index.css';
 import { useState, useEffect } from 'react';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
 import { event, sendEvent } from 'analytics';
 
-const NavigationBar = () => {
-  const [isFold, setIsFold] = useState(false);
+interface Props {
+  isFold: boolean;
+  setIsFold: (isFold: boolean) => void;
+}
+
+const NavigationBar = ({ isFold, setIsFold }: Props) => {
   const [canHover, setCanHover] = useState(true);
 
   useEffect(() => {
@@ -16,14 +19,17 @@ const NavigationBar = () => {
   }, [isFold]);
 
   return (
-    <div className="group">
+    <div className="fixed left-0 z-[1000]">
       {isFold && (
-        <div className="fixed z-10 ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium">
+        <div
+          className="fixed ml-[.9375rem] mt-[.625rem] flex items-center bg-white font-apple text-[1rem] font-medium"
+          onClick={() => setIsFold(false)}
+        >
           <MenuIcon className="h-[1.875rem] w-[1.875rem] cursor-pointer" />
         </div>
       )}
       <div
-        className={`z-10 ${canHover && 'group-hover:translate-x-0'} ${
+        className={`z-10 ${canHover && 'hover:translate-x-0'} ${
           !isFold ? 'sticky' : 'fixed'
         } top-0 duration-500 ease-in-out ${
           !isFold ? '' : 'translate-x-[-10.0625rem]'
