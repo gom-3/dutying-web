@@ -79,17 +79,6 @@ function ShiftTeamList() {
       destination.droppableId === source.droppableId &&
       destinationNurses.findIndex((x) => x.nurseId === dragedNurse.nurseId) < destination.index
     ) {
-      console.log(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index].priority,
-        destination.index === destinationNurses.length - 1
-          ? destinationNurses[destination.index].priority + 2024
-          : destinationNurses[destination.index + 1].priority
-      );
-
       moveNurseOrder(
         dragedNurse.nurseId,
         parseInt(sourceShiftTeamId),
@@ -101,27 +90,27 @@ function ShiftTeamList() {
           : destinationNurses[destination.index + 1].priority
       );
     } else {
-      console.log(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
-        destination.index === destinationNurses.length
-          ? destinationNurses[destination.index - 1].priority + 2024
-          : destinationNurses[destination.index].priority
-      );
-
-      moveNurseOrder(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
-        destination.index === destinationNurses.length
-          ? destinationNurses[destination.index - 1].priority + 2024
-          : destinationNurses[destination.index].priority
-      );
+      if (parseInt(destinationDivision) === 0) {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          parseInt(sourceShiftTeamId),
+          parseInt(destinationShiftTeamId),
+          1,
+          0,
+          2024
+        );
+      } else {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          parseInt(sourceShiftTeamId),
+          parseInt(destinationShiftTeamId),
+          parseInt(destinationDivision),
+          destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
+          destination.index === destinationNurses.length
+            ? destinationNurses[destination.index - 1].priority + 2024
+            : destinationNurses[destination.index].priority
+        );
+      }
     }
   };
 
@@ -232,13 +221,22 @@ function ShiftTeamList() {
                 )}
               </div>
               {shiftTeam.nurses.length === 0 && (
-                <div
-                  className={`flex h-[3.5rem] w-full cursor-pointer select-none items-center justify-center`}
+                <Droppable
+                  droppableId={shiftTeam.shiftTeamId + ',' + 0}
+                  key={shiftTeam.shiftTeamId + ',' + 0}
                 >
-                  <h3 className="font-apple text-[1.25rem] font-semibold text-sub-2.5">
-                    아직 간호사가 없습니다!
-                  </h3>
-                </div>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className={`flex h-[3.5rem] w-full cursor-pointer select-none items-center justify-center`}
+                    >
+                      <h3 className="font-apple text-[1.25rem] font-semibold text-sub-2.5">
+                        아직 간호사가 없습니다!
+                      </h3>
+                    </div>
+                  )}
+                </Droppable>
               )}
               {Object.entries(groupBy(shiftTeam.nurses, 'divisionNum')).map(
                 ([division, divisionNurses]) => (
