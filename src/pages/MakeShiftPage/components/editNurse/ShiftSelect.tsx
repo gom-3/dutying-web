@@ -1,4 +1,4 @@
-import useEditNurse from '@hooks/useEditNurse';
+import useEditShiftTeam from '@hooks/useEditShiftTeam';
 
 interface Props {
   mode: 'isPreferred' | 'isPossible';
@@ -8,7 +8,7 @@ const ShiftSelect = ({ mode }: Props) => {
   const {
     state: { selectedNurse },
     actions: { updateNurseShift },
-  } = useEditNurse();
+  } = useEditShiftTeam();
 
   const nurseShiftTypes = selectedNurse?.nurseShiftTypes;
 

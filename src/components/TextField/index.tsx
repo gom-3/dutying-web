@@ -1,10 +1,16 @@
 import { twMerge } from 'tailwind-merge';
 
-type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+type Props = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & {
+  forwardRef?: React.LegacyRef<HTMLInputElement> | undefined;
+};
 
-function TextField({ value, onChange, className, ...props }: Props) {
+function TextField({ value, onChange, className, forwardRef, ...props }: Props) {
   return (
     <input
+      ref={forwardRef}
       value={value}
       onChange={onChange}
       className={twMerge(

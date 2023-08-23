@@ -134,7 +134,7 @@ const SetConstraint = () => {
               .otherwise(() => null)}
             {isActive ? (
               <div
-                className="ml-auto flex w-[6.5625rem] cursor-pointer items-center justify-between"
+                className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between"
                 onClick={() => {
                   updateConstraint({
                     ...wardConstraint,
@@ -143,11 +143,11 @@ const SetConstraint = () => {
                 }}
               >
                 <ToggleOnIcon className="h-[1rem] w-[1.875rem]" />
-                <p className="w-[4.125rem] text-center text-[.75rem] text-sub-3">근무표 적용</p>
+                <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 적용</p>
               </div>
             ) : (
               <div
-                className="ml-auto flex w-[6.5625rem] cursor-pointer items-center justify-between"
+                className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between"
                 onClick={() => {
                   updateConstraint({
                     ...wardConstraint,
@@ -156,7 +156,7 @@ const SetConstraint = () => {
                 }}
               >
                 <ToggleOffIcon className="h-[1rem] w-[1.875rem]" />
-                <p className="w-[4.125rem] text-center text-[.75rem] text-sub-3">근무표 미적용</p>
+                <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 미적용</p>
               </div>
             )}
           </div>

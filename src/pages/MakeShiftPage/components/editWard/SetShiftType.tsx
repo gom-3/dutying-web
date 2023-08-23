@@ -127,7 +127,7 @@ function SetShiftType() {
             setOpenModal(true);
           }}
         >
-          <PlusIcon className="h-[1.25rem] w-[1.25rem]" />
+          <PlusIcon className="h-[1.25rem] w-[1.25rem] stroke-main-2" />
           <p className="font-apple text-[.875rem] text-main-2">새로운 근무/휴가 추가하기</p>
         </div>
       </div>

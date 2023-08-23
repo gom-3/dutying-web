@@ -8,7 +8,7 @@ import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
 import TextField from '@components/TextField';
 import useEditShift from '@hooks/useEditShift';
-import useEditNurse from '@hooks/useEditNurse';
+import useEditShiftTeam from '@hooks/useEditShiftTeam';
 
 interface Props {
   isEditable?: boolean;
@@ -18,7 +18,7 @@ interface Props {
 export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
   const {
     actions: { selectNurse },
-  } = useEditNurse();
+  } = useEditShiftTeam();
   const {
     state: { shift, focus, faults, foldedLevels, wardShiftTypeMap, showLayer },
     actions: { changeFocus, foldLevel, updateCarry },

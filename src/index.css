@@ -18,13 +18,13 @@ body {
 
 @media screen and (max-width: 1680px) {
   html {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
 
 @media screen and (max-width: 1440px) {
   html {
-    font-size: 10px;
+    font-size: 10px !important;
   }
 }
 

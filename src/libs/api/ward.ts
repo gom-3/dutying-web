@@ -11,44 +11,6 @@ export type EditWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
 const editWard = async (wardId: number, ward: EditWardDTO) =>
   (await axiosInstance.patch<Ward>(`/wards/${wardId}`, ward)).data;
 
-// 병동 근무팀 간호사
-/** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses` */
-const getShiftTeamNurses = async (wardId: number, shiftTeamId: number) =>
-  (
-    await axiosInstance.get<{ nurses: Nurse[] }>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses`
-    )
-  ).data.nurses;
-
-/** POST   `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses` */
-const addNurseIntoShiftTeam = async (
-  wardId: number,
-  shiftTeamId: number,
-  nurse: Pick<
-    Nurse,
-    | 'name'
-    | 'phoneNum'
-    | 'gender'
-    | 'isWorker'
-    | 'employmentDate'
-    | 'isDutyManager'
-    | 'isWardManager'
-    | 'memo'
-    | 'workStartDate'
-    | 'workEndDate'
-  >
-) =>
-  (await axiosInstance.post<Nurse>(`/wards/${wardId}/shift-teams/${shiftTeamId}/nurses`, nurse))
-    .data;
-
-/** DELETE `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses/${nurseId}` */
-const removeNurseFromShiftTeam = async (wardId: number, shiftTeamId: number, nurseId: number) =>
-  (
-    await axiosInstance.delete<Nurse>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses${nurseId}`
-    )
-  ).data;
-
 // 병동 근무팀 관련
 /** GET    `/wards/${wardId}/shift-teams` */
 const getShiftTeams = async (wardId: number) =>
@@ -56,8 +18,8 @@ const getShiftTeams = async (wardId: number) =>
     .shiftTeams;
 
 /** POST   `/wards/${wardId}/shift-teams` */
-const createShiftTeam = async (wardId: number, shiftTeamId: number) =>
-  (await axiosInstance.post<ShiftTeam>(`/wards/${wardId}/shift-teams/${shiftTeamId}`)).data;
+const createShiftTeam = async (wardId: number) =>
+  (await axiosInstance.post<ShiftTeam>(`/wards/${wardId}/shift-teams`)).data;
 
 /** POST   `/wards/${wardId}/shift-teams/build` */
 const buildShiftTeam = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
@@ -72,9 +34,18 @@ const deleteShiftTeam = async (wardId: number, shiftTeamId: number) =>
   (await axiosInstance.delete<ShiftTeam>(`/wards/${wardId}/shift-teams/${shiftTeamId}`)).data;
 
 /** PATCH  `/wards/${wardId}/shift-teams/${shiftTeamId}` */
-const editShiftTeam = async (wardId: number, shiftTeamId: number, shiftTeam: ShiftTeam) =>
-  (await axiosInstance.patch<ShiftTeam>(`/wards/${wardId}/shift-teams/${shiftTeamId}`, shiftTeam))
-    .data;
+export type UpdateShiftTeamDTO = Pick<ShiftTeam, 'name'>;
+const updateShiftTeam = async (
+  wardId: number,
+  shiftTeamId: number,
+  updateShiftTeamDTO: UpdateShiftTeamDTO
+) =>
+  (
+    await axiosInstance.patch<ShiftTeam>(
+      `/wards/${wardId}/shift-teams/${shiftTeamId}`,
+      updateShiftTeamDTO
+    )
+  ).data;
 
 /** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/constraint` */
 const getWardConstraint = async (wardId: number, shiftTeamId: number) =>
@@ -170,15 +141,43 @@ const updateReqShift = async (
     })
   ).data;
 
+const updateNurseOrder = async (
+  nurseId: number,
+  shiftTeamId: number,
+  nextShiftTeamId: number,
+  divisionNum: number,
+  prevPriority: number,
+  nextPriority: number
+) =>
+  (
+    await axiosInstance.patch(`/nurses/${nurseId}/priority`, {
+      shiftTeamId,
+      nextShiftTeamId,
+      divisionNum,
+      prevPriority,
+      nextPriority,
+    })
+  ).data;
+
+const updateShiftTeamDivision = async (
+  shiftTeamId: number,
+  prevPriority: number,
+  changeValue: number
+) =>
+  (
+    await axiosInstance.patch(`/nurses/division`, {
+      shiftTeamId,
+      prevPriority,
+      changeValue,
+    })
+  ).data;
+
 export {
-  getShiftTeamNurses,
-  addNurseIntoShiftTeam,
-  removeNurseFromShiftTeam,
   getShiftTeams,
   createShiftTeam,
   buildShiftTeam,
   deleteShiftTeam,
-  editShiftTeam,
+  updateShiftTeam,
   getWardConstraint,
   updateWardConstraint,
   getWard,
@@ -189,4 +188,6 @@ export {
   updateShift,
   updateShifts,
   updateReqShift,
+  updateNurseOrder,
+  updateShiftTeamDivision,
 };

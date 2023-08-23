@@ -1,9 +1,10 @@
 import NavigationBar from '@components/NavigationBar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import useGlobalStore from 'store';
 
 function MainLayout() {
+  const [isFold, setIsFold] = useState(false);
   const { nurseId } = useGlobalStore();
 
   useEffect(() => {
@@ -12,8 +13,8 @@ function MainLayout() {
   }, [nurseId]);
 
   return (
-    <div className="flex bg-[#FDFCFE]">
-      <NavigationBar />
+    <div className={`h-full w-full bg-[#FDFCFE] ${!isFold ? 'pl-[10.125rem]' : 'pl-[2.625rem]'}`}>
+      <NavigationBar isFold={isFold} setIsFold={setIsFold} />
       <Outlet />
     </div>
   );
