@@ -72,8 +72,8 @@ function Toolbar() {
             <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
               <div
                 className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
-        ${currentSetup === 'constraint' ? 'bg-white text-main-1' : 'text-sub-3'}
-      `}
+                  ${currentSetup === 'constraint' ? 'bg-white text-main-1' : 'text-sub-3'}
+                `}
                 onClick={() => setCurrentSetup('constraint')}
               >
                 제약 조건
@@ -84,8 +84,8 @@ function Toolbar() {
               />
               <div
                 className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
-        ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
-      `}
+                  ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
+                `}
                 onClick={() => setCurrentSetup('shiftType')}
               >
                 근무 형태

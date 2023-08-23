@@ -18,7 +18,7 @@ type Nurse = {
   /** 간호사 이름 */
   name: string;
   /** 간호사 전화번호 */
-  phoneNum: string | null;
+  phoneNum: string;
   /** 간호사 연동 여부 */
   isConnected: boolean;
   /** 근무 리스트 */
@@ -43,4 +43,8 @@ type Nurse = {
   workEndDate: string;
   memo: string;
   isDeleted: boolean;
+  /** 구분 인덱스 */
+  divisionNum: number;
+  /** 구분 내 인덱스 */
+  priority: number;
 };

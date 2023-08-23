@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import ShiftSelect from './ShiftSelect';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import useEditNurse from '@hooks/useEditNurse';
+import useEditShiftTeam from '@hooks/useEditShiftTeam';
 
 type Props = {
   isFixed?: boolean;
@@ -12,7 +12,7 @@ const EditNurseTab = ({ isFixed, close }: Props) => {
   const {
     state: { selectedNurse },
     actions: { updateNurse },
-  } = useEditNurse();
+  } = useEditShiftTeam();
 
   const tabRef = useOnclickOutside(() => {
     if (isFixed && close) {
@@ -22,7 +22,7 @@ const EditNurseTab = ({ isFixed, close }: Props) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!selectedNurse) return;
-    updateNurse({ ...selectedNurse, name: e.target.value });
+    updateNurse(selectedNurse.nurseId, { ...selectedNurse, name: e.target.value });
   };
 
   return (

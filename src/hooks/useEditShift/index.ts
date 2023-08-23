@@ -66,7 +66,7 @@ const useEditShift = (activeEffect = false) => {
   const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
 
   const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
-    enabled: currentShiftTeam === null && wardId != null,
+    enabled: wardId != null,
     onSuccess: (data) => {
       if (currentShiftTeam === null) setState('currentShiftTeam', data[0]);
     },

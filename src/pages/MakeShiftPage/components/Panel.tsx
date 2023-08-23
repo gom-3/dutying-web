@@ -63,28 +63,32 @@ function Panel() {
               return (
                 <div
                   key={index}
-                  className={`flex cursor-pointer gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none ${
+                  className={`flex cursor-pointer items-center gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none ${
                     isPrev ? 'text-sub-3' : 'text-sub-2'
                   }`}
                   onClick={() =>
                     moveHistory(histories.history.length - index - 1 - histories.current)
                   }
                 >
-                  {history.focus.shiftNurseName} / {history.focus.day + 1}일
+                  <p className="truncate">
+                    {history.focus.shiftNurseName} / {history.focus.day + 1}일
+                  </p>
                   <div className="h-full w-[.0313rem] bg-sub-3" />
-                  {match(history)
-                    .with(
-                      { prevShiftType: null },
-                      () => `추가 → ${history.nextShiftType?.shortName}`
-                    )
-                    .with(
-                      { nextShiftType: null },
-                      () => `${history.prevShiftType?.shortName} → 삭제`
-                    )
-                    .otherwise(
-                      () =>
-                        `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
-                    )}
+                  <p className="shrink-0">
+                    {match(history)
+                      .with(
+                        { prevShiftType: null },
+                        () => `추가 → ${history.nextShiftType?.shortName}`
+                      )
+                      .with(
+                        { nextShiftType: null },
+                        () => `${history.prevShiftType?.shortName} → 삭제`
+                      )
+                      .otherwise(
+                        () =>
+                          `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
+                      )}
+                  </p>
                   {isPrev ? (
                     <RestoreIconDisable className="ml-auto h-[1.125rem] w-[1.125rem]" />
                   ) : (

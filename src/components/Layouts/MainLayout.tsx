@@ -13,7 +13,7 @@ function MainLayout() {
   }, [nurseId]);
 
   return (
-    <div className={`h-full w-full bg-[#FDFCFE] ${!isFold && 'pl-[10.125rem]'}`}>
+    <div className={`h-full w-full bg-[#FDFCFE] ${!isFold ? 'pl-[10.125rem]' : 'pl-[2.625rem]'}`}>
       <NavigationBar isFold={isFold} setIsFold={setIsFold} />
       <Outlet />
     </div>
