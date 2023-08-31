@@ -109,7 +109,10 @@ const useEditShiftTeam = () => {
       shiftTeamId: number;
       prevPriority: number;
       changeValue: number;
-    }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue)
+    }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue),
+    {
+      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+    }
   );
 
   const { mutate: moveNurseOrderMutate } = useMutation(

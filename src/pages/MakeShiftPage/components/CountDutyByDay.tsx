@@ -26,7 +26,7 @@ function CountDutyByDay() {
               {shift.days.map((_date, i) => (
                 <p
                   key={i}
-                  className={`flex w-[2.25rem] flex-1 items-center justify-center font-poppins text-[1.25rem] text-sub-3 ${
+                  className={`flex w-[2.25rem] flex-1 items-center justify-center font-poppins text-[1.25rem] text-sub-2 ${
                     focus?.day === i && 'bg-main-4'
                   }`}
                 >

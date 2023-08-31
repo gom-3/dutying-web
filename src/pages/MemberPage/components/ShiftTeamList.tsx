@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { DragIcon, InfoIcon, MoreIcon, PersonIcon, PlusIcon } from '@assets/svg';
+import {
+  DragIcon,
+  InfoIcon,
+  MoreIcon,
+  PersonIcon,
+  PlusIcon,
+  PlusIcon2,
+  UnlinkedIcon,
+} from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/ward';
@@ -11,7 +19,14 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 function ShiftTeamList() {
   const {
     state: { shiftTeams, selectedNurse },
-    actions: { selectNurse, createShiftTeam, moveNurseOrder, updateShiftTeam, addNurse },
+    actions: {
+      selectNurse,
+      createShiftTeam,
+      moveNurseOrder,
+      updateShiftTeam,
+      addNurse,
+      editDivision,
+    },
   } = useEditShiftTeam();
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [editShiftTeam, setEditShiftTeam] = useState<{
@@ -79,17 +94,6 @@ function ShiftTeamList() {
       destination.droppableId === source.droppableId &&
       destinationNurses.findIndex((x) => x.nurseId === dragedNurse.nurseId) < destination.index
     ) {
-      console.log(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index].priority,
-        destination.index === destinationNurses.length - 1
-          ? destinationNurses[destination.index].priority + 2024
-          : destinationNurses[destination.index + 1].priority
-      );
-
       moveNurseOrder(
         dragedNurse.nurseId,
         parseInt(sourceShiftTeamId),
@@ -101,27 +105,27 @@ function ShiftTeamList() {
           : destinationNurses[destination.index + 1].priority
       );
     } else {
-      console.log(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
-        destination.index === destinationNurses.length
-          ? destinationNurses[destination.index - 1].priority + 2024
-          : destinationNurses[destination.index].priority
-      );
-
-      moveNurseOrder(
-        dragedNurse.nurseId,
-        parseInt(sourceShiftTeamId),
-        parseInt(destinationShiftTeamId),
-        parseInt(destinationDivision),
-        destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
-        destination.index === destinationNurses.length
-          ? destinationNurses[destination.index - 1].priority + 2024
-          : destinationNurses[destination.index].priority
-      );
+      if (parseInt(destinationDivision) === 0) {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          parseInt(sourceShiftTeamId),
+          parseInt(destinationShiftTeamId),
+          1,
+          0,
+          2024
+        );
+      } else {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          parseInt(sourceShiftTeamId),
+          parseInt(destinationShiftTeamId),
+          parseInt(destinationDivision),
+          destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
+          destination.index === destinationNurses.length
+            ? destinationNurses[destination.index - 1].priority + 2024
+            : destinationNurses[destination.index].priority
+        );
+      }
     }
   };
 
@@ -163,6 +167,8 @@ function ShiftTeamList() {
                           updateShiftTeamDTO: { name: e.target.value },
                         })
                       }
+                      className="ml-[-.5rem] bg-transparent px-[.5rem] font-apple text-[1.5rem] font-semibold text-sub-4 outline-main-2 focus:outline-main-2"
+                      autoFocus
                     />
                   ) : (
                     <h2
@@ -191,21 +197,34 @@ function ShiftTeamList() {
                 />
                 {openMenu === shiftTeam.shiftTeamId && (
                   <div
-                    className="absolute right-0 top-[3.75rem] z-10 flex h-[10.5rem] w-[14.375rem] flex-col rounded-[.625rem] bg-white shadow-[4px_4px_42px_0px_rgba(104,81,149,0.25)]"
+                    className="absolute right-0 top-[3.75rem] z-10 flex h-[14rem] w-[14.375rem] flex-col rounded-[.625rem] bg-white shadow-[4px_4px_42px_0px_rgba(104,81,149,0.25)]"
                     ref={clickAwayMenuRef}
                   >
                     <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
                       팀 초대하기
                     </div>
                     <div
-                      className="flex flex-1 cursor-pointer items-center gap-[.3125rem] border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
+                      className="relative flex flex-1 cursor-pointer items-center gap-[.3125rem] border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
                       onClick={() => {
                         addNurse(shiftTeam.shiftTeamId);
                         setOpenMenu(null);
                       }}
                     >
                       가상 간호사 만들기
-                      <InfoIcon className="h-[1.25rem] w-[1.25rem]" />
+                      <InfoIcon className="peer h-[1.25rem] w-[1.25rem]" />
+                      <div className="invisible absolute right-[-21.5rem] top-[50%] z-30 flex w-[22.75rem] translate-y-[-50%] items-center gap-[.5rem] rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
+                        <div
+                          className="absolute left-[-.4375rem] top-[50%] h-0 w-0 translate-y-[-50%]"
+                          style={{
+                            borderTop: '.4375rem solid transparent',
+                            borderLeft: '.625rem solid none',
+                            borderRight: '.625rem solid white',
+                            borderBottom: '.4375rem solid transparent',
+                          }}
+                        />
+                        초대하지 않아도, 가상의 프로필을 만들어 관리할 수 있어요! &nbsp; (언제든지
+                        초대해서 연동 가능합니다.)
+                      </div>
                     </div>
                     <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
                       근무표 보러가기
@@ -217,13 +236,22 @@ function ShiftTeamList() {
                 )}
               </div>
               {shiftTeam.nurses.length === 0 && (
-                <div
-                  className={`flex h-[3.5rem] w-full cursor-pointer select-none items-center justify-center`}
+                <Droppable
+                  droppableId={shiftTeam.shiftTeamId + ',' + 0}
+                  key={shiftTeam.shiftTeamId + ',' + 0}
                 >
-                  <h3 className="font-apple text-[1.25rem] font-semibold text-sub-2.5">
-                    아직 간호사가 없습니다!
-                  </h3>
-                </div>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className={`flex h-[3.5rem] w-full cursor-pointer select-none items-center justify-center`}
+                    >
+                      <h3 className="font-apple text-[1.25rem] font-semibold text-sub-2.5">
+                        아직 간호사가 없습니다!
+                      </h3>
+                    </div>
+                  )}
+                </Droppable>
               )}
               {Object.entries(groupBy(shiftTeam.nurses, 'divisionNum')).map(
                 ([division, divisionNurses]) => (
@@ -235,7 +263,7 @@ function ShiftTeamList() {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="border-b-[.0938rem] border-sub-2.5 last:border-none"
+                        className="border-b-[.0938rem]"
                       >
                         {divisionNurses.map((nurse, index) => (
                           <Draggable
@@ -263,9 +291,53 @@ function ShiftTeamList() {
                                 {...provided.dragHandleProps}
                               >
                                 <DragIcon className="invisible absolute left-[.75rem] h-[1.5rem] w-[1.5rem] group-hover:visible" />
-                                <h3 className="font-apple text-[1.25rem] font-semibold text-sub-1">
+                                <div className="peer relative font-apple text-[1.25rem] font-semibold text-sub-1">
                                   {nurse.name}
-                                </h3>
+                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-[#FF4A80]"></div>
+                                </div>
+                                <div className="invisible absolute top-0 z-30 flex translate-y-[-60%] items-center gap-[.5rem] whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
+                                  <div
+                                    className="absolute bottom-[-0.375rem] left-[50%] h-0 w-0 translate-x-[-50%]"
+                                    style={{
+                                      borderTop: '.625rem solid white',
+                                      borderLeft: '.4375rem solid transparent',
+                                      borderRight: '.4375rem solid transparent',
+                                      borderBottom: '.625rem solid none',
+                                    }}
+                                  />
+                                  연동 되지 않은 가상의 프로필입니다.
+                                  <UnlinkedIcon className="h-[1.25rem] w-[1.25rem]" />
+                                </div>
+                                {index !== divisionNurses.length - 1 ? (
+                                  <div
+                                    className="absolute bottom-0 z-10 w-full"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      editDivision(shiftTeam.shiftTeamId, nurse.priority, 1);
+                                    }}
+                                  >
+                                    <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                    <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                    <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
+                                    <p className="invisible absolute bottom-0 left-0 translate-x-[calc(.625rem-100%)] translate-y-[-50%] font-apple text-[.75rem] text-sub-2.5 peer-hover:visible">
+                                      구분선
+                                    </p>
+                                  </div>
+                                ) : (
+                                  shiftTeam.nurses.findIndex((x) => x.nurseId === nurse.nurseId) !==
+                                    shiftTeam.nurses.length - 1 && (
+                                    <div
+                                      className="absolute bottom-0 z-10 w-full"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        editDivision(shiftTeam.shiftTeamId, nurse.priority, -1);
+                                      }}
+                                    >
+                                      <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-sub-2.5 peer-hover:visible peer-hover:bg-red-600" />
+                                    </div>
+                                  )
+                                )}
                               </div>
                             )}
                           </Draggable>
