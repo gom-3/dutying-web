@@ -36,6 +36,7 @@ function NurseEditDrawer() {
       <div className="mb-[1.25rem] mt-[3.75rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
         <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
         <TextField
+          autoFocus
           className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
           onChange={(e) => handleChange('name', e.target.value)}
           value={writeNurse?.name || ''}

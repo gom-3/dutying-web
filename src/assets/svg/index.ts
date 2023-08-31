@@ -32,6 +32,7 @@ export { default as NurseIconSelected } from './NurseIconSelected';
 export { default as PenIcon } from './PenIcon';
 export { default as PersonIcon } from './PersonIcon';
 export { default as PlusIcon } from './PlusIcon';
+export { default as PlusIcon2 } from './PlusIcon2';
 export { default as PrevIcon2 } from './PrevIcon2';
 export { default as PrevIcon } from './PrevIcon';
 export { default as RequestCheckIcon } from './RequestCheckIcon';

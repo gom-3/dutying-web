@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { DragIcon, InfoIcon, MoreIcon, PersonIcon, PlusIcon, UnlinkedIcon } from '@assets/svg';
+import {
+  DragIcon,
+  InfoIcon,
+  MoreIcon,
+  PersonIcon,
+  PlusIcon,
+  PlusIcon2,
+  UnlinkedIcon,
+} from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/ward';
@@ -11,7 +19,14 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 function ShiftTeamList() {
   const {
     state: { shiftTeams, selectedNurse },
-    actions: { selectNurse, createShiftTeam, moveNurseOrder, updateShiftTeam, addNurse },
+    actions: {
+      selectNurse,
+      createShiftTeam,
+      moveNurseOrder,
+      updateShiftTeam,
+      addNurse,
+      editDivision,
+    },
   } = useEditShiftTeam();
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [editShiftTeam, setEditShiftTeam] = useState<{
@@ -248,7 +263,7 @@ function ShiftTeamList() {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="border-b-[.0938rem] border-sub-2.5 last:border-none"
+                        className="border-b-[.0938rem]"
                       >
                         {divisionNurses.map((nurse, index) => (
                           <Draggable
@@ -293,6 +308,36 @@ function ShiftTeamList() {
                                   연동 되지 않은 가상의 프로필입니다.
                                   <UnlinkedIcon className="h-[1.25rem] w-[1.25rem]" />
                                 </div>
+                                {index !== divisionNurses.length - 1 ? (
+                                  <div
+                                    className="absolute bottom-0 z-10 w-full"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      editDivision(shiftTeam.shiftTeamId, nurse.priority, 1);
+                                    }}
+                                  >
+                                    <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                    <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                    <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
+                                    <p className="invisible absolute bottom-0 left-0 translate-x-[calc(.625rem-100%)] translate-y-[-50%] font-apple text-[.75rem] text-sub-2.5 peer-hover:visible">
+                                      구분선
+                                    </p>
+                                  </div>
+                                ) : (
+                                  shiftTeam.nurses.findIndex((x) => x.nurseId === nurse.nurseId) !==
+                                    shiftTeam.nurses.length - 1 && (
+                                    <div
+                                      className="absolute bottom-0 z-10 w-full"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        editDivision(shiftTeam.shiftTeamId, nurse.priority, -1);
+                                      }}
+                                    >
+                                      <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-sub-2.5 peer-hover:visible peer-hover:bg-red-600" />
+                                    </div>
+                                  )
+                                )}
                               </div>
                             )}
                           </Draggable>
