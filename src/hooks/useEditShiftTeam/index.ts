@@ -20,6 +20,7 @@ import {
 } from '@libs/api/ward';
 import useGlobalStore from 'store';
 import { produce } from 'immer';
+import useEditShift from '@hooks/useEditShift';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -31,6 +32,9 @@ const useEditShiftTeam = () => {
 
   const queryClient = useQueryClient();
   const getWardQueryKey = ['ward', wardId];
+  const {
+    queryKey: { shiftQueryKey },
+  } = useEditShift();
   const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
@@ -140,7 +144,7 @@ const useEditShiftTeam = () => {
         nextPriority
       ),
     {
-      onMutate: ({
+      onMutate: async ({
         nurseId,
         shiftTeamId,
         nextShiftTeamId,
@@ -148,36 +152,87 @@ const useEditShiftTeam = () => {
         nextPriority,
         divisionNum,
       }) => {
+        await queryClient.cancelQueries(getWardQueryKey);
+        await queryClient.cancelQueries(shiftQueryKey);
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
-        if (!oldWard) return;
+        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
 
-        queryClient.setQueryData<Ward>(
-          getWardQueryKey,
-          produce(oldWard, (draft) => {
-            const sourceNurses = draft.shiftTeams.find(
-              (shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId
-            )!.nurses;
-            const nurse = sourceNurses.find((nurse) => nurse.nurseId === nurseId)!;
+        oldWard &&
+          queryClient.setQueryData<Ward>(
+            getWardQueryKey,
+            produce(oldWard, (draft) => {
+              const sourceNurses = draft.shiftTeams.find(
+                (shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId
+              )!.nurses;
+              const nurse = sourceNurses.find((nurse) => nurse.nurseId === nurseId)!;
 
-            sourceNurses.splice(
-              sourceNurses.findIndex((x) => x.nurseId === nurseId),
-              1
-            );
-            const destinationNurses = draft.shiftTeams.find(
-              (shiftTeam) => shiftTeam.shiftTeamId === nextShiftTeamId
-            )!.nurses;
+              sourceNurses.splice(
+                sourceNurses.findIndex((x) => x.nurseId === nurseId),
+                1
+              );
+              const destinationNurses = draft.shiftTeams.find(
+                (shiftTeam) => shiftTeam.shiftTeamId === nextShiftTeamId
+              )!.nurses;
 
-            const index = destinationNurses.findIndex((x) => x.priority === nextPriority);
-            destinationNurses.splice(index === -1 ? 0 : index, 0, {
-              ...nurse,
-              divisionNum,
-              priority: (prevPriority + nextPriority) / 2,
-            });
-          })
-        );
+              const index = destinationNurses.findIndex((x) => x.priority === nextPriority);
+              destinationNurses.splice(index === -1 ? 0 : index, 0, {
+                ...nurse,
+                divisionNum,
+                priority: (prevPriority + nextPriority) / 2,
+              });
+            })
+          );
+        queryClient.getQueryCache();
+
+        oldShift &&
+          queryClient.setQueryData<Shift>(
+            shiftQueryKey,
+            produce(oldShift, (draft) => {
+              const sourceRows = draft.divisionShiftNurses.find((x) =>
+                x.some((y) => y.shiftNurse.nurseInfo.nurseId === nurseId)
+              )!;
+              const row = sourceRows.find((x) => x.shiftNurse.nurseInfo.nurseId === nurseId)!;
+
+              sourceRows.splice(
+                sourceRows.findIndex((x) => x.shiftNurse.nurseInfo.nurseId === nurseId),
+                1
+              );
+
+              if (nextPriority === 0) {
+                const desticationRow = draft.divisionShiftNurses.find((x) =>
+                  x.some((y) => y.shiftNurse.priority === prevPriority)
+                )!;
+                const index = desticationRow.findIndex(
+                  (x) => x.shiftNurse.priority === prevPriority
+                );
+                desticationRow.splice(index === -1 ? 0 : index + 1, 0, row);
+              } else {
+                const desticationRow = draft.divisionShiftNurses.find((x) =>
+                  x.some((y) => y.shiftNurse.priority === nextPriority)
+                )!;
+                const index = desticationRow.findIndex(
+                  (x) => x.shiftNurse.priority === nextPriority
+                );
+                desticationRow.splice(index === -1 ? 0 : index, 0, row);
+              }
+            })
+          );
+
+        return { oldWard, oldShift };
       },
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
+        queryClient.invalidateQueries(['shift']);
+      },
+      onError: (_, __, context) => {
+        if (
+          context === undefined ||
+          context.oldShift === undefined ||
+          context.oldWard === undefined
+        )
+          return;
+        queryClient.setQueryData(getWardQueryKey, context.oldWard);
+        queryClient.setQueryData(['shift'], context.oldShift);
       },
     }
   );
@@ -219,13 +274,7 @@ const useEditShiftTeam = () => {
       selectedNurse: ward?.shiftTeams
         ?.flatMap((x) => x.nurses)
         .find((nurse) => nurse.nurseId === selectedNurseId),
-      shiftTeams: ward?.shiftTeams.map((shiftTeam) => ({
-        ...shiftTeam,
-        nurses: [...shiftTeam.nurses].sort((a, b) => {
-          if (a.divisionNum === b.divisionNum) return a.priority - b.priority;
-          else return a.divisionNum - b.divisionNum;
-        }),
-      })),
+      shiftTeams: ward?.shiftTeams,
     },
     actions: {
       addNurse: (shiftTeamId: number) => wardId && addNurseMutate({ wardId, shiftTeamId }),
