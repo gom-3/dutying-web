@@ -115,7 +115,10 @@ const useEditShiftTeam = () => {
       changeValue: number;
     }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue),
     {
-      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+      onSuccess: () => {
+        queryClient.invalidateQueries(getWardQueryKey);
+        queryClient.invalidateQueries(shiftQueryKey);
+      },
     }
   );
 
@@ -190,7 +193,8 @@ const useEditShiftTeam = () => {
             produce(oldShift, (draft) => {
               const sourceRows = draft.divisionShiftNurses.find((x) =>
                 x.some((y) => y.shiftNurse.nurseInfo.nurseId === nurseId)
-              )!;
+              );
+              if (sourceRows === undefined) return;
               const row = sourceRows.find((x) => x.shiftNurse.nurseInfo.nurseId === nurseId)!;
 
               sourceRows.splice(

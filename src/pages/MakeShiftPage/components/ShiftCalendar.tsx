@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { DragIcon, FoldDutyIcon } from '@assets/svg';
+import { DragIcon, FoldDutyIcon, PlusIcon2 } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
@@ -23,7 +23,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
   } = useEditShift();
   const {
     state: { shiftTeams },
-    actions: { selectNurse, moveNurseOrder },
+    actions: { selectNurse, moveNurseOrder, editDivision },
   } = useEditShiftTeam();
 
   const focusedCellRef = useRef<HTMLElement>(null);
@@ -35,10 +35,11 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     if (source.droppableId === destination.droppableId && destination.index === source.index)
       return;
 
+    const sourceDivision = parseInt(source.droppableId);
     const destinationDivision = parseInt(destination.droppableId);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    const dragedNurse = shift.divisionShiftNurses[destinationDivision].find(
+    const dragedNurse = shift.divisionShiftNurses[sourceDivision].find(
       (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
     )!.shiftNurse;
     const destinationNurses = shift.divisionShiftNurses[destinationDivision];
@@ -96,7 +97,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     }
   }, [focus]);
 
-  return shift && foldedLevels && wardShiftTypeMap ? (
+  return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
     <div ref={clickAwayRef} className="flex flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
@@ -193,7 +194,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           >
                             {(provided) => (
                               <div
-                                className={`flex h-[3.25rem] items-center gap-[1.25rem]
+                                className={`relative flex h-[3.25rem] items-center gap-[1.25rem]
                                 ${
                                   rowIndex === 0
                                     ? 'rounded-t-[1.25rem]'
@@ -339,6 +340,40 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                     </div>
                                   </div>
                                 </div>
+                                {rowIndex !== rows.length - 1 ? (
+                                  <div
+                                    className="absolute bottom-0 z-10 w-full"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      editDivision(
+                                        currentShiftTeam.shiftTeamId,
+                                        row.shiftNurse.priority,
+                                        1
+                                      );
+                                    }}
+                                  >
+                                    <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                    <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                    <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
+                                  </div>
+                                ) : (
+                                  level !== shift.divisionShiftNurses.length - 1 && (
+                                    <div
+                                      className="absolute bottom-0 z-10 w-full"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        editDivision(
+                                          currentShiftTeam.shiftTeamId,
+                                          row.shiftNurse.priority,
+                                          -1
+                                        );
+                                      }}
+                                    >
+                                      <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
+                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible peer-hover:bg-red-600" />
+                                    </div>
+                                  )
+                                )}
                               </div>
                             )}
                           </Draggable>
