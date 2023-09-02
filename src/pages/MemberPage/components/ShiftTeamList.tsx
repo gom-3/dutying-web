@@ -253,18 +253,15 @@ function ShiftTeamList() {
                   )}
                 </Droppable>
               )}
-              {Object.entries(groupBy(shiftTeam.nurses, 'divisionNum')).map(
-                ([division, divisionNurses]) => (
+              {Object.entries(groupBy(shiftTeam.nurses, 'divisionNum'))
+                .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+                .map(([division, divisionNurses], divisionIndex) => (
                   <Droppable
                     droppableId={shiftTeam.shiftTeamId + ',' + division}
                     key={shiftTeam.shiftTeamId + ',' + division}
                   >
                     {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="border-b-[.0938rem]"
-                      >
+                      <div ref={provided.innerRef} {...provided.droppableProps}>
                         {divisionNurses.map((nurse, index) => (
                           <Draggable
                             draggableId={nurse.nurseId.toString()}
@@ -324,8 +321,10 @@ function ShiftTeamList() {
                                     </p>
                                   </div>
                                 ) : (
-                                  shiftTeam.nurses.findIndex((x) => x.nurseId === nurse.nurseId) !==
-                                    shiftTeam.nurses.length - 1 && (
+                                  divisionIndex !==
+                                    Object.entries(groupBy(shiftTeam.nurses, 'divisionNum'))
+                                      .length -
+                                      1 && (
                                     <div
                                       className="absolute bottom-0 z-10 w-full"
                                       onClick={(e) => {
@@ -346,8 +345,7 @@ function ShiftTeamList() {
                       </div>
                     )}
                   </Droppable>
-                )
-              )}
+                ))}
             </div>
           ))}
         </div>

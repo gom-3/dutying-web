@@ -292,21 +292,21 @@ const useEditShift = (activeEffect = false) => {
   const changeMonth = useCallback(
     (type: 'prev' | 'next') => {
       if (type === 'prev') {
-        // if (month === 1) {
-        //   setMonth(12);
-        //   setYear(year - 1);
-        // } else {
-        //   setMonth(month - 1);
-        // }
+        if (month === 1) {
+          setState('month', 12);
+          setState('year', year - 1);
+        } else {
+          setState('month', month - 1);
+        }
         if (month === 7) return;
         else setState('month', month - 1);
       } else if (type === 'next') {
-        // if (month === 12) {
-        //   setMonth(1);
-        //   setYear(year + 1);
-        // } else {
-        //   setMonth(month + 1);
-        // }
+        if (month === 12) {
+          setState('month', 1);
+          setState('year', year + 1);
+        } else {
+          setState('month', month + 1);
+        }
         if (month === 8) return;
         else setState('month', month + 1);
       }
@@ -448,6 +448,12 @@ const useEditShift = (activeEffect = false) => {
   }, [activeEffect, focus, shift, editHistory, handleKeyDown]);
 
   return {
+    queryKey: {
+      wardQueryKey,
+      shiftQueryKey,
+      shiftTeamQueryKey,
+      wardConstraintQueryKey,
+    },
     state: {
       month,
       shift,
