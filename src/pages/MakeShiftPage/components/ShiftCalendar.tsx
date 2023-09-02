@@ -38,7 +38,6 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
     const sourceDivision = parseInt(source.droppableId);
     const destinationDivision = parseInt(destination.droppableId);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     const dragedNurse = shift.divisionShiftNurses[sourceDivision].find(
       (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
     )!.shiftNurse;
