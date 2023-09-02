@@ -198,16 +198,17 @@ const useEditShiftTeam = () => {
                 1
               );
 
-              if (nextPriority === 0) {
-                const desticationRow = draft.divisionShiftNurses.find((x) =>
-                  x.some((y) => y.shiftNurse.priority === prevPriority)
-                )!;
+              let desticationRow = draft.divisionShiftNurses.find((x) =>
+                x.some((y) => y.shiftNurse.priority === prevPriority)
+              );
+
+              if (desticationRow) {
                 const index = desticationRow.findIndex(
                   (x) => x.shiftNurse.priority === prevPriority
                 );
                 desticationRow.splice(index === -1 ? 0 : index + 1, 0, row);
               } else {
-                const desticationRow = draft.divisionShiftNurses.find((x) =>
+                desticationRow = draft.divisionShiftNurses.find((x) =>
                   x.some((y) => y.shiftNurse.priority === nextPriority)
                 )!;
                 const index = desticationRow.findIndex(
