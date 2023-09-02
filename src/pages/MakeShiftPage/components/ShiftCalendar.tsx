@@ -70,6 +70,8 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
           : destinationNurses[destination.index].shiftNurse.priority
       );
     }
+
+    sendEvent(event.move_nurse_md);
   };
 
   useEffect(() => {
@@ -160,7 +162,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                   key={level}
                   className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
                   onClick={() => {
-                    sendEvent(event.clickFoldLevelButton, 'close');
+                    sendEvent(event.fold_division);
                     foldLevel(level);
                   }}
                 >
@@ -180,7 +182,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                           <FoldDutyIcon
                             className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                             onClick={() => {
-                              sendEvent(event.clickFoldLevelButton, 'open');
+                              sendEvent(event.spread_division);
                               foldLevel(level);
                             }}
                           />
@@ -227,6 +229,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                     value={row.shiftNurse.carried}
                                     onClick={(e) => {
                                       e.currentTarget.select();
+                                      sendEvent(event.focus_carried);
                                     }}
                                     onKeyDown={(e) => {
                                       e.preventDefault();
@@ -240,6 +243,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                           row.shiftNurse.shiftNurseId,
                                           row.shiftNurse.carried - 1
                                         );
+                                      sendEvent(event.change_carried);
                                     }}
                                   />
                                 </div>
@@ -289,6 +293,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                               shiftNurseId: row.shiftNurse.shiftNurseId,
                                               day: j,
                                             });
+                                            sendEvent(event.focus_cell);
                                           }}
                                           shiftType={
                                             current === null
@@ -349,6 +354,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                         row.shiftNurse.priority,
                                         1
                                       );
+                                      sendEvent(event.create_division_md);
                                     }}
                                   >
                                     <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
@@ -366,6 +372,7 @@ export default function ShiftCalendar({ isEditable, setNurseTabOpen }: Props) {
                                           row.shiftNurse.priority,
                                           -1
                                         );
+                                        sendEvent(event.delete_division_md);
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />

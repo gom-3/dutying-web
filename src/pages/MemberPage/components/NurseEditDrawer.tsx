@@ -2,6 +2,7 @@
 import { CheckedIcon, FoldIcon, UncheckedIcon2 } from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
@@ -38,12 +39,18 @@ function NurseEditDrawer() {
         <TextField
           autoFocus
           className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
-          onChange={(e) => handleChange('name', e.target.value)}
+          onChange={(e) => {
+            handleChange('name', e.target.value);
+            sendEvent(event.change_nurse_name);
+          }}
           value={writeNurse?.name || ''}
         />
         <div
           className="ml-auto flex h-[1.25rem] w-[1.75rem] cursor-pointer items-center justify-center rounded-[.3125rem] bg-sub-5 font-apple text-[.875rem] text-[#A2A6F5]"
-          onClick={() => handleChange('gender', writeNurse?.gender === '남' ? '여' : '남')}
+          onClick={() => {
+            handleChange('gender', writeNurse?.gender === '남' ? '여' : '남');
+            sendEvent(event.change_nurse_gender);
+          }}
         >
           {writeNurse?.gender}
         </div>
@@ -59,7 +66,10 @@ function NurseEditDrawer() {
         <TextField
           type="date"
           className="h-[2.5rem] font-poppins text-[1.25rem] text-sub-3"
-          onChange={(e) => handleChange('employmentDate', e.target.value)}
+          onChange={(e) => {
+            handleChange('employmentDate', e.target.value);
+            sendEvent(event.change_nurse_employment_date);
+          }}
           value={writeNurse?.employmentDate || ''}
         />
       </div>
@@ -73,7 +83,10 @@ function NurseEditDrawer() {
         <TextField
           type="tel"
           className="h-[2.5rem] font-poppins text-[1.25rem] text-sub-3"
-          onChange={(e) => handleChange('employmentDate', e.target.value)}
+          onChange={(e) => {
+            handleChange('phoneNum', e.target.value);
+            sendEvent(event.change_nurse_phone);
+          }}
           value={writeNurse?.phoneNum || ''}
         />
       </div>
@@ -91,15 +104,16 @@ function NurseEditDrawer() {
               className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-[.3125rem] border-[.0625rem] font-apple text-[1.25rem]
                 ${isPossible ? 'border-main-1 text-main-1' : 'border-sub-4 text-sub-3'}
               `}
-              onClick={() =>
+              onClick={() => {
                 handleChange(
                   'nurseShiftTypes',
                   produce(writeNurse.nurseShiftTypes, (draft: Nurse['nurseShiftTypes']) => {
                     draft.find((x) => x.nurseShiftTypeId === nurseShiftTypeId)!.isPossible =
                       !isPossible;
                   })
-                )
-              }
+                );
+                sendEvent(event.change_nurse_shift_types);
+              }}
             >
               {name}
             </div>
@@ -114,7 +128,10 @@ function NurseEditDrawer() {
             <CheckedIcon
               className="h-[1.25rem] w-[1.25rem] cursor-pointer"
               fill="#B08BFF"
-              onClick={() => handleChange('isWorker', false)}
+              onClick={() => {
+                handleChange('isWorker', false);
+                sendEvent(event.change_nurse_is_worker);
+              }}
             />
           </div>
         ) : (
@@ -122,7 +139,10 @@ function NurseEditDrawer() {
             <p className="font-apple text-[.75rem] text-sub-3">해당 안됨</p>
             <UncheckedIcon2
               className="h-[1.25rem] w-[1.25rem] cursor-pointer"
-              onClick={() => handleChange('isWorker', true)}
+              onClick={() => {
+                handleChange('isWorker', true);
+                sendEvent(event.change_nurse_is_worker);
+              }}
             />
           </div>
         )}
@@ -135,7 +155,10 @@ function NurseEditDrawer() {
             <CheckedIcon
               className="h-[1.25rem] w-[1.25rem] cursor-pointer"
               fill="#B08BFF"
-              onClick={() => handleChange('isDutyManager', false)}
+              onClick={() => {
+                handleChange('isDutyManager', false);
+                sendEvent(event.change_nurse_is_manager);
+              }}
             />
           </div>
         ) : (
@@ -143,7 +166,10 @@ function NurseEditDrawer() {
             <p className="font-apple text-[.75rem] text-sub-3">해당 안됨</p>
             <UncheckedIcon2
               className="h-[1.25rem] w-[1.25rem] cursor-pointer"
-              onClick={() => handleChange('isDutyManager', true)}
+              onClick={() => {
+                handleChange('isDutyManager', true);
+                sendEvent(event.change_nurse_is_manager);
+              }}
             />
           </div>
         )}
@@ -155,7 +181,10 @@ function NurseEditDrawer() {
       <textarea
         value={writeNurse?.memo}
         className="mx-[2.5rem] mt-[.9375rem] h-[10.8125rem] resize-none rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-2 font-apple text-sm text-sub-1"
-        onChange={(e) => handleChange('memo', e.target.value)}
+        onChange={(e) => {
+          handleChange('memo', e.target.value);
+          sendEvent(event.change_nurse_memo);
+        }}
       />
 
       <button

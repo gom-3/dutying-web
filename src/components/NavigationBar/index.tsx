@@ -30,10 +30,7 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
         <div
           onClick={() => {
             setIsFold(!isFold);
-            sendEvent(
-              event.clickFoldNavigationButton,
-              isFold ? 'open navigation' : 'close navigation'
-            );
+            sendEvent(isFold ? event.spread_navigation : event.fold_navigation);
           }}
         >
           <FoldIcon

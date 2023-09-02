@@ -11,6 +11,7 @@ import {
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/ward';
+import { event, sendEvent } from 'analytics';
 import { groupBy } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -47,29 +48,45 @@ function ShiftTeamList() {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (!shiftTeams || !selectedNurse) return;
-    const selectedShiftTeamId = shiftTeams.findIndex(
+    const selectedShiftTeamIndex = shiftTeams.findIndex(
       (shiftTeam) =>
         shiftTeam.nurses.findIndex((nurse) => nurse.nurseId === selectedNurse.nurseId) !== -1
     );
-
-    const selectedNurseIndex = shiftTeams[selectedShiftTeamId].nurses.findIndex(
+    const groupNurses = Object.entries(
+      groupBy(shiftTeams[selectedShiftTeamIndex].nurses, 'divisionNum')
+    ).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+    const selectedGroupIndex = groupNurses.findIndex((x) =>
+      x[1].some((y) => y.nurseId === selectedNurse.nurseId)
+    );
+    const selectedGroup = groupNurses[selectedGroupIndex][1];
+    const selectedNurseIndex = selectedGroup.findIndex(
       (nurse) => nurse.nurseId === selectedNurse.nurseId
     );
     if (e.key === 'ArrowUp') {
-      if (selectedNurseIndex > 0)
-        selectNurse(shiftTeams[selectedShiftTeamId].nurses[selectedNurseIndex - 1].nurseId);
-      else if (selectedShiftTeamId > 0)
+      if (selectedNurseIndex > 0) {
+        selectNurse(selectedGroup[selectedNurseIndex - 1].nurseId);
+      } else if (selectedGroupIndex > 0) {
         selectNurse(
-          shiftTeams[selectedShiftTeamId - 1].nurses[
-            shiftTeams[selectedShiftTeamId - 1].nurses.length - 1
+          groupNurses[selectedGroupIndex - 1][1][groupNurses[selectedGroupIndex - 1][1].length - 1]
+            .nurseId
+        );
+      } else if (selectedShiftTeamIndex > 0) {
+        selectNurse(
+          shiftTeams[selectedShiftTeamIndex - 1].nurses[
+            shiftTeams[selectedShiftTeamIndex - 1].nurses.length - 1
           ].nurseId
         );
+      }
     } else if (e.key === 'ArrowDown') {
-      if (selectedNurseIndex < shiftTeams[selectedShiftTeamId].nurses.length - 1)
-        selectNurse(shiftTeams[selectedShiftTeamId].nurses[selectedNurseIndex + 1].nurseId);
-      else if (selectedShiftTeamId < shiftTeams.length - 1)
-        selectNurse(shiftTeams[selectedShiftTeamId + 1].nurses[0].nurseId);
+      if (selectedNurseIndex < selectedGroup.length - 1) {
+        selectNurse(selectedGroup[selectedNurseIndex + 1].nurseId);
+      } else if (selectedGroupIndex < groupNurses.length - 1) {
+        selectNurse(groupNurses[selectedGroupIndex + 1][1][0].nurseId);
+      } else if (selectedShiftTeamIndex < shiftTeams.length - 1) {
+        selectNurse(shiftTeams[selectedShiftTeamIndex + 1].nurses[0].nurseId);
+      }
     }
+    sendEvent(event.move_nurse_focus);
   };
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
@@ -127,6 +144,7 @@ function ShiftTeamList() {
         );
       }
     }
+    sendEvent(event.move_nurse);
   };
 
   useEffect(() => {
@@ -141,7 +159,10 @@ function ShiftTeamList() {
         <p className="font-apple text-base text-sub-2.5">팀당 근무표 1개 생성 가능합니다.</p>
         <button
           className="ml-[16.125rem] flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0625rem] border-main-3 bg-white px-[.75rem] font-apple text-base text-main-2"
-          onClick={createShiftTeam}
+          onClick={() => {
+            createShiftTeam;
+            sendEvent(event.create_shift_team);
+          }}
         >
           <PlusIcon className="h-[1.5rem] w-[1.5rem] stroke-main-2" />팀 추가하기
         </button>
@@ -193,7 +214,10 @@ function ShiftTeamList() {
                 </div>
                 <MoreIcon
                   className="h-[1.875rem] w-[1.875rem] cursor-pointer"
-                  onClick={() => setOpenMenu(shiftTeam.shiftTeamId)}
+                  onClick={() => {
+                    setOpenMenu(shiftTeam.shiftTeamId);
+                    sendEvent(event.open_shift_team_menu);
+                  }}
                 />
                 {openMenu === shiftTeam.shiftTeamId && (
                   <div
@@ -283,7 +307,10 @@ function ShiftTeamList() {
                                   : 'border-b-[.0313rem] border-b-sub-4.5'
                               }`}
                                 ref={provided.innerRef}
-                                onClick={() => selectNurse(nurse.nurseId)}
+                                onClick={() => {
+                                  selectNurse(nurse.nurseId);
+                                  sendEvent(event.focus_nurse);
+                                }}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
@@ -311,6 +338,7 @@ function ShiftTeamList() {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       editDivision(shiftTeam.shiftTeamId, nurse.priority, 1);
+                                      sendEvent(event.create_division);
                                     }}
                                   >
                                     <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
@@ -330,6 +358,7 @@ function ShiftTeamList() {
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         editDivision(shiftTeam.shiftTeamId, nurse.priority, -1);
+                                        sendEvent(event.delete_division);
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />

@@ -7,8 +7,10 @@ import { findNurse, keydownEventMapper, moveFocusByKeydown } from '@hooks/useEdi
 import { produce } from 'immer';
 import useGlobalStore from 'store';
 import { getReqShift, getShiftTeams, updateReqShift } from '@libs/api/ward';
+import { event, sendEvent } from 'analytics';
+import { match } from 'ts-pattern';
 
-const useRequestShift = () => {
+const useRequestShift = (activeEffect = false) => {
   const [year, month, focus, currentShiftTeam, foldedLevels, wardShiftTypeMap, setState] =
     useRequestShiftStore(
       (state) => [
@@ -77,9 +79,34 @@ const useRequestShift = () => {
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['requestShift']);
+        const { shiftNurseId, day } = focus;
         const oldShift = queryClient.getQueryData<RequestShift>(requestShiftQueryKey);
 
-        if (!oldShift) return;
+        if (!oldShift || !wardShiftTypeMap) return;
+
+        const oldShiftTypeId = oldShift.divisionShiftNurses
+          .flatMap((x) => x)
+          .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)!.wardReqShiftList[focus.day];
+
+        const edit = {
+          nurseName: findNurse(oldShift, focus.shiftNurseId)!.name,
+          focus,
+          prevShiftType:
+            oldShiftTypeId !== null ? wardShiftTypeMap.get(oldShiftTypeId) || null : null,
+          nextShiftType: shiftTypeId !== null ? wardShiftTypeMap.get(shiftTypeId) || null : null,
+          dateString: new Date().toLocaleString(),
+        };
+
+        sendEvent(
+          event.change_shift,
+          `${focus.shiftNurseName} / ${day + 1}일 | ` +
+            match(edit)
+              .with({ prevShiftType: null }, () => `추가 → ${edit.nextShiftType?.shortName}`)
+              .with({ nextShiftType: null }, () => `${edit.prevShiftType?.shortName} → 삭제`)
+              .otherwise(
+                () => `${edit.prevShiftType?.shortName} → ${edit.nextShiftType?.shortName}`
+              )
+        );
 
         queryClient.setQueryData<RequestShift>(
           requestShiftQueryKey,
@@ -131,6 +158,7 @@ const useRequestShift = () => {
         setState('month', month + 1);
       }
     }
+    sendEvent(event.change_month_rq);
   };
 
   const changeFocusedShift = (shiftTypeId: number | null) => {
@@ -150,7 +178,10 @@ const useRequestShift = () => {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (!focus || !requestShift) return;
-    moveFocusByKeydown(e, requestShift, focus, (focus: Focus | null) => setState('focus', focus));
+    moveFocusByKeydown(e, requestShift, focus, (focus: Focus | null) => {
+      setState('focus', focus);
+      sendEvent(e.ctrlKey || e.metaKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+    });
     keydownEventMapper(
       e,
       ...requestShift.wardShiftTypes.map((shiftType) => ({
@@ -162,7 +193,7 @@ const useRequestShift = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    activeEffect && document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -184,7 +215,10 @@ const useRequestShift = () => {
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
+      changeShiftTeam: (shiftTeam: ShiftTeam) => {
+        setState('currentShiftTeam', shiftTeam);
+        sendEvent(event.change_shift_team_rq);
+      },
     },
   };
 };

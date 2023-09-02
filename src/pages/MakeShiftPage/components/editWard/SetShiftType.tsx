@@ -3,8 +3,9 @@ import { PenIcon, PlusIcon } from '@assets/svg';
 import TimeInput from '@components/TimeInput';
 import TextField from '@components/TextField';
 import { useState } from 'react';
-import CreateShiftModal from './CreateWardModal';
 import { CreateShiftTypeDTO } from '@libs/api/shift';
+import CreateShiftModal from './CreateShiftModal';
+import { event, sendEvent } from 'analytics';
 
 function SetShiftType() {
   const {
@@ -19,8 +20,10 @@ function SetShiftType() {
     if (shiftTypeId) {
       editShiftType(shiftTypeId, shiftType);
       setTempShiftType(null);
+      sendEvent(event.edit_shift_type);
     } else {
       addShiftType(shiftType);
+      sendEvent(event.create_shift_type);
     }
     setTempShiftType(null);
   };
@@ -52,12 +55,13 @@ function SetShiftType() {
               onClick={(e) => {
                 e.currentTarget.select();
               }}
-              onChange={(e) =>
+              onChange={(e) => {
                 editShiftType(shiftType.wardShiftTypeId, {
                   ...shiftType,
                   shortName: e.target.value.slice(0, 1).toUpperCase(),
-                })
-              }
+                });
+                sendEvent(event.change_shift_type_name);
+              }}
             />
           </div>
           <div className="flex flex-[3] items-center justify-center gap-[1.125rem]">
@@ -68,17 +72,19 @@ function SetShiftType() {
                 <TimeInput
                   className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
                   initTime={shiftType.startTime}
-                  onTimeChange={(value) =>
-                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, startTime: value })
-                  }
+                  onTimeChange={(value) => {
+                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, startTime: value });
+                    sendEvent(event.change_shift_type_time);
+                  }}
                 />
                 <p className="font-poppins text-[1.25rem]">~</p>
                 <TimeInput
                   className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
                   initTime={shiftType.endTime}
-                  onTimeChange={(value) =>
-                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, endTime: value })
-                  }
+                  onTimeChange={(value) => {
+                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, endTime: value });
+                    sendEvent(event.change_shift_type_time);
+                  }}
                 />
               </>
             )}
@@ -94,17 +100,19 @@ function SetShiftType() {
               className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
               type="color"
               value={shiftType.color}
-              onChange={(e) =>
-                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, color: e.target.value })
-              }
+              onChange={(e) => {
+                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, color: e.target.value });
+                sendEvent(event.change_shift_type_color);
+              }}
             />
           </div>
           <div className="flex flex-1 justify-center">
             <div
               className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
-              onClick={() =>
-                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, isOff: !shiftType.isOff })
-              }
+              onClick={() => {
+                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, isOff: !shiftType.isOff });
+                sendEvent(event.change_shift_type_off_type);
+              }}
             >
               {shiftType.isOff ? '휴가' : '근무'}
             </div>
@@ -115,6 +123,7 @@ function SetShiftType() {
               onClick={() => {
                 setTempShiftType(shiftType);
                 setOpenModal(true);
+                sendEvent(event.open_shift_type_edit_modal);
               }}
             />
           </div>
@@ -125,6 +134,7 @@ function SetShiftType() {
           className="flex cursor-pointer gap-[.4375rem]"
           onClick={() => {
             setOpenModal(true);
+            sendEvent(event.open_shift_type_edit_modal);
           }}
         >
           <PlusIcon className="h-[1.25rem] w-[1.25rem] stroke-main-2" />

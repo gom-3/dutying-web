@@ -8,7 +8,7 @@ import { RestoreIcon, RestoreIconDisable } from '@assets/svg';
 function Panel() {
   const {
     state: { faults, histories },
-    actions: { moveHistory },
+    actions: { moveHistory, changeFocus },
   } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('histories');
@@ -26,7 +26,7 @@ function Panel() {
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
-            sendEvent(event.clickFaultTab);
+            sendEvent(event.change_panel_tab, 'histories');
           }}
         >
           기록
@@ -36,7 +36,7 @@ function Panel() {
           ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
-            sendEvent(event.clickHistoryTab);
+            sendEvent(event.change_panel_tab, 'faults');
           }}
         >
           <p className="relative">
@@ -52,7 +52,11 @@ function Panel() {
           ? [...faults.values()].map((fault, index) => (
               <p
                 key={index}
-                className="border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
+                className="cursor-pointer border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
+                onClick={() => {
+                  changeFocus(fault.focus);
+                  sendEvent(event.focus_fault);
+                }}
               >
                 {fault.focus.shiftNurseName} / {fault.focus.day + 1}일: {fault.message}
               </p>
@@ -66,9 +70,11 @@ function Panel() {
                   className={`flex cursor-pointer items-center gap-[.625rem] border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] last:border-none ${
                     isPrev ? 'text-sub-3' : 'text-sub-2'
                   }`}
-                  onClick={() =>
-                    moveHistory(histories.history.length - index - 1 - histories.current)
-                  }
+                  onClick={() => {
+                    const diff = histories.history.length - index - 1 - histories.current;
+                    sendEvent(diff > 0 ? event.redo_panel : event.undo_panel);
+                    moveHistory(diff);
+                  }}
                 >
                   <p className="truncate">
                     {history.focus.shiftNurseName} / {history.focus.day + 1}일
@@ -100,7 +106,10 @@ function Panel() {
       </div>
       <div
         className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+          sendEvent(open ? event.fold_panel : event.spread_panel);
+        }}
       >
         {open ? '닫기' : '펼치기'}
       </div>
