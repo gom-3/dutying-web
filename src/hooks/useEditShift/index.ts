@@ -464,6 +464,7 @@ const useEditShift = (activeEffect = false) => {
       wardConstraintQueryKey,
     },
     state: {
+      year,
       month,
       shift,
       focus,

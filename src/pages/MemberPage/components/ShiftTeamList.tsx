@@ -119,7 +119,8 @@ function ShiftTeamList() {
         destination.index === 0 ? 0 : destinationNurses[destination.index].priority,
         destination.index === destinationNurses.length - 1
           ? destinationNurses[destination.index].priority + 2024
-          : destinationNurses[destination.index + 1].priority
+          : destinationNurses[destination.index + 1].priority,
+        `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
       );
     } else {
       if (parseInt(destinationDivision) === 0) {
@@ -129,7 +130,8 @@ function ShiftTeamList() {
           parseInt(destinationShiftTeamId),
           1,
           0,
-          2024
+          2024,
+          `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
         );
       } else {
         moveNurseOrder(
@@ -140,7 +142,8 @@ function ShiftTeamList() {
           destination.index === 0 ? 0 : destinationNurses[destination.index - 1].priority,
           destination.index === destinationNurses.length
             ? destinationNurses[destination.index - 1].priority + 2024
-            : destinationNurses[destination.index].priority
+            : destinationNurses[destination.index].priority,
+          `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
         );
       }
     }
@@ -285,7 +288,11 @@ function ShiftTeamList() {
                     key={shiftTeam.shiftTeamId + ',' + division}
                   >
                     {(provided) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="border-b-[.0938rem] border-sub-2.5 last:border-none"
+                      >
                         {divisionNurses.map((nurse, index) => (
                           <Draggable
                             draggableId={nurse.nurseId.toString()}
@@ -337,7 +344,14 @@ function ShiftTeamList() {
                                     className="absolute bottom-0 z-10 w-full"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      editDivision(shiftTeam.shiftTeamId, nurse.priority, 1);
+                                      editDivision(
+                                        shiftTeam.shiftTeamId,
+                                        nurse.priority,
+                                        1,
+                                        `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+                                          .toString()
+                                          .padStart(2, '0')}`
+                                      );
                                       sendEvent(event.create_division);
                                     }}
                                   >
@@ -357,12 +371,19 @@ function ShiftTeamList() {
                                       className="absolute bottom-0 z-10 w-full"
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        editDivision(shiftTeam.shiftTeamId, nurse.priority, -1);
+                                        editDivision(
+                                          shiftTeam.shiftTeamId,
+                                          nurse.priority,
+                                          -1,
+                                          `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+                                            .toString()
+                                            .padStart(2, '0')}`
+                                        );
                                         sendEvent(event.delete_division);
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
-                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-sub-2.5 peer-hover:visible peer-hover:bg-red-600" />
+                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible peer-hover:bg-red-600" />
                                     </div>
                                   )
                                 )}
