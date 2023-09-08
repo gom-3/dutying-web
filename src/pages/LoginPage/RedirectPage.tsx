@@ -1,9 +1,9 @@
-import { LOGIN } from '@libs/constant/path';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { setAccessToken } from '@libs/api/client';
 import { TailSpin } from 'react-loader-spinner';
 import qs from 'qs';
+import ROUTE from '@libs/constant/path';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const RedirectPage = () => {
       // }
     } catch (e) {
       alert('로그인에 실패했습니다.');
-      navigate(LOGIN, { replace: true });
+      navigate(ROUTE.LOGIN, { replace: true });
     }
   };
 

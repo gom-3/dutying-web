@@ -1,18 +1,12 @@
-export const ROOT = '/';
-
-export const LOGIN = '/login';
-export const REDIRECT = '/oauth2/redirect';
-
-export const ONBOARDING = {
-  ACCOUNT: '/onboarding/account',
-  WARD: '/onboarding/ward',
-};
-
-export const HOME = '/home';
-export const SHIFT = {
+const ROUTE = {
+  ROOT: '/',
+  LOGIN: '/login',
+  REDIRECT: '//redirect',
+  ONBOARDING: '/onboarding',
+  HOME: '/home',
   MAKE: '/make',
-  SETUP: '/setup',
   REQUEST: '/request',
+  MEMBER: '/member',
 };
-export const MEMBER = '/member';
-export const SETTING = '/setting';
+
+export default ROUTE;

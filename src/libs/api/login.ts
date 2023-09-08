@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import axiosInstance from './client';
-import { LOGIN } from '@libs/constant/path';
+import ROUTE from '@libs/constant/path';
 
 export const useRefreshToken = async () => {
   const navigate = useNavigate();
@@ -9,6 +9,6 @@ export const useRefreshToken = async () => {
     const { accessToken } = data;
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   } catch (error) {
-    navigate(LOGIN);
+    navigate(ROUTE.LOGIN);
   }
 };
