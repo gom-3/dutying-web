@@ -28,7 +28,7 @@ const items = [
     path: SHIFT.REQUEST,
     icon: RequestIcon,
     selectedIcon: RequestIconSelected,
-    text: '휴가 신청 관리',
+    text: '신청 근무 관리',
   },
   {
     path: MEMBER,

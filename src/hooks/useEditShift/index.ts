@@ -182,8 +182,8 @@ const useEditShift = (activeEffect = false) => {
         );
 
         sendEvent(
-          event.changeShift,
-          `${name} / ${day + 1}일 | ` +
+          event.change_shift,
+          `${focus.shiftNurseName} / ${day + 1}일 | ` +
             match(edit)
               .with({ prevShiftType: null }, () => `추가 → ${edit.nextShiftType?.shortName}`)
               .with({ nextShiftType: null }, () => `${edit.prevShiftType?.shortName} → 삭제`)
@@ -310,6 +310,7 @@ const useEditShift = (activeEffect = false) => {
         if (month === 8) return;
         else setState('month', month + 1);
       }
+      sendEvent(event.change_month);
     },
     [month, year]
   );
@@ -411,12 +412,20 @@ const useEditShift = (activeEffect = false) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
         if (e.shiftKey) {
           moveHistory(1);
+          sendEvent(event.redo_key);
         } else {
           moveHistory(-1);
+          sendEvent(event.undo_key);
         }
       }
       if (!focus || !shift) return;
-      moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => setState('focus', focus));
+      moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => {
+        setState('focus', focus);
+        sendEvent(
+          e.ctrlKey || e.metaKey ? event.move_cell_focus_end : event.move_cell_focus,
+          e.key
+        );
+      });
       keydownEventMapper(
         e,
         ...shift.wardShiftTypes.map((shiftType) => ({
@@ -490,7 +499,10 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
+      changeShiftTeam: (shiftTeam: ShiftTeam) => {
+        setState('currentShiftTeam', shiftTeam);
+        sendEvent(event.change_shift_team);
+      },
     },
   };
 };

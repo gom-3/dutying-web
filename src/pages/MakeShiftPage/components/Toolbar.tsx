@@ -26,7 +26,7 @@ import Select from '@components/Select';
 function Toolbar() {
   const {
     state: { month, shift, changeStatus, showLayer, currentShiftTeam, shiftTeams },
-    actions: { changeMonth, toggleLayer, changeShiftTeam },
+    actions: { changeMonth, toggleLayer, changeShiftTeam, moveHistory },
   } = useEditShift();
 
   const [openInfo, setOpenInfo] = useState(false);
@@ -59,15 +59,16 @@ function Toolbar() {
       <Button
         type="outline"
         className="flex h-[2.5rem] w-[7.9375rem] items-center justify-center rounded-[3.125rem] border-[.0313rem] border-main-2 bg-main-4 text-base font-normal"
-        onClick={() =>
-          currentSetup === null ? setCurrentSetup('constraint') : setCurrentSetup(null)
-        }
+        onClick={() => {
+          currentSetup === null ? setCurrentSetup('constraint') : setCurrentSetup(null);
+          sendEvent(event.open_edit_modal);
+        }}
       >
         <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-main-1" />
         설정 편집
       </Button>
       {currentSetup !== null && (
-        <Draggable>
+        <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
           <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex w-[36.25rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-2">
             <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
               <div
@@ -99,10 +100,13 @@ function Toolbar() {
 
       <InfoIcon
         className="ml-[1.25rem] h-[1.625rem] w-[1.625rem] cursor-pointer"
-        onClick={() => setOpenInfo(!openInfo)}
+        onClick={() => {
+          setOpenInfo(!openInfo);
+          sendEvent(event.open_shift_info_modal);
+        }}
       />
       {openInfo && (
-        <Draggable>
+        <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
           <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
             <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
               <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
@@ -130,7 +134,10 @@ function Toolbar() {
           className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
             showLayer.fault ? 'white' : 'bg-sub-5'
           }`}
-          onClick={() => toggleLayer('fault')}
+          onClick={() => {
+            toggleLayer('fault');
+            sendEvent(showLayer.fault ? event.off_layer : event.on_layer, 'fault');
+          }}
         >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#FF0000] bg-[#ff000033]`}
@@ -149,7 +156,10 @@ function Toolbar() {
           className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
             showLayer.check ? 'white' : 'bg-sub-5'
           }`}
-          onClick={() => toggleLayer('check')}
+          onClick={() => {
+            toggleLayer('check');
+            sendEvent(showLayer.check ? event.off_layer : event.on_layer, 'check');
+          }}
         >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#06E738] bg-[#06e73833]`}
@@ -168,7 +178,10 @@ function Toolbar() {
           className={`flex h-[2.25rem] cursor-pointer items-center gap-[.5rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 px-[.625rem] ${
             showLayer.slash ? 'white' : 'bg-sub-5'
           }`}
-          onClick={() => toggleLayer('slash')}
+          onClick={() => {
+            toggleLayer('slash');
+            sendEvent(showLayer.slash ? event.off_layer : event.on_layer, 'slash');
+          }}
         >
           <div
             className={`relative h-[.875rem] w-[.875rem] rounded-[.1875rem] border-[.0806rem] border-[#0027F4] bg-[#0027f433]`}
@@ -195,8 +208,20 @@ function Toolbar() {
       </div>
 
       <div className="ml-[1.875rem] flex gap-[.625rem]">
-        <HistoryBackIcon className="h-[1.625rem] w-[1.625rem]" />
-        <HistoryNextIcon className="h-[1.625rem] w-[1.625rem]" />
+        <HistoryBackIcon
+          className="h-[1.625rem] w-[1.625rem] cursor-pointer"
+          onClick={() => {
+            moveHistory(-1);
+            sendEvent(event.undo_toolbar);
+          }}
+        />
+        <HistoryNextIcon
+          className="h-[1.625rem] w-[1.625rem] cursor-pointer"
+          onClick={() => {
+            moveHistory(1);
+            sendEvent(event.redo_toolbar);
+          }}
+        />
       </div>
 
       <div>
@@ -224,7 +249,7 @@ function Toolbar() {
         className="ml-[1.25rem] h-[2.5rem] w-[10rem] border-[.0938rem] text-[1.25rem] font-normal"
         onClick={() => {
           shift && shiftToExcel(month, shift);
-          sendEvent(event.clickExcelDownloadButton, 'excel download');
+          sendEvent(event.download_excel);
         }}
       >
         엑셀로 저장하기

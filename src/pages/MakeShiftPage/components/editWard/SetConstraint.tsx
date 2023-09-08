@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ArrowDownIcon, ToggleOffIcon, ToggleOnIcon } from '@assets/svg';
 import useEditShift from '@hooks/useEditShift';
+import { event, sendEvent } from 'analytics';
 import { match } from 'ts-pattern';
 
 const Select = ({
@@ -54,6 +55,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousWorkVal: parseInt(e.target.value),
                       });
+                      sendEvent(event.change_constraint_value, 'maxContinuousWorkVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -72,6 +74,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousNightVal: parseInt(e.target.value),
                       });
+                      sendEvent(event.change_constraint_value, 'maxContinuousNightVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -90,6 +93,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minContinuousNightVal: parseInt(e.target.value),
                       });
+                      sendEvent(event.change_constraint_value, 'minContinuousNightVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -108,6 +112,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minNightIntervalVal: parseInt(e.target.value),
                       });
+                      sendEvent(event.change_constraint_value, 'minNightIntervalVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -125,6 +130,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minOffAssignAfterNightVal: parseInt(e.target.value),
                       });
+                      sendEvent(event.change_constraint_value, 'minOffAssignAfterNightVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -140,6 +146,7 @@ const SetConstraint = () => {
                     ...wardConstraint,
                     [key]: false,
                   });
+                  sendEvent(event.inactive_constraint);
                 }}
               >
                 <ToggleOnIcon className="h-[1rem] w-[1.875rem]" />
@@ -153,6 +160,7 @@ const SetConstraint = () => {
                     ...wardConstraint,
                     [key]: true,
                   });
+                  sendEvent(event.active_constraint);
                 }}
               >
                 <ToggleOffIcon className="h-[1rem] w-[1.875rem]" />

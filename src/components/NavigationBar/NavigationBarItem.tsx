@@ -1,3 +1,4 @@
+import { event, sendEvent } from 'analytics';
 import { useLocation, useNavigate } from 'react-router';
 
 interface Props {
@@ -17,6 +18,7 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
       className={`mt-[3.125rem] flex w-[10.0625rem] cursor-pointer flex-col items-center`}
       onClick={() => {
         navigate(path);
+        sendEvent(event.navigate, pathname);
       }}
     >
       {isSelected ? (
