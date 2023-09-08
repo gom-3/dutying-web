@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CheckedIcon, FoldIcon, UncheckedIcon2 } from '@assets/svg';
+import { CancelIcon, CheckedIcon, UncheckedIcon2 } from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-function NurseEditDrawer() {
+function NurseEditModal() {
   const {
-    state: { shiftTeams, selectedNurse },
-    actions: { selectNurse, updateNurse, deleteNurse },
+    state: { selectedNurse },
+    actions: { selectNurse, updateNurse },
   } = useEditShiftTeam();
   const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
-
-  const textInputRef = useRef<HTMLInputElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (key: keyof Nurse, value: any) => {
@@ -21,43 +19,26 @@ function NurseEditDrawer() {
     setWriteNurse({ ...writeNurse, [key]: value });
   };
 
-  const save = () => {
-    writeNurse && updateNurse(writeNurse.nurseId, writeNurse);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      save();
-    }
-  };
-
   useEffect(() => {
     if (selectedNurse) setWriteNurse(selectedNurse);
-    if (textInputRef) textInputRef.current?.focus();
   }, [selectedNurse]);
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [writeNurse]);
 
   return (
     <div
-      className={`ignore-onclickoutside fixed right-0 top-0 flex h-screen w-[25rem] flex-col justify-center border-l-[.0625rem] border-sub-4.5 bg-white transition-all duration-500 ease-out ${
-        selectedNurse ? 'translate-x-0' : 'translate-x-[100%]'
+      className={`ignore-onclickoutside fixed top-[9.5rem] z-[999] flex h-fit w-[25rem] flex-col justify-center rounded-[1.25rem] border-l-[.0625rem] border-sub-4.5 bg-white shadow-shadow-2 transition-all duration-500 ease-out ${
+        selectedNurse ? 'right-[3.125rem]' : 'right-[-25rem]'
       }`}
     >
-      <FoldIcon
-        className="absolute left-[1.25rem] top-[.8125rem] h-[1.875rem] w-[1.875rem] scale-x-[-1] cursor-pointer"
-        onClick={() => selectNurse(null)}
-      />
-      <p className="ml-[1.5625rem] font-apple text-base font-medium text-sub-3">간호사별 관리</p>
-      <div className="mb-[1.25rem] mt-[3.75rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
+      <div className="flex h-[2.75rem] items-center bg-sub-5 px-[2.5rem]">
+        <p className="font-apple text-base text-sub-3">간호사별 관리</p>
+        <div className="ml-auto flex cursor-pointer items-center" onClick={() => selectNurse(null)}>
+          <p className="font-apple text-base text-sub-3">닫기</p>
+          <CancelIcon className="h-[1.5rem] w-[1.5rem]" />
+        </div>
+      </div>
+      <div className="my-[1.25rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
         <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
         <TextField
-          forwardRef={textInputRef}
           autoFocus
           className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
           onChange={(e) => {
@@ -208,30 +189,14 @@ function NurseEditDrawer() {
         }}
       />
 
-      <div className="ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] gap-4">
-        <button
-          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-sub-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
-          onClick={() =>
-            selectedNurse &&
-            shiftTeams &&
-            deleteNurse(
-              shiftTeams.find((x) => x.nurses.some((y) => y.nurseId === selectedNurse.nurseId))!
-                .shiftTeamId,
-              selectedNurse.nurseId
-            )
-          }
-        >
-          간호사 삭제
-        </button>
-        <button
-          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
-          onClick={() => save()}
-        >
-          저장
-        </button>
-      </div>
+      <button
+        className="mb-[1.625rem] ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] w-[4.375rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+        onClick={() => writeNurse && updateNurse(writeNurse.nurseId, writeNurse)}
+      >
+        저장
+      </button>
     </div>
   );
 }
 
-export default NurseEditDrawer;
+export default NurseEditModal;

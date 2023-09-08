@@ -13,6 +13,7 @@ import { shallow } from 'zustand/shallow';
 import {
   UpdateShiftTeamDTO,
   createShiftTeam,
+  deleteShiftTeam,
   getWard,
   updateNurseOrder,
   updateShiftTeam,
@@ -43,7 +44,10 @@ const useEditShiftTeam = () => {
     ({ nurseId, updateNurseDTO }: { nurseId: number; updateNurseDTO: UpdateNurseDTO }) =>
       patchNurse(nurseId, updateNurseDTO),
     {
-      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+      onSuccess: () => {
+        queryClient.invalidateQueries(getWardQueryKey);
+        queryClient.invalidateQueries(shiftQueryKey);
+      },
       onError: (error) => {
         console.log(error);
         alert('간호사 정보 수정이 실패했습니다.');
@@ -104,16 +108,26 @@ const useEditShiftTeam = () => {
     }
   );
 
+  const { mutate: deleteShiftTeamMutate } = useMutation(
+    ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
+      deleteShiftTeam(wardId, shiftTeamId),
+    {
+      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+    }
+  );
+
   const { mutate: editDivisionMutate } = useMutation(
     ({
       shiftTeamId,
       prevPriority,
       changeValue,
+      patchYearMonth,
     }: {
       shiftTeamId: number;
       prevPriority: number;
       changeValue: number;
-    }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue),
+      patchYearMonth: string;
+    }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue, patchYearMonth),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -130,6 +144,7 @@ const useEditShiftTeam = () => {
       divisionNum,
       prevPriority,
       nextPriority,
+      patchYearMonth,
     }: {
       nurseId: number;
       shiftTeamId: number;
@@ -137,6 +152,7 @@ const useEditShiftTeam = () => {
       divisionNum: number;
       prevPriority: number;
       nextPriority: number;
+      patchYearMonth: string;
     }) =>
       updateNurseOrder(
         nurseId,
@@ -144,7 +160,8 @@ const useEditShiftTeam = () => {
         nextShiftTeamId,
         divisionNum,
         prevPriority,
-        nextPriority
+        nextPriority,
+        patchYearMonth
       ),
     {
       onMutate: async ({
@@ -185,20 +202,19 @@ const useEditShiftTeam = () => {
               });
             })
           );
-        queryClient.getQueryCache();
 
         oldShift &&
           queryClient.setQueryData<Shift>(
             shiftQueryKey,
             produce(oldShift, (draft) => {
               const sourceRows = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.nurseInfo.nurseId === nurseId)
+                x.some((y) => y.shiftNurse.nurseId === nurseId)
               );
               if (sourceRows === undefined) return;
-              const row = sourceRows.find((x) => x.shiftNurse.nurseInfo.nurseId === nurseId)!;
+              const row = sourceRows.find((x) => x.shiftNurse.nurseId === nurseId)!;
 
               sourceRows.splice(
-                sourceRows.findIndex((x) => x.shiftNurse.nurseInfo.nurseId === nurseId),
+                sourceRows.findIndex((x) => x.shiftNurse.nurseId === nurseId),
                 1
               );
 
@@ -294,15 +310,22 @@ const useEditShiftTeam = () => {
         change: updateNurseShiftTypeRequest
       ) => updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change }),
       createShiftTeam: () => wardId && createShiftTeamMutate(wardId),
-      editDivision: (shiftTeamId: number, prevPriority: number, changeValue: number) =>
-        editDivisionMutate({ shiftTeamId, prevPriority, changeValue }),
+      deleteShiftTeam: (shiftTeamId: number) =>
+        wardId && deleteShiftTeamMutate({ wardId, shiftTeamId }),
+      editDivision: (
+        shiftTeamId: number,
+        prevPriority: number,
+        changeValue: number,
+        patchYearMonth: string
+      ) => editDivisionMutate({ shiftTeamId, prevPriority, changeValue, patchYearMonth }),
       moveNurseOrder: (
         nurseId: number,
         shiftTeamId: number,
         nextShiftTeamId: number,
         divisionNum: number,
         prevPriority: number,
-        nextPriority: number
+        nextPriority: number,
+        patchYearMonth: string
       ) =>
         moveNurseOrderMutate({
           nurseId,
@@ -311,6 +334,7 @@ const useEditShiftTeam = () => {
           divisionNum,
           prevPriority,
           nextPriority,
+          patchYearMonth,
         }),
       updateShiftTeam: (shiftTeamId: number, updateShiftTeamDTO: UpdateShiftTeamDTO) =>
         wardId && updateShiftTeamMutate({ wardId, shiftTeamId, updateShiftTeamDTO }),

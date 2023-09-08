@@ -1,4 +1,4 @@
-import { HOME } from '@libs/constant/path';
+import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import useGlobalStore from 'store';
@@ -8,7 +8,7 @@ function NotAuthzLayout() {
   const { nurseId } = useGlobalStore();
 
   useEffect(() => {
-    if (nurseId) navigate(HOME);
+    if (nurseId) navigate(ROUTE.HOME);
   }, [nurseId]);
 
   return <Outlet />;

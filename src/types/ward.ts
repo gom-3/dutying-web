@@ -56,19 +56,7 @@ type ShiftNurse = {
   /** 구분 내 인덱스 */
   priority: number;
   isWorker: true;
-  nurseInfo: Pick<
-    Nurse,
-    | 'nurseId'
-    | 'accountId'
-    | 'isConnected'
-    | 'phoneNum'
-    | 'nurseShiftTypes'
-    | 'isDutyManager'
-    | 'isWardManager'
-    | 'gender'
-    | 'employmentDate'
-    | 'isDeleted'
-  >;
+  nurseId: number;
 };
 
 type ShiftTeam = {

@@ -1,5 +1,5 @@
 import NavigationBarItem from './NavigationBarItem';
-import { SHIFT, MEMBER } from '@libs/constant/path';
+import ROUTE from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
@@ -19,19 +19,19 @@ const items = [
   //   text: '홈',
   // },
   {
-    path: SHIFT.MAKE,
+    path: ROUTE.MAKE,
     icon: DutyIcon,
     selectedIcon: DutyIconSelected,
     text: '근무표 만들기',
   },
   {
-    path: SHIFT.REQUEST,
+    path: ROUTE.REQUEST,
     icon: RequestIcon,
     selectedIcon: RequestIconSelected,
     text: '신청 근무 관리',
   },
   {
-    path: MEMBER,
+    path: ROUTE.MEMBER,
     icon: NurseIcon,
     selectedIcon: NurseIconSelected,
     text: '간호사 관리',

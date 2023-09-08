@@ -147,7 +147,8 @@ const updateNurseOrder = async (
   nextShiftTeamId: number,
   divisionNum: number,
   prevPriority: number,
-  nextPriority: number
+  nextPriority: number,
+  patchYearMonth: string
 ) =>
   (
     await axiosInstance.patch(`/nurses/${nurseId}/priority`, {
@@ -156,19 +157,22 @@ const updateNurseOrder = async (
       divisionNum,
       prevPriority,
       nextPriority,
+      patchYearMonth,
     })
   ).data;
 
 const updateShiftTeamDivision = async (
   shiftTeamId: number,
   prevPriority: number,
-  changeValue: number
+  changeValue: number,
+  patchYearMonth: string
 ) =>
   (
     await axiosInstance.patch(`/nurses/division`, {
       shiftTeamId,
       prevPriority,
       changeValue,
+      patchYearMonth,
     })
   ).data;
 

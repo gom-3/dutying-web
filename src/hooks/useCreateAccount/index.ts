@@ -1,4 +1,4 @@
-import { ONBOARDING } from '@libs/constant/path';
+import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useCreateAccountStore from './store';
@@ -79,7 +79,7 @@ const useCreateAccount = () => {
   }, [account]);
 
   const handleCreateAccount = async () => {
-    navigate(ONBOARDING.WARD);
+    navigate(ROUTE.ONBOARDING);
   };
 
   return {
