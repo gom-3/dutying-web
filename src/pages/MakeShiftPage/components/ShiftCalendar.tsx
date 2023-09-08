@@ -248,6 +248,9 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                   <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
                                     <button
                                       className="h-[1.875rem] w-[1.875rem] rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4"
+                                      onClick={() => {
+                                        sendEvent(event.focus_carried);
+                                      }}
                                       onKeyDown={(e) => {
                                         e.preventDefault();
                                         if (e.key === 'ArrowUp')
