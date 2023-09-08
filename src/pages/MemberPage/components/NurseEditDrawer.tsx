@@ -4,14 +4,16 @@ import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function NurseEditDrawer() {
   const {
-    state: { selectedNurse },
-    actions: { selectNurse, updateNurse },
+    state: { shiftTeams, selectedNurse },
+    actions: { selectNurse, updateNurse, deleteNurse },
   } = useEditShiftTeam();
   const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
+
+  const textInputRef = useRef<HTMLInputElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (key: keyof Nurse, value: any) => {
@@ -19,9 +21,27 @@ function NurseEditDrawer() {
     setWriteNurse({ ...writeNurse, [key]: value });
   };
 
+  const save = () => {
+    writeNurse && updateNurse(writeNurse.nurseId, writeNurse);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      save();
+    }
+  };
+
   useEffect(() => {
     if (selectedNurse) setWriteNurse(selectedNurse);
+    if (textInputRef) textInputRef.current?.focus();
   }, [selectedNurse]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [writeNurse]);
 
   return (
     <div
@@ -37,6 +57,7 @@ function NurseEditDrawer() {
       <div className="mb-[1.25rem] mt-[3.75rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
         <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
         <TextField
+          forwardRef={textInputRef}
           autoFocus
           className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
           onChange={(e) => {
@@ -187,12 +208,28 @@ function NurseEditDrawer() {
         }}
       />
 
-      <button
-        className="ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] w-[4.375rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
-        onClick={() => writeNurse && updateNurse(writeNurse.nurseId, writeNurse)}
-      >
-        저장
-      </button>
+      <div className="ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] gap-4">
+        <button
+          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-sub-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+          onClick={() =>
+            selectedNurse &&
+            shiftTeams &&
+            deleteNurse(
+              shiftTeams.find((x) => x.nurses.some((y) => y.nurseId === selectedNurse.nurseId))!
+                .shiftTeamId,
+              selectedNurse.nurseId
+            )
+          }
+        >
+          간호사 삭제
+        </button>
+        <button
+          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+          onClick={() => save()}
+        >
+          저장
+        </button>
+      </div>
     </div>
   );
 }

@@ -25,7 +25,7 @@ const addNurseIntoShiftTeam = async (
 const removeNurseFromShiftTeam = async (wardId: number, shiftTeamId: number, nurseId: number) =>
   (
     await axiosInstance.delete<Nurse>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses${nurseId}`
+      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses/${nurseId}`
     )
   ).data;
 

@@ -13,6 +13,7 @@ import { shallow } from 'zustand/shallow';
 import {
   UpdateShiftTeamDTO,
   createShiftTeam,
+  deleteShiftTeam,
   getWard,
   updateNurseOrder,
   updateShiftTeam,
@@ -102,6 +103,14 @@ const useEditShiftTeam = () => {
 
   const { mutate: createShiftTeamMutate } = useMutation(
     (wardId: number) => createShiftTeam(wardId),
+    {
+      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+    }
+  );
+
+  const { mutate: deleteShiftTeamMutate } = useMutation(
+    ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
+      deleteShiftTeam(wardId, shiftTeamId),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
@@ -199,13 +208,13 @@ const useEditShiftTeam = () => {
             shiftQueryKey,
             produce(oldShift, (draft) => {
               const sourceRows = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.nurseInfo.nurseId === nurseId)
+                x.some((y) => y.shiftNurse.nurseId === nurseId)
               );
               if (sourceRows === undefined) return;
-              const row = sourceRows.find((x) => x.shiftNurse.nurseInfo.nurseId === nurseId)!;
+              const row = sourceRows.find((x) => x.shiftNurse.nurseId === nurseId)!;
 
               sourceRows.splice(
-                sourceRows.findIndex((x) => x.shiftNurse.nurseInfo.nurseId === nurseId),
+                sourceRows.findIndex((x) => x.shiftNurse.nurseId === nurseId),
                 1
               );
 
@@ -301,6 +310,8 @@ const useEditShiftTeam = () => {
         change: updateNurseShiftTypeRequest
       ) => updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change }),
       createShiftTeam: () => wardId && createShiftTeamMutate(wardId),
+      deleteShiftTeam: (shiftTeamId: number) =>
+        wardId && deleteShiftTeamMutate({ wardId, shiftTeamId }),
       editDivision: (
         shiftTeamId: number,
         prevPriority: number,

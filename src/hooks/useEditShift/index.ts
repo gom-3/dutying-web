@@ -433,7 +433,7 @@ const useEditShift = (activeEffect = false) => {
           callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
         })),
         { keys: ['Backspace'], callback: () => changeFocusedShift(null) },
-        { keys: ['/'], callback: () => changeFocusedShift(4) }
+        { keys: ['/'], callback: () => changeFocusedShift(9) }
       );
     },
     [shift, focus, editHistory]

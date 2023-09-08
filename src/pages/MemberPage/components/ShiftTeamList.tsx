@@ -9,13 +9,16 @@ import {
   UnlinkedIcon,
 } from '@assets/svg';
 import TextField from '@components/TextField';
+import useEditShiftStore from '@hooks/useEditShift/store';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/ward';
+import ROUTE from '@libs/constant/path';
 import { event, sendEvent } from 'analytics';
 import { groupBy } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import useOnclickOutside from 'react-cool-onclickoutside';
+import { useNavigate } from 'react-router';
 
 function ShiftTeamList() {
   const {
@@ -27,6 +30,7 @@ function ShiftTeamList() {
       updateShiftTeam,
       addNurse,
       editDivision,
+      deleteShiftTeam,
     },
   } = useEditShiftTeam();
   const [openMenu, setOpenMenu] = useState<number | null>(null);
@@ -34,6 +38,10 @@ function ShiftTeamList() {
     shiftTeamId: number;
     updateShiftTeamDTO: UpdateShiftTeamDTO;
   } | null>(null);
+  const setEditShiftStore = useEditShiftStore((state) => state.setState);
+
+  const navigate = useNavigate();
+
   const clickAwayRef = useOnclickOutside(() => selectNurse(null));
   const clickAwayMenuRef = useOnclickOutside(() => setOpenMenu(null));
   const clickAwayShiftTeamNameRef = useOnclickOutside(() => {
@@ -163,7 +171,7 @@ function ShiftTeamList() {
         <button
           className="ml-[16.125rem] flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0625rem] border-main-3 bg-white px-[.75rem] font-apple text-base text-main-2"
           onClick={() => {
-            createShiftTeam;
+            createShiftTeam();
             sendEvent(event.create_shift_team);
           }}
         >
@@ -224,7 +232,7 @@ function ShiftTeamList() {
                 />
                 {openMenu === shiftTeam.shiftTeamId && (
                   <div
-                    className="absolute right-0 top-[3.75rem] z-10 flex h-[14rem] w-[14.375rem] flex-col rounded-[.625rem] bg-white shadow-[4px_4px_42px_0px_rgba(104,81,149,0.25)]"
+                    className="absolute right-0 top-[3.75rem] z-30 flex h-[14rem] w-[14.375rem] flex-col rounded-[.625rem] bg-white shadow-[4px_4px_42px_0px_rgba(104,81,149,0.25)]"
                     ref={clickAwayMenuRef}
                   >
                     <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
@@ -253,10 +261,19 @@ function ShiftTeamList() {
                         초대해서 연동 가능합니다.)
                       </div>
                     </div>
-                    <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
+                    <div
+                      className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
+                      onClick={() => {
+                        setEditShiftStore('currentShiftTeam', shiftTeam);
+                        navigate(ROUTE.MAKE);
+                      }}
+                    >
                       근무표 보러가기
                     </div>
-                    <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
+                    <div
+                      className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
+                      onClick={() => deleteShiftTeam(shiftTeam.shiftTeamId)}
+                    >
                       팀 삭제하기
                     </div>
                   </div>
