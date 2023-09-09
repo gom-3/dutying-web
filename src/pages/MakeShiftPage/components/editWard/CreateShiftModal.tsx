@@ -38,7 +38,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
   return open
     ? createPortal(
         <div
-          className="fixed left-0 top-0 z-50 h-screen w-screen bg-[#00000066]"
+          className="fixed left-0 top-0 z-[1000] h-screen w-screen bg-[#00000066]"
           onClick={() => close()}
         >
           <div

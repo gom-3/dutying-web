@@ -16,7 +16,7 @@ function CountDutyByDay() {
             <div
               className={`flex h-full w-[3.125rem] items-center justify-center font-poppins text-[1.5rem] text-white 
             ${index === 0 && 'rounded-tl-[1.25rem]'} 
-            ${index === shift.wardShiftTypes.length - 2 && 'rounded-bl-[1.25rem]'}
+            ${index === 2 && 'rounded-bl-[1.25rem]'}
             `}
               style={{ backgroundColor: wardShiftType.color }}
             >
