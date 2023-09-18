@@ -28,6 +28,7 @@ export default {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
         apple: ['Apple-SDG', 'sans-serif'],
+        line: ['LINESeedKR', 'sans-serif'],
       },
       boxShadow: {
         'shadow-1': '0px 4px 34px #EDE9F5',

@@ -8,6 +8,12 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 #root {
@@ -135,6 +141,13 @@ body {
   src: url('./assets/fonts/AppleSDGothicNeoH.ttf');
   font-weight: 900;
 }
+
+@font-face {
+  font-family: 'LINESeedKR';
+  font-style: bold;
+  src: url('./assets/fonts/LINESeedKR-Bd.ttf');
+}
+
 /* 100 Thin */
 @font-face {
   font-family: 'Poppins';

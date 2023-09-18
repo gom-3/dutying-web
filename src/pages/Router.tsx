@@ -4,11 +4,12 @@ import RequestPage from './RequestShiftPage';
 import MakeShiftPage from './MakeShiftPage';
 import MemberPage from './MemberPage';
 import ROUTE from '@libs/constant/path';
+import LandingPage from './LandingPage';
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path={ROUTE.ROOT} element={<Navigate to={ROUTE.MAKE} />} />
+      <Route path={ROUTE.ROOT} element={<LandingPage />} />
       {/* <Route path={REDIRECT} element={<RedirectPage />} /> */}
       {/* 인증된 사용자가 접근할 수 없는 페이지 */}
       {/* <Route element={<NotAuthzLayout />}> */}
