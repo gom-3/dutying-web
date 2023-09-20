@@ -12,8 +12,14 @@ import { initializeApp as initializeFirebaseApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { createInstance } from '@hackler/react-sdk';
 import { enableMapSet } from 'immer';
+import airbridge from 'airbridge-web-sdk-loader';
 
 enableMapSet();
+
+airbridge.init({
+  app: 'App Name',
+  webToken: 'Web SDK Token',
+});
 
 // Firebase 관련 초기화
 const firebaseConfig = {

@@ -3,6 +3,8 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface State {
+  isLogined: boolean;
+  accountId: number | null;
   nurseId: number | null;
   wardId: number | null;
 }
@@ -16,12 +18,14 @@ const useGlobalStore = create<Store>()(
   devtools(
     persist(
       (set, get) => ({
+        isLogined: true,
+        accountId: 1,
         nurseId: 1,
-        wardId: 2,
+        wardId: 1,
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
-              draft[key] = value;
+              draft[key] = value as never;
             })
           ),
       }),

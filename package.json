@@ -1,7 +1,7 @@
 {
   "name": "dutying-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,6 +20,7 @@
     "@tanstack/react-query": "^4.32.0",
     "@tanstack/react-query-devtools": "^4.32.0",
     "@types/react-beautiful-dnd": "^13.1.4",
+    "airbridge-web-sdk-loader": "^1.7.0",
     "axios": "^1.4.0",
     "exceljs": "^4.3.0",
     "firebase": "^10.1.0",
