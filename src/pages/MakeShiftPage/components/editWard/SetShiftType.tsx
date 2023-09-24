@@ -3,9 +3,9 @@ import { PenIcon, PlusIcon } from '@assets/svg';
 import TimeInput from '@components/TimeInput';
 import TextField from '@components/TextField';
 import { useState } from 'react';
-import { CreateShiftTypeDTO } from '@libs/api/shift';
 import CreateShiftModal from './CreateShiftModal';
 import { event, sendEvent } from 'analytics';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 function SetShiftType() {
   const {

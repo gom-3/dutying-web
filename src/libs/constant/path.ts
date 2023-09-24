@@ -1,5 +1,6 @@
 const ROUTE = {
   ROOT: '/',
+  SIGNUP: '/signup',
   LOGIN: '/login',
   REDIRECT: '//redirect',
   ONBOARDING: '/onboarding',

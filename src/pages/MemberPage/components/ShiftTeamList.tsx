@@ -11,7 +11,7 @@ import {
 import TextField from '@components/TextField';
 import useEditShiftStore from '@hooks/useEditShift/store';
 import useEditShiftTeam from '@hooks/useEditShiftTeam';
-import { UpdateShiftTeamDTO } from '@libs/api/ward';
+import { UpdateShiftTeamDTO } from '@libs/api/shiftTeam';
 import ROUTE from '@libs/constant/path';
 import { event, sendEvent } from 'analytics';
 import { groupBy } from 'lodash-es';

@@ -14,11 +14,11 @@ import {
   UpdateShiftTeamDTO,
   createShiftTeam,
   deleteShiftTeam,
-  getWard,
   updateNurseOrder,
   updateShiftTeam,
   updateShiftTeamDivision,
-} from '@libs/api/ward';
+} from '@libs/api/shiftTeam';
+import { getWard } from '@libs/api/ward';
 import useGlobalStore from 'store';
 import { produce } from 'immer';
 import useEditShift from '@hooks/useEditShift';
@@ -66,8 +66,6 @@ const useEditShiftTeam = () => {
         isDutyManager: false,
         isWardManager: false,
         memo: '',
-        workStartDate: '2023-08-01',
-        workEndDate: '2023-12-31',
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),

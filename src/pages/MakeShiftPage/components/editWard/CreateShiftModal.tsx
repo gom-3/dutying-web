@@ -3,8 +3,8 @@ import { CancelIcon } from '@assets/svg';
 import Button from '@components/Button';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
-import { CreateShiftTypeDTO } from '@libs/api/shift';
 import { createPortal } from 'react-dom';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 interface Props {
   open: boolean;

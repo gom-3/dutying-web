@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import useCreateWardStore from './store';
 import { shallow } from 'zustand/shallow';
-import { CreateShiftTypeDTO } from '@libs/api/shift';
 import { CreateWardDTO } from '@libs/api/ward';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 const useCreateWard = () => {
   const [steps, currentStep, createWardDTO, shiftTypes, isFilled, error, setState] =

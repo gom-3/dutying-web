@@ -76,7 +76,7 @@ function LandingPage() {
             </div>
             <div className="flex h-[2.5rem] items-center gap-[2.8125rem]">
               <a
-                className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5"
+                className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5 underline"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
                 다운로드

@@ -6,7 +6,7 @@ import {
   createShiftType,
   deleteShiftType,
   updateShiftType,
-} from '@libs/api/shift';
+} from '@libs/api/shiftType';
 import useGlobalStore from 'store';
 
 const useEditWard = () => {

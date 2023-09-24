@@ -2,8 +2,8 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
-import { CreateShiftTypeDTO } from '@libs/api/shift';
 import { CreateWardDTO } from '@libs/api/ward';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 interface State {
   steps: string[];

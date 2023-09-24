@@ -43,8 +43,6 @@ export type UpdateNurseDTO = Pick<
   | 'isDutyManager'
   | 'isWardManager'
   | 'memo'
-  | 'workStartDate'
-  | 'workEndDate'
 >;
 const updateNurse = async (nurseId: number, updatedNurse: UpdateNurseDTO) =>
   (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, updatedNurse)).data;

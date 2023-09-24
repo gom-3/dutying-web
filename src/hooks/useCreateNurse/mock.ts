@@ -1,0 +1,43 @@
+export const mockAccount: Account = {
+  name: '황인서',
+  gender: '남',
+  email: 'sjsjsj1246@gmail.com',
+  accountId: 1,
+  isDeleted: false,
+  isManager: false,
+  modifiedAt: '2021-08-31T14:00:00.000Z',
+  nurseId: null,
+  onboardingStatus: 'INITIAL',
+  phoneNum: '010-1234-5678',
+  shiftTeamId: null,
+  wardId: null,
+};
+
+export const mockNurse: Nurse = {
+  nurseId: 1,
+  accountId: 1,
+  shiftTeamId: 1,
+  wardId: 1,
+  name: '홍길동',
+  divisionNum: 1,
+  priority: 1,
+  gender: '여',
+  phoneNum: '01012345678',
+  employmentDate: '2021-01-01',
+  isDutyManager: false,
+  isWardManager: false,
+  isWorker: true,
+  isConnected: true,
+  nurseShiftTypes: [
+    {
+      nurseShiftTypeId: 1,
+      name: '데이',
+      shortName: 'D',
+      isPossible: true,
+      isPreferred: true,
+    },
+  ],
+  memo: '간호사 메모입니다.',
+  isDeleted: false,
+  status: 'DONE',
+};
