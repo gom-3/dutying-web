@@ -2,26 +2,26 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   UpdateNurseDTO,
-  addNurseIntoShiftTeam,
   updateNurse as patchNurse,
-  removeNurseFromShiftTeam,
+  updateNurseOrder,
   updateNurseShiftType,
   updateNurseShiftTypeRequest,
+  updateShiftTeamDivision,
 } from '@libs/api/nurse';
 import useEditNurseStore from './store';
 import { shallow } from 'zustand/shallow';
 import {
   UpdateShiftTeamDTO,
+  addNurseIntoShiftTeam,
   createShiftTeam,
   deleteShiftTeam,
-  updateNurseOrder,
+  removeNurseFromShiftTeam,
   updateShiftTeam,
-  updateShiftTeamDivision,
 } from '@libs/api/shiftTeam';
 import { getWard } from '@libs/api/ward';
-import useGlobalStore from 'store';
 import { produce } from 'immer';
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
+import useAuth from '@hooks/useAuth';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -29,7 +29,9 @@ const useEditShiftTeam = () => {
     shallow
   );
 
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const queryClient = useQueryClient();
   const getWardQueryKey = ['ward', wardId];

@@ -1,4 +1,4 @@
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 
 function WardInfo() {
   const {

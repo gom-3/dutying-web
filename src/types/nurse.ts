@@ -45,5 +45,4 @@ type Nurse = {
   divisionNum: number;
   /** 구분 내 인덱스 */
   priority: number;
-  status: string;
 };

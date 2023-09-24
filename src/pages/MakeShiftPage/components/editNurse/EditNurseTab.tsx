@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import ShiftSelect from './ShiftSelect';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 
 type Props = {
   isFixed?: boolean;

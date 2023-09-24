@@ -1,4 +1,4 @@
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
 
 function CountDutyByDay() {
   const {

@@ -2,7 +2,7 @@ const ROUTE = {
   ROOT: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  REDIRECT: '//redirect',
+  REDIRECT: '/oauth2/redirect',
   ONBOARDING: '/onboarding',
   HOME: '/home',
   MAKE: '/make',

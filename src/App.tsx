@@ -1,17 +1,27 @@
+import useAuth from '@hooks/useAuth';
+import ROUTE from '@libs/constant/path';
 import { Router } from '@pages/Router';
-import { event, sendEvent } from 'analytics';
-import { hackleClient } from 'initializeApp';
 import { useEffect } from 'react';
-import useGlobalStore from 'store';
+import { useNavigate } from 'react-router';
 
 function App() {
-  const { nurseId } = useGlobalStore();
+  const {
+    state: { accessToken, accountMe },
+    actions: { handleLogin },
+  } = useAuth();
+  const navigate = useNavigate();
   useEffect(() => {
-    if (nurseId) {
-      sendEvent(event.login, nurseId.toString());
-      hackleClient.setUserId(nurseId.toString()); // @TODO 로그인 부착 시 삭제
+    if (accountMe && accountMe.status !== 'LINKED') {
+      navigate(ROUTE.SIGNUP);
+    }
+  }, [accountMe]);
+
+  useEffect(() => {
+    if (accessToken) {
+      handleLogin(accessToken);
     }
   }, []);
+
   return <Router />;
 }
 

@@ -9,8 +9,8 @@ import {
   UnlinkedIcon,
 } from '@assets/svg';
 import TextField from '@components/TextField';
-import useEditShiftStore from '@hooks/useEditShift/store';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/shiftTeam';
 import ROUTE from '@libs/constant/path';
 import { event, sendEvent } from 'analytics';

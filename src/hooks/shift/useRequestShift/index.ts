@@ -3,13 +3,17 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { findNurse, keydownEventMapper, moveFocusByKeydown } from '@hooks/useEditShift/handlers';
+import {
+  findNurse,
+  keydownEventMapper,
+  moveFocusByKeydown,
+} from '@hooks/shift/useEditShift/handlers';
 import { produce } from 'immer';
-import useGlobalStore from 'store';
 import { getReqShift, updateReqShift } from '@libs/api/shift';
 import { event, sendEvent } from 'analytics';
 import { match } from 'ts-pattern';
 import { getShiftTeams } from '@libs/api/shiftTeam';
+import useAuth from '@hooks/useAuth';
 
 const useRequestShift = (activeEffect = false) => {
   const [year, month, focus, currentShiftTeam, foldedLevels, wardShiftTypeMap, setState] =
@@ -25,7 +29,9 @@ const useRequestShift = (activeEffect = false) => {
       ],
       shallow
     );
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const queryClient = useQueryClient();
   const requestShiftQueryKey = ['requestShift', wardId, year, month, currentShiftTeam];

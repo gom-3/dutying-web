@@ -1,21 +1,24 @@
 import NavigationBar from '@components/NavigationBar';
+import useAuth from '@hooks/useAuth';
+import ROUTE from '@libs/constant/path';
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router';
-import useGlobalStore from 'store';
+import { Outlet, useNavigate } from 'react-router';
 
 function MainLayout() {
   const [isFold, setIsFold] = useState(false);
-  const { nurseId } = useGlobalStore();
+  const navigate = useNavigate();
+  const {
+    state: { isAuth },
+  } = useAuth();
 
   useEffect(() => {
-    // 임시 차단
-    // if (!account) navigate(LOGIN);
-  }, [nurseId]);
+    if (!isAuth) navigate(ROUTE.LOGIN);
+  }, [isAuth]);
 
   return (
     <div className={`h-full w-full bg-[#FDFCFE] ${!isFold ? 'pl-[10.125rem]' : 'pl-[2.625rem]'}`}>
       <NavigationBar isFold={isFold} setIsFold={setIsFold} />
-      <Outlet />
+      {isAuth && <Outlet />}
     </div>
   );
 }

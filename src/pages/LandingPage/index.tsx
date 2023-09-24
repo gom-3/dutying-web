@@ -9,13 +9,15 @@ import {
   PlaystoreIcon,
 } from '@assets/svg';
 import Button from '@components/Button';
+import useAuth from '@hooks/useAuth';
 import ROUTE from '@libs/constant/path';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import useGlobalStore from 'store';
 
 function LandingPage() {
-  const { isLogined } = useGlobalStore();
+  const {
+    state: { isAuth },
+  } = useAuth();
   const navigate = useNavigate();
 
   const [focus, setFocus] = useState('top');
@@ -88,7 +90,7 @@ function LandingPage() {
               >
                 문의하기
               </a>
-              {isLogined ? (
+              {isAuth ? (
                 <button className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-sub-2.5">
                   로그아웃
                 </button>

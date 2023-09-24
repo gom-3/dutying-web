@@ -7,7 +7,7 @@ export const mockAccount: Account = {
   isManager: false,
   modifiedAt: '2021-08-31T14:00:00.000Z',
   nurseId: null,
-  onboardingStatus: 'INITIAL',
+  status: 'INITIAL',
   phoneNum: '010-1234-5678',
   shiftTeamId: null,
   wardId: null,
@@ -39,5 +39,4 @@ export const mockNurse: Nurse = {
   ],
   memo: '간호사 메모입니다.',
   isDeleted: false,
-  status: 'DONE',
 };

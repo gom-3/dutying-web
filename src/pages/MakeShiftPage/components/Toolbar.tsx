@@ -15,7 +15,7 @@ import {
 import Button from '@components/Button';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
 import { event, sendEvent } from 'analytics';
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
 import Draggable from 'react-draggable';
 import ShiftBadge from '@components/ShiftBadge';

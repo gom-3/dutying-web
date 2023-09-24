@@ -6,19 +6,20 @@ import MemberPage from './MemberPage';
 import ROUTE from '@libs/constant/path';
 import LandingPage from './LandingPage';
 import SignupPage from './SignupPage';
+import { NotAuthzLayout } from '@components/Layouts';
+import LoginPage from './LoginPage';
+import RedirectPage from './LoginPage/RedirectPage';
 
 export const Router = () => {
   return (
     <Routes>
       <Route path={ROUTE.ROOT} element={<LandingPage />} />
       <Route path={ROUTE.SIGNUP} element={<SignupPage />} />
-      {/* <Route path={REDIRECT} element={<RedirectPage />} /> */}
-      {/* 인증된 사용자가 접근할 수 없는 페이지 */}
-      {/* <Route element={<NotAuthzLayout />}> */}
-      {/* <Route path={LOGIN} element={<LoginPage />} /> */}
-      {/* <Route path={ONBOARDING.ACCOUNT} element={<SetAccount />} /> */}
-      {/* <Route path={ONBOARDING.WARD} element={<SetWard />} /> */}
-      {/* </Route> */}
+      <Route path={ROUTE.REDIRECT} element={<RedirectPage />} />
+      인증된 사용자가 접근할 수 없는 페이지
+      <Route element={<NotAuthzLayout />}>
+        <Route path={ROUTE.LOGIN} element={<LoginPage />} />
+      </Route>
       {/* 인증되지 않은 사용자가 접근할 수 없는 페이지 */}
       <Route element={<MainLayout />}>
         <Route path={ROUTE.MAKE} element={<MakeShiftPage />} />

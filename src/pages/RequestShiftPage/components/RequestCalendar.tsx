@@ -3,7 +3,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useEffect, useRef } from 'react';
 import { FoldDutyIcon } from '@assets/svg';
 import { event, sendEvent } from 'analytics';
-import useRequestShift from '@hooks/useRequestShift';
+import useRequestShift from '@hooks/shift/useRequestShift';
 
 interface Props {
   isEditable?: boolean;

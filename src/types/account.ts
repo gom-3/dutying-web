@@ -16,7 +16,7 @@ type Account = {
   /** 병동 관리자 여부 */
   isManager: boolean;
   /** 온보딩 중 상태 */
-  onboardingStatus:
+  status:
     | 'INITIAL' // 계정 정보 입력 전
     | 'NURSE_INFO_PENDING' // 간호사 정보 입력 전
     | 'WARD_SELECT_PENDING' // 병동 생성 or 입장 선택 전

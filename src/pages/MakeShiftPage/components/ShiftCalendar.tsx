@@ -6,8 +6,8 @@ import { RefObject, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
-import useEditShift from '@hooks/useEditShift';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShift from '@hooks/shift/useEditShift';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface Props {

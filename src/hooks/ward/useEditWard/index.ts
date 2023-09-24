@@ -7,10 +7,12 @@ import {
   deleteShiftType,
   updateShiftType,
 } from '@libs/api/shiftType';
-import useGlobalStore from 'store';
+import useAuth from '@hooks/useAuth';
 
 const useEditWard = () => {
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const getWardQueryKey = ['ward', wardId];
   const queryClient = useQueryClient();
