@@ -21,11 +21,12 @@ const TextField = forwardRef(
           onChange={onChange}
           className={twMerge(
             'w-full rounded-[.625rem] px-[1.5625rem] font-apple text-[2.25rem] outline outline-1 outline-sub-4 focus:outline-main-1',
+            error && 'outline-red focus:outline-red',
             className
           )}
           {...props}
         />
-        <p className="absolute bottom-[-.3125rem] translate-y-[100%] text-main-2">{error}</p>
+        <p className="absolute bottom-[-0.5rem] translate-y-[100%] text-red">{error}</p>
       </div>
     );
   }

@@ -52,14 +52,14 @@ function SetNurseForm() {
   return (
     <form
       onSubmit={handleSubmit(createAccountNurse)}
-      className="mx-auto flex h-full w-[62.5rem] flex-col items-center bg-[#FDFCFE] pt-[7.6875rem]"
+      className="mx-auto flex h-full w-[62.5rem] flex-col items-center justify-center bg-[#FDFCFE]"
     >
       <div className="fixed left-[3.125rem] top-[1.875rem] flex gap-[1.25rem]">
         <LogoSymbolFill className="h-[1.875rem] w-[1.875rem]" />
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>
       <h1 className="self-start font-apple text-[2rem] font-semibold text-[#150B3C]">회원 정보</h1>
-      <div className="mt-[1.875rem] min-h-[22rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[4.375rem] py-[2.625rem] shadow-[0rem_.25rem_2.125rem_#EDE9F5]">
+      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-shadow-1">
         <div className="w-[75%]">
           <label
             htmlFor="name"
@@ -79,7 +79,7 @@ function SetNurseForm() {
             {...register('name')}
           />
         </div>
-        <div className="mt-[2.25rem] flex w-[75%] gap-[4.375rem]">
+        <div className="mt-[3.25rem] flex w-[75%] gap-[4.375rem]">
           <div className="flex-[1]">
             <label
               htmlFor="gender"
@@ -117,7 +117,8 @@ function SetNurseForm() {
           </div>
           <div className="flex-auto"></div>
         </div>
-        <div className="my-[2.9375rem] h-[.0625rem] w-[calc(100%+8.75rem)] translate-x-[-4.375rem] bg-sub-4.5" />
+      </div>
+      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-shadow-1">
         <div className="w-[35%]">
           <label
             htmlFor="employmentDate"
@@ -170,15 +171,15 @@ function SetNurseForm() {
               </div>
             </div>
           </div>
-          <Button
-            onClick={(e) => e.preventDefault()}
-            disabled={!isValid}
-            className="h-[5rem] w-[11.4375rem] text-center text-[2.25rem] font-semibold"
-          >
-            저장
-          </Button>
         </div>
       </div>
+      <Button
+        onClick={(e) => e.preventDefault()}
+        disabled={!isValid}
+        className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"
+      >
+        다음
+      </Button>
     </form>
   );
 }

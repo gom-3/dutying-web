@@ -190,7 +190,7 @@ function ShiftTeamList() {
                 <div className="flex flex-col gap-[.3125rem]">
                   {editShiftTeam?.shiftTeamId === shiftTeam.shiftTeamId ? (
                     <TextField
-                      forwardRef={clickAwayShiftTeamNameRef}
+                      ref={clickAwayShiftTeamNameRef}
                       value={editShiftTeam.updateShiftTeamDTO.name}
                       onKeyDown={(e) => e.key === 'Enter' && handleUpdateShiftTeam()}
                       onChange={(e) =>
@@ -341,7 +341,7 @@ function ShiftTeamList() {
                                 <DragIcon className="invisible absolute left-[.75rem] h-[1.5rem] w-[1.5rem] group-hover:visible" />
                                 <div className="peer relative font-apple text-[1.25rem] font-semibold text-sub-1">
                                   {nurse.name}
-                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-[#FF4A80]"></div>
+                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-red"></div>
                                 </div>
                                 <div className="invisible absolute top-0 z-30 flex translate-y-[-60%] items-center gap-[.5rem] whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
                                   <div
@@ -400,7 +400,7 @@ function ShiftTeamList() {
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
-                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible peer-hover:bg-red-600" />
+                                      <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible" />
                                     </div>
                                   )
                                 )}

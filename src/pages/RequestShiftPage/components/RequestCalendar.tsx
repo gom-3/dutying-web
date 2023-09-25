@@ -62,12 +62,12 @@ export default function RequestCalendar({ isEditable }: Props) {
                 ${
                   item.dayType === 'saturday'
                     ? j === focus?.day
-                      ? 'rounded-full bg-[#436DFF] text-white'
-                      : 'text-[#436DFF]'
+                      ? 'rounded-full bg-blue text-white'
+                      : 'text-blue'
                     : item.dayType === 'sunday' || item.dayType === 'holiday'
                     ? j === focus?.day
-                      ? 'rounded-full bg-[#FF4A80] text-white'
-                      : 'text-[#FF4A80]'
+                      ? 'rounded-full bg-red text-white'
+                      : 'text-red'
                     : item.dayType === 'workday'
                     ? j === focus?.day
                       ? 'rounded-full bg-main-1 text-white'
