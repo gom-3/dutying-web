@@ -3,17 +3,17 @@ import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 
-function NotAuthzLayout() {
+function AuthzLayout() {
   const navigate = useNavigate();
   const {
     state: { isAuth },
   } = useAuth();
 
   useEffect(() => {
-    if (isAuth) navigate(ROUTE.ROOT);
+    if (!isAuth) navigate(ROUTE.LOGIN);
   }, [isAuth]);
 
-  return !isAuth && <Outlet />;
+  return isAuth && <Outlet />;
 }
 
-export default NotAuthzLayout;
+export default AuthzLayout;

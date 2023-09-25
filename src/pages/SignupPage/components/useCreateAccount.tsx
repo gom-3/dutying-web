@@ -52,7 +52,10 @@ const useCreateAccount = () => {
   const validate = () => {
     if (!/^[가-힣|A-Z|a-z]{2,10}$/.test(account.name)) {
       setIsFilled(false);
-      setError({ key: 'name', message: '이름은 2~10자에 숫자나 특수문자를 사용할 수 없습니다.' });
+      setError({
+        key: 'name',
+        message: '이름은 2~10자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.',
+      });
       return false;
     }
     if (!/(\d{3})-(\d{4})-(\d{4})/.test(account.phoneNum)) {

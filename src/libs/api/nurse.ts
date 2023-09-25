@@ -1,10 +1,12 @@
 import axiosInstance from './client';
-import qs from 'qs';
 
-export type CreateNurseDTO = Pick<Nurse, 'name' | 'phoneNum' | 'gender' | 'isWorker'>;
+export type CreateNurseDTO = Pick<
+  Nurse,
+  'name' | 'phoneNum' | 'gender' | 'isWorker' | 'employmentDate'
+>;
 
 const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO) =>
-  (await axiosInstance.post<Nurse>(`/nurses?${qs.stringify(accountId)}`, createNurse)).data;
+  (await axiosInstance.post<Nurse>(`/nurses?accountId=${accountId}`, createNurse)).data;
 
 /** DELETE `/nurses/${nurseId}` */
 const getNurse = async (nurseId: number) =>

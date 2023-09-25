@@ -1,6 +1,6 @@
 import { FullLogo, LogoSymbolFill } from '@assets/svg';
 import { match } from 'ts-pattern';
-import SetAccount from './components/SetAccount';
+import SetNurseForm from './components/SetNurseForm';
 import { TailSpin } from 'react-loader-spinner';
 import useAuth from '@hooks/useAuth';
 
@@ -16,8 +16,8 @@ function SignupPage() {
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>
       {match(accountMe?.status)
-        .with('INITIAL', () => <SetAccount />)
-        .with('NURSE_INFO_PENDING', () => <SetAccount />)
+        .with('INITIAL', () => <SetNurseForm />)
+        .with('NURSE_INFO_PENDING', () => <SetNurseForm />)
         .with('WARD_SELECT_PENDING', () => <div>as</div>)
         .with('WARD_ENTRY_PENDING', () => <div>as</div>)
         .with('LINKED', () => <div>as</div>)
