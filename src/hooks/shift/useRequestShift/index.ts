@@ -13,7 +13,7 @@ import { getReqShift, updateReqShift } from '@libs/api/shift';
 import { event, sendEvent } from 'analytics';
 import { match } from 'ts-pattern';
 import { getShiftTeams } from '@libs/api/shiftTeam';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 
 const useRequestShift = (activeEffect = false) => {
   const [year, month, focus, currentShiftTeam, foldedLevels, wardShiftTypeMap, setState] =

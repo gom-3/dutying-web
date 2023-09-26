@@ -8,12 +8,6 @@ type Account = {
   shiftTeamId: number | null;
   email: string;
   name: string;
-  gender: string;
-  phoneNum: string;
-  modifiedAt: string;
-  /** 계정 삭제 여부 */
-  isDeleted: boolean;
-  /** 병동 관리자 여부 */
   isManager: boolean;
   /** 온보딩 중 상태 */
   status:

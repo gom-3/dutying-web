@@ -1,4 +1,4 @@
-import { CheckedIcon, FullLogo, LogoSymbolFill, UncheckedIcon } from '@assets/svg';
+import { BackIcon, CheckedIcon, UncheckedIcon } from '@assets/svg';
 import TextField from '@components/TextField';
 import Button from '@components/Button';
 import Select from '@components/Select';
@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { match } from 'ts-pattern';
 import { CreateNurseDTO } from '@libs/api/nurse';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 
 const schema = yup
   .object()
@@ -29,7 +29,7 @@ const schema = yup
   })
   .required();
 
-function SetNurseForm() {
+function RegisterWard() {
   const {
     formState: { errors, isValid },
     watch,
@@ -50,16 +50,12 @@ function SetNurseForm() {
   const watchIsWorker = watch('isWorker');
 
   return (
-    <form
-      onSubmit={handleSubmit(createAccountNurse)}
-      className="mx-auto flex h-full w-[62.5rem] flex-col items-center justify-center bg-[#FDFCFE]"
-    >
-      <div className="fixed left-[3.125rem] top-[1.875rem] flex gap-[1.25rem]">
-        <LogoSymbolFill className="h-[1.875rem] w-[1.875rem]" />
-        <FullLogo className="h-[1.875rem] w-[6.875rem]" />
-      </div>
-      <h1 className="self-start font-apple text-[2rem] font-semibold text-[#150B3C]">회원 정보</h1>
-      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-shadow-1">
+    <form onSubmit={handleSubmit(createAccountNurse)} className="flex w-full flex-col">
+      <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">
+        병동 생성
+      </h1>
+      <BackIcon className="absolute left-[-2.5rem] top-0 h-[3rem] w-[3rem] translate-x-[-100%]" />
+      <div className="mt-[3.75rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
         <div className="w-[75%]">
           <label
             htmlFor="name"
@@ -100,13 +96,13 @@ function SetNurseForm() {
           </div>
           <div className="flex-[2]">
             <label
-              htmlFor="phone"
+              htmlFor="phoneNum"
               className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
             >
               전화 번호
             </label>
             <TextField
-              id="phone"
+              id="phoneNum"
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
               error={match(errors.phoneNum?.type)
                 .with('matches', () => '전화번호 형식을 지켜주세요.')
@@ -118,7 +114,7 @@ function SetNurseForm() {
           <div className="flex-auto"></div>
         </div>
       </div>
-      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-shadow-1">
+      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
         <div className="w-[35%]">
           <label
             htmlFor="employmentDate"
@@ -174,7 +170,6 @@ function SetNurseForm() {
         </div>
       </div>
       <Button
-        onClick={(e) => e.preventDefault()}
         disabled={!isValid}
         className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"
       >
@@ -184,4 +179,4 @@ function SetNurseForm() {
   );
 }
 
-export default SetNurseForm;
+export default RegisterWard;

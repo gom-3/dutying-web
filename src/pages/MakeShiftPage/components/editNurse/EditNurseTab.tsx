@@ -36,7 +36,7 @@ const EditNurseTab = ({ isFixed, close }: Props) => {
         {!isFixed && <div className="mb-[.9375rem] font-apple text-sub-3">간호사별 관리</div>}
         <div
           style={{ height: 'calc(100vh - 19.5rem' }}
-          className="flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-shadow-1"
+          className="flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-banner"
         >
           <div className="m-[1.875rem] flex justify-start">
             <input

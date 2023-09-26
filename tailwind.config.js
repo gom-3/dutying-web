@@ -29,7 +29,7 @@ export default {
         line: ['LINESeedKR', 'sans-serif'],
       },
       boxShadow: {
-        'shadow-1': '0rem .25rem 2.125rem #EDE9F5',
+        banner: '0rem .25rem 2.125rem #EDE9F5',
         'shadow-2': '.1875rem .25rem 1.25rem 0rem #D2C7E7',
         'shadow-3': '.25rem .25rem 1.1875rem 0rem #68519533',
       },

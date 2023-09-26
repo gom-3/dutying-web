@@ -183,7 +183,7 @@ function ShiftTeamList() {
           {shiftTeams?.map((shiftTeam) => (
             <div
               ref={clickAwayRef}
-              className="mt-[1.375rem] flex w-[18.75rem] flex-col rounded-[.9375rem] border-[.0625rem] border-sub-4.5 shadow-shadow-1"
+              className="mt-[1.375rem] flex w-[18.75rem] flex-col rounded-[.9375rem] border-[.0625rem] border-sub-4.5 shadow-banner"
               key={shiftTeam.shiftTeamId}
             >
               <div className="relative flex w-full items-center justify-between rounded-t-[.9375rem] bg-sub-2 px-[1.25rem] py-[.875rem]">

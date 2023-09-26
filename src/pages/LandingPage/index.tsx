@@ -9,7 +9,7 @@ import {
   PlaystoreIcon,
 } from '@assets/svg';
 import Button from '@components/Button';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -160,14 +160,22 @@ function LandingPage() {
             </p>
           </div>
           <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
-            <div className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3">
+            <a
+              href="https://abr.ge/bv13wa"
+              target="_blank"
+              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+            >
               <PlaystoreIcon className="w-[17px] xl:w-[1.75rem]" />
               Google Play
-            </div>
-            <div className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3">
+            </a>
+            <a
+              href="https://abr.ge/bv13wa"
+              target="_blank"
+              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+            >
               <AppstoreIcon className="w-[17px] xl:w-[1.9375rem]" />
               App Store
-            </div>
+            </a>
           </div>
         </div>
       </div>

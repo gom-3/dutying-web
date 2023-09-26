@@ -7,7 +7,7 @@ import {
   deleteShiftType,
   updateShiftType,
 } from '@libs/api/shiftType';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditWard = () => {
   const {

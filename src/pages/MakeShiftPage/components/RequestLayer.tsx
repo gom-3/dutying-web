@@ -28,7 +28,7 @@ function RequestLayer({ isAccept, request, showCheck, showSlash }: Props) {
               <p className="absolute font-poppins text-[.6rem] text-white">{request.shortName}</p>
             </div>
           </div>
-          <div className="invisible absolute bottom-[-1.625rem] z-10 whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-1 group-hover:visible">
+          <div className="invisible absolute bottom-[-1.625rem] z-10 whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-banner group-hover:visible">
             <div
               className="absolute left-[50%] top-[-0.375rem] h-0 w-0 translate-x-[-50%]"
               style={{

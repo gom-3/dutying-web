@@ -21,7 +21,7 @@ import {
 import { getWard } from '@libs/api/ward';
 import { produce } from 'immer';
 import useEditShift from '@hooks/shift/useEditShift';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(

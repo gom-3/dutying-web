@@ -1,4 +1,4 @@
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';

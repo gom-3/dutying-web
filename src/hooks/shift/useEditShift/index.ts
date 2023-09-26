@@ -17,7 +17,7 @@ import {
   updateCheckFaultOption,
 } from './handlers';
 import { getShiftTeams } from '@libs/api/shiftTeam';
-import useAuth from '@hooks/useAuth';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditShift = (activeEffect = false) => {
   const [

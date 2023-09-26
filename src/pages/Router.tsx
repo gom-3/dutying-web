@@ -14,6 +14,7 @@ import AuthzLayout from '@components/Layouts/AuthzLayout';
 export const Router = () => {
   return (
     <Routes>
+      <Route path="/test" element={<SignupPage />} />
       <Route path={ROUTE.ROOT} element={<LandingPage />} />
       {/* 인증된 사용자가 접근할 수 없는 페이지 */}
       <Route element={<NotAuthzLayout />}>

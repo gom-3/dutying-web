@@ -6,7 +6,12 @@ export type CreateNurseDTO = Pick<
 >;
 
 const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO) =>
-  (await axiosInstance.post<Nurse>(`/nurses?accountId=${accountId}`, createNurse)).data;
+  (
+    await axiosInstance.post<Nurse>(`/nurses?accountId=${accountId}`, {
+      ...createNurse,
+      phoneNum: createNurse.phoneNum.replace(/-+/g, ''),
+    })
+  ).data;
 
 /** DELETE `/nurses/${nurseId}` */
 const getNurse = async (nurseId: number) =>
