@@ -1,4 +1,4 @@
-import { BackIcon, CheckedIcon, UncheckedIcon } from '@assets/svg';
+import { CheckedIcon, UncheckedIcon } from '@assets/svg';
 import TextField from '@components/TextField';
 import Button from '@components/Button';
 import Select from '@components/Select';
@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { match } from 'ts-pattern';
 import { CreateNurseDTO } from '@libs/api/nurse';
-import useAuth from '@hooks/auth/useAuth';
+import useRegister from '@hooks/auth/useRegister';
 
 const schema = yup
   .object()
@@ -29,7 +29,7 @@ const schema = yup
   })
   .required();
 
-function RegisterWard() {
+function RegisterNurse() {
   const {
     formState: { errors, isValid },
     watch,
@@ -46,15 +46,17 @@ function RegisterWard() {
   });
   const {
     actions: { createAccountNurse },
-  } = useAuth();
+  } = useRegister();
   const watchIsWorker = watch('isWorker');
 
   return (
-    <form onSubmit={handleSubmit(createAccountNurse)} className="flex w-full flex-col">
+    <form
+      onSubmit={handleSubmit(createAccountNurse)}
+      className="my-auto flex w-full flex-col items-center justify-center"
+    >
       <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">
-        병동 생성
+        회원 정보
       </h1>
-      <BackIcon className="absolute left-[-2.5rem] top-0 h-[3rem] w-[3rem] translate-x-[-100%]" />
       <div className="mt-[3.75rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
         <div className="w-[75%]">
           <label
@@ -179,4 +181,4 @@ function RegisterWard() {
   );
 }
 
-export default RegisterWard;
+export default RegisterNurse;

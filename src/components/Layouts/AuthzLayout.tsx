@@ -10,9 +10,11 @@ function AuthzLayout() {
   } = useAuth();
 
   useEffect(() => {
-    if (!isAuth) navigate(ROUTE.LOGIN);
+    if (!isAuth) {
+      navigate(ROUTE.LOGIN);
+    }
     if (accountMe && accountMe.status !== 'LINKED') {
-      location.replace(ROUTE.SIGNUP);
+      location.replace(ROUTE.REGISTER);
     }
   }, [isAuth]);
 

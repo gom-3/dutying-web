@@ -1,9 +1,8 @@
 import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
 import axiosInstance from '@libs/api/client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getAccountMe } from '@libs/api/auth';
-import { CreateNurseDTO, createAccountNurse } from '@libs/api/nurse';
 
 const useAuth = () => {
   const [isAuth, accessToken, nurseId, accountId, wardId, setState, initState] = useAuthStore(
@@ -19,7 +18,6 @@ const useAuth = () => {
     shallow
   );
 
-  const queryClient = useQueryClient();
   const accountMeQuery = ['accountMe', accessToken];
 
   const { data: accountMe } = useQuery(accountMeQuery, getAccountMe, {
@@ -40,16 +38,6 @@ const useAuth = () => {
     setState('accessToken', accessToken);
   };
 
-  const { mutate: createAccountNurseMutate } = useMutation(
-    async ({ accountId, createNurse }: { accountId: number; createNurse: CreateNurseDTO }) =>
-      createAccountNurse(accountId, createNurse),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(accountMeQuery);
-      },
-    }
-  );
-
   return {
     queryKey: {
       accountMeQuery,
@@ -64,8 +52,6 @@ const useAuth = () => {
     },
     actions: {
       handleLogin,
-      createAccountNurse: (createNurse: CreateNurseDTO) =>
-        accountId && createAccountNurseMutate({ accountId, createNurse }),
     },
   };
 };

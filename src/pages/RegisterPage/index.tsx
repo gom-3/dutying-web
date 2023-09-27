@@ -8,7 +8,7 @@ import { FullLogo, LogoSymbolFill } from '@assets/svg';
 // import PendingEnter from './components/PendingEnter';
 import RegisterWard from './components/RegisterWard';
 
-function SignupPage() {
+function RegisterPage() {
   // const {
   // state: { accountMe },
   // } = useAuth();
@@ -38,4 +38,4 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default RegisterPage;

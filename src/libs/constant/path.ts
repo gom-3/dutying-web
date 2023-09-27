@@ -1,6 +1,6 @@
 const ROUTE = {
   ROOT: '/',
-  SIGNUP: '/signup',
+  REGISTER: '/register',
   LOGIN: '/login',
   REDIRECT: '/oauth2/redirect',
   ONBOARDING: '/onboarding',

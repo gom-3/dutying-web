@@ -2,7 +2,12 @@ import axiosInstance from './client';
 
 const getWard = async (wardId: number) => (await axiosInstance.get<Ward>(`/wards/${wardId}`)).data;
 
-export type CreateWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
+export type CreateWardDTO = {
+  name: string;
+  hospitalName: string;
+  wardShiftTypes: Omit<WardShiftType, 'wardShiftTypeId'>[];
+  shiftTeams: string[][];
+};
 const createWrad = async (accountId: number, createWardDTO: CreateWardDTO) =>
   (await axiosInstance.post<Ward>(`/wards/accounts/${accountId}`, createWardDTO)).data;
 

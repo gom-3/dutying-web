@@ -14,14 +14,13 @@ interface Props {
   onDelete: () => void;
 }
 
-function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props) {
-  const initialValue: CreateShiftTypeDTO = {
+function CreateShiftTypeModal({ open, shiftType, close, onSubmit, onDelete }: Props) {
+  const initialValue = {
     name: '',
     startTime: '00:00',
     endTime: '00:00',
     color: '#FFFFFF',
     isOff: false,
-    isDefault: false,
     shortName: '',
   };
   const [writeShift, setWriteShift] = useState(initialValue);
@@ -130,7 +129,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
               </div>
             </div>
             <div className="flex">
-              {!shiftType?.isDefault && (
+              {shiftType && (
                 <Button
                   className="absolute bottom-[1.875rem] right-[7.9375rem] h-[2.5rem] w-[4.6875rem] border-sub-2.5 text-[1.25rem] font-semibold text-sub-2.5"
                   type="outline"
@@ -161,4 +160,4 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     : null;
 }
 
-export default CreateShiftModal;
+export default CreateShiftTypeModal;

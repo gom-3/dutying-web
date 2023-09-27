@@ -78,8 +78,9 @@ function LandingPage() {
             </div>
             <div className="flex h-[2.5rem] items-center gap-[2.8125rem]">
               <a
+                href="https://abr.ge/bv13wa"
+                target="_blank"
                 className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5 underline"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
                 다운로드
               </a>
@@ -108,7 +109,7 @@ function LandingPage() {
       </div>
 
       {/*메인*/}
-      <div className='h-screen w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px] xl:relative  xl:h-[1080px] xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
+      <div className='h-screen w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px] xl:relative  xl:h-screen xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:container xl:relative xl:top-[50%] xl:h-fit xl:translate-y-[-50%] xl:pt-0">
           <h1 className="font-line text-[32px] font-bold leading-[42px] text-main-1 xl:text-[4rem] xl:leading-[5.4375rem] xl:text-white">
             근무표,
@@ -184,7 +185,7 @@ function LandingPage() {
       <div
         id="web"
         ref={webSection}
-        className='h-screen w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat xl:h-[1080px]  xl:bg-[url("/img/landing_2.png")]'
+        className='h-screen w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat xl:h-screen  xl:bg-[url("/img/landing_2.png")]'
       >
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
@@ -209,7 +210,7 @@ function LandingPage() {
       </div>
 
       {/*메인 3*/}
-      <div className='h-screen w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat xl:h-[1080px]  xl:bg-[url("/img/landing_3.png")]'>
+      <div className='h-screen w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat xl:h-screen  xl:bg-[url("/img/landing_3.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
@@ -238,7 +239,7 @@ function LandingPage() {
       <div
         id="mobile"
         ref={mobileSection}
-        className='h-screen w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat xl:h-[1080px]  xl:bg-[url("/img/landing_4.png")]'
+        className='h-screen w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat xl:h-screen  xl:bg-[url("/img/landing_4.png")]'
       >
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
@@ -263,7 +264,7 @@ function LandingPage() {
       </div>
 
       {/*메인 5*/}
-      <div className='h-screen w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:h-[1080px]  xl:bg-[url("/img/landing_5.png")]'>
+      <div className='h-screen w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:h-screen  xl:bg-[url("/img/landing_5.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
@@ -315,14 +316,22 @@ function LandingPage() {
                 모바일 앱
               </div>
               <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-0">
-                <div className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base">
+                <a
+                  href="https://abr.ge/bv13wa"
+                  target="_blank"
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                >
                   <PlaystoreGrayIcon className="w-[17px]" />
                   Google Play
-                </div>
-                <div className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base">
+                </a>
+                <a
+                  href="https://abr.ge/bv13wa"
+                  target="_blank"
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                >
                   <AppstoreGrayIcon className="w-[19px]" />
                   App Store
-                </div>
+                </a>
               </div>
             </div>
           </div>

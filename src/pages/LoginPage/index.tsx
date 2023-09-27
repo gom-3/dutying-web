@@ -7,7 +7,7 @@ const LoginPage = () => {
   return (
     <div className="bg- flex w-screen justify-center">
       <div className="flex h-screen w-[100vh] flex-col items-center justify-between bg-white p-[4.5rem]">
-        <div className="flex" onClick={() => navigate(ROUTE.ROOT)}>
+        <div className="flex cursor-pointer" onClick={() => navigate(ROUTE.ROOT)}>
           <LogoSymbolFill className="mr-[2.3438rem] h-[3.125rem] w-[2.9688rem]" />
           <FullLogo className="h-[3.125rem] w-[11.3125rem]" />
         </div>
