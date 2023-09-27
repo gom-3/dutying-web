@@ -4,8 +4,7 @@ import Button from '@components/Button';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { P, match } from 'ts-pattern';
-import useRegister from '@hooks/auth/useRegister';
+import { match } from 'ts-pattern';
 import { useEffect, useState } from 'react';
 import TimeInput from '@components/TimeInput';
 import CreateShiftModal from '@pages/MakeShiftPage/components/editWard/CreateShiftModal';
@@ -62,9 +61,6 @@ function RegisterWard() {
       isOff: false,
     },
   ]);
-  const {
-    actions: { createWrad },
-  } = useRegister();
   const {
     formState: { errors, isValid },
     register,
