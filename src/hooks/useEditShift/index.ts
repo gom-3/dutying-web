@@ -37,6 +37,7 @@ const useEditShift = (activeEffect = false) => {
     faults,
     checkFaultOptions,
     wardShiftTypeMap,
+    readonly,
     showLayer,
     setState,
   ] = useEditShiftStore(
@@ -51,6 +52,7 @@ const useEditShift = (activeEffect = false) => {
       state.faults,
       state.checkFaultOptions,
       state.wardShiftTypeMap,
+      state.readonly,
       state.showLayer,
       state.setState,
     ],
@@ -438,6 +440,25 @@ const useEditShift = (activeEffect = false) => {
     [shift, focus, editHistory]
   );
 
+  const handleToggleEditMode = useCallback(() => {
+    if (readonly) {
+      setState('readonly', false);
+    } else {
+      setState('readonly', true);
+      setState('focus', null);
+      shift &&
+        setState(
+          'foldedLevels',
+          shift.divisionShiftNurses.map(() => false)
+        );
+    }
+  }, [readonly, shift]);
+
+  const handleCreateNextMonthShift = useCallback(() => {
+    setState('month', new Date().getMonth() + 2);
+    handleToggleEditMode();
+  }, []);
+
   useEffect(() => {
     if (activeEffect && wardConstraint)
       setState('checkFaultOptions', updateCheckFaultOption(wardConstraint));
@@ -476,11 +497,14 @@ const useEditShift = (activeEffect = false) => {
       checkFaultOptions,
       wardShiftTypeMap,
       wardConstraint,
+      readonly,
       showLayer,
       currentShiftTeam,
       shiftTeams,
     },
     actions: {
+      toggleEditMode: handleToggleEditMode,
+      createNextMonthShift: handleCreateNextMonthShift,
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),

@@ -2,7 +2,7 @@
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { DragIcon, FoldDutyIcon, PlusIcon2 } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
@@ -17,6 +17,7 @@ interface Props {
 export default function ShiftCalendar({ isEditable }: Props) {
   const {
     state: {
+      readonly,
       year,
       month,
       shift,
@@ -41,51 +42,56 @@ export default function ShiftCalendar({ isEditable }: Props) {
     selectNurse(null);
   });
 
-  const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
-    if (!destination || !shiftTeams || !shift || !currentShiftTeam) return null;
-    if (source.droppableId === destination.droppableId && destination.index === source.index)
-      return;
+  const onDragEnd = useCallback(
+    ({ source, destination, draggableId }: DropResult) => {
+      if (!destination || !shiftTeams || !shift || !currentShiftTeam) return null;
+      if (source.droppableId === destination.droppableId && destination.index === source.index)
+        return;
 
-    const sourceDivision = parseInt(source.droppableId);
-    const destinationDivision = parseInt(destination.droppableId);
+      const sourceDivision = parseInt(source.droppableId);
+      const destinationDivision = parseInt(destination.droppableId);
 
-    const dragedNurse = shift.divisionShiftNurses[sourceDivision].find(
-      (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
-    )!.shiftNurse;
-    const destinationNurses = shift.divisionShiftNurses[destinationDivision];
+      const dragedNurse = shift.divisionShiftNurses[sourceDivision].find(
+        (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
+      )!.shiftNurse;
+      const destinationNurses = shift.divisionShiftNurses[destinationDivision];
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destinationNurses.findIndex((x) => x.shiftNurse.shiftNurseId === dragedNurse.shiftNurseId) <
-        destination.index
-    ) {
-      moveNurseOrder(
-        dragedNurse.nurseId,
-        currentShiftTeam.shiftTeamId,
-        currentShiftTeam.shiftTeamId,
-        destinationNurses[0].shiftNurse.divisionNum,
-        destination.index === 0 ? 0 : destinationNurses[destination.index].shiftNurse.priority,
-        destination.index === destinationNurses.length - 1
-          ? destinationNurses[destination.index].shiftNurse.priority + 2024
-          : destinationNurses[destination.index + 1].shiftNurse.priority,
-        year.toString() + '-' + month.toString().padStart(2, '0')
-      );
-    } else {
-      moveNurseOrder(
-        dragedNurse.nurseId,
-        currentShiftTeam.shiftTeamId,
-        currentShiftTeam.shiftTeamId,
-        destinationNurses[0].shiftNurse.divisionNum,
-        destination.index === 0 ? 0 : destinationNurses[destination.index - 1].shiftNurse.priority,
-        destination.index === destinationNurses.length
-          ? destinationNurses[destination.index - 1].shiftNurse.priority + 2024
-          : destinationNurses[destination.index].shiftNurse.priority,
-        year.toString() + '-' + month.toString().padStart(2, '0')
-      );
-    }
+      if (
+        destination.droppableId === source.droppableId &&
+        destinationNurses.findIndex((x) => x.shiftNurse.shiftNurseId === dragedNurse.shiftNurseId) <
+          destination.index
+      ) {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          currentShiftTeam.shiftTeamId,
+          currentShiftTeam.shiftTeamId,
+          destinationNurses[0].shiftNurse.divisionNum,
+          destination.index === 0 ? 0 : destinationNurses[destination.index].shiftNurse.priority,
+          destination.index === destinationNurses.length - 1
+            ? destinationNurses[destination.index].shiftNurse.priority + 2024
+            : destinationNurses[destination.index + 1].shiftNurse.priority,
+          year.toString() + '-' + month.toString().padStart(2, '0')
+        );
+      } else {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          currentShiftTeam.shiftTeamId,
+          currentShiftTeam.shiftTeamId,
+          destinationNurses[0].shiftNurse.divisionNum,
+          destination.index === 0
+            ? 0
+            : destinationNurses[destination.index - 1].shiftNurse.priority,
+          destination.index === destinationNurses.length
+            ? destinationNurses[destination.index - 1].shiftNurse.priority + 2024
+            : destinationNurses[destination.index].shiftNurse.priority,
+          year.toString() + '-' + month.toString().padStart(2, '0')
+        );
+      }
 
-    sendEvent(event.move_nurse_md);
-  };
+      sendEvent(event.move_nurse_md);
+    },
+    [shiftTeams, shift, currentShiftTeam]
+  );
 
   useEffect(() => {
     if (focus) {
@@ -163,7 +169,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
           <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
         </div>
       </div>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
         <div
           className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pt-[1.25rem] scrollbar-hide"
           ref={containerRef}
@@ -200,20 +206,23 @@ export default function ShiftCalendar({ isEditable }: Props) {
                         {...provided.droppableProps}
                       >
                         <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-                          <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
-                            <FoldDutyIcon
-                              className="absolute left-[50%] top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
-                              onClick={() => {
-                                sendEvent(event.spread_division);
-                                foldLevel(level);
-                              }}
-                            />
-                          </div>
+                          {!readonly && (
+                            <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
+                              <FoldDutyIcon
+                                className="absolute left-[50%] top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
+                                onClick={() => {
+                                  sendEvent(event.spread_division);
+                                  foldLevel(level);
+                                }}
+                              />
+                            </div>
+                          )}
                           {rows.map((row, rowIndex) => (
                             <Draggable
                               draggableId={row.shiftNurse.shiftNurseId.toString()}
                               index={rowIndex}
                               key={row.shiftNurse.shiftNurseId}
+                              isDragDisabled={readonly}
                             >
                               {(provided) => (
                                 <div
@@ -235,7 +244,9 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                   {...provided.dragHandleProps}
                                 >
                                   <div className="relative w-[2.125rem] shrink-0">
-                                    <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
+                                    {!readonly && (
+                                      <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
+                                    )}
                                   </div>
                                   <div
                                     className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
@@ -246,28 +257,34 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                     {row.shiftNurse.name}
                                   </div>
                                   <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
-                                    <button
-                                      className="h-[1.875rem] w-[1.875rem] rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4"
-                                      onClick={() => {
-                                        sendEvent(event.focus_carried);
-                                      }}
-                                      onKeyDown={(e) => {
-                                        e.preventDefault();
-                                        if (e.key === 'ArrowUp')
-                                          updateCarry(
-                                            row.shiftNurse.shiftNurseId,
-                                            row.shiftNurse.carried + 1
-                                          );
-                                        if (e.key === 'ArrowDown')
-                                          updateCarry(
-                                            row.shiftNurse.shiftNurseId,
-                                            row.shiftNurse.carried - 1
-                                          );
-                                        sendEvent(event.change_carried);
-                                      }}
-                                    >
-                                      {row.shiftNurse.carried}
-                                    </button>
+                                    {readonly ? (
+                                      <div className="h-[1.875rem] w-[1.875rem] cursor-default rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4">
+                                        {row.shiftNurse.carried}
+                                      </div>
+                                    ) : (
+                                      <button
+                                        className="h-[1.875rem] w-[1.875rem] rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4"
+                                        onClick={() => {
+                                          sendEvent(event.focus_carried);
+                                        }}
+                                        onKeyDown={(e) => {
+                                          e.preventDefault();
+                                          if (e.key === 'ArrowUp')
+                                            updateCarry(
+                                              row.shiftNurse.shiftNurseId,
+                                              row.shiftNurse.carried + 1
+                                            );
+                                          if (e.key === 'ArrowDown')
+                                            updateCarry(
+                                              row.shiftNurse.shiftNurseId,
+                                              row.shiftNurse.carried - 1
+                                            );
+                                          sendEvent(event.change_carried);
+                                        }}
+                                      >
+                                        {row.shiftNurse.carried}
+                                      </button>
+                                    )}
                                   </div>
                                   <div className="flex w-[5.625rem] gap-[.125rem]">
                                     {row.lastWardShiftList.map((current, j) => (
@@ -300,8 +317,10 @@ export default function ShiftCalendar({ isEditable }: Props) {
                               ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''} 
                               ${j === focus?.day && 'bg-main-4'}`}
                                         >
-                                          {showLayer.fault && fault && <FaultLayer fault={fault} />}
-                                          {request !== null && current !== null && (
+                                          {!readonly && showLayer.fault && fault && (
+                                            <FaultLayer fault={fault} />
+                                          )}
+                                          {!readonly && request !== null && current !== null && (
                                             <RequestLayer
                                               isAccept={request === current}
                                               request={wardShiftTypeMap.get(request)!}
@@ -312,6 +331,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                           <ShiftBadge
                                             key={j}
                                             onClick={() => {
+                                              if (readonly) return;
                                               changeFocus?.({
                                                 shiftNurseName: row.shiftNurse.name,
                                                 shiftNurseId: row.shiftNurse.shiftNurseId,
@@ -327,8 +347,12 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                                 : wardShiftTypeMap.get(current)
                                             }
                                             isOnlyRequest={current === null && request !== null}
-                                            className={`z-10 cursor-pointer 
-                                ${isFocused && 'outline outline-[.125rem] outline-main-1'}`}
+                                            className={`z-10 ${
+                                              readonly ? 'cursor-default' : 'cursor-pointer'
+                                            } ${
+                                              isFocused &&
+                                              'outline outline-[.125rem] outline-main-1'
+                                            }`}
                                             forwardRef={
                                               isFocused
                                                 ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
@@ -369,46 +393,49 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                       </div>
                                     </div>
                                   </div>
-                                  {rowIndex !== rows.length - 1 ? (
-                                    <div
-                                      className="absolute bottom-0 w-full"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        editDivision(
-                                          currentShiftTeam.shiftTeamId,
-                                          row.shiftNurse.priority,
-                                          1,
-                                          year.toString() + '-' + month.toString().padStart(2, '0')
-                                        );
-                                        sendEvent(event.create_division_md);
-                                      }}
-                                    >
-                                      <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
-                                      <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
-                                      <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
-                                    </div>
-                                  ) : (
-                                    level !== shift.divisionShiftNurses.length - 1 && (
-                                      <div
-                                        className="absolute bottom-0 w-full"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          editDivision(
-                                            currentShiftTeam.shiftTeamId,
-                                            row.shiftNurse.priority,
-                                            -1,
-                                            year.toString() +
-                                              '-' +
-                                              month.toString().padStart(2, '0')
-                                          );
-                                          sendEvent(event.delete_division_md);
-                                        }}
-                                      >
-                                        <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
-                                        <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible peer-hover:bg-red-600" />
-                                      </div>
-                                    )
-                                  )}
+                                  {rowIndex !== rows.length - 1
+                                    ? !readonly && (
+                                        <div
+                                          className="absolute bottom-0 w-full"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            editDivision(
+                                              currentShiftTeam.shiftTeamId,
+                                              row.shiftNurse.priority,
+                                              1,
+                                              year.toString() +
+                                                '-' +
+                                                month.toString().padStart(2, '0')
+                                            );
+                                            sendEvent(event.create_division_md);
+                                          }}
+                                        >
+                                          <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
+                                          <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                          <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
+                                        </div>
+                                      )
+                                    : level !== shift.divisionShiftNurses.length - 1 &&
+                                      !readonly && (
+                                        <div
+                                          className="absolute bottom-0 w-full"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            editDivision(
+                                              currentShiftTeam.shiftTeamId,
+                                              row.shiftNurse.priority,
+                                              -1,
+                                              year.toString() +
+                                                '-' +
+                                                month.toString().padStart(2, '0')
+                                            );
+                                            sendEvent(event.delete_division_md);
+                                          }}
+                                        >
+                                          <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
+                                          <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible peer-hover:bg-red-600" />
+                                        </div>
+                                      )}
                                 </div>
                               )}
                             </Draggable>

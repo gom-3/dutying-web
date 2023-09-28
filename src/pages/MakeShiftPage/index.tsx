@@ -2,15 +2,12 @@ import Toolbar from './components/Toolbar';
 import CountDutyByDay from './components/CountDutyByDay';
 import ShiftCalendar from './components/ShiftCalendar';
 import Panel from './components/Panel';
-import useEditShift from '@hooks/useEditShift';
 import NurseEditModal from './components/NurseEditModal';
+import useEditShift from '@hooks/useEditShift';
 
 const MakeShiftPage = () => {
-  const {
-    state: { shiftStatus },
-  } = useEditShift(true);
-
-  return shiftStatus === 'success' ? (
+  useEditShift(true);
+  return (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
       <Toolbar />
       <ShiftCalendar isEditable />
@@ -20,7 +17,7 @@ const MakeShiftPage = () => {
       </div>
       <NurseEditModal />
     </div>
-  ) : null;
+  );
 };
 
 export default MakeShiftPage;
