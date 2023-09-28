@@ -24,7 +24,7 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
         className={`z-10 ${canHover && 'group-hover:translate-x-0'} ${
           !isFold ? 'sticky' : 'fixed'
         } top-0 duration-500 ease-out ${
-          !isFold ? '' : 'translate-x-[-7.5rem]'
+          !isFold ? '' : 'translate-x-[-8rem]'
         } left-0 flex h-screen w-[10.125rem] flex-col items-center border-r border-sub-4 bg-white font-apple text-base text-sub-3`}
       >
         <div
