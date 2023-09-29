@@ -7,13 +7,13 @@ import { RestoreIcon, RestoreIconDisable } from '@assets/svg';
 
 function Panel() {
   const {
-    state: { faults, histories },
+    state: { readonly, faults, histories, shiftStatus },
     actions: { moveHistory, changeFocus },
   } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('histories');
 
-  return (
+  return !readonly && shiftStatus === 'success' ? (
     <div
       className={twMerge(
         'mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-banner',
@@ -114,7 +114,7 @@ function Panel() {
         {open ? '닫기' : '펼치기'}
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default Panel;

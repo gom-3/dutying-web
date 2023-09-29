@@ -6,11 +6,8 @@ import useEditShift from '@hooks/shift/useEditShift';
 import NurseEditModal from './components/NurseEditModal';
 
 const MakeShiftPage = () => {
-  const {
-    state: { shiftStatus },
-  } = useEditShift(true);
-
-  return shiftStatus === 'success' ? (
+  useEditShift(true);
+  return (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
       <Toolbar />
       <ShiftCalendar isEditable />
@@ -20,7 +17,7 @@ const MakeShiftPage = () => {
       </div>
       <NurseEditModal />
     </div>
-  ) : null;
+  );
 };
 
 export default MakeShiftPage;

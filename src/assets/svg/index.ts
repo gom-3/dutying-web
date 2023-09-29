@@ -56,6 +56,7 @@ export { default as SavingIcon } from './SavingIcon';
 export { default as SelectboxArrowIcon } from './SelectboxArrowIcon';
 export { default as SettingIcon } from './SettingIcon';
 export { default as SettingIconSelected } from './SettingIconSelected';
+export { default as ShareIcon } from './ShareIcon';
 export { default as SixDotsIcon } from './SixDotsIcon';
 export { default as ToggleOffIcon } from './ToggleOffIcon';
 export { default as ToggleOnIcon } from './ToggleOnIcon';
