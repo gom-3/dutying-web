@@ -8,7 +8,6 @@ import {
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
-import Button from '@components/Button';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
 import { useEffect, useRef, useState } from 'react';
@@ -52,9 +51,13 @@ function LandingPage() {
         <div className="mx-auto flex h-full w-[85%] items-center xl:container">
           <LogoWithSymbol className="w-[98.5504px] shrink-0 xl:w-[8.4375rem]" />
           <div className="flex w-full items-center xl:hidden">
-            <Button className="ml-auto px-[10px] py-[5px] text-[12px] font-semibold">
+            <a
+              href="https://abr.ge/bv13wa"
+              target="_blank"
+              className="ml-auto rounded-[1.875rem] bg-main-1 px-[10px] py-[5px] font-apple text-[12px] font-semibold text-white"
+            >
               다운로드
-            </Button>
+            </a>
             <MenuIcon className="ml-[20px] h-[24px] w-[24px]" />
           </div>
           <div className="hidden w-full items-center xl:flex">
