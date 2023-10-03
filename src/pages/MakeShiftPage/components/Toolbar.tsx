@@ -107,7 +107,7 @@ function Toolbar() {
       />
       {openInfo && (
         <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
-          <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
+          <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
             <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
               <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
               <CancelIcon
@@ -115,9 +115,9 @@ function Toolbar() {
                 onClick={() => setOpenInfo(false)}
               />
             </div>
-            <div className="flex h-[3.625rem] items-center justify-center gap-[1.25rem]">
+            <div className="flex flex-wrap items-center justify-start gap-[1.25rem] py-[.875rem] pl-[2.5rem]">
               {shift?.wardShiftTypes.map((shiftType, index) => (
-                <div key={index} className="flex items-center gap-[.3125rem]">
+                <div key={index} className="flex shrink-0 items-center gap-[.3125rem]">
                   <ShiftBadge key={index} shiftType={shiftType} />
                   <p className="font-apple text-[.875rem] text-sub-2">
                     {shiftType.name}({shiftType.shortName})

@@ -16,7 +16,7 @@ const useGlobalStore = create<Store>()(
   devtools(
     persist(
       (set, get) => ({
-        nurseId: 1,
+        nurseId: 12,
         wardId: 2,
         setState: (key, value) =>
           set(
