@@ -21,7 +21,7 @@ export const useRequestShiftStore = create<Store>()(
     persist(
       (set, get) => ({
         year: new Date().getFullYear(),
-        month: new Date().getMonth() + 1,
+        month: new Date().getMonth() + 2,
         focus: null,
         currentShiftTeam: null,
         foldedLevels: null,
