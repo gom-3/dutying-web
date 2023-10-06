@@ -81,24 +81,27 @@ export const shiftToExcel = (month: number, shift: Shift) => {
             : '';
         return acc;
       }, {} as { [key: string]: string }),
-      ...shift.wardShiftTypes.reduce((acc, shiftType, index) => {
+      ...shift.wardShiftTypes.reduce((acc, shiftType) => {
         acc[shiftType.shortName] = dutyRow.wardShiftList.filter(
-          (current) => current === index
+          (current) => current === shiftType.wardShiftTypeId
         ).length;
         return acc;
       }, {} as { [key: string]: number }),
       WO: dutyRow.wardShiftList.filter(
         (current, i) =>
-          current === 3 && shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
+          shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)?.name === '오프' &&
+          shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
       ).length,
     })
   );
 
-  shift.wardShiftTypes.map((shiftType, index) => {
+  shift.wardShiftTypes.map((shiftType) => {
     worksheet.addRow({
       lastShift: shiftType.name,
       ...shift.days.reduce((acc, _, i) => {
-        acc[i + 1] = flatRows.filter((item) => item.wardShiftList[i] === index).length;
+        acc[i + 1] = flatRows.filter(
+          (item) => item.wardShiftList[i] === shiftType.wardShiftTypeId
+        ).length;
         return acc;
       }, {} as { [key: string]: number }),
     });
