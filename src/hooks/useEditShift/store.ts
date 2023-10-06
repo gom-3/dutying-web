@@ -13,6 +13,7 @@ interface State {
   faults: Faults;
   checkFaultOptions: CheckFaultOptions | null;
   wardShiftTypeMap: Map<number, WardShiftType> | null;
+  readonly: boolean;
   showLayer: {
     fault: boolean;
     check: boolean;
@@ -40,6 +41,7 @@ const useEditShiftStore = create<Store>()(
         faults: new Map(),
         checkFaultOptions: null,
         wardShiftTypeMap: null,
+        readonly: true,
         showLayer: {
           check: true,
           fault: true,
@@ -48,7 +50,7 @@ const useEditShiftStore = create<Store>()(
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
-              draft[key] = value;
+              draft[key] = value as never;
             })
           ),
       }),
@@ -79,10 +81,18 @@ const useEditShiftStore = create<Store>()(
           },
           removeItem: (name) => localStorage.removeItem(name),
         },
-        partialize: ({ year, month, editHistory, showLayer, currentShiftTeam }: Store) => ({
+        partialize: ({
           year,
           month,
           editHistory,
+          readonly,
+          showLayer,
+          currentShiftTeam,
+        }: Store) => ({
+          year,
+          month,
+          editHistory,
+          readonly,
           showLayer,
           currentShiftTeam,
         }),
