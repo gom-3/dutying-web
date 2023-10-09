@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getShift, updateShift } from '@libs/api/shift';
-import useGlobalStore from 'store';
-import {
-  WardShiftsDTO,
-  getShiftTeams,
-  getWard,
-  getWardConstraint,
-  updateShifts,
-  updateWardConstraint,
-} from '@libs/api/ward';
+import { WardShiftsDTO, getShift, updateShift, updateShifts } from '@libs/api/shift';
+import { getWard, getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -24,6 +16,8 @@ import {
   moveFocusByKeydown,
   updateCheckFaultOption,
 } from './handlers';
+import { getShiftTeams } from '@libs/api/shiftTeam';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditShift = (activeEffect = false) => {
   const [
@@ -58,7 +52,9 @@ const useEditShift = (activeEffect = false) => {
     ],
     shallow
   );
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const queryClient = useQueryClient();
 

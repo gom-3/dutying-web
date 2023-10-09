@@ -5,7 +5,7 @@ interface Props
     React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
     'type'
   > {
-  type?: 'outline' | 'fill';
+  type?: 'outline' | 'fill' | 'button' | 'reset' | 'submit';
 }
 
 function Button({ type = 'fill', children, className, ...props }: Props) {

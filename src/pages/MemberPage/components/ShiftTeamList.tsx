@@ -9,9 +9,9 @@ import {
   UnlinkedIcon,
 } from '@assets/svg';
 import TextField from '@components/TextField';
-import useEditShiftStore from '@hooks/useEditShift/store';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
-import { UpdateShiftTeamDTO } from '@libs/api/ward';
+import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import { UpdateShiftTeamDTO } from '@libs/api/shiftTeam';
 import ROUTE from '@libs/constant/path';
 import { event, sendEvent } from 'analytics';
 import { groupBy } from 'lodash-es';
@@ -183,14 +183,14 @@ function ShiftTeamList() {
           {shiftTeams?.map((shiftTeam) => (
             <div
               ref={clickAwayRef}
-              className="mt-[1.375rem] flex w-[18.75rem] flex-col rounded-[.9375rem] border-[.0625rem] border-sub-4.5 shadow-shadow-1"
+              className="mt-[1.375rem] flex w-[18.75rem] flex-col rounded-[.9375rem] border-[.0625rem] border-sub-4.5 shadow-banner"
               key={shiftTeam.shiftTeamId}
             >
               <div className="relative flex w-full items-center justify-between rounded-t-[.9375rem] bg-sub-2 px-[1.25rem] py-[.875rem]">
                 <div className="flex flex-col gap-[.3125rem]">
                   {editShiftTeam?.shiftTeamId === shiftTeam.shiftTeamId ? (
                     <TextField
-                      forwardRef={clickAwayShiftTeamNameRef}
+                      ref={clickAwayShiftTeamNameRef}
                       value={editShiftTeam.updateShiftTeamDTO.name}
                       onKeyDown={(e) => e.key === 'Enter' && handleUpdateShiftTeam()}
                       onChange={(e) =>
@@ -341,7 +341,7 @@ function ShiftTeamList() {
                                 <DragIcon className="invisible absolute left-[.75rem] h-[1.5rem] w-[1.5rem] group-hover:visible" />
                                 <div className="peer relative font-apple text-[1.25rem] font-semibold text-sub-1">
                                   {nurse.name}
-                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-[#FF4A80]"></div>
+                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-red"></div>
                                 </div>
                                 <div className="invisible absolute top-0 z-30 flex translate-y-[-60%] items-center gap-[.5rem] whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
                                   <div
@@ -400,7 +400,7 @@ function ShiftTeamList() {
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
-                                      <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible peer-hover:bg-red-600" />
+                                      <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible" />
                                     </div>
                                   )
                                 )}

@@ -6,11 +6,13 @@ import {
   createShiftType,
   deleteShiftType,
   updateShiftType,
-} from '@libs/api/shift';
-import useGlobalStore from 'store';
+} from '@libs/api/shiftType';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditWard = () => {
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const getWardQueryKey = ['ward', wardId];
   const queryClient = useQueryClient();

@@ -1,32 +1,13 @@
 import axiosInstance from './client';
 
-/** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses` */
-const getShiftTeamNurses = async (wardId: number, shiftTeamId: number) =>
-  (
-    await axiosInstance.get<{ nurses: Nurse[] }>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses`
-    )
-  ).data.nurses;
+export type CreateNurseDTO = Pick<Nurse, 'name' | 'phoneNum' | 'gender' | 'isWorker'>;
 
-/** POST   `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses` */
-const addNurseIntoShiftTeam = async (
-  wardId: number,
-  shiftTeamId: number,
-  addShiftTeamNurseDTO: UpdateNurseDTO
-) =>
+const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO) =>
   (
-    await axiosInstance.post<Nurse>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses`,
-      addShiftTeamNurseDTO
-    )
-  ).data;
-
-/** DELETE `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses/${nurseId}` */
-const removeNurseFromShiftTeam = async (wardId: number, shiftTeamId: number, nurseId: number) =>
-  (
-    await axiosInstance.delete<Nurse>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/nurses/${nurseId}`
-    )
+    await axiosInstance.post<Nurse>(`/nurses?accountId=${accountId}`, {
+      ...createNurse,
+      phoneNum: createNurse.phoneNum.replace(/-+/g, ''),
+    })
   ).data;
 
 /** DELETE `/nurses/${nurseId}` */
@@ -43,17 +24,53 @@ export type UpdateNurseDTO = Pick<
   | 'isDutyManager'
   | 'isWardManager'
   | 'memo'
-  | 'workStartDate'
-  | 'workEndDate'
 >;
 const updateNurse = async (nurseId: number, updatedNurse: UpdateNurseDTO) =>
   (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, updatedNurse)).data;
+
+const updateNurseStatus = async (nurseId: number, status: string) =>
+  (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, { status })).data;
 
 const connectNurse = async (nurseId: number) =>
   (await axiosInstance.post(`/nurses/${nurseId}/connect`)).data;
 
 const unConnectNurse = async (nurseId: number) =>
   (await axiosInstance.delete(`/nurses/${nurseId}/connect`)).data;
+
+const updateNurseOrder = async (
+  nurseId: number,
+  shiftTeamId: number,
+  nextShiftTeamId: number,
+  divisionNum: number,
+  prevPriority: number,
+  nextPriority: number,
+  patchYearMonth: string
+) =>
+  (
+    await axiosInstance.patch(`/nurses/${nurseId}/priority`, {
+      shiftTeamId,
+      nextShiftTeamId,
+      divisionNum,
+      prevPriority,
+      nextPriority,
+      patchYearMonth,
+    })
+  ).data;
+
+const updateShiftTeamDivision = async (
+  shiftTeamId: number,
+  prevPriority: number,
+  changeValue: number,
+  patchYearMonth: string
+) =>
+  (
+    await axiosInstance.patch(`/nurses/division`, {
+      shiftTeamId,
+      prevPriority,
+      changeValue,
+      patchYearMonth,
+    })
+  ).data;
 
 export type updateNurseShiftTypeRequest = {
   isPossible?: boolean;
@@ -73,15 +90,14 @@ const updateNurseCarry = async (shiftNurseId: number, value: number) =>
   ).data;
 
 export {
-  // 근무팀 간호사
-  getShiftTeamNurses,
-  addNurseIntoShiftTeam,
-  removeNurseFromShiftTeam,
-  // 간호사
-  getNurse,
-  updateNurse,
-  connectNurse,
-  unConnectNurse,
-  updateNurseShiftType,
-  updateNurseCarry,
+  createAccountNurse, // 계정 간호사 등록
+  connectNurse, // 간호사 연동 등록
+  unConnectNurse, // 간호사 연동 해제
+  getNurse, // 간호사 조회
+  updateNurse, // 간호사 정보 수정
+  updateNurseStatus, // 간호사 상태 수정
+  updateNurseOrder, // 간호사 순서 수정
+  updateShiftTeamDivision, // 간호사 구분 수정
+  updateNurseShiftType, // 간호사 근무유형 수정
+  updateNurseCarry, // 간호사 이월 수정
 };

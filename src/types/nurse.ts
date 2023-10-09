@@ -11,10 +11,10 @@ type Nurse = {
   nurseId: number;
   /** 계정 id */
   accountId: number | null;
+  /** 간호 팀 아이디 */
+  shiftTeamId: number | null;
   /** 병동 id */
   wardId: number;
-  /** 간호 조무사 */
-  isAssistant: boolean;
   /** 간호사 이름 */
   name: string;
   /** 간호사 전화번호 */
@@ -39,8 +39,6 @@ type Nurse = {
   gender: string;
   /**입사날짜 */
   employmentDate: string;
-  workStartDate: string;
-  workEndDate: string;
   memo: string;
   isDeleted: boolean;
   /** 구분 인덱스 */
