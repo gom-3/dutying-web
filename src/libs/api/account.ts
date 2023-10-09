@@ -6,7 +6,7 @@ const getAccount = async (accountId: number) =>
 const editAccount = async (accountId: number) =>
   (await axiosInstance.put<Account>(`/accounts/${accountId}`)).data;
 
-const eidtAccountStatus = async (accountId: number) =>
-  (await axiosInstance.patch<Account>(`/accounts/${accountId}/status`)).data;
+const eidtAccountStatus = async (accountId: number, status: Account['status']) =>
+  (await axiosInstance.patch<Account>(`/accounts/${accountId}/status?status=${status}`)).data;
 
 export { getAccount, editAccount, eidtAccountStatus };

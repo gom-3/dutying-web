@@ -1,17 +1,17 @@
 import { FullLogo, LogoSymbolFill } from '@assets/svg';
-// import { match } from 'ts-pattern';
-// import RegisterNurse from './components/RegisterNurse';
-// import { TailSpin } from 'react-loader-spinner';
-// import useAuth from '@hooks/auth/useAuth';
-// import SelectEnterOrCreate from './components/SelectEnterOrCreate';
-// import EnterWard from './components/EnterWard';
-// import PendingEnter from './components/PendingEnter';
-import RegisterWard from './components/RegisterWard';
+import { match } from 'ts-pattern';
+import RegisterNurse from './components/RegisterNurse';
+import { TailSpin } from 'react-loader-spinner';
+import useAuth from '@hooks/auth/useAuth';
+import PendingEnter from './components/PendingEnter';
+import { Navigate } from 'react-router';
+import SelectEnterOrCreate from './components/SelectEnterOrCreate';
+import ROUTE from '@libs/constant/path';
 
 function RegisterPage() {
-  // const {
-  // state: { accountMe },
-  // } = useAuth();
+  const {
+    state: { accountMe },
+  } = useAuth();
 
   return (
     <div className="relative mx-auto mt-[7.6875rem] flex h-full w-[52%] flex-col items-center bg-[#FDFCFE]">
@@ -19,21 +19,16 @@ function RegisterPage() {
         <LogoSymbolFill className="h-[1.875rem] w-[1.875rem]" />
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>
-      {/* {match(accountMe?.status)
-        .with('INITIAL', 'NURSE_INFO_PENDING' () => <SetNurseForm />)
-        .with('WARD_SELECT_PENDING', () => <div>as</div>)
-        .with('WARD_ENTRY_PENDING', () => <div>as</div>)
-        .with('LINKED', () => <div>as</div>)
+      {match(accountMe?.status)
+        .with('INITIAL', 'NURSE_INFO_PENDING', () => <RegisterNurse />)
+        .with('WARD_SELECT_PENDING', () => <SelectEnterOrCreate />)
+        .with('WARD_ENTRY_PENDING', () => <PendingEnter />)
+        .with('LINKED', () => <Navigate to={ROUTE.MAKE} />)
         .otherwise(() => (
           <div className="flex h-screen w-screen flex-col items-center justify-center">
             <TailSpin color="#844AFF" />
           </div>
-        ))} */}
-      {/* <RegisterNurse /> */}
-      {/* <SelectEnterOrCreate /> */}
-      {/* <EnterWard /> */}
-      {/* <PendingEnter /> */}
-      <RegisterWard />
+        ))}
     </div>
   );
 }

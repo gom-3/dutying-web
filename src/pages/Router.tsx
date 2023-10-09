@@ -10,11 +10,12 @@ import { NotAuthzLayout } from '@components/Layouts';
 import LoginPage from './LoginPage';
 import RedirectPage from './LoginPage/RedirectPage';
 import AuthzLayout from '@components/Layouts/AuthzLayout';
+import EnterWard from './RegisterPage/EnterWard';
+import RegisterWard from './RegisterPage/RegisterWard';
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path="/test" element={<RegisterPage />} />
       <Route path={ROUTE.ROOT} element={<LandingPage />} />
       {/* 인증된 사용자가 접근할 수 없는 페이지 */}
       <Route element={<NotAuthzLayout />}>
@@ -24,6 +25,8 @@ export const Router = () => {
       {/* 인증되지 않은 사용자가 접근할 수 없는 페이지 */}
       <Route element={<AuthzLayout />}>
         <Route path={ROUTE.REGISTER} element={<RegisterPage />} />
+        <Route path={ROUTE.ENTER_WARD} element={<EnterWard />} />
+        <Route path={ROUTE.REGISTER_WARD} element={<RegisterWard />} />
         <Route element={<MainLayout />}>
           <Route path={ROUTE.MAKE} element={<MakeShiftPage />} />
           <Route path={ROUTE.REQUEST} element={<RequestPage />} />

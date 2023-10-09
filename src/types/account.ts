@@ -15,5 +15,6 @@ type Account = {
     | 'NURSE_INFO_PENDING' // 간호사 정보 입력 전
     | 'WARD_SELECT_PENDING' // 병동 생성 or 입장 선택 전
     | 'WARD_ENTRY_PENDING' // 병동 입장 전
-    | 'LINKED'; // 입장 완료
+    | 'LINKED' // 입장 완료
+    | 'DEMO'; // 데모 계정
 };

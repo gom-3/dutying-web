@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router';
 function LandingPage() {
   const {
     state: { isAuth },
+    actions: { handleLogout, demoTry },
   } = useAuth();
   const navigate = useNavigate();
 
@@ -95,7 +96,10 @@ function LandingPage() {
                 문의하기
               </a>
               {isAuth ? (
-                <button className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-sub-2.5">
+                <button
+                  onClick={() => handleLogout()}
+                  className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-sub-2.5"
+                >
                   로그아웃
                 </button>
               ) : (
@@ -144,7 +148,10 @@ function LandingPage() {
             </p>
           </div>
           <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-[3.125rem]">
-            <div className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3">
+            <div
+              className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+              onClick={() => demoTry()}
+            >
               데모 테스트 해보기
             </div>
             <div

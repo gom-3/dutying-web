@@ -21,10 +21,6 @@ const schema = yup
       .required()
       .matches(/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/),
     gender: yup.string().required(),
-    employmentDate: yup
-      .string()
-      .required()
-      .matches(/^\d{4}.(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/),
     isWorker: yup.boolean().required(),
   })
   .required();
@@ -45,7 +41,7 @@ function RegisterNurse() {
     resolver: yupResolver(schema),
   });
   const {
-    actions: { createAccountNurse },
+    actions: { registerAccountNurse: createAccountNurse },
   } = useRegister();
   const watchIsWorker = watch('isWorker');
 
@@ -115,62 +111,40 @@ function RegisterNurse() {
           </div>
           <div className="flex-auto"></div>
         </div>
-      </div>
-      <div className="mt-[1.875rem] w-full shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
-        <div className="w-[35%]">
-          <label
-            htmlFor="employmentDate"
-            className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
+        <div className="mt-[2.625rem] flex flex-1 items-center gap-[4.375rem]">
+          <div>
+            <p className="font-apple text-[1.25rem] text-sub-3">근무에 들어가시나요?</p>
+            <p className="font-apple text-[.875rem] text-main-2">* 듀티표에 포함되는 근무인가요?</p>
+          </div>
+          <div
+            className="flex cursor-pointer items-center justify-center"
+            onClick={() => setValue('isWorker', true)}
           >
-            입사 연도
-          </label>
-          <TextField
-            id="employmentDate"
-            className="h-[3.75rem] py-[1.0625rem] text-center font-apple text-[1.5rem] font-medium text-sub-1"
-            placeholder="YYYY.MM.DD"
-            error={match(errors.employmentDate?.type)
-              .with('matches', () => '연도 형식을 지켜주세요.')
-              .otherwise(() => undefined)}
-            {...register('employmentDate')}
-          />
-        </div>
-        <div className="mt-[1.8125rem] flex w-full">
-          <div className="flex flex-1 items-center gap-[4.375rem]">
-            <div>
-              <p className="font-apple text-[1.25rem] text-sub-3">근무에 들어가시나요?</p>
-              <p className="font-apple text-[.875rem] text-main-2">
-                * 듀티표에 포함되는 근무인가요?
-              </p>
+            {watchIsWorker ? (
+              <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+            ) : (
+              <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+            )}
+            <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
+              네
             </div>
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', true)}
-            >
-              {watchIsWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                네
-              </div>
-            </div>
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', false)}
-            >
-              {!watchIsWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                아니오
-              </div>
+          </div>
+          <div
+            className="flex cursor-pointer items-center justify-center"
+            onClick={() => setValue('isWorker', false)}
+          >
+            {!watchIsWorker ? (
+              <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+            ) : (
+              <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+            )}
+            <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
+              아니오
             </div>
           </div>
         </div>
       </div>
+
       <Button
         disabled={!isValid}
         className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"

@@ -36,4 +36,34 @@ const updateWardConstraint = async (
     )
   ).data;
 
-export { getWardConstraint, updateWardConstraint, getWard, createWrad, editWard };
+const getWardByCode = async (code: string) =>
+  (await axiosInstance.get<Ward>(`/wards?code=${code}`)).data;
+
+const getWatingNurses = async (wardId: number) =>
+  (await axiosInstance.get(`/wards/${wardId}/waiting-nurses`)).data;
+
+const addMeToWatingNurses = async (wardId: number) =>
+  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses`)).data;
+
+const connectWatingNurses = async (wardId: number, nurseId: number) =>
+  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${nurseId}/connect`)).data;
+
+const approveWatingNurses = async (wardId: number, nurseId: number) =>
+  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${nurseId}/approve`)).data;
+
+const deleteWatingNurses = async (wardId: number, nurseId: number) =>
+  (await axiosInstance.delete(`/wards/${wardId}/waiting-nurse/${nurseId}`)).data;
+
+export {
+  getWardConstraint,
+  updateWardConstraint,
+  getWard,
+  createWrad,
+  editWard,
+  getWardByCode,
+  getWatingNurses,
+  addMeToWatingNurses,
+  connectWatingNurses,
+  approveWatingNurses,
+  deleteWatingNurses,
+};

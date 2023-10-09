@@ -9,6 +9,7 @@ interface State {
   accountId: number | null;
   nurseId: number | null;
   wardId: number | null;
+  demoStartDate: string | null;
 }
 
 interface Store extends State {
@@ -22,6 +23,7 @@ const initialState: State = {
   accountId: null,
   nurseId: null,
   wardId: null,
+  demoStartDate: null,
 };
 
 const useAuthStore = create<Store>()(
@@ -39,12 +41,20 @@ const useAuthStore = create<Store>()(
       }),
       {
         name: 'useAuthStore',
-        partialize: ({ isAuth, accessToken, accountId, nurseId, wardId }: Store) => ({
+        partialize: ({
           isAuth,
           accessToken,
           accountId,
           nurseId,
           wardId,
+          demoStartDate,
+        }: Store) => ({
+          isAuth,
+          accessToken,
+          accountId,
+          nurseId,
+          wardId,
+          demoStartDate,
         }),
       }
     )

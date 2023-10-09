@@ -176,7 +176,6 @@ const useEditShiftTeam = () => {
         await queryClient.cancelQueries(shiftQueryKey);
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
-
         oldWard &&
           queryClient.setQueryData<Ward>(
             getWardQueryKey,

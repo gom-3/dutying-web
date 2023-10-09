@@ -24,6 +24,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import SetConstraint from './editWard/SetConstraint';
 import SetShiftType from './editWard/SetShiftType';
 import Select from '@components/Select';
+import { createPortal } from 'react-dom';
 
 function Toolbar() {
   const {
@@ -79,36 +80,39 @@ function Toolbar() {
         </Button>
       )}
 
-      {currentSetup !== null && (
-        <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
-          <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex w-[36.25rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-2">
-            <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
-              <div
-                className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
+      {currentSetup !== null &&
+        createPortal(
+          <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
+            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex w-[36.25rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-2">
+              <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
+                <div
+                  className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
                   ${currentSetup === 'constraint' ? 'bg-white text-main-1' : 'text-sub-3'}
                 `}
-                onClick={() => setCurrentSetup('constraint')}
-              >
-                제약 조건
-              </div>
-              <CancelIcon
-                className="absolute right-[.5rem] h-[1.5rem] w-[1.5rem] cursor-pointer"
-                onClick={() => setCurrentSetup(null)}
-              />
-              <div
-                className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
+                  onClick={() => setCurrentSetup('constraint')}
+                >
+                  제약 조건
+                </div>
+                <CancelIcon
+                  className="absolute right-[.5rem] h-[1.5rem] w-[1.5rem] cursor-pointer"
+                  onClick={() => setCurrentSetup(null)}
+                />
+                <div
+                  className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
                   ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
                 `}
-                onClick={() => setCurrentSetup('shiftType')}
-              >
-                근무 형태
+                  onClick={() => setCurrentSetup('shiftType')}
+                >
+                  근무 형태
+                </div>
               </div>
+              {currentSetup === 'constraint' && <SetConstraint />}
+              {currentSetup === 'shiftType' && <SetShiftType />}
             </div>
-            {currentSetup === 'constraint' && <SetConstraint />}
-            {currentSetup === 'shiftType' && <SetShiftType />}
-          </div>
-        </Draggable>
-      )}
+          </Draggable>,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          document.getElementById('edit-modal-root')!
+        )}
 
       <InfoIcon
         className="h-[1.625rem] w-[1.625rem] cursor-pointer"
@@ -117,29 +121,32 @@ function Toolbar() {
           sendEvent(event.open_shift_info_modal);
         }}
       />
-      {openInfo && (
-        <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
-          <div className="absolute left-[17.625rem] top-[5.5rem] z-30 flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
-            <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
-              <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
-              <CancelIcon
-                className="absolute right-[.5rem] h-[1.125rem] w-[1.125rem] cursor-pointer"
-                onClick={() => setOpenInfo(false)}
-              />
+      {openInfo &&
+        createPortal(
+          <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
+            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
+              <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
+                <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
+                <CancelIcon
+                  className="absolute right-[.5rem] h-[1.125rem] w-[1.125rem] cursor-pointer"
+                  onClick={() => setOpenInfo(false)}
+                />
+              </div>
+              <div className="flex h-[3.625rem] items-center justify-center gap-[1.25rem]">
+                {shift?.wardShiftTypes.map((shiftType, index) => (
+                  <div key={index} className="flex items-center gap-[.3125rem]">
+                    <ShiftBadge key={index} shiftType={shiftType} />
+                    <p className="font-apple text-[.875rem] text-sub-2">
+                      {shiftType.name}({shiftType.shortName})
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex h-[3.625rem] items-center justify-center gap-[1.25rem]">
-              {shift?.wardShiftTypes.map((shiftType, index) => (
-                <div key={index} className="flex items-center gap-[.3125rem]">
-                  <ShiftBadge key={index} shiftType={shiftType} />
-                  <p className="font-apple text-[.875rem] text-sub-2">
-                    {shiftType.name}({shiftType.shortName})
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Draggable>
-      )}
+          </Draggable>,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          document.getElementById('info-modal-root')!
+        )}
 
       {!readonly && (
         <>
