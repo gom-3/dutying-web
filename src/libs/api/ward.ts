@@ -6,10 +6,10 @@ export type CreateWardDTO = {
   name: string;
   hospitalName: string;
   wardShiftTypes: Omit<WardShiftType, 'wardShiftTypeId'>[];
-  shiftTeams: string[][];
+  shiftTeams: { nurseNames: string[] }[];
 };
-const createWrad = async (accountId: number, createWardDTO: CreateWardDTO) =>
-  (await axiosInstance.post<Ward>(`/wards/accounts/${accountId}`, createWardDTO)).data;
+const createWrad = async (createWardDTO: CreateWardDTO) =>
+  (await axiosInstance.post<Ward>(`/wards`, createWardDTO)).data;
 
 export type EditWardDTO = Pick<Ward, 'name' | 'hospitalName'>;
 const editWard = async (wardId: number, ward: EditWardDTO) =>
@@ -37,7 +37,7 @@ const updateWardConstraint = async (
   ).data;
 
 const getWardByCode = async (code: string) =>
-  (await axiosInstance.get<Ward>(`/wards?code=${code}`)).data;
+  (await axiosInstance.get<Ward>(`/wards/search?code=${code}`)).data;
 
 const getWatingNurses = async (wardId: number) =>
   (await axiosInstance.get(`/wards/${wardId}/waiting-nurses`)).data;
@@ -45,14 +45,14 @@ const getWatingNurses = async (wardId: number) =>
 const addMeToWatingNurses = async (wardId: number) =>
   (await axiosInstance.post(`/wards/${wardId}/waiting-nurses`)).data;
 
-const connectWatingNurses = async (wardId: number, nurseId: number) =>
-  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${nurseId}/connect`)).data;
+const connectWatingNurses = async (wardId: number, waitingNurseId: number) =>
+  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${waitingNurseId}/connect`)).data;
 
-const approveWatingNurses = async (wardId: number, nurseId: number) =>
-  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${nurseId}/approve`)).data;
+const approveWatingNurses = async (wardId: number, waitingNurseId: number) =>
+  (await axiosInstance.post(`/wards/${wardId}/waiting-nurses/${waitingNurseId}/approve`)).data;
 
 const deleteWatingNurses = async (wardId: number, nurseId: number) =>
-  (await axiosInstance.delete(`/wards/${wardId}/waiting-nurse/${nurseId}`)).data;
+  (await axiosInstance.delete(`/wards/${wardId}/waiting-nurses?nurseId=${nurseId}`)).data;
 
 export {
   getWardConstraint,

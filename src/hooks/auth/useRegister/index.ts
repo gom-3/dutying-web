@@ -16,17 +16,18 @@ const useRegister = () => {
   const queryClient = useQueryClient();
 
   const { mutate: changeAccountStatusMutate } = useMutation(
-    async ({ accountId, status }: { accountId: number; status: Account['status'] }) =>
+    ({ accountId, status }: { accountId: number; status: Account['status'] }) =>
       eidtAccountStatus(accountId, status),
     {
-      onSuccess: () => {
+      onSuccess: ({ status }) => {
         queryClient.invalidateQueries(accountMeQuery);
+        if (status === 'LINKED') navigate(ROUTE.MAKE);
       },
     }
   );
 
   const { mutate: registerAccountNurseMutate } = useMutation(
-    async ({ accountId, createNurseDTO }: { accountId: number; createNurseDTO: CreateNurseDTO }) =>
+    ({ accountId, createNurseDTO }: { accountId: number; createNurseDTO: CreateNurseDTO }) =>
       createAccountNurse(accountId, createNurseDTO),
     {
       onSuccess: () => {
@@ -37,28 +38,25 @@ const useRegister = () => {
   );
 
   const { mutate: createWardMutate } = useMutation(
-    async ({ accountId, createWardDTO }: { accountId: number; createWardDTO: CreateWardDTO }) =>
-      createWrad(accountId, createWardDTO),
+    (createWardDTO: CreateWardDTO) => createWrad(createWardDTO),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(accountMeQuery);
+        accountMe &&
+          changeAccountStatusMutate({ accountId: accountMe.accountId, status: 'LINKED' });
       },
     }
   );
 
-  const { mutate: enterWardMutate } = useMutation(
-    async (wardId: number) => addMeToWatingNurses(wardId),
-    {
-      onSuccess: () => {
-        if (!accountId) return;
-        changeAccountStatusMutate({ accountId, status: 'WARD_ENTRY_PENDING' });
-        navigate(ROUTE.REGISTER);
-      },
-    }
-  );
+  const { mutate: enterWardMutate } = useMutation((wardId: number) => addMeToWatingNurses(wardId), {
+    onSuccess: () => {
+      if (!accountId) return;
+      changeAccountStatusMutate({ accountId, status: 'WARD_ENTRY_PENDING' });
+      navigate(ROUTE.REGISTER);
+    },
+  });
 
   const { mutate: cancelWaitingMutate } = useMutation(
-    async ({ wardId, nurseId }: { wardId: number; nurseId: number }) =>
+    ({ wardId, nurseId }: { wardId: number; nurseId: number }) =>
       deleteWatingNurses(wardId, nurseId),
     {
       onSuccess: () => {
@@ -69,15 +67,16 @@ const useRegister = () => {
     }
   );
 
-  const { data: accountWaitingWard } = useQuery(['accountWaitingWard'], getAccountMeWaiting);
+  const { data: accountWaitingWard } = useQuery(['accountWaitingWard'], getAccountMeWaiting, {
+    enabled: accountMe?.status === 'WARD_ENTRY_PENDING',
+  });
 
   return {
     state: { accountMe, accountWaitingWard },
     actions: {
       registerAccountNurse: (createNurseDTO: CreateNurseDTO) =>
         accountId && registerAccountNurseMutate({ accountId, createNurseDTO }),
-      createWrad: (createWardDTO: CreateWardDTO) =>
-        accountId && createWardMutate({ accountId, createWardDTO }),
+      createWrad: createWardMutate,
       enterWard: enterWardMutate,
       cancelWaiting: (wardId: number, nurseId: number) => cancelWaitingMutate({ wardId, nurseId }),
     },

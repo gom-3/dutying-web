@@ -12,11 +12,13 @@ import RedirectPage from './LoginPage/RedirectPage';
 import AuthzLayout from '@components/Layouts/AuthzLayout';
 import EnterWard from './RegisterPage/EnterWard';
 import RegisterWard from './RegisterPage/RegisterWard';
+import RefreshPage from './RefreshPage';
 
 export const Router = () => {
   return (
     <Routes>
       <Route path={ROUTE.ROOT} element={<LandingPage />} />
+      <Route path={ROUTE.REFRESH} element={<RefreshPage />} />
       {/* 인증된 사용자가 접근할 수 없는 페이지 */}
       <Route element={<NotAuthzLayout />}>
         <Route path={ROUTE.REDIRECT} element={<RedirectPage />} />

@@ -27,14 +27,14 @@ function EnterWard() {
     match(e.key)
       .with('ArrowRight', 'ArrowDown', () => setFocusedIndex(Math.min(5, focusedIndex + 1)))
       .with('ArrowLeft', 'ArrowUp', () => setFocusedIndex(Math.max(0, focusedIndex - 1)))
+      .with('Backspace', () => {
+        setCodeList(codeList.map((code, index) => (index === focusedIndex ? null : code)));
+      })
       .with(Pattern.string.regex(/[0-9a-zA-Z]/), () => {
         setCodeList(
           codeList.map((code, index) => (index === focusedIndex ? e.key.toUpperCase() : code))
         );
         setFocusedIndex(Math.min(5, focusedIndex + 1));
-      })
-      .with('Backspace', () => {
-        setCodeList(codeList.map((code, index) => (index === focusedIndex ? null : code)));
       });
   };
 
@@ -73,8 +73,11 @@ function EnterWard() {
   }, [focusedIndex, codeList]);
 
   return (
-    <div className="relative mx-auto mt-[7.6875rem] flex h-full w-[52%] flex-col items-center bg-[#FDFCFE]">
-      <div className="fixed left-[3.125rem] top-[1.875rem] flex gap-[1.25rem]">
+    <div className="relative mx-auto mt-[7.6875rem] flex h-[calc(100%-7.6875rem)] w-[52%] flex-col items-center bg-[#FDFCFE]">
+      <div
+        className="fixed left-[3.125rem] top-[1.875rem] flex cursor-pointer gap-[1.25rem]"
+        onClick={() => navigate(ROUTE.ROOT)}
+      >
         <LogoSymbolFill className="h-[1.875rem] w-[1.875rem]" />
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>

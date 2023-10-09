@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { demoStart, getAccountMe } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
+import useInitStore from '@hooks/useResetStore';
 
 const useAuth = () => {
   const [isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, setState, initState] =
@@ -21,6 +22,7 @@ const useAuth = () => {
       ],
       shallow
     );
+  const initStore = useInitStore();
   const navigate = useNavigate();
 
   const accountMeQuery = ['accountMe', accessToken];
@@ -39,10 +41,11 @@ const useAuth = () => {
   });
 
   const handleLogout = () => {
-    initState();
+    initStore();
   };
 
   const handleLogin = (accessToken: string) => {
+    initStore();
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     setState('accessToken', accessToken);
   };

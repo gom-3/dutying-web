@@ -25,11 +25,11 @@ const schema = yup.object().shape({
   name: yup
     .string()
     .required()
-    .matches(/^[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\s]{1,50}$/),
+    .matches(/^[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9|\s]{1,50}$/),
   hospitalName: yup
     .string()
     .required()
-    .matches(/^[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\s]{1,50}$/),
+    .matches(/^[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9|\s]{1,50}$/),
 });
 
 function RegisterWard() {
@@ -93,6 +93,7 @@ function RegisterWard() {
 
   const {
     state: { accountMe },
+    actions: { createWrad },
   } = useRegister();
 
   const navigate = useNavigate();
@@ -102,12 +103,25 @@ function RegisterWard() {
   }, [accountMe]);
 
   return (
-    <div className="relative mx-auto mt-[7.6875rem] flex h-full w-[52%] flex-col items-center bg-[#FDFCFE]">
-      <div className="fixed left-[3.125rem] top-[1.875rem] flex gap-[1.25rem]">
+    <div className="relative mx-auto mt-[7.6875rem] flex h-[calc(100%-7.6875rem)] w-[52%] flex-col items-center bg-[#FDFCFE]">
+      <div
+        className="fixed left-[3.125rem] top-[1.875rem] flex cursor-pointer gap-[1.25rem]"
+        onClick={() => navigate(ROUTE.ROOT)}
+      >
         <LogoSymbolFill className="h-[1.875rem] w-[1.875rem]" />
         <FullLogo className="h-[1.875rem] w-[6.875rem]" />
       </div>
-      <form onSubmit={handleSubmit((d) => console.log(d))} className="flex w-full flex-col">
+      <form
+        onSubmit={handleSubmit((d) => {
+          createWrad({
+            name: d.name,
+            hospitalName: d.hospitalName,
+            shiftTeams: shiftTeams.map((shiftTeam) => ({ nurseNames: shiftTeam })),
+            wardShiftTypes,
+          });
+        })}
+        className="flex w-full flex-col"
+      >
         <h1 className="font-apple text-[2rem] font-semibold text-text-1">병동 생성</h1>
         <BackIcon
           className="absolute left-[-2.5rem] top-0 h-[3rem] w-[3rem] translate-x-[-100%] cursor-pointer"
@@ -124,11 +138,8 @@ function RegisterWard() {
             <TextField
               id="name"
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
-              error={match(errors.name?.type)
-                .with(
-                  'matches',
-                  () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.'
-                )
+              error={match(errors.hospitalName?.type)
+                .with('matches', () => '이름은 1~50자 한/영문에 특수문자를 사용할 수 없습니다.')
                 .otherwise(() => undefined)}
               {...register('hospitalName')}
             />
@@ -144,10 +155,7 @@ function RegisterWard() {
               id="name"
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
               error={match(errors.name?.type)
-                .with(
-                  'matches',
-                  () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.'
-                )
+                .with('matches', () => '이름은 1~50자 한/영문에 특수문자를 사용할 수 없습니다.')
                 .otherwise(() => undefined)}
               {...register('name')}
             />
@@ -171,7 +179,8 @@ function RegisterWard() {
               <p className="flex-[2]">근무 명</p>
               <p className="flex-1">약자</p>
               <p className="flex-[3]">근무 시간</p>
-              <p className="flex-1">색상</p>
+              <p className="flex-1">배경색</p>
+              <p className="flex-1">글자색</p>
               <p className="flex-1">유형</p>
               <p className="flex-1">수정</p>
             </div>
@@ -230,14 +239,14 @@ function RegisterWard() {
                     </>
                   )}
                 </div>
-                <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+                <div className="relative flex flex-1  items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
                   <label
-                    htmlFor={`color_picker_${index}`}
-                    className={`h-[2rem] w-[2rem] rounded-[.4375rem]`}
+                    htmlFor={`pick_background_color_${index}`}
+                    className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
                     style={{ backgroundColor: shiftType.backgroundColor }}
                   />
                   <input
-                    id={`color_picker_${index}`}
+                    id={`pick_background_color_${index}`}
                     className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
                     type="color"
                     value={shiftType.backgroundColor}
@@ -245,6 +254,26 @@ function RegisterWard() {
                       setWardShiftTypes(
                         produce(wardShiftTypes, (draft) => {
                           draft[index].backgroundColor = e.target.value;
+                        })
+                      );
+                    }}
+                  />
+                </div>
+                <div className="relative flex flex-1  items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+                  <label
+                    htmlFor={`pick_text_color_${index}`}
+                    className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
+                    style={{ backgroundColor: shiftType.textColor }}
+                  />
+                  <input
+                    id={`pick_text_color_${index}`}
+                    className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
+                    type="color"
+                    value={shiftType.textColor}
+                    onChange={(e) => {
+                      setWardShiftTypes(
+                        produce(wardShiftTypes, (draft) => {
+                          draft[index].textColor = e.target.value;
                         })
                       );
                     }}
@@ -351,6 +380,7 @@ function RegisterWard() {
                       if (e.nativeEvent.isComposing) return;
                       if (e.currentTarget.value === '') return;
                       if (e.key === 'Enter') {
+                        e.preventDefault();
                         setShiftTeams(
                           produce(shiftTeams, (draft) => {
                             draft[index].push(e.currentTarget.value);
@@ -368,6 +398,7 @@ function RegisterWard() {
           ))}
         </div>
         <Button
+          type="submit"
           disabled={!isValid}
           className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"
         >

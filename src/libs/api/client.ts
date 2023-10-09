@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { refreshAccessToken } from './auth';
 import { match } from 'ts-pattern';
 import { toast } from 'react-hot-toast';
+import ROUTE from '@libs/constant/path';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -17,7 +17,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     match(error.response.status)
       .with(401, () => {
-        refreshAccessToken();
+        location.replace(ROUTE.REFRESH);
       })
       .with(400, 403, 404, () => {
         toast.error('에러가 발생했습니다. 다시 시도해주세요.');

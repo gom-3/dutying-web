@@ -24,35 +24,40 @@ interface State {
 interface Store extends State {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: (key: keyof State, value: any) => void;
+  initState: () => void;
 }
+
+const initialState: State = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth() + 1,
+  focus: null,
+  currentShiftTeam: null,
+  focusedDayInfo: null,
+  foldedLevels: null,
+  editHistory: new Map(),
+  faults: new Map(),
+  checkFaultOptions: null,
+  wardShiftTypeMap: null,
+  readonly: true,
+  showLayer: {
+    check: true,
+    fault: true,
+    slash: true,
+  },
+};
 
 const useEditShiftStore = create<Store>()(
   devtools(
     persist(
       (set, get) => ({
-        year: new Date().getFullYear(),
-        month: new Date().getMonth() + 1,
-        focus: null,
-        currentShiftTeam: null,
-        focusedDayInfo: null,
-        foldedLevels: null,
-        editHistory: new Map(),
-        historyIndex: 0,
-        faults: new Map(),
-        checkFaultOptions: null,
-        wardShiftTypeMap: null,
-        readonly: true,
-        showLayer: {
-          check: true,
-          fault: true,
-          slash: true,
-        },
+        ...initialState,
         setState: (key, value) =>
           set(
             produce(get(), (draft) => {
               draft[key] = value as never;
             })
           ),
+        initState: () => set(initialState),
       }),
       {
         name: 'useEditShiftStore',
