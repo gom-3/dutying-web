@@ -8,6 +8,7 @@ import {
   updateShiftType,
 } from '@libs/api/shiftType';
 import useAuth from '@hooks/auth/useAuth';
+import useEditShift from '@hooks/shift/useEditShift';
 
 const useEditWard = () => {
   const {
@@ -16,6 +17,9 @@ const useEditWard = () => {
 
   const getWardQueryKey = ['ward', wardId];
   const queryClient = useQueryClient();
+  const {
+    queryKey: { shiftQueryKey },
+  } = useEditShift();
   const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
@@ -56,7 +60,7 @@ const useEditWard = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
-        queryClient.invalidateQueries(['shift']);
+        queryClient.invalidateQueries(shiftQueryKey);
       },
     }
   );

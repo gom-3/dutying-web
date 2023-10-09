@@ -19,7 +19,7 @@ interface Store extends State {
 
 const initialState: State = {
   year: new Date().getFullYear(),
-  month: new Date().getMonth() + 1,
+  month: new Date().getMonth() + 2,
   focus: null,
   currentShiftTeam: null,
   foldedLevels: null,

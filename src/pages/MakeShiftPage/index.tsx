@@ -8,10 +8,10 @@ import NurseEditModal from './components/NurseEditModal';
 const MakeShiftPage = () => {
   useEditShift(true);
   return (
-    <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col overflow-hidden">
+    <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col">
       <Toolbar />
-      <ShiftCalendar isEditable />
-      <div className="sticky bottom-0 z-20 flex h-[15.625rem] w-full gap-[1.25rem] bg-[#FDFCFE] pl-[15.9375rem]">
+      <ShiftCalendar />
+      <div className="relative mt-[1.25rem] flex w-full justify-between bg-[#FDFCFE] pl-[15.9375rem]">
         <CountDutyByDay />
         <Panel />
       </div>

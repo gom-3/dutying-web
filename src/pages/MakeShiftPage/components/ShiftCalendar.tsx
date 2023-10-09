@@ -10,11 +10,7 @@ import useEditShift from '@hooks/shift/useEditShift';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 
-interface Props {
-  isEditable?: boolean;
-}
-
-export default function ShiftCalendar({ isEditable }: Props) {
+export default function ShiftCalendar() {
   const {
     state: {
       readonly,
@@ -38,7 +34,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => {
-    isEditable && changeFocus?.(null);
+    changeFocus(null);
     selectNurse(null);
   });
 
@@ -118,7 +114,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
   }, [focus]);
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
-    <div ref={clickAwayRef} className="flex flex-col">
+    <div ref={clickAwayRef} className="flex w-full flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
@@ -141,8 +137,8 @@ export default function ShiftCalendar({ isEditable }: Props) {
                   ${
                     item.dayType === 'saturday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-blue text-white'
-                        : 'text-blue'
+                        ? 'rounded-full bg-red text-white'
+                        : 'text-red'
                       : item.dayType === 'sunday' || item.dayType === 'holiday'
                       ? j === focus?.day
                         ? 'rounded-full bg-red text-white'
@@ -160,28 +156,33 @@ export default function ShiftCalendar({ isEditable }: Props) {
             ))}
           </div>
         </div>
-        <div className="flex w-[13.625rem] shrink-0 items-center px-[1.5625rem] text-center">
-          {shift.wardShiftTypes.slice(0, 4).map((shiftType, index) => (
-            <div key={index} className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">
+        <div className="flex shrink-0 items-center gap-2 px-[1.5625rem] text-center">
+          {shift.wardShiftTypes.map((shiftType, index) => (
+            <div
+              key={index}
+              className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] p-2 font-poppins text-[1.25rem]"
+              style={{ backgroundColor: shiftType.backgroundColor, color: shiftType.textColor }}
+            >
               {shiftType.shortName}
             </div>
           ))}
-          <div className="flex-1 font-poppins text-[1.25rem] text-sub-3 ">WO</div>
+          <div
+            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[1.25rem] text-white"
+            style={{
+              backgroundColor: shift.wardShiftTypes.find((x) => x.name === '오프')?.backgroundColor,
+              color: shift.wardShiftTypes.find((x) => x.name === '오프')?.textColor,
+            }}
+          >
+            W
+          </div>
         </div>
       </div>
       <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
         <div
-          className="mt-[-1.25rem] flex max-h-[calc(100vh-22rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pt-[1.25rem] scrollbar-hide"
+          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pt-[1.25rem] scrollbar-hide"
           ref={containerRef}
         >
           {shift.divisionShiftNurses
-            .map((x) =>
-              x.map((y) =>
-                y.shiftNurse.name === '박은미'
-                  ? { ...y, shiftNurse: { ...y.shiftNurse, isWorker: false } }
-                  : y
-              )
-            )
             .map((x) => x.filter((y) => y.shiftNurse.isWorker)) // 근무자만 필터링
             .map((rows, level) => {
               return rows.length ? (
@@ -205,7 +206,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                         className="flex gap-[1.25rem]"
                         {...provided.droppableProps}
                       >
-                        <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
+                        <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-banner">
                           {!readonly && (
                             <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
                               <FoldDutyIcon
@@ -226,7 +227,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                             >
                               {(provided) => (
                                 <div
-                                  className={`relative flex h-[3.25rem] items-center gap-[1.25rem]
+                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
                                 ${
                                   rowIndex === 0
                                     ? rowIndex === rows.length - 1
@@ -297,7 +298,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                       />
                                     ))}
                                   </div>
-                                  <div className="flex h-full  px-[1rem]">
+                                  <div className="flex h-full px-[1.0625rem]">
                                     {row.wardShiftList.map((current, j) => {
                                       const request = row.wardReqShiftList[j];
                                       const isSaturday = shift.days[j].dayType === 'saturday';
@@ -314,7 +315,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                         <div
                                           key={j}
                                           className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
-                              ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''} 
+                              ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#FFE1E680]' : ''} 
                               ${j === focus?.day && 'bg-main-4'}`}
                                         >
                                           {!readonly && showLayer.fault && fault && (
@@ -363,34 +364,32 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                       );
                                     })}
                                   </div>
-                                  <div className="w-[13.625rem] shrink-0 rounded-[1.25rem] px-[1.5625rem]">
-                                    <div key={rowIndex} className="flex h-[3.25rem] items-center">
-                                      {shift?.wardShiftTypes
-                                        .slice(0, 4)
-                                        .map((wardShiftType, index) => (
-                                          <div
-                                            key={index}
-                                            className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2"
-                                          >
-                                            {
-                                              row.wardShiftList.filter(
-                                                (current) =>
-                                                  current === wardShiftType.wardShiftTypeId
-                                              ).length
-                                            }
-                                          </div>
-                                        ))}
-                                      <div className="flex-1 text-center font-poppins text-[1.25rem] text-sub-2">
+                                  <div
+                                    className="relative flex shrink-0 items-center gap-2 px-[1.5625rem] text-center"
+                                    key={rowIndex}
+                                  >
+                                    {shift?.wardShiftTypes.map((wardShiftType, index) => (
+                                      <div
+                                        key={index}
+                                        className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2"
+                                      >
                                         {
                                           row.wardShiftList.filter(
-                                            (current, i) =>
-                                              current &&
-                                              wardShiftTypeMap.get(current)?.isOff &&
-                                              shift.days.find((x) => x.day === i + 1)?.dayType !=
-                                                'workday'
+                                            (current) => current === wardShiftType.wardShiftTypeId
                                           ).length
                                         }
                                       </div>
+                                    ))}
+                                    <div className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2">
+                                      {
+                                        row.wardShiftList.filter(
+                                          (current, i) =>
+                                            current &&
+                                            wardShiftTypeMap.get(current)?.isOff &&
+                                            shift.days.find((x) => x.day === i + 1)?.dayType !=
+                                              'workday'
+                                        ).length
+                                      }
                                     </div>
                                   </div>
                                   {rowIndex !== rows.length - 1
