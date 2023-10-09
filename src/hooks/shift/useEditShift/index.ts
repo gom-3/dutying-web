@@ -341,6 +341,29 @@ const useEditShift = (activeEffect = false) => {
         return;
 
       mutateShift({ wardId, shift, focus, shiftTypeId });
+
+      const flatNurses = shift.divisionShiftNurses
+        .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
+        .map((x) => x.shiftNurse);
+      const { day, shiftNurseId } = focus;
+      const dayCnt = shift.days.length;
+      const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
+      let newNurseId = shiftNurseId;
+      let newDay = day;
+
+      if (day === dayCnt - 1) {
+        if (nurseIndex === flatNurses.length - 1) {
+          newNurseId = flatNurses[0].shiftNurseId;
+          newDay = 0;
+        } else {
+          newNurseId = flatNurses[nurseIndex + 1].shiftNurseId;
+          newDay = 0;
+        }
+      } else {
+        newDay = Math.min(dayCnt - 1, day + 1);
+      }
+
+      setState('focus', { shiftNurseId: newNurseId, day: newDay });
     },
     [focus, shift]
   );
@@ -430,7 +453,7 @@ const useEditShift = (activeEffect = false) => {
           keys: [shiftType.shortName],
           callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
         })),
-        { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
+        { keys: ['Backspace', 'Delete'], callback: () => changeFocusedShift(null) }
       );
     },
     [shift, focus, editHistory]
