@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CancelIcon, CheckedIcon, UncheckedIcon2 } from '@assets/svg';
 import TextField from '@components/TextField';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';

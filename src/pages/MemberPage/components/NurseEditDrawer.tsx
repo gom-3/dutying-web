@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CheckedIcon, FoldIcon, UncheckedIcon2 } from '@assets/svg';
 import TextField from '@components/TextField';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { event, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { useEffect, useRef, useState } from 'react';
@@ -57,7 +57,7 @@ function NurseEditDrawer() {
       <div className="mb-[1.25rem] mt-[3.75rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
         <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
         <TextField
-          forwardRef={textInputRef}
+          ref={textInputRef}
           autoFocus
           className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
           onChange={(e) => {

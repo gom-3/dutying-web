@@ -1,5 +1,5 @@
 import { event, sendEvent } from 'analytics';
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
@@ -16,7 +16,7 @@ function Panel() {
   return !readonly && shiftStatus === 'success' ? (
     <div
       className={twMerge(
-        'mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-shadow-1',
+        'mb-[3.125rem] mt-[1.25rem] flex w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-banner',
         open && 'absolute bottom-0 right-0 h-[300%] max-h-[calc(50vh)]'
       )}
     >

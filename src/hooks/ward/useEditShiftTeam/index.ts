@@ -2,26 +2,26 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   UpdateNurseDTO,
-  addNurseIntoShiftTeam,
   updateNurse as patchNurse,
-  removeNurseFromShiftTeam,
+  updateNurseOrder,
   updateNurseShiftType,
   updateNurseShiftTypeRequest,
+  updateShiftTeamDivision,
 } from '@libs/api/nurse';
 import useEditNurseStore from './store';
 import { shallow } from 'zustand/shallow';
 import {
   UpdateShiftTeamDTO,
+  addNurseIntoShiftTeam,
   createShiftTeam,
   deleteShiftTeam,
-  getWard,
-  updateNurseOrder,
+  removeNurseFromShiftTeam,
   updateShiftTeam,
-  updateShiftTeamDivision,
-} from '@libs/api/ward';
-import useGlobalStore from 'store';
+} from '@libs/api/shiftTeam';
+import { getWard } from '@libs/api/ward';
 import { produce } from 'immer';
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -29,7 +29,9 @@ const useEditShiftTeam = () => {
     shallow
   );
 
-  const { wardId } = useGlobalStore();
+  const {
+    state: { wardId },
+  } = useAuth();
 
   const queryClient = useQueryClient();
   const getWardQueryKey = ['ward', wardId];
@@ -66,8 +68,6 @@ const useEditShiftTeam = () => {
         isDutyManager: false,
         isWardManager: false,
         memo: '',
-        workStartDate: '2023-08-01',
-        workEndDate: '2023-12-31',
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
@@ -176,7 +176,6 @@ const useEditShiftTeam = () => {
         await queryClient.cancelQueries(shiftQueryKey);
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
-
         oldWard &&
           queryClient.setQueryData<Ward>(
             getWardQueryKey,

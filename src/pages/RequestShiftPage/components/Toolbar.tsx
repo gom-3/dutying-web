@@ -1,6 +1,6 @@
 import { NextIcon, PrevIcon, SaveCompleteIcon, SavingIcon } from '@assets/svg';
 import Select from '@components/Select';
-import useRequestShift from '@hooks/useRequestShift';
+import useRequestShift from '@hooks/shift/useRequestShift';
 
 function Toolbar() {
   const {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ArrowDownIcon, ToggleOffIcon, ToggleOnIcon } from '@assets/svg';
-import useEditShift from '@hooks/useEditShift';
+import useEditShift from '@hooks/shift/useEditShift';
 import { event, sendEvent } from 'analytics';
 import { match } from 'ts-pattern';
 

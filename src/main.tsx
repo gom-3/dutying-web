@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HackleProvider } from '@hackler/react-sdk';
 import { hackleClient } from 'initializeApp';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast';
 import App from 'App';
 import './index.css';
 
@@ -16,6 +17,7 @@ const element = (
     <BrowserRouter>
       <HackleProvider hackleClient={hackleClient}>
         <App />
+        <Toaster position="bottom-center" containerClassName="toaster" />
       </HackleProvider>
     </BrowserRouter>
   </QueryClientProvider>

@@ -3,8 +3,8 @@ import { CancelIcon } from '@assets/svg';
 import Button from '@components/Button';
 import TextField from '@components/TextField';
 import TimeInput from '@components/TimeInput';
-import { CreateShiftTypeDTO } from '@libs/api/shift';
 import { createPortal } from 'react-dom';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 interface Props {
   open: boolean;
@@ -15,12 +15,14 @@ interface Props {
 }
 
 function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props) {
-  const initialValue = {
+  const initialValue: CreateShiftTypeDTO = {
     name: '',
     startTime: '00:00',
     endTime: '00:00',
-    color: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
+    textColor: '#000000',
     isOff: false,
+    isDefault: false,
     shortName: '',
   };
   const [writeShift, setWriteShift] = useState(initialValue);
@@ -38,7 +40,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
   return open
     ? createPortal(
         <div
-          className="fixed left-0 top-0 z-[1000] h-screen w-screen bg-[#00000066]"
+          className="fixed left-0 top-0 z-[1002] h-screen w-screen bg-[#00000066]"
           onClick={() => close()}
         >
           <div
@@ -109,27 +111,50 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 </div>
               </div>
             )}
-            <div className="flex w-full">
-              <div className="flex-1">
-                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">색상</p>
+            <div className="flex w-full gap-12">
+              <div className="flex flex-col items-center">
+                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">
+                  배경 색
+                </p>
                 <div className="flex flex-1 items-center gap-[4.375rem]">
                   <label
-                    htmlFor={`color_picker_modal`}
+                    htmlFor={`pick_background_color`}
                     className={`h-[3.4375rem] w-[3.4375rem] rounded-full border-[.0625rem] border-sub-4.5`}
-                    style={{ backgroundColor: writeShift.color }}
+                    style={{ backgroundColor: writeShift.backgroundColor }}
                   />
                   <input
-                    id={`color_picker_modal`}
-                    className="absolute translate-x-[100%] translate-y-[50%] opacity-0"
+                    id={`pick_background_color`}
+                    className="absolute h-[3.4375rem] w-[3.4375rem] opacity-0"
                     type="color"
-                    value={writeShift.color}
-                    onChange={(e) => setWriteShift({ ...writeShift, color: e.target.value })}
+                    value={writeShift.backgroundColor}
+                    onChange={(e) =>
+                      setWriteShift({ ...writeShift, backgroundColor: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">
+                  글자 색
+                </p>
+                <div className="flex flex-1 items-center gap-[4.375rem]">
+                  <label
+                    htmlFor={`pick_text_color`}
+                    className={`h-[3.4375rem] w-[3.4375rem] rounded-full border-[.0625rem] border-sub-4.5`}
+                    style={{ backgroundColor: writeShift.textColor }}
+                  />
+                  <input
+                    id={`pick_text_color`}
+                    className="absolute h-[3.4375rem] w-[3.4375rem] opacity-0"
+                    type="color"
+                    value={writeShift.textColor}
+                    onChange={(e) => setWriteShift({ ...writeShift, textColor: e.target.value })}
                   />
                 </div>
               </div>
             </div>
             <div className="flex">
-              {shiftType && (
+              {!shiftType?.isDefault && (
                 <Button
                   className="absolute bottom-[1.875rem] right-[7.9375rem] h-[2.5rem] w-[4.6875rem] border-sub-2.5 text-[1.25rem] font-semibold text-sub-2.5"
                   type="outline"

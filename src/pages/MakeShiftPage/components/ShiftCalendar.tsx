@@ -6,8 +6,8 @@ import { RefObject, useCallback, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
 import { event, sendEvent } from 'analytics';
-import useEditShift from '@hooks/useEditShift';
-import useEditShiftTeam from '@hooks/useEditShiftTeam';
+import useEditShift from '@hooks/shift/useEditShift';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface Props {
@@ -141,12 +141,12 @@ export default function ShiftCalendar({ isEditable }: Props) {
                   ${
                     item.dayType === 'saturday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-[#436DFF] text-white'
-                        : 'text-[#436DFF]'
+                        ? 'rounded-full bg-blue text-white'
+                        : 'text-blue'
                       : item.dayType === 'sunday' || item.dayType === 'holiday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-[#FF4A80] text-white'
-                        : 'text-[#FF4A80]'
+                        ? 'rounded-full bg-red text-white'
+                        : 'text-red'
                       : item.dayType === 'workday'
                       ? j === focus?.day
                         ? 'rounded-full bg-main-1 text-white'
@@ -433,7 +433,7 @@ export default function ShiftCalendar({ isEditable }: Props) {
                                           }}
                                         >
                                           <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
-                                          <div className="absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible peer-hover:bg-red-600" />
+                                          <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible" />
                                         </div>
                                       )}
                                 </div>
