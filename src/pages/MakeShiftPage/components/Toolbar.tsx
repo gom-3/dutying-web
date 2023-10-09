@@ -83,7 +83,7 @@ function Toolbar() {
       {currentSetup !== null &&
         createPortal(
           <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
-            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex w-[36.25rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-2">
+            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex w-[38.75rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-3">
               <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
                 <div
                   className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
@@ -124,7 +124,7 @@ function Toolbar() {
       {openInfo &&
         createPortal(
           <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
-            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-2">
+            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex h-[5.25rem] w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-3">
               <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
                 <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
                 <CancelIcon

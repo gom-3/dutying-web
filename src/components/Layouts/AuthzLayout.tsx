@@ -41,7 +41,7 @@ function AuthzLayout() {
 
   return (
     isAuth && (
-      <div>
+      <div className="h-full w-full">
         <Helmet title={demoRemainTime || '듀팅 | Dutying'} />
         <Outlet />
       </div>

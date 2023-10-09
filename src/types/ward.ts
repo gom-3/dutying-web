@@ -39,8 +39,10 @@ type WardShiftType = {
   startTime: string;
   /** 근무 종료 시간 @example 15:00 */
   endTime: string;
-  /** 근무 표시 색상 */
-  color: string;
+  /** 근무 배경 색상 */
+  backgroundColor: string;
+  /** 근무 글자 색상 */
+  textColor: string;
   /** 기본 값 여부 (D,E,N,O 인지) */
   isDefault: boolean;
   /** 휴가 여부 */

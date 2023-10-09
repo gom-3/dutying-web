@@ -5,7 +5,14 @@ const getShiftTypes = async (wardId: number) =>
 
 export type CreateShiftTypeDTO = Pick<
   WardShiftType,
-  'name' | 'shortName' | 'color' | 'startTime' | 'endTime' | 'isOff' | 'isDefault'
+  | 'name'
+  | 'shortName'
+  | 'backgroundColor'
+  | 'textColor'
+  | 'startTime'
+  | 'endTime'
+  | 'isOff'
+  | 'isDefault'
 >;
 const createShiftType = async (wardId: number, createShiftTypeDTO: CreateShiftTypeDTO) =>
   (await axiosInstance.post<WardShiftType>(`/wards/${wardId}/shift-types`, createShiftTypeDTO))

@@ -40,7 +40,8 @@ function RegisterWard() {
       shortName: 'O',
       startTime: '',
       endTime: '',
-      color: '#465B7A',
+      backgroundColor: '#465B7A',
+      textColor: '#FFFFFF',
       isDefault: true,
       isOff: true,
     },
@@ -49,7 +50,8 @@ function RegisterWard() {
       shortName: 'D',
       startTime: '07:00',
       endTime: '15:00',
-      color: '#4DC2AD',
+      backgroundColor: '#4DC2AD',
+      textColor: '#FFFFFF',
       isDefault: true,
       isOff: false,
     },
@@ -58,7 +60,8 @@ function RegisterWard() {
       shortName: 'E',
       startTime: '15:00',
       endTime: '23:00',
-      color: '#FF8BA5',
+      backgroundColor: '#FF8BA5',
+      textColor: '#FFFFFF',
       isDefault: true,
       isOff: false,
     },
@@ -67,7 +70,8 @@ function RegisterWard() {
       shortName: 'N',
       startTime: '23:00',
       endTime: '07:00',
-      color: '#3580FF',
+      backgroundColor: '#3580FF',
+      textColor: '#FFFFFF',
       isDefault: true,
       isOff: false,
     },
@@ -230,17 +234,17 @@ function RegisterWard() {
                   <label
                     htmlFor={`color_picker_${index}`}
                     className={`h-[2rem] w-[2rem] rounded-[.4375rem]`}
-                    style={{ backgroundColor: shiftType.color }}
+                    style={{ backgroundColor: shiftType.backgroundColor }}
                   />
                   <input
                     id={`color_picker_${index}`}
                     className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
                     type="color"
-                    value={shiftType.color}
+                    value={shiftType.backgroundColor}
                     onChange={(e) => {
                       setWardShiftTypes(
                         produce(wardShiftTypes, (draft) => {
-                          draft[index].color = e.target.value;
+                          draft[index].backgroundColor = e.target.value;
                         })
                       );
                     }}

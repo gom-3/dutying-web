@@ -34,7 +34,8 @@ function SetShiftType() {
         <p className="flex-[2]">근무 명</p>
         <p className="flex-1">약자</p>
         <p className="flex-[3]">근무 시간</p>
-        <p className="flex-1">색상</p>
+        <p className="flex-1">배경색</p>
+        <p className="flex-1">글자색</p>
         <p className="flex-1">유형</p>
         <p className="flex-1">수정</p>
       </div>
@@ -92,18 +93,15 @@ function SetShiftType() {
           <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
             <label
               htmlFor={`color_picker_${index}`}
-              className={`h-[2rem] w-[2rem] rounded-[.4375rem]`}
-              style={{ backgroundColor: shiftType.color }}
+              className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
+              style={{ backgroundColor: shiftType.backgroundColor }}
             />
-            <input
-              id={`color_picker_${index}`}
-              className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
-              type="color"
-              value={shiftType.color}
-              onChange={(e) => {
-                editShiftType(shiftType.wardShiftTypeId, { ...shiftType, color: e.target.value });
-                sendEvent(event.change_shift_type_color);
-              }}
+          </div>
+          <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+            <label
+              htmlFor={`color_picker_${index}`}
+              className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
+              style={{ backgroundColor: shiftType.textColor }}
             />
           </div>
           <div className="flex flex-1 justify-center">
