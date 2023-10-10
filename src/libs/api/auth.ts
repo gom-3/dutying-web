@@ -7,5 +7,7 @@ const demoStart = () => async () =>
       '/demo/start'
     )
   ).data;
+const logout = async (accessToken: string | null) =>
+  (await axiosInstance.post('/token/blacklist', { accessToken })).data;
 
-export { getAccountMe, demoStart };
+export { getAccountMe, demoStart, logout };

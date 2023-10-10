@@ -1,8 +1,8 @@
 import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
 import axiosInstance from '@libs/api/client';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { demoStart, getAccountMe } from '@libs/api/auth';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { demoStart, getAccountMe, logout } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
 import useInitStore from '@hooks/useInitStore';
@@ -24,10 +24,11 @@ const useAuth = () => {
     );
   const initStore = useInitStore();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const accountMeQuery = ['accountMe', accessToken];
+  const accountMeQueryKey = ['accountMe'];
 
-  const { data: accountMe } = useQuery(accountMeQuery, getAccountMe, {
+  const { data: accountMe } = useQuery(accountMeQueryKey, getAccountMe, {
     onSuccess: (account) => {
       setState('isAuth', true);
       setState('wardId', account.wardId);
@@ -37,9 +38,12 @@ const useAuth = () => {
     enabled: !!_loaded,
   });
 
-  const handleLogout = () => {
-    initStore();
-  };
+  const { mutate: handleLogout } = useMutation(() => logout(accessToken), {
+    onMutate: () => {
+      queryClient.cancelQueries(accountMeQueryKey);
+      initStore();
+    },
+  });
 
   const handleLogin = (accessToken: string) => {
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -61,7 +65,7 @@ const useAuth = () => {
 
   return {
     queryKey: {
-      accountMeQuery,
+      accountMeQuery: accountMeQueryKey,
     },
     state: {
       accountMe: accountMe === undefined ? null : accountMe,
