@@ -13,6 +13,9 @@ function AuthzLayout() {
   } = useAuth();
 
   useEffect(() => {
+    if (!isAuth) {
+      location.replace(ROUTE.LOGIN);
+    }
     if (accountMe && accountMe.status !== 'LINKED' && accountMe.status !== 'DEMO') {
       location.replace(ROUTE.REGISTER);
     }

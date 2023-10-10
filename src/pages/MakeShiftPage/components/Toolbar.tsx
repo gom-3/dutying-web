@@ -61,7 +61,7 @@ function Toolbar() {
           onClick={() => changeMonth('next')}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
-        <p className="ml-[1.25rem] font-apple text-[.875rem] text-main-1">
+        <p className="ml-[1.25rem] font-apple text-[.875rem] text-main-1" onClick={() => test()}>
           기본 OFF {shift?.days.filter((x) => x.dayType !== 'workday').length}일
         </p>
       </div>
