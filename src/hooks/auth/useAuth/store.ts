@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
+import { setAccessToken } from '@libs/api/client';
 
 interface State {
   isAuth: boolean;
@@ -10,6 +11,7 @@ interface State {
   nurseId: number | null;
   wardId: number | null;
   demoStartDate: string | null;
+  _loaded: boolean;
 }
 
 interface Store extends State {
@@ -24,6 +26,7 @@ const initialState: State = {
   nurseId: null,
   wardId: null,
   demoStartDate: null,
+  _loaded: false,
 };
 
 const useAuthStore = create<Store>()(
@@ -37,25 +40,22 @@ const useAuthStore = create<Store>()(
               draft[key] = value;
             })
           ),
-        initState: () => set(initialState),
+        initState: () => set({ ...initialState, _loaded: true }),
       }),
       {
         name: 'useAuthStore',
-        partialize: ({
-          isAuth,
-          accessToken,
-          accountId,
-          nurseId,
-          wardId,
-          demoStartDate,
-        }: Store) => ({
-          isAuth,
-          accessToken,
-          accountId,
-          nurseId,
-          wardId,
-          demoStartDate,
-        }),
+        partialize: ({ isAuth, accessToken, accountId, nurseId, wardId, demoStartDate }: Store) => {
+          if (accessToken) setAccessToken(accessToken);
+          return {
+            isAuth,
+            accessToken,
+            accountId,
+            nurseId,
+            wardId,
+            demoStartDate,
+            _loaded: true,
+          };
+        },
       }
     )
   )

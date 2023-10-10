@@ -2,6 +2,7 @@ import { FoldIcon } from '@assets/svg';
 import { useState, useEffect } from 'react';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
 import { event, sendEvent } from 'analytics';
+import useAuth from '@hooks/auth/useAuth';
 
 interface Props {
   isFold: boolean;
@@ -9,6 +10,9 @@ interface Props {
 }
 
 const NavigationBar = ({ isFold, setIsFold }: Props) => {
+  const {
+    state: { accountMe },
+  } = useAuth();
   const [canHover, setCanHover] = useState(true);
 
   useEffect(() => {
@@ -41,12 +45,7 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
         </div>
         <NavigationBarItemGroups />
         <div className="absolute bottom-[1.875rem] mt-[3.125rem] flex cursor-pointer flex-col items-center">
-          <img
-            className="h-[3.125rem] w-[3.125rem] rounded-full object-cover"
-            src="https://i.namu.wiki/i/GYWTca0tsaAfzBFcTsqoCt8wB_mrCGoSIoivXhaukvxQBil3JtX-BOXyEqqJRJJA7qTb-dpjv9YGfE7izuZ00Q.webp"
-            alt="user-profile"
-          />
-          <div className="mt-2 ">{'곰세마리'}님</div>
+          <div className="mt-2 ">{accountMe?.name}</div>
         </div>
       </div>
     </div>

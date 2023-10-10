@@ -36,16 +36,6 @@ function RegisterWard() {
   const [shiftTeams, setShiftTeams] = useState<string[][]>([[]]);
   const [wardShiftTypes, setWardShiftTypes] = useState([
     {
-      name: '오프',
-      shortName: 'O',
-      startTime: '',
-      endTime: '',
-      backgroundColor: '#465B7A',
-      textColor: '#FFFFFF',
-      isDefault: true,
-      isOff: true,
-    },
-    {
       name: '데이',
       shortName: 'D',
       startTime: '07:00',
@@ -74,6 +64,16 @@ function RegisterWard() {
       textColor: '#FFFFFF',
       isDefault: true,
       isOff: false,
+    },
+    {
+      name: '오프',
+      shortName: 'O',
+      startTime: '',
+      endTime: '',
+      backgroundColor: '#465B7A',
+      textColor: '#FFFFFF',
+      isDefault: true,
+      isOff: true,
     },
   ]);
   const {

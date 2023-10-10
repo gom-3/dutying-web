@@ -5,10 +5,10 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { demoStart, getAccountMe } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
-import useInitStore from '@hooks/useResetStore';
+import useInitStore from '@hooks/useInitStore';
 
 const useAuth = () => {
-  const [isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, setState, initState] =
+  const [isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, _loaded, setState] =
     useAuthStore(
       (state) => [
         state.isAuth,
@@ -17,8 +17,8 @@ const useAuth = () => {
         state.accountId,
         state.wardId,
         state.demoStartDate,
+        state._loaded,
         state.setState,
-        state.initState,
       ],
       shallow
     );
@@ -34,10 +34,7 @@ const useAuth = () => {
       setState('accountId', account.accountId);
       setState('nurseId', account.nurseId);
     },
-    onError: () => {
-      initState();
-    },
-    enabled: accessToken !== null,
+    enabled: !!_loaded,
   });
 
   const handleLogout = () => {
@@ -45,7 +42,6 @@ const useAuth = () => {
   };
 
   const handleLogin = (accessToken: string) => {
-    initStore();
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     setState('accessToken', accessToken);
   };
@@ -75,6 +71,7 @@ const useAuth = () => {
       accountId,
       wardId,
       demoStartDate,
+      _loaded,
     },
     actions: {
       handleLogin,
