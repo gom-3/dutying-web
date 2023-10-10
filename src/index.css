@@ -22,6 +22,12 @@ body::-webkit-scrollbar {
   flex-direction: column;
 }
 
+@media screen and (max-width: 1800px) {
+  html {
+    font-size: 14px !important;
+  }
+}
+
 @media screen and (max-width: 1680px) {
   html {
     font-size: 12px !important;

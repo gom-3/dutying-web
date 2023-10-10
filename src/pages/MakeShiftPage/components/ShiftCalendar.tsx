@@ -173,7 +173,7 @@ export default function ShiftCalendar() {
               color: shift.wardShiftTypes.find((x) => x.name === '오프')?.textColor,
             }}
           >
-            W
+            WO
           </div>
         </div>
       </div>

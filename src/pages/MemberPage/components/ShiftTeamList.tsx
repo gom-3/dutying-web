@@ -257,7 +257,7 @@ function ShiftTeamList() {
                             borderBottom: '.4375rem solid transparent',
                           }}
                         />
-                        초대하지 않아도, 가상의 프로필을 만들어 관리할 수 있어요! &nbsp; (언제든지
+                        초대하지 않아도, 가상의 간호사를 만들어 관리할 수 있어요! &nbsp; (언제든지
                         초대해서 연동 가능합니다.)
                       </div>
                     </div>
@@ -341,7 +341,9 @@ function ShiftTeamList() {
                                 <DragIcon className="invisible absolute left-[.75rem] h-[1.5rem] w-[1.5rem] group-hover:visible" />
                                 <div className="peer relative font-apple text-[1.25rem] font-semibold text-sub-1">
                                   {nurse.name}
-                                  <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-red"></div>
+                                  {!nurse.isConnected && (
+                                    <div className="absolute right-[-.3125rem] top-0 h-[.3125rem] w-[.3125rem] rounded-full bg-red"></div>
+                                  )}
                                 </div>
                                 <div className="invisible absolute top-0 z-30 flex translate-y-[-60%] items-center gap-[.5rem] whitespace-nowrap rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
                                   <div
