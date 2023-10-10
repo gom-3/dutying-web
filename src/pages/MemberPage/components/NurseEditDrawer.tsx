@@ -53,7 +53,6 @@ function NurseEditDrawer() {
         className="absolute left-[1.25rem] top-[.8125rem] h-[1.875rem] w-[1.875rem] scale-x-[-1] cursor-pointer"
         onClick={() => selectNurse(null)}
       />
-      <p className="ml-[1.5625rem] font-apple text-base font-medium text-sub-3">간호사별 관리</p>
       <div className="mb-[1.25rem] mt-[3.75rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
         <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
         <TextField
