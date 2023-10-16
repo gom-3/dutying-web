@@ -23,6 +23,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     isOff: false,
     isDefault: false,
     shortName: '',
+    isCounted: true,
   };
   const [writeShift, setWriteShift] = useState(initialValue);
 

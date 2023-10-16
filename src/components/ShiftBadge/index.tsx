@@ -1,3 +1,4 @@
+import useUIConfig from '@hooks/useUIConfig';
 import { Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,6 +10,10 @@ interface Props
 }
 
 function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props }: Props) {
+  const {
+    state: { shiftTypeColorStyle },
+  } = useUIConfig();
+
   return (
     <div
       className={twMerge(
@@ -17,9 +22,17 @@ function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props 
         className
       )}
       ref={forwardRef}
-      style={{
-        backgroundColor: shiftType ? shiftType.color : '#D6D6DE',
-      }}
+      style={
+        shiftTypeColorStyle === 'background'
+          ? {
+              backgroundColor: shiftType ? shiftType.color : '#D6D6DE',
+            }
+          : {
+              border: '.0625rem solid #E7E7EF',
+              backgroundColor: 'white',
+              color: shiftType ? shiftType.color : 'black',
+            }
+      }
       {...props}
     >
       {shiftType ? shiftType.shortName : '-'}

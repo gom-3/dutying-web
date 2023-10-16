@@ -58,8 +58,6 @@ export { default as SettingIcon } from './SettingIcon';
 export { default as SettingIconSelected } from './SettingIconSelected';
 export { default as ShareIcon } from './ShareIcon';
 export { default as SixDotsIcon } from './SixDotsIcon';
-export { default as ToggleOffIcon } from './ToggleOffIcon';
-export { default as ToggleOnIcon } from './ToggleOnIcon';
 export { default as UncheckedIcon } from './UncheckedIcon';
 export { default as UncheckedIcon2 } from './UncheckedIcon2';
 export { default as UnlinkedIcon } from './UnlinkedIcon';

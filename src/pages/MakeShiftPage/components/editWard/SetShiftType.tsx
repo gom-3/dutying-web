@@ -29,13 +29,14 @@ function SetShiftType() {
   };
 
   return (
-    <div className="relative h-fit rounded-[1.25rem]">
+    <div className="relative h-fit w-[44.8125rem] rounded-[1.25rem]">
       <div className="mt-[1.25rem] flex items-center text-center font-apple text-[.875rem] text-sub-2.5">
         <p className="flex-[2]">근무 명</p>
         <p className="flex-1">약자</p>
         <p className="flex-[3]">근무 시간</p>
         <p className="flex-1">색상</p>
         <p className="flex-1">유형</p>
+        <p className="flex-1">카운트</p>
         <p className="flex-1">수정</p>
       </div>
       {ward?.wardShiftTypes.map((shiftType, index) => (
@@ -105,6 +106,19 @@ function SetShiftType() {
               }}
             >
               {shiftType.isOff ? '휴가' : '근무'}
+            </div>
+          </div>
+          <div className="flex flex-1 justify-center">
+            <div
+              className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
+              onClick={() => {
+                editShiftType(shiftType.wardShiftTypeId, {
+                  ...shiftType,
+                  isCounted: !shiftType.isCounted,
+                });
+              }}
+            >
+              {shiftType.isCounted ? 'On' : 'Off'}
             </div>
           </div>
           <div className="flex flex-1 justify-center">

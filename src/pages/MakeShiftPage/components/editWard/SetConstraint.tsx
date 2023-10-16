@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ArrowDownIcon, ToggleOffIcon, ToggleOnIcon } from '@assets/svg';
+import { ArrowDownIcon } from '@assets/svg';
+import Toggle from '@components/Toggle';
 import useEditShift from '@hooks/shift/useEditShift';
 import { event, sendEvent } from 'analytics';
 import { match } from 'ts-pattern';
@@ -36,7 +37,7 @@ const SetConstraint = () => {
   return (
     checkFaultOptions &&
     wardConstraint && (
-      <div className="flex w-full flex-col font-apple">
+      <div className="flex w-[36.25rem] flex-col font-apple">
         {Object.entries(checkFaultOptions).map(([key, { label, value, isActive }]) => (
           <div
             key={key}
@@ -138,35 +139,23 @@ const SetConstraint = () => {
                 </div>
               ))
               .otherwise(() => null)}
-            {isActive ? (
-              <div
-                className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between"
-                onClick={() => {
+            <div className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between">
+              <Toggle
+                isOn={isActive}
+                setIsOn={() => {
                   updateConstraint({
                     ...wardConstraint,
-                    [key]: false,
+                    [key]: isActive ? false : true,
                   });
-                  sendEvent(event.inactive_constraint);
+                  sendEvent(isActive ? event.inactive_constraint : event.active_constraint);
                 }}
-              >
-                <ToggleOnIcon className="h-[1rem] w-[1.875rem]" />
+              />
+              {isActive ? (
                 <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 적용</p>
-              </div>
-            ) : (
-              <div
-                className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between"
-                onClick={() => {
-                  updateConstraint({
-                    ...wardConstraint,
-                    [key]: true,
-                  });
-                  sendEvent(event.active_constraint);
-                }}
-              >
-                <ToggleOffIcon className="h-[1rem] w-[1.875rem]" />
+              ) : (
                 <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 미적용</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
