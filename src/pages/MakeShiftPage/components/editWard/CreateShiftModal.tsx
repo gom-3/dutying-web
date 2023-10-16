@@ -19,8 +19,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     name: '',
     startTime: '00:00',
     endTime: '00:00',
-    backgroundColor: '#FFFFFF',
-    textColor: '#000000',
+    color: '#6c3434',
     isOff: false,
     isDefault: false,
     shortName: '',
@@ -111,46 +110,21 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 </div>
               </div>
             )}
-            <div className="flex w-full gap-12">
-              <div className="flex flex-col items-center">
-                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">
-                  배경 색
-                </p>
-                <div className="flex flex-1 items-center gap-[4.375rem]">
-                  <label
-                    htmlFor={`pick_background_color`}
-                    className={`h-[3.4375rem] w-[3.4375rem] rounded-full border-[.0625rem] border-sub-4.5`}
-                    style={{ backgroundColor: writeShift.backgroundColor }}
-                  />
-                  <input
-                    id={`pick_background_color`}
-                    className="absolute h-[3.4375rem] w-[3.4375rem] opacity-0"
-                    type="color"
-                    value={writeShift.backgroundColor}
-                    onChange={(e) =>
-                      setWriteShift({ ...writeShift, backgroundColor: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">
-                  글자 색
-                </p>
-                <div className="flex flex-1 items-center gap-[4.375rem]">
-                  <label
-                    htmlFor={`pick_text_color`}
-                    className={`h-[3.4375rem] w-[3.4375rem] rounded-full border-[.0625rem] border-sub-4.5`}
-                    style={{ backgroundColor: writeShift.textColor }}
-                  />
-                  <input
-                    id={`pick_text_color`}
-                    className="absolute h-[3.4375rem] w-[3.4375rem] opacity-0"
-                    type="color"
-                    value={writeShift.textColor}
-                    onChange={(e) => setWriteShift({ ...writeShift, textColor: e.target.value })}
-                  />
-                </div>
+            <div className="flex flex-col items-start">
+              <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">배경 색</p>
+              <div className="flex flex-1 items-center gap-[4.375rem]">
+                <label
+                  htmlFor={`pick_background_color`}
+                  className={`h-[3.4375rem] w-[3.4375rem] rounded-full border-[.0625rem] border-sub-4.5`}
+                  style={{ backgroundColor: writeShift.color }}
+                />
+                <input
+                  id={`pick_background_color`}
+                  className="absolute h-[3.4375rem] w-[3.4375rem] opacity-0"
+                  type="color"
+                  value={writeShift.color}
+                  onChange={(e) => setWriteShift({ ...writeShift, color: e.target.value })}
+                />
               </div>
             </div>
             <div className="flex">

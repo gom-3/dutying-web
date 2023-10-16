@@ -161,16 +161,16 @@ export default function ShiftCalendar() {
             <div
               key={index}
               className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] p-2 font-poppins text-[1.25rem]"
-              style={{ backgroundColor: shiftType.backgroundColor, color: shiftType.textColor }}
+              style={{ backgroundColor: shiftType.color, color: 'white' }}
             >
               {shiftType.shortName}
             </div>
           ))}
           <div
-            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[1.25rem] text-white"
+            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[0.8rem] text-white"
             style={{
-              backgroundColor: shift.wardShiftTypes.find((x) => x.name === '오프')?.backgroundColor,
-              color: shift.wardShiftTypes.find((x) => x.name === '오프')?.textColor,
+              backgroundColor: shift.wardShiftTypes.find((x) => x.name === '오프')?.color,
+              color: 'white',
             }}
           >
             WO

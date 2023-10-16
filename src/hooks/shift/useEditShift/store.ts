@@ -6,6 +6,7 @@ interface State {
   year: number;
   month: number;
   currentShiftTeam: ShiftTeam | null;
+  oldCurrentShiftTeamId: number | null;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
   foldedLevels: boolean[] | null;
@@ -32,6 +33,7 @@ const initialState: State = {
   month: new Date().getMonth() + 1,
   focus: null,
   currentShiftTeam: null,
+  oldCurrentShiftTeamId: null,
   focusedDayInfo: null,
   foldedLevels: null,
   editHistory: new Map(),
@@ -93,6 +95,7 @@ const useEditShiftStore = create<Store>()(
           readonly,
           showLayer,
           currentShiftTeam,
+          oldCurrentShiftTeamId,
         }: Store) => ({
           year,
           month,
@@ -100,6 +103,7 @@ const useEditShiftStore = create<Store>()(
           readonly,
           showLayer,
           currentShiftTeam,
+          oldCurrentShiftTeamId,
         }),
       }
     )

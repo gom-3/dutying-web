@@ -1,24 +1,27 @@
 import { event, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
-import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
 import { RestoreIcon, RestoreIconDisable } from '@assets/svg';
+import { twMerge } from 'tailwind-merge';
 
 function Panel() {
   const {
-    state: { readonly, faults, histories, shiftStatus },
+    state: { readonly, faults, histories, shiftStatus, shift },
     actions: { moveHistory, changeFocus },
   } = useEditShift();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('histories');
 
-  return !readonly && shiftStatus === 'success' ? (
+  return !readonly && shiftStatus === 'success' && shift ? (
     <div
       className={twMerge(
-        'absolute bottom-0 right-0 flex h-full w-[13.625rem] shrink-0 flex-col rounded-[1.25rem] bg-white shadow-banner',
-        open && 'h-[300%] max-h-[calc(50vh)]'
+        'flex flex-col rounded-[1.25rem] bg-white shadow-banner',
+        open && 'absolute bottom-[1.25rem] right-[1.25rem] h-[300%] max-h-[50vh]'
       )}
+      style={{
+        width: `${(shift.wardShiftTypes.length + 1) * 2 + 1.25}rem`,
+      }}
     >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div

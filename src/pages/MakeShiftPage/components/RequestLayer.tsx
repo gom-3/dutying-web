@@ -24,10 +24,7 @@ function RequestLayer({ isAccept, request, showCheck, showSlash }: Props) {
           >
             <RequestSlashIcon className="absolute right-0 top-[-0.85rem] h-[.75rem] w-[.75rem]" />
             <div className="invisible relative top-[-1.3125rem] z-[1] flex justify-center group-hover:visible">
-              <ChatIcon
-                className="absolute h-[1.25rem] w-[1.0625rem]"
-                fill={request.backgroundColor}
-              />
+              <ChatIcon className="absolute h-[1.25rem] w-[1.0625rem]" fill={request.color} />
               <p className="absolute font-poppins text-[.6rem] text-white">{request.shortName}</p>
             </div>
           </div>

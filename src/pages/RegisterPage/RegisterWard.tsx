@@ -40,8 +40,7 @@ function RegisterWard() {
       shortName: 'D',
       startTime: '07:00',
       endTime: '15:00',
-      backgroundColor: '#4DC2AD',
-      textColor: '#FFFFFF',
+      color: '#4DC2AD',
       isDefault: true,
       isOff: false,
     },
@@ -50,8 +49,7 @@ function RegisterWard() {
       shortName: 'E',
       startTime: '15:00',
       endTime: '23:00',
-      backgroundColor: '#FF8BA5',
-      textColor: '#FFFFFF',
+      color: '#FF8BA5',
       isDefault: true,
       isOff: false,
     },
@@ -60,8 +58,7 @@ function RegisterWard() {
       shortName: 'N',
       startTime: '23:00',
       endTime: '07:00',
-      backgroundColor: '#3580FF',
-      textColor: '#FFFFFF',
+      color: '#3580FF',
       isDefault: true,
       isOff: false,
     },
@@ -70,8 +67,7 @@ function RegisterWard() {
       shortName: 'O',
       startTime: '',
       endTime: '',
-      backgroundColor: '#465B7A',
-      textColor: '#FFFFFF',
+      color: '#465B7A',
       isDefault: true,
       isOff: true,
     },
@@ -97,6 +93,17 @@ function RegisterWard() {
   } = useRegister();
 
   const navigate = useNavigate();
+
+  const appendClipboardTextToNurse = async (index: number) => {
+    const nurses = (await navigator.clipboard.readText())
+      .split('\n')
+      .map((x) => x.replace(/\r/g, ''));
+    setShiftTeams(
+      produce(shiftTeams, (draft) => {
+        draft[index] = draft[index].concat(nurses);
+      })
+    );
+  };
 
   useEffect(() => {
     if (accountMe?.status !== 'WARD_SELECT_PENDING') navigate(ROUTE.REGISTER);
@@ -179,8 +186,7 @@ function RegisterWard() {
               <p className="flex-[2]">근무 명</p>
               <p className="flex-1">약자</p>
               <p className="flex-[3]">근무 시간</p>
-              <p className="flex-1">배경색</p>
-              <p className="flex-1">글자색</p>
+              <p className="flex-1">색상</p>
               <p className="flex-1">유형</p>
               <p className="flex-1">수정</p>
             </div>
@@ -239,41 +245,22 @@ function RegisterWard() {
                     </>
                   )}
                 </div>
+
                 <div className="relative flex flex-1  items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
                   <label
-                    htmlFor={`pick_background_color_${index}`}
+                    htmlFor={`pick_color_${index}`}
                     className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
-                    style={{ backgroundColor: shiftType.backgroundColor }}
+                    style={{ backgroundColor: shiftType.color }}
                   />
                   <input
-                    id={`pick_background_color_${index}`}
+                    id={`pick_color_${index}`}
                     className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
                     type="color"
-                    value={shiftType.backgroundColor}
+                    value={shiftType.color}
                     onChange={(e) => {
                       setWardShiftTypes(
                         produce(wardShiftTypes, (draft) => {
-                          draft[index].backgroundColor = e.target.value;
-                        })
-                      );
-                    }}
-                  />
-                </div>
-                <div className="relative flex flex-1  items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
-                  <label
-                    htmlFor={`pick_text_color_${index}`}
-                    className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
-                    style={{ backgroundColor: shiftType.textColor }}
-                  />
-                  <input
-                    id={`pick_text_color_${index}`}
-                    className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
-                    type="color"
-                    value={shiftType.textColor}
-                    onChange={(e) => {
-                      setWardShiftTypes(
-                        produce(wardShiftTypes, (draft) => {
-                          draft[index].textColor = e.target.value;
+                          draft[index].color = e.target.value;
                         })
                       );
                     }}
@@ -297,7 +284,7 @@ function RegisterWard() {
                   <PenIcon
                     className="h-[2.25rem] w-[2.25rem] cursor-pointer"
                     onClick={() => {
-                      setTempShiftType({ ...shiftType, wardShiftTypeId: index });
+                      setTempShiftType({ ...shiftType, wardShiftTypeId: index, isCounted: true });
                       setOpenModal(true);
                     }}
                   />
@@ -377,6 +364,11 @@ function RegisterWard() {
                     placeholder="이름 추가"
                     className="w-[70%] focus:outline-none"
                     onKeyDown={(e) => {
+                      if ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')) {
+                        e.preventDefault();
+                        appendClipboardTextToNurse(index);
+                        return;
+                      }
                       if (e.nativeEvent.isComposing) return;
                       if (e.currentTarget.value === '') return;
                       if (e.key === 'Enter') {
