@@ -5,7 +5,7 @@ const getWard = async (wardId: number) => (await axiosInstance.get<Ward>(`/wards
 export type CreateWardDTO = {
   name: string;
   hospitalName: string;
-  wardShiftTypes: Omit<WardShiftType, 'wardShiftTypeId'>[];
+  wardShiftTypes: Omit<WardShiftType, 'wardShiftTypeId' | 'isCounted'>[];
   shiftTeams: { nurseNames: string[] }[];
 };
 const createWrad = async (createWardDTO: CreateWardDTO) =>

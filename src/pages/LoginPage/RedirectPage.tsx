@@ -13,8 +13,7 @@ const RedirectPage = () => {
     const accessToken = query?.['accessToken'] as string;
     const nextPageUrl = query?.['nextPageUrl'] as string;
     if (accessToken) {
-      handleLogin(accessToken);
-      location.replace(nextPageUrl || '/');
+      handleLogin(accessToken, nextPageUrl);
     }
   }, []);
 

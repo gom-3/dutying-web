@@ -14,7 +14,9 @@ const LoginPage = () => {
         <div className="relative">
           <div className="absolute top-[-4.3rem] font-apple text-[2rem] text-sub-2">로그인</div>
           <a
-            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao`}
+            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao?nextPageUrl=${
+              location.origin
+            }/make`}
             className="flex h-[7.625rem] w-[40rem] items-center justify-center rounded-[1.25rem] border border-sub-4 shadow-banner"
           >
             <KakaoIcon className="mr-[3.125rem] h-[4rem] w-[4rem]" />

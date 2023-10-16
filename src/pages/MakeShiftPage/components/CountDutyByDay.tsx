@@ -19,8 +19,8 @@ function CountDutyByDay() {
             ${index === shift.wardShiftTypes.length - 1 && 'rounded-bl-[1.25rem]'}
             `}
               style={{
-                backgroundColor: wardShiftType.backgroundColor,
-                color: wardShiftType.textColor,
+                backgroundColor: wardShiftType.color,
+                color: 'white',
               }}
             >
               {wardShiftType.shortName}

@@ -6,6 +6,7 @@ import { demoStart, getAccountMe, logout } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
 import useInitStore from '@hooks/useInitStore';
+import useEditShiftStore from '@hooks/shift/useEditShift/store';
 
 const useAuth = () => {
   const [isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, _loaded, setState] =
@@ -23,6 +24,7 @@ const useAuth = () => {
       shallow
     );
   const initStore = useInitStore();
+  const { initState: initEditShiftStore } = useEditShiftStore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -45,9 +47,12 @@ const useAuth = () => {
     },
   });
 
-  const handleLogin = (accessToken: string) => {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  const handleLogin = (accessToken: string, nextPageUrl?: string) => {
+    setState('isAuth', true);
     setState('accessToken', accessToken);
+    initEditShiftStore();
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    location.replace(nextPageUrl || '/');
   };
 
   const { mutate: demoTry } = useMutation(demoStart(), {

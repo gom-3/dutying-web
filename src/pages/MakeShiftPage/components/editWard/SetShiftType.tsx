@@ -34,8 +34,7 @@ function SetShiftType() {
         <p className="flex-[2]">근무 명</p>
         <p className="flex-1">약자</p>
         <p className="flex-[3]">근무 시간</p>
-        <p className="flex-1">배경색</p>
-        <p className="flex-1">글자색</p>
+        <p className="flex-1">색상</p>
         <p className="flex-1">유형</p>
         <p className="flex-1">수정</p>
       </div>
@@ -94,14 +93,7 @@ function SetShiftType() {
             <label
               htmlFor={`color_picker_${index}`}
               className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
-              style={{ backgroundColor: shiftType.backgroundColor }}
-            />
-          </div>
-          <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
-            <label
-              htmlFor={`color_picker_${index}`}
-              className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
-              style={{ backgroundColor: shiftType.textColor }}
+              style={{ backgroundColor: shiftType.color }}
             />
           </div>
           <div className="flex flex-1 justify-center">
