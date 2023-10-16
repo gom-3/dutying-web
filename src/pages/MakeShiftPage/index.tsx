@@ -16,7 +16,9 @@ const MakeShiftPage = () => {
       <div
         className="sticky bottom-0 z-20 flex items-stretch gap-[1.25rem] bg-main-bg py-[1.25rem] pl-[15.9375rem]"
         style={{
-          height: shift ? `${shift.wardShiftTypes.length * 2.5 + 2.5}rem` : '0',
+          height: shift
+            ? `${shift.wardShiftTypes.filter((x) => x.isCounted).length * 2.5 + 2.5}rem`
+            : '0',
         }}
       >
         <CountDutyByDay />

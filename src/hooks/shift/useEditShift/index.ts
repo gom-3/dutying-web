@@ -107,6 +107,7 @@ const useEditShift = (activeEffect = false) => {
         if (data === null) return;
 
         if (
+          !foldedLevels ||
           !oldCurrentShiftTeamId ||
           (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeam?.shiftTeamId)
         ) {

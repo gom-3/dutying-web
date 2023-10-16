@@ -8,7 +8,15 @@ import { Toaster } from 'react-hot-toast';
 import App from 'App';
 import './index.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: 'always',
+      staleTime: 1000 * 10,
+    },
+  },
+});
 
 const container = document.getElementById('root') as HTMLElement;
 const element = (

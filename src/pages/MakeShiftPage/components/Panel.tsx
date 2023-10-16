@@ -20,7 +20,7 @@ function Panel() {
         open && 'absolute bottom-[1.25rem] right-[1.25rem] h-[300%] max-h-[50vh]'
       )}
       style={{
-        width: `${(shift.wardShiftTypes.length + 1) * 2 + 1.25}rem`,
+        width: `${(shift.wardShiftTypes.filter((x) => x.isCounted).length + 1) * 2 + 1.25}rem`,
       }}
     >
       <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
