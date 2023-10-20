@@ -299,8 +299,6 @@ const useEditShift = (activeEffect = false) => {
         } else {
           setState('month', month - 1);
         }
-        if (month === 7) return;
-        else setState('month', month - 1);
       } else if (type === 'next') {
         if (month === 12) {
           setState('month', 1);
@@ -308,8 +306,6 @@ const useEditShift = (activeEffect = false) => {
         } else {
           setState('month', month + 1);
         }
-        if (month === 8) return;
-        else setState('month', month + 1);
       }
       sendEvent(event.change_month);
     },
@@ -504,7 +500,7 @@ const useEditShift = (activeEffect = false) => {
   useEffect(() => {
     if (activeEffect && shift && checkFaultOptions && wardShiftTypeMap)
       setState('faults', checkShift(shift, checkFaultOptions, wardShiftTypeMap));
-  }, [activeEffect, shift, checkFaultOptions]);
+  }, [activeEffect, shift, checkFaultOptions, wardShiftTypeMap, readonly]);
 
   useEffect(() => {
     if (activeEffect) document.addEventListener('keydown', handleKeyDown);

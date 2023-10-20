@@ -4,7 +4,6 @@ import {
   Logo,
   LogoGray,
   LogoWithSymbol,
-  MenuIcon,
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
@@ -59,7 +58,7 @@ function LandingPage() {
             >
               다운로드
             </a>
-            <MenuIcon className="ml-[20px] h-[24px] w-[24px]" />
+            {/* <MenuIcon className="ml-[20px] h-[24px] w-[24px]" /> */}
           </div>
           <div className="hidden w-full items-center xl:flex">
             <div className="ml-auto mr-[3.75rem] flex h-[2.5rem] items-center gap-[2.8125rem] border-r-[.0625rem] border-sub-4 pr-[3.75rem]">

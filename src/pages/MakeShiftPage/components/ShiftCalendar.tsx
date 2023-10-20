@@ -117,10 +117,6 @@ export default function ShiftCalendar() {
     }
   }, [focus]);
 
-  useEffect(() => {
-    console.log(shift, foldedLevels, wardShiftTypeMap, currentShiftTeam);
-  }, [shift, foldedLevels, wardShiftTypeMap, currentShiftTeam]);
-
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
     <div ref={clickAwayRef} className="flex w-full flex-col">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
