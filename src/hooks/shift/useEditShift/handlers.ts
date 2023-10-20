@@ -167,19 +167,19 @@ export const checkShift = (
     const division = shift.divisionShiftNurses[i];
     for (let j = 0; j < division.length; j++) {
       const row = division[j];
+      let str = row.wardShiftList
+        .map((x, index) =>
+          x === null
+            ? '-'
+            : x === row.wardReqShiftList[index]
+            ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
+            : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
+        )
+        .join('');
+      str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
         if (option.isActive === false) continue;
-        let str = row.wardShiftList
-          .map((x, index) =>
-            x === null
-              ? '-'
-              : x === row.wardReqShiftList[index]
-              ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
-              : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
-          )
-          .join('');
-        str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const match = option.regExp.exec(str);

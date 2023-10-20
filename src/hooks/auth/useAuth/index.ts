@@ -52,7 +52,7 @@ const useAuth = () => {
     setState('accessToken', accessToken);
     initEditShiftStore();
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    location.replace(nextPageUrl || '/');
+    location.replace(nextPageUrl || '/make');
   };
 
   const { mutate: demoTry } = useMutation(demoStart(), {

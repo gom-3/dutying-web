@@ -13,13 +13,14 @@ function AuthzLayout() {
   } = useAuth();
 
   useEffect(() => {
+    console.log(isAuth, accountMe);
     if (!isAuth) {
       location.replace(ROUTE.LOGIN);
     }
     if (accountMe && accountMe.status !== 'LINKED' && accountMe.status !== 'DEMO') {
-      location.replace(ROUTE.REGISTER);
+      if (location.pathname !== ROUTE.REGISTER) location.replace(ROUTE.REGISTER);
     }
-  }, [isAuth]);
+  }, [isAuth, accountMe]);
 
   useInterval(
     () => {

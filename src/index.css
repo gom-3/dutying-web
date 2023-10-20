@@ -150,15 +150,30 @@ body::-webkit-scrollbar {
 
 @font-face {
   font-family: 'LINESeedKR';
-  font-style: bold;
+  font-style: normal;
+  src: url('./assets/fonts/LINESeedKR-Th.ttf');
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+  font-style: normal;
+  src: url('./assets/fonts/LINESeedKR-Rg.ttf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+  font-style: normal;
   src: url('./assets/fonts/LINESeedKR-Bd.ttf');
+  font-weight: 700;
 }
 
 /* 100 Thin */
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
-  src: url('./assets/fonts/Poppins-Bold.ttf');
+  src: url('./assets/fonts/Poppins-Thin.ttf');
   font-weight: 100;
 }
 /* 200 Ulta Light */
@@ -193,7 +208,7 @@ body::-webkit-scrollbar {
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
-  src: url('./assets/fonts/Poppins-Bold.ttf');
+  src: url('./assets/fonts/Poppins-SemiBold.ttf');
   font-weight: 600;
 }
 /* 700 Bold */
@@ -207,13 +222,13 @@ body::-webkit-scrollbar {
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
-  src: url('./assets/fonts/Poppins-Bold.ttf');
+  src: url('./assets/fonts/Poppins-ExtraBold.ttf');
   font-weight: 800;
 }
 /* 900 Heavy */
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
-  src: url('./assets/fonts/Poppins-Bold.ttf');
+  src: url('./assets/fonts/Poppins-Black.ttf');
   font-weight: 900;
 }
