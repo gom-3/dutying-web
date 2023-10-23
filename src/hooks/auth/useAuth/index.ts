@@ -1,51 +1,46 @@
 import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
 import axiosInstance from '@libs/api/client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { demoStart, getAccountMe, logout } from '@libs/api/auth';
+import { useMutation } from '@tanstack/react-query';
+import { demoStart, getAccountMe } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
 import useInitStore from '@hooks/useInitStore';
 import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import { useEffect } from 'react';
 
-const useAuth = () => {
-  const [isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, _loaded, setState] =
-    useAuthStore(
-      (state) => [
-        state.isAuth,
-        state.accessToken,
-        state.nurseId,
-        state.accountId,
-        state.wardId,
-        state.demoStartDate,
-        state._loaded,
-        state.setState,
-      ],
-      shallow
-    );
+const useAuth = (activeEffect = false) => {
+  const [
+    accountMe,
+    isAuth,
+    accessToken,
+    nurseId,
+    accountId,
+    wardId,
+    demoStartDate,
+    _loaded,
+    setState,
+  ] = useAuthStore(
+    (state) => [
+      state.accountMe,
+      state.isAuth,
+      state.accessToken,
+      state.nurseId,
+      state.accountId,
+      state.wardId,
+      state.demoStartDate,
+      state._loaded,
+      state.setState,
+    ],
+    shallow
+  );
   const initStore = useInitStore();
   const { initState: initEditShiftStore } = useEditShiftStore();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const accountMeQueryKey = ['accountMe'];
-
-  const { data: accountMe } = useQuery(accountMeQueryKey, getAccountMe, {
-    onSuccess: (account) => {
-      setState('isAuth', true);
-      setState('wardId', account.wardId);
-      setState('accountId', account.accountId);
-      setState('nurseId', account.nurseId);
-    },
-    enabled: !!_loaded,
-  });
-
-  const { mutate: handleLogout } = useMutation(() => logout(accessToken), {
-    onMutate: () => {
-      queryClient.cancelQueries(accountMeQueryKey);
-      initStore();
-    },
-  });
+  const handleLogout = async () => {
+    initStore();
+  };
 
   const handleLogin = (accessToken: string, nextPageUrl?: string) => {
     setState('isAuth', true);
@@ -68,10 +63,22 @@ const useAuth = () => {
     },
   });
 
+  const handleGetAccountMe = async () => {
+    const account = await getAccountMe();
+    setState('accountMe', account);
+    setState('wardId', account.wardId);
+    setState('accountId', account.accountId);
+    setState('nurseId', account.nurseId);
+    setState('isAuth', true);
+  };
+
+  useEffect(() => {
+    if (_loaded && activeEffect) {
+      handleGetAccountMe();
+    }
+  }, [activeEffect, accessToken, _loaded]);
+
   return {
-    queryKey: {
-      accountMeQuery: accountMeQueryKey,
-    },
     state: {
       accountMe: accountMe === undefined ? null : accountMe,
       isAuth,
@@ -83,6 +90,7 @@ const useAuth = () => {
       _loaded,
     },
     actions: {
+      handleGetAccountMe,
       handleLogin,
       handleLogout,
       demoTry,

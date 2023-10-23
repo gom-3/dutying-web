@@ -119,7 +119,7 @@ export default function ShiftCalendar() {
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
     <div ref={clickAwayRef} className="flex w-full flex-col">
-      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
+      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             {/* 구분 */}
@@ -200,7 +200,7 @@ export default function ShiftCalendar() {
       </div>
       <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
         <div
-          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pt-[1.25rem] scrollbar-hide"
+          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pr-[1rem] pt-[1.25rem] scrollbar-hide"
           ref={containerRef}
         >
           {shift.divisionShiftNurses
@@ -248,7 +248,7 @@ export default function ShiftCalendar() {
                             >
                               {(provided) => (
                                 <div
-                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
+                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem] bg-white
                                 ${
                                   rowIndex === 0
                                     ? rowIndex === rows.length - 1

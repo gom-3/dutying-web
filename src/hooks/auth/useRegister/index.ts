@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { CreateNurseDTO, createAccountNurse } from '@libs/api/nurse';
 import useAuth from '../useAuth';
 import { CreateWardDTO, addMeToWatingNurses, createWrad, deleteWatingNurses } from '@libs/api/ward';
@@ -8,19 +8,17 @@ import ROUTE from '@libs/constant/path';
 
 const useRegister = () => {
   const {
-    queryKey: { accountMeQuery },
     state: { accountMe, accountId },
+    actions: { handleGetAccountMe },
   } = useAuth();
   const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
 
   const { mutate: changeAccountStatusMutate } = useMutation(
     ({ accountId, status }: { accountId: number; status: Account['status'] }) =>
       eidtAccountStatus(accountId, status),
     {
       onSuccess: ({ status }) => {
-        queryClient.invalidateQueries(accountMeQuery);
+        handleGetAccountMe();
         if (status === 'LINKED') navigate(ROUTE.MAKE);
       },
     }
