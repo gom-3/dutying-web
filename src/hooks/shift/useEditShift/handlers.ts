@@ -1,7 +1,8 @@
 import { koToEn } from '@libs/util/koToEn';
 
-export const moveFocusByKeydown = (
-  e: KeyboardEvent,
+export const moveFocus = (
+  direction: 'left' | 'right' | 'up' | 'down',
+  moveEnd: boolean,
   shift: Shift | RequestShift,
   focus: Focus,
   setFocus: (focus: Focus) => void
@@ -15,12 +16,8 @@ export const moveFocusByKeydown = (
   let newNurseId = shiftNurseId;
   let newDay = day;
 
-  if (['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1) {
-    e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
-  }
-
-  switch (e.key) {
-    case 'ArrowLeft': {
+  switch (direction) {
+    case 'left': {
       if (day === 0) {
         if (nurseIndex === 0) {
           newDay = dayCnt - 1;
@@ -30,11 +27,11 @@ export const moveFocusByKeydown = (
           newDay = dayCnt - 1;
         }
       } else {
-        newDay = e.ctrlKey || e.metaKey ? 0 : Math.max(0, day - 1);
+        newDay = moveEnd ? 0 : Math.max(0, day - 1);
       }
       break;
     }
-    case 'ArrowRight': {
+    case 'right': {
       if (day === dayCnt - 1) {
         if (nurseIndex === flatNurses.length - 1) {
           newNurseId = flatNurses[0].shiftNurseId;
@@ -44,32 +41,28 @@ export const moveFocusByKeydown = (
           newDay = 0;
         }
       } else {
-        newDay = e.ctrlKey || e.metaKey ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
+        newDay = moveEnd ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
       }
       break;
     }
-    case 'ArrowUp': {
+    case 'up': {
       if (nurseIndex === 0) {
         newNurseId = flatNurses[flatNurses.length - 1].shiftNurseId;
         newDay = day;
       } else {
-        newNurseId =
-          e.ctrlKey || e.metaKey
-            ? flatNurses[0].shiftNurseId
-            : flatNurses[nurseIndex - 1].shiftNurseId;
+        newNurseId = moveEnd ? flatNurses[0].shiftNurseId : flatNurses[nurseIndex - 1].shiftNurseId;
         newDay = day;
       }
       break;
     }
-    case 'ArrowDown': {
+    case 'down': {
       if (nurseIndex === flatNurses.length - 1) {
         newNurseId = flatNurses[0].shiftNurseId;
         newDay = day;
       } else {
-        newNurseId =
-          e.ctrlKey || e.metaKey
-            ? flatNurses[flatNurses.length - 1].shiftNurseId
-            : flatNurses[nurseIndex + 1].shiftNurseId;
+        newNurseId = moveEnd
+          ? flatNurses[flatNurses.length - 1].shiftNurseId
+          : flatNurses[nurseIndex + 1].shiftNurseId;
         newDay = day;
       }
       break;
@@ -174,19 +167,19 @@ export const checkShift = (
     const division = shift.divisionShiftNurses[i];
     for (let j = 0; j < division.length; j++) {
       const row = division[j];
+      let str = row.wardShiftList
+        .map((x, index) =>
+          x === null
+            ? '-'
+            : x === row.wardReqShiftList[index]
+            ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
+            : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
+        )
+        .join('');
+      str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
         if (option.isActive === false) continue;
-        let str = row.wardShiftList
-          .map((x, index) =>
-            x === null
-              ? '-'
-              : x === row.wardReqShiftList[index]
-              ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
-              : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
-          )
-          .join('');
-        str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const match = option.regExp.exec(str);

@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRequestShiftStore } from './store';
 import { shallow } from 'zustand/shallow';
-import {
-  findNurse,
-  keydownEventMapper,
-  moveFocusByKeydown,
-} from '@hooks/shift/useEditShift/handlers';
+import { findNurse, keydownEventMapper, moveFocus } from '@hooks/shift/useEditShift/handlers';
 import { produce } from 'immer';
 import { getReqShift, updateReqShift } from '@libs/api/shift';
 import { event, sendEvent } from 'analytics';
@@ -183,21 +179,56 @@ const useRequestShift = (activeEffect = false) => {
     focusedShiftChange({ wardId, requestShift, focus, shiftTypeId });
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!focus || !requestShift) return;
-    moveFocusByKeydown(e, requestShift, focus, (focus: Focus | null) => {
-      setState('focus', focus);
-      sendEvent(e.ctrlKey || e.metaKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
-    });
-    keydownEventMapper(
-      e,
-      ...requestShift.wardShiftTypes.map((shiftType) => ({
-        keys: [shiftType.shortName],
-        callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
-      })),
-      { keys: ['Backspace'], callback: () => changeFocusedShift(null) }
-    );
-  };
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (
+        ['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1
+      ) {
+        e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+      }
+
+      const ctrlKey = e.ctrlKey || e.metaKey;
+
+      if (!focus || !requestShift) return;
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        moveFocus(
+          e.key.replace('Arrow', '').toLowerCase() as 'left' | 'right' | 'up' | 'down',
+          ctrlKey,
+          requestShift,
+          focus,
+          (focus: Focus | null) => {
+            setState('focus', focus);
+            sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+          }
+        );
+      }
+      keydownEventMapper(
+        e,
+        ...requestShift.wardShiftTypes.map((shiftType) => ({
+          keys: [shiftType.shortName],
+          callback: () => {
+            changeFocusedShift(shiftType.wardShiftTypeId);
+            moveFocus('right', ctrlKey, requestShift, focus, (focus: Focus | null) => {
+              setState('focus', focus);
+              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+            });
+          },
+        })),
+        {
+          keys: ['Backspace'],
+          callback: () => {
+            changeFocusedShift(null);
+            moveFocus('left', ctrlKey, requestShift, focus, (focus: Focus | null) => {
+              setState('focus', focus);
+              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+            });
+          },
+        },
+        { keys: ['Delete'], callback: () => changeFocusedShift(null) }
+      );
+    },
+    [requestShift, focus]
+  );
 
   useEffect(() => {
     activeEffect && document.addEventListener('keydown', handleKeyDown);

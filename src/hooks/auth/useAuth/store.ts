@@ -5,6 +5,7 @@ import { produce } from 'immer';
 import { setAccessToken } from '@libs/api/client';
 
 interface State {
+  accountMe: Account | null;
   isAuth: boolean;
   accessToken: string | null;
   accountId: number | null;
@@ -20,6 +21,7 @@ interface Store extends State {
 }
 
 const initialState: State = {
+  accountMe: null,
   isAuth: false,
   accessToken: null,
   accountId: null,

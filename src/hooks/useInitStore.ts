@@ -1,3 +1,4 @@
+import { setAccessToken } from '@libs/api/client';
 import useAuthStore from './auth/useAuth/store';
 import useEditShiftStore from './shift/useEditShift/store';
 import { useRequestShiftStore } from './shift/useRequestShift/store';
@@ -11,6 +12,7 @@ const useInitStore = () => {
     initReqShiftStore();
     initShiftStore();
     initAuthStore();
+    setAccessToken('');
   };
 
   return initStore;

@@ -9,6 +9,7 @@ import { event, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
+import useUIConfig from '@hooks/useUIConfig';
 
 export default function ShiftCalendar() {
   const {
@@ -30,6 +31,9 @@ export default function ShiftCalendar() {
     state: { shiftTeams },
     actions: { selectNurse, moveNurseOrder, editDivision },
   } = useEditShiftTeam();
+  const {
+    state: { separateWeekendColor, shiftTypeColorStyle },
+  } = useUIConfig();
 
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -115,7 +119,7 @@ export default function ShiftCalendar() {
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
     <div ref={clickAwayRef} className="flex w-full flex-col">
-      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
+      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             {/* 구분 */}
@@ -133,19 +137,23 @@ export default function ShiftCalendar() {
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem]
+                className={`w-[2.25rem] flex-1 rounded-full text-center font-poppins text-[1rem]
                   ${
                     item.dayType === 'saturday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-red text-white'
+                        ? separateWeekendColor
+                          ? 'bg-blue text-white'
+                          : 'bg-red text-white'
+                        : separateWeekendColor
+                        ? 'text-blue'
                         : 'text-red'
                       : item.dayType === 'sunday' || item.dayType === 'holiday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-red text-white'
+                        ? 'bg-red text-white'
                         : 'text-red'
                       : item.dayType === 'workday'
                       ? j === focus?.day
-                        ? 'rounded-full bg-main-1 text-white'
+                        ? 'bg-main-1 text-white'
                         : 'text-sub-2.5'
                       : ''
                   }
@@ -157,21 +165,34 @@ export default function ShiftCalendar() {
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2 px-[1.5625rem] text-center">
-          {shift.wardShiftTypes.map((shiftType, index) => (
-            <div
-              key={index}
-              className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] p-2 font-poppins text-[1.25rem]"
-              style={{ backgroundColor: shiftType.backgroundColor, color: shiftType.textColor }}
-            >
-              {shiftType.shortName}
-            </div>
-          ))}
+          {shift.wardShiftTypes
+            .filter((x) => x.isCounted)
+            .map((shiftType, index) => (
+              <div
+                key={index}
+                className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] p-2 font-poppins text-[1.25rem]"
+                style={
+                  shiftTypeColorStyle === 'background'
+                    ? { backgroundColor: shiftType.color, color: 'white' }
+                    : { color: shiftType.color, backgroundColor: 'white' }
+                }
+              >
+                {shiftType.shortName}
+              </div>
+            ))}
           <div
-            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[1.25rem] text-white"
-            style={{
-              backgroundColor: shift.wardShiftTypes.find((x) => x.name === '오프')?.backgroundColor,
-              color: shift.wardShiftTypes.find((x) => x.name === '오프')?.textColor,
-            }}
+            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[0.8rem] text-white"
+            style={
+              shiftTypeColorStyle === 'background'
+                ? {
+                    backgroundColor: shift.wardShiftTypes.find((x) => x.name === '오프')?.color,
+                    color: 'white',
+                  }
+                : {
+                    color: shift.wardShiftTypes.find((x) => x.name === '오프')?.color,
+                    backgroundColor: 'white',
+                  }
+            }
           >
             WO
           </div>
@@ -179,7 +200,7 @@ export default function ShiftCalendar() {
       </div>
       <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
         <div
-          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pt-[1.25rem] scrollbar-hide"
+          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pr-[1rem] pt-[1.25rem] scrollbar-hide"
           ref={containerRef}
         >
           {shift.divisionShiftNurses
@@ -227,7 +248,7 @@ export default function ShiftCalendar() {
                             >
                               {(provided) => (
                                 <div
-                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
+                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem] bg-white
                                 ${
                                   rowIndex === 0
                                     ? rowIndex === rows.length - 1
@@ -315,7 +336,15 @@ export default function ShiftCalendar() {
                                         <div
                                           key={j}
                                           className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
-                              ${isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#FFE1E680]' : ''} 
+                              ${
+                                isSunday
+                                  ? 'bg-[#FFE1E680]'
+                                  : isSaturday
+                                  ? separateWeekendColor
+                                    ? 'bg-[#E1E5FF80]'
+                                    : 'bg-[#FFE1E680]'
+                                  : ''
+                              } 
                               ${j === focus?.day && 'bg-main-4'}`}
                                         >
                                           {!readonly && showLayer.fault && fault && (
@@ -368,18 +397,20 @@ export default function ShiftCalendar() {
                                     className="relative flex shrink-0 items-center gap-2 px-[1.5625rem] text-center"
                                     key={rowIndex}
                                   >
-                                    {shift?.wardShiftTypes.map((wardShiftType, index) => (
-                                      <div
-                                        key={index}
-                                        className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2"
-                                      >
-                                        {
-                                          row.wardShiftList.filter(
-                                            (current) => current === wardShiftType.wardShiftTypeId
-                                          ).length
-                                        }
-                                      </div>
-                                    ))}
+                                    {shift?.wardShiftTypes
+                                      .filter((x) => x.isCounted)
+                                      .map((wardShiftType, index) => (
+                                        <div
+                                          key={index}
+                                          className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2"
+                                        >
+                                          {
+                                            row.wardShiftList.filter(
+                                              (current) => current === wardShiftType.wardShiftTypeId
+                                            ).length
+                                          }
+                                        </div>
+                                      ))}
                                     <div className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2">
                                       {
                                         row.wardShiftList.filter(
@@ -417,7 +448,7 @@ export default function ShiftCalendar() {
                                     : level !== shift.divisionShiftNurses.length - 1 &&
                                       !readonly && (
                                         <div
-                                          className="absolute bottom-0 w-full"
+                                          className="absolute bottom-0 h-[.0625rem] w-full bg-red opacity-0 hover:opacity-100"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             editDivision(

@@ -25,6 +25,7 @@ import SetConstraint from './editWard/SetConstraint';
 import SetShiftType from './editWard/SetShiftType';
 import Select from '@components/Select';
 import { createPortal } from 'react-dom';
+import SetDesignTheme from './editWard/SetDesignTheme';
 
 function Toolbar() {
   const {
@@ -40,10 +41,12 @@ function Toolbar() {
   } = useEditShift();
 
   const [openInfo, setOpenInfo] = useState(false);
-  const [currentSetup, setCurrentSetup] = useState<'constraint' | 'shiftType' | null>(null);
+  const [currentSetup, setCurrentSetup] = useState<
+    'constraint' | 'shiftType' | 'designTheme' | null
+  >(null);
 
   return (
-    <div className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pt-[1.875rem]">
+    <div className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pr-[1rem] pt-[1.875rem]">
       <div className="flex gap-[1.25rem]">
         <div className="w-[3.375rem]"></div>
         <div className="w-[4.375rem]"></div>
@@ -83,7 +86,7 @@ function Toolbar() {
       {currentSetup !== null &&
         createPortal(
           <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
-            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex w-[38.75rem] flex-col rounded-[1.25rem] bg-white shadow-shadow-3">
+            <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex flex-col rounded-[1.25rem] bg-white shadow-shadow-3">
               <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
                 <div
                   className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
@@ -93,10 +96,6 @@ function Toolbar() {
                 >
                   제약 조건
                 </div>
-                <CancelIcon
-                  className="absolute right-[.5rem] h-[1.5rem] w-[1.5rem] cursor-pointer"
-                  onClick={() => setCurrentSetup(null)}
-                />
                 <div
                   className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
                   ${currentSetup === 'shiftType' ? 'bg-white text-main-1' : 'text-sub-3'}
@@ -105,9 +104,22 @@ function Toolbar() {
                 >
                   근무 형태
                 </div>
+                <div
+                  className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
+                  ${currentSetup === 'designTheme' ? 'bg-white text-main-1' : 'text-sub-3'}
+                `}
+                  onClick={() => setCurrentSetup('designTheme')}
+                >
+                  디자인 테마
+                </div>
+                <CancelIcon
+                  className="absolute right-[.5rem] h-[1.5rem] w-[1.5rem] cursor-pointer"
+                  onClick={() => setCurrentSetup(null)}
+                />
               </div>
               {currentSetup === 'constraint' && <SetConstraint />}
               {currentSetup === 'shiftType' && <SetShiftType />}
+              {currentSetup === 'designTheme' && <SetDesignTheme />}
             </div>
           </Draggable>,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

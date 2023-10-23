@@ -2,7 +2,7 @@
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { WardShiftsDTO, getShift, updateShift, updateShifts } from '@libs/api/shift';
-import { getWard, getWardConstraint, updateWardConstraint } from '@libs/api/ward';
+import { getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
 import { event, sendEvent } from 'analytics';
@@ -13,7 +13,7 @@ import {
   checkShift,
   findNurse,
   keydownEventMapper,
-  moveFocusByKeydown,
+  moveFocus,
   updateCheckFaultOption,
 } from './handlers';
 import { getShiftTeams } from '@libs/api/shiftTeam';
@@ -24,6 +24,7 @@ const useEditShift = (activeEffect = false) => {
     year,
     month,
     currentShiftTeam,
+    oldCurrentShiftTeamId,
     focus,
     focusedDayInfo,
     foldedLevels,
@@ -39,6 +40,7 @@ const useEditShift = (activeEffect = false) => {
       state.year,
       state.month,
       state.currentShiftTeam,
+      state.oldCurrentShiftTeamId,
       state.focus,
       state.focusedDayInfo,
       state.foldedLevels,
@@ -58,7 +60,6 @@ const useEditShift = (activeEffect = false) => {
 
   const queryClient = useQueryClient();
 
-  const wardQueryKey = ['ward', wardId];
   const shiftQueryKey = ['shift', wardId, year, month, currentShiftTeam];
   const shiftTeamQueryKey = ['shiftTeams', wardId];
   const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
@@ -66,7 +67,10 @@ const useEditShift = (activeEffect = false) => {
   const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: wardId != null,
     onSuccess: (data) => {
-      if (currentShiftTeam === null) setState('currentShiftTeam', data[0]);
+      if (currentShiftTeam) {
+        data.every((x) => x.shiftTeamId !== currentShiftTeam.shiftTeamId) &&
+          setState('currentShiftTeam', data[0]);
+      } else setState('currentShiftTeam', data[0]);
     },
   });
 
@@ -94,9 +98,6 @@ const useEditShift = (activeEffect = false) => {
     }
   );
 
-  useQuery(wardQueryKey, () => getWard(wardId!), {
-    enabled: wardId !== null,
-  });
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
     () => getShift(wardId!, currentShiftTeam!.shiftTeamId, year, month),
@@ -104,16 +105,18 @@ const useEditShift = (activeEffect = false) => {
       enabled: wardId !== null && currentShiftTeam !== null,
       onSuccess: (data) => {
         if (data === null) return;
-        setState(
-          'foldedLevels',
-          data.divisionShiftNurses.map(() => false)
-        );
 
-        const wardShiftTypeMap = new Map<number, WardShiftType>();
-        data.wardShiftTypes.forEach((wardShiftType) => {
-          wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
-        });
-        setState('wardShiftTypeMap', wardShiftTypeMap);
+        if (
+          !foldedLevels ||
+          !oldCurrentShiftTeamId ||
+          (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeam?.shiftTeamId)
+        ) {
+          setState(
+            'foldedLevels',
+            data.divisionShiftNurses.map(() => false)
+          );
+          setState('oldCurrentShiftTeamId', currentShiftTeam?.shiftTeamId);
+        }
       },
     }
   );
@@ -296,8 +299,6 @@ const useEditShift = (activeEffect = false) => {
         } else {
           setState('month', month - 1);
         }
-        if (month === 7) return;
-        else setState('month', month - 1);
       } else if (type === 'next') {
         if (month === 12) {
           setState('month', 1);
@@ -305,8 +306,6 @@ const useEditShift = (activeEffect = false) => {
         } else {
           setState('month', month + 1);
         }
-        if (month === 8) return;
-        else setState('month', month + 1);
       }
       sendEvent(event.change_month);
     },
@@ -315,10 +314,8 @@ const useEditShift = (activeEffect = false) => {
 
   const changeFocusedShift = useCallback(
     (shiftTypeId: number | null) => {
+      if (!wardId || !focus || !shift) return;
       if (
-        !wardId ||
-        !focus ||
-        !shift ||
         shift.divisionShiftNurses
           .flatMap((x) => x)
           .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardShiftList[
@@ -341,29 +338,6 @@ const useEditShift = (activeEffect = false) => {
         return;
 
       mutateShift({ wardId, shift, focus, shiftTypeId });
-
-      const flatNurses = shift.divisionShiftNurses
-        .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
-        .map((x) => x.shiftNurse);
-      const { day, shiftNurseId } = focus;
-      const dayCnt = shift.days.length;
-      const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
-      let newNurseId = shiftNurseId;
-      let newDay = day;
-
-      if (day === dayCnt - 1) {
-        if (nurseIndex === flatNurses.length - 1) {
-          newNurseId = flatNurses[0].shiftNurseId;
-          newDay = 0;
-        } else {
-          newNurseId = flatNurses[nurseIndex + 1].shiftNurseId;
-          newDay = 0;
-        }
-      } else {
-        newDay = Math.min(dayCnt - 1, day + 1);
-      }
-
-      setState('focus', { shiftNurseId: newNurseId, day: newDay });
     },
     [focus, shift]
   );
@@ -430,7 +404,15 @@ const useEditShift = (activeEffect = false) => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      if (
+        ['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1
+      ) {
+        e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+      }
+
+      const ctrlKey = e.ctrlKey || e.metaKey;
+
+      if (ctrlKey && e.key === 'z') {
         if (e.shiftKey) {
           moveHistory(1);
           sendEvent(event.redo_key);
@@ -439,21 +421,43 @@ const useEditShift = (activeEffect = false) => {
           sendEvent(event.undo_key);
         }
       }
+
       if (!focus || !shift) return;
-      moveFocusByKeydown(e, shift, focus, (focus: Focus | null) => {
-        setState('focus', focus);
-        sendEvent(
-          e.ctrlKey || e.metaKey ? event.move_cell_focus_end : event.move_cell_focus,
-          e.key
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        moveFocus(
+          e.key.replace('Arrow', '').toLowerCase() as 'left' | 'right' | 'up' | 'down',
+          ctrlKey,
+          shift,
+          focus,
+          (focus: Focus | null) => {
+            setState('focus', focus);
+            sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+          }
         );
-      });
+      }
       keydownEventMapper(
         e,
         ...shift.wardShiftTypes.map((shiftType) => ({
           keys: [shiftType.shortName],
-          callback: () => changeFocusedShift(shiftType.wardShiftTypeId),
+          callback: () => {
+            changeFocusedShift(shiftType.wardShiftTypeId);
+            moveFocus('right', ctrlKey, shift, focus, (focus: Focus | null) => {
+              setState('focus', focus);
+              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+            });
+          },
         })),
-        { keys: ['Backspace', 'Delete'], callback: () => changeFocusedShift(null) }
+        {
+          keys: ['Backspace'],
+          callback: () => {
+            changeFocusedShift(null);
+            moveFocus('left', ctrlKey, shift, focus, (focus: Focus | null) => {
+              setState('focus', focus);
+              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+            });
+          },
+        },
+        { keys: ['Delete'], callback: () => changeFocusedShift(null) }
       );
     },
     [shift, focus, editHistory]
@@ -479,6 +483,16 @@ const useEditShift = (activeEffect = false) => {
   }, []);
 
   useEffect(() => {
+    if (activeEffect && shift) {
+      const wardShiftTypeMap = new Map<number, WardShiftType>();
+      shift.wardShiftTypes.forEach((wardShiftType) => {
+        wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
+      });
+      setState('wardShiftTypeMap', wardShiftTypeMap);
+    }
+  }, [activeEffect, shift]);
+
+  useEffect(() => {
     if (activeEffect && wardConstraint)
       setState('checkFaultOptions', updateCheckFaultOption(wardConstraint));
   }, [activeEffect, wardConstraint]);
@@ -486,7 +500,7 @@ const useEditShift = (activeEffect = false) => {
   useEffect(() => {
     if (activeEffect && shift && checkFaultOptions && wardShiftTypeMap)
       setState('faults', checkShift(shift, checkFaultOptions, wardShiftTypeMap));
-  }, [activeEffect, shift, checkFaultOptions]);
+  }, [activeEffect, shift, checkFaultOptions, wardShiftTypeMap, readonly]);
 
   useEffect(() => {
     if (activeEffect) document.addEventListener('keydown', handleKeyDown);
@@ -497,7 +511,6 @@ const useEditShift = (activeEffect = false) => {
 
   return {
     queryKey: {
-      wardQueryKey,
       shiftQueryKey,
       shiftTeamQueryKey,
       wardConstraintQueryKey,

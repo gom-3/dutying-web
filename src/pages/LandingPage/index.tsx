@@ -4,7 +4,6 @@ import {
   Logo,
   LogoGray,
   LogoWithSymbol,
-  MenuIcon,
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
@@ -15,7 +14,7 @@ import { useNavigate } from 'react-router';
 
 function LandingPage() {
   const {
-    state: { isAuth },
+    state: { isAuth, accountMe },
     actions: { handleLogout, demoTry },
   } = useAuth();
   const navigate = useNavigate();
@@ -59,7 +58,7 @@ function LandingPage() {
             >
               다운로드
             </a>
-            <MenuIcon className="ml-[20px] h-[24px] w-[24px]" />
+            {/* <MenuIcon className="ml-[20px] h-[24px] w-[24px]" /> */}
           </div>
           <div className="hidden w-full items-center xl:flex">
             <div className="ml-auto mr-[3.75rem] flex h-[2.5rem] items-center gap-[2.8125rem] border-r-[.0625rem] border-sub-4 pr-[3.75rem]">
@@ -100,7 +99,7 @@ function LandingPage() {
                   onClick={() => handleLogout()}
                   className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-sub-2.5"
                 >
-                  로그아웃
+                  {accountMe?.status === 'DEMO' ? '데모 종료하기' : '로그아웃'}
                 </button>
               ) : (
                 <button
@@ -148,19 +147,32 @@ function LandingPage() {
             </p>
           </div>
           <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-[3.125rem]">
-            <div
-              className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-              onClick={() => demoTry()}
-            >
-              데모 테스트 해보기
-            </div>
-            <div
-              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-              onClick={() => navigate(ROUTE.MAKE)}
-            >
-              <Logo className="w-[17px] xl:w-[1.6875rem]" />
-              근무표 만들기
-            </div>
+            {accountMe?.status === 'DEMO' ? (
+              <div
+                className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[16.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                onClick={() => demoTry()}
+              >
+                데모 테스트 마저 하기
+              </div>
+            ) : (
+              <>
+                {!accountMe && (
+                  <div
+                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                    onClick={() => demoTry()}
+                  >
+                    데모 테스트 해보기
+                  </div>
+                )}
+                <div
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                  onClick={() => navigate(ROUTE.MAKE)}
+                >
+                  <Logo className="w-[17px] xl:w-[1.6875rem]" />
+                  근무표 만들기
+                </div>
+              </>
+            )}
           </div>
           <div className="mt-[43px] flex items-center gap-[8px] xl:mt-[2.5rem]">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">

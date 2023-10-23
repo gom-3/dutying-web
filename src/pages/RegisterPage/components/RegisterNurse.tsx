@@ -19,7 +19,7 @@ const schema = yup
     phoneNum: yup
       .string()
       .required()
-      .matches(/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/),
+      .matches(/^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/),
     gender: yup.string().required(),
     isWorker: yup.boolean().required(),
   })
@@ -106,7 +106,7 @@ function RegisterNurse() {
                 .with('matches', () => '전화번호 형식을 지켜주세요.')
                 .otherwise(() => undefined)}
               {...register('phoneNum')}
-              placeholder="010-1234-1234"
+              placeholder="01012341234"
             />
           </div>
           <div className="flex-auto"></div>
