@@ -46,7 +46,7 @@ function Toolbar() {
   >(null);
 
   return (
-    <div className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pt-[1.875rem]">
+    <div className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pr-[1rem] pt-[1.875rem]">
       <div className="flex gap-[1.25rem]">
         <div className="w-[3.375rem]"></div>
         <div className="w-[4.375rem]"></div>
