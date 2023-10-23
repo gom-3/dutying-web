@@ -114,7 +114,7 @@ function LandingPage() {
       </div>
 
       {/*메인*/}
-      <div className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px]  xl:relative xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
+      <div className='h-[100svh] min-h-[740px] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px]  xl:relative xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:container xl:relative xl:top-[50%] xl:h-fit xl:translate-y-[-50%] xl:pt-0">
           <h1 className="font-line text-[32px] font-bold leading-[42px] text-main-1 xl:text-[4rem] xl:leading-[5.4375rem] xl:text-white">
             근무표,
@@ -137,7 +137,7 @@ function LandingPage() {
               일정 관리의 모든 여정이 더 편리해지는 경험을 제공합니다.
             </p>
           </div>
-          <div className="mt-[43vh] flex items-center gap-[8px] xl:mt-[5.1875rem]">
+          <div className="mt-[43svh] flex items-center gap-[8px] xl:mt-[5.1875rem]">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
@@ -181,7 +181,7 @@ function LandingPage() {
               근무 일정 관리 (일반 간호사 용)
             </p>
           </div>
-          <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
+          <div className="mt-[15px] flex h-[38px] shrink-0 gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
             <a
               href="https://abr.ge/bv13wa"
               target="_blank"
