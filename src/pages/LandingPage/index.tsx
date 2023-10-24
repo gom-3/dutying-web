@@ -2,7 +2,6 @@ import {
   AppstoreGrayIcon,
   AppstoreIcon,
   Logo,
-  LogoGray,
   LogoWithSymbol,
   PlaystoreGrayIcon,
   PlaystoreIcon,
@@ -148,7 +147,7 @@ function LandingPage() {
             {accountMe?.status === 'DEMO' ? (
               <div
                 className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                onClick={() => demoTry()}
+                onClick={() => navigate(ROUTE.MAKE)}
               >
                 데모 테스트 마저 하기
               </div>
@@ -324,7 +323,7 @@ function LandingPage() {
                 {accountMe?.status === 'DEMO' ? (
                   <div
                     className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
-                    onClick={() => demoTry()}
+                    onClick={() => navigate(ROUTE.MAKE)}
                   >
                     데모 테스트 마저 하기
                   </div>
