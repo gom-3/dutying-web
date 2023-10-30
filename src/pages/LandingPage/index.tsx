@@ -112,7 +112,7 @@ function LandingPage() {
       </div>
 
       {/*메인*/}
-      <div className='h-[100svh] min-h-[740px] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px]  xl:relative xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
+      <div className='h-real-screen min-h-[660px] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pb-[6.25rem] pt-[60px] xl:relative xl:bg-[url("/img/landing_1.png")] xl:py-0'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:container xl:relative xl:top-[50%] xl:h-fit xl:translate-y-[-50%] xl:pt-0">
           <h1 className="font-line text-[32px] font-bold leading-[42px] text-main-1 xl:text-[4rem] xl:leading-[5.4375rem] xl:text-white">
             근무표,
@@ -135,7 +135,7 @@ function LandingPage() {
               일정 관리의 모든 여정이 더 편리해지는 경험을 제공합니다.
             </p>
           </div>
-          <div className="mt-[43svh] flex items-center gap-[8px] xl:mt-[5.1875rem]">
+          <div className="mt-auto flex items-center gap-[8px] xl:mt-[5.1875rem]">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
@@ -204,9 +204,9 @@ function LandingPage() {
       <div
         id="web"
         ref={webSection}
-        className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_2.png")]'
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_2.png")]'
       >
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
+        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
               Web
@@ -229,7 +229,7 @@ function LandingPage() {
       </div>
 
       {/*메인 3*/}
-      <div className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.png")]'>
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
@@ -258,7 +258,7 @@ function LandingPage() {
       <div
         id="mobile"
         ref={mobileSection}
-        className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_4.png")]'
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_4.png")]'
       >
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
@@ -283,7 +283,7 @@ function LandingPage() {
       </div>
 
       {/*메인 5*/}
-      <div className='h-[100svh] w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:h-[100svh]  xl:bg-[url("/img/landing_5.png")]'>
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_5.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
