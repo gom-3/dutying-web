@@ -1,18 +1,15 @@
-import Toolbar from './components/Toolbar';
-import RequestCalendar from './components/RequestCalendar';
 import useRequestShift from '@hooks/shift/useRequestShift';
+import RequestCalendar from './components/RequestCalendar';
+import Toolbar from './components/Toolbar';
 
-const RequestPage = () => {
-  const {
-    state: { shiftStatus },
-  } = useRequestShift(true);
-
-  return shiftStatus === 'success' ? (
-    <div className="mx-auto flex h-screen w-fit min-w-[82rem] flex-col overflow-hidden">
+const RequestShiftPage = () => {
+  useRequestShift(true);
+  return (
+    <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col">
       <Toolbar />
-      <RequestCalendar isEditable />
+      <RequestCalendar />
     </div>
-  ) : null;
+  );
 };
 
-export default RequestPage;
+export default RequestShiftPage;

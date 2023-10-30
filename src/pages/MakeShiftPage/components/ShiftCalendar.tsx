@@ -248,7 +248,7 @@ export default function ShiftCalendar() {
                             >
                               {(provided) => (
                                 <div
-                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem] bg-white
+                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
                                 ${
                                   rowIndex === 0
                                     ? rowIndex === rows.length - 1
@@ -259,7 +259,9 @@ export default function ShiftCalendar() {
                                     : ''
                                 }
                                 ${
-                                  focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'
+                                  focus?.shiftNurseId === row.shiftNurse.shiftNurseId
+                                    ? 'bg-main-4'
+                                    : 'bg-white'
                                 }`}
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}

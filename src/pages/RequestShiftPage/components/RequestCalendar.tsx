@@ -1,23 +1,95 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useOnclickOutside from 'react-cool-onclickoutside';
+import { DragIcon, FoldDutyIcon, LinkedIcon, PlusIcon2, UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
-import { RefObject, useEffect, useRef } from 'react';
-import { FoldDutyIcon } from '@assets/svg';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { event, sendEvent } from 'analytics';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
+import useUIConfig from '@hooks/useUIConfig';
 import useRequestShift from '@hooks/shift/useRequestShift';
+import { twMerge } from 'tailwind-merge';
 
-interface Props {
-  isEditable?: boolean;
-}
-
-export default function RequestCalendar({ isEditable }: Props) {
+export default function ShiftCalendar() {
   const {
-    state: { focus, requestShift, foldedLevels, wardShiftTypeMap },
+    state: {
+      readonly,
+      year,
+      month,
+      requestShift,
+      dutyRequestList,
+      focus,
+      foldedLevels,
+      wardShiftTypeMap,
+      currentShiftTeam,
+    },
     actions: { changeFocus, foldLevel },
   } = useRequestShift();
+  const {
+    state: { shiftTeams },
+    actions: { selectNurse, moveNurseOrder, editDivision },
+  } = useEditShiftTeam();
+  const {
+    state: { separateWeekendColor },
+  } = useUIConfig();
 
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const clickAwayRef = useOnclickOutside(() => isEditable && changeFocus?.(null));
+  const clickAwayRef = useOnclickOutside(() => {
+    changeFocus(null);
+    selectNurse(null);
+  });
+
+  const onDragEnd = useCallback(
+    ({ source, destination, draggableId }: DropResult) => {
+      if (!destination || !shiftTeams || !requestShift || !currentShiftTeam) return null;
+      if (source.droppableId === destination.droppableId && destination.index === source.index)
+        return;
+
+      const sourceDivision = parseInt(source.droppableId);
+      const destinationDivision = parseInt(destination.droppableId);
+
+      const dragedNurse = requestShift.divisionShiftNurses[sourceDivision].find(
+        (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
+      )!.shiftNurse;
+      const destinationNurses = requestShift.divisionShiftNurses[destinationDivision];
+
+      if (
+        destination.droppableId === source.droppableId &&
+        destinationNurses.findIndex((x) => x.shiftNurse.shiftNurseId === dragedNurse.shiftNurseId) <
+          destination.index
+      ) {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          currentShiftTeam.shiftTeamId,
+          currentShiftTeam.shiftTeamId,
+          destinationNurses[0].shiftNurse.divisionNum,
+          destination.index === 0 ? 0 : destinationNurses[destination.index].shiftNurse.priority,
+          destination.index === destinationNurses.length - 1
+            ? destinationNurses[destination.index].shiftNurse.priority + 2024
+            : destinationNurses[destination.index + 1].shiftNurse.priority,
+          year.toString() + '-' + month.toString().padStart(2, '0')
+        );
+      } else {
+        moveNurseOrder(
+          dragedNurse.nurseId,
+          currentShiftTeam.shiftTeamId,
+          currentShiftTeam.shiftTeamId,
+          destinationNurses[0].shiftNurse.divisionNum,
+          destination.index === 0
+            ? 0
+            : destinationNurses[destination.index - 1].shiftNurse.priority,
+          destination.index === destinationNurses.length
+            ? destinationNurses[destination.index - 1].shiftNurse.priority + 2024
+            : destinationNurses[destination.index].shiftNurse.priority,
+          year.toString() + '-' + month.toString().padStart(2, '0')
+        );
+      }
+
+      sendEvent(event.move_nurse_md);
+    },
+    [shiftTeams, requestShift, currentShiftTeam]
+  );
 
   useEffect(() => {
     if (focus) {
@@ -43,131 +115,300 @@ export default function RequestCalendar({ isEditable }: Props) {
     }
   }, [focus]);
 
-  return requestShift && foldedLevels && wardShiftTypeMap ? (
-    <div ref={clickAwayRef} className="flex flex-col">
-      <div className="z-10 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE]">
-        <div className="flex gap-[1.25rem]">
-          <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            숙련도
-          </div>
-          <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-            이름
-          </div>
-
-          <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
-            {requestShift.days.map((item, j) => (
-              <p
-                key={j}
-                className={`w-[2.25rem] flex-1 text-center font-poppins text-[1rem]
-                ${
-                  item.dayType === 'saturday'
-                    ? j === focus?.day
-                      ? 'rounded-full bg-blue text-white'
-                      : 'text-blue'
-                    : item.dayType === 'sunday' || item.dayType === 'holiday'
-                    ? j === focus?.day
-                      ? 'rounded-full bg-red text-white'
-                      : 'text-red'
-                    : item.dayType === 'workday'
-                    ? j === focus?.day
-                      ? 'rounded-full bg-main-1 text-white'
-                      : 'text-sub-2.5'
-                    : ''
-                }
-              `}
-              >
-                {item.day}
-              </p>
-            ))}
+  return requestShift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
+    <div className="flex">
+      <div ref={clickAwayRef} className="flex flex-col">
+        <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
+          <div className="flex gap-[1.25rem]">
+            <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+              {/* 구분 */}
+            </div>
+            <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+              이름
+            </div>
+            <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+              이월
+            </div>
+            <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
+              {requestShift.days.map((item, j) => (
+                <p
+                  key={j}
+                  className={`w-[2.25rem] flex-1 rounded-full text-center font-poppins text-[1rem]
+                  ${
+                    item.dayType === 'saturday'
+                      ? j === focus?.day
+                        ? separateWeekendColor
+                          ? 'bg-blue text-white'
+                          : 'bg-red text-white'
+                        : separateWeekendColor
+                        ? 'text-blue'
+                        : 'text-red'
+                      : item.dayType === 'sunday' || item.dayType === 'holiday'
+                      ? j === focus?.day
+                        ? 'bg-red text-white'
+                        : 'text-red'
+                      : item.dayType === 'workday'
+                      ? j === focus?.day
+                        ? 'bg-main-1 text-white'
+                        : 'text-sub-2.5'
+                      : ''
+                  }
+                `}
+                >
+                  {item.day}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className="m-[-1.25rem] flex max-h-[calc(100vh-10rem)] flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll p-[1.25rem] scrollbar-hide"
-        ref={containerRef}
-      >
-        {requestShift.divisionShiftNurses.map((rows, level) => {
-          return foldedLevels[level] ? (
-            <div
-              key={level}
-              className="flex h-[1.875rem] w-full cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
-              onClick={() => {
-                sendEvent(event.fold_division_rq);
-                foldLevel(level);
-              }}
-            >
-              <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
-            </div>
-          ) : (
-            <div key={level} className="flex gap-[1.25rem]">
-              <div className="relative rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
-                <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
-                  <div className="absolute flex h-full w-[1.875rem] items-center justify-center rounded-l-[1.25rem] bg-sub-4.5 font-poppins font-light text-sub-2.5">
-                    <FoldDutyIcon
-                      className="absolute left-[50%] top-[50%] h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
+        <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
+          <div
+            className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pr-[1rem] pt-[1.25rem] scrollbar-hide"
+            ref={containerRef}
+          >
+            {requestShift.divisionShiftNurses
+              .map((x) => x.filter((y) => y.shiftNurse.isWorker)) // 근무자만 필터링
+              .map((rows, level) => {
+                return rows.length ? (
+                  requestShift && foldedLevels[level] ? (
+                    <div
+                      key={level}
+                      className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
                       onClick={() => {
-                        sendEvent(event.spread_division_rq);
+                        sendEvent(event.fold_division);
                         foldLevel(level);
                       }}
-                    />
-                  </div>
-                </div>
-                {rows.map((row, rowIndex) => (
-                  <div
-                    key={rowIndex}
-                    className={`flex h-[3.25rem] items-center gap-[1.25rem] rounded-l-[1.25rem] ${
-                      focus?.shiftNurseId === row.shiftNurse.shiftNurseId && 'bg-main-4'
-                    }`}
-                  >
-                    <div className="w-[3.375rem] shrink-0"></div>
-                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
-                      {row.shiftNurse.name}
+                    >
+                      <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
                     </div>
-                    <div className="flex h-full px-[1rem]">
-                      {row.wardReqShiftList.map((reqShift, j) => {
-                        if (!requestShift.days[j]) return;
-                        const isSaturday = requestShift.days[j].dayType === 'saturday';
-                        const isSunday =
-                          requestShift.days[j].dayType === 'sunday' ||
-                          requestShift.days[j].dayType === 'holiday';
-                        const isFocused =
-                          focus?.shiftNurseId === row.shiftNurse.shiftNurseId && focus.day === j;
-                        return (
-                          <div
-                            key={j}
-                            className={`flex h-full w-[2.25rem] flex-1 items-center px-[.25rem] ${
-                              isSunday ? 'bg-[#FFE1E680]' : isSaturday ? 'bg-[#E1E5FF80]' : ''
-                            } ${j === focus?.day && 'bg-main-4'}`}
-                          >
-                            <ShiftBadge
-                              key={j}
-                              onClick={() => {
-                                changeFocus?.({
-                                  shiftNurseId: row.shiftNurse.shiftNurseId,
-                                  shiftNurseName: row.shiftNurse.name,
-                                  day: j,
-                                });
-                              }}
-                              shiftType={reqShift !== null ? wardShiftTypeMap.get(reqShift) : null}
-                              className={`cursor-pointer ${
-                                isFocused && 'outline outline-[.0625rem] outline-main-1'
-                              }`}
-                              forwardRef={
-                                isFocused
-                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
-                                  : null
-                              }
-                            />
+                  ) : (
+                    <Droppable droppableId={level.toString()} key={level.toString()}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          key={level}
+                          className="flex gap-[1.25rem]"
+                          {...provided.droppableProps}
+                        >
+                          <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-banner">
+                            {!readonly && (
+                              <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
+                                <FoldDutyIcon
+                                  className="absolute left-[50%] top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
+                                  onClick={() => {
+                                    sendEvent(event.spread_division);
+                                    foldLevel(level);
+                                  }}
+                                />
+                              </div>
+                            )}
+                            {rows.map((row, rowIndex) => (
+                              <Draggable
+                                draggableId={row.shiftNurse.shiftNurseId.toString()}
+                                index={rowIndex}
+                                key={row.shiftNurse.shiftNurseId}
+                                isDragDisabled={readonly}
+                              >
+                                {(provided) => (
+                                  <div
+                                    className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
+                                ${
+                                  rowIndex === 0
+                                    ? rowIndex === rows.length - 1
+                                      ? 'rounded-[1.25rem]'
+                                      : 'rounded-t-[1.25rem]'
+                                    : rowIndex === rows.length - 1
+                                    ? 'rounded-b-[1.25rem]'
+                                    : ''
+                                }
+                                ${
+                                  focus?.shiftNurseId === row.shiftNurse.shiftNurseId
+                                    ? 'bg-main-4'
+                                    : 'bg-white'
+                                }`}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <div className="relative w-[2.125rem] shrink-0">
+                                      {!readonly && (
+                                        <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
+                                      )}
+                                    </div>
+                                    <div
+                                      className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
+                                      onClick={() => {
+                                        selectNurse(row.shiftNurse.nurseId);
+                                      }}
+                                    >
+                                      {row.shiftNurse.name}
+                                    </div>
+                                    <div className="flex w-[1.875rem] shrink-0 items-center justify-center text-center font-apple text-[1.25rem] text-sub-1">
+                                      {currentShiftTeam.nurses.find(
+                                        (x) => x.nurseId === row.shiftNurse.nurseId
+                                      )?.isConnected ? (
+                                        <LinkedIcon className="h-[1.5rem] w-[1.5rem]" />
+                                      ) : (
+                                        <UnlinkedIcon className="h-[1.5rem] w-[1.5rem]" />
+                                      )}
+                                    </div>
+                                    <div className="flex h-full px-[1.0625rem]">
+                                      {row.wardReqShiftList.map((current, j) => {
+                                        const request = row.wardReqShiftList[j];
+                                        const isSaturday =
+                                          requestShift.days[j].dayType === 'saturday';
+                                        const isSunday =
+                                          requestShift.days[j].dayType === 'sunday' ||
+                                          requestShift.days[j].dayType === 'holiday';
+                                        const isFocused =
+                                          focus?.shiftNurseId === row.shiftNurse.shiftNurseId &&
+                                          focus.day === j;
+                                        return (
+                                          <div
+                                            key={j}
+                                            className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
+                                          ${
+                                            isSunday
+                                              ? 'bg-[#FFE1E680]'
+                                              : isSaturday
+                                              ? separateWeekendColor
+                                                ? 'bg-[#E1E5FF80]'
+                                                : 'bg-[#FFE1E680]'
+                                              : ''
+                                          } 
+                                          ${j === focus?.day && 'bg-main-4'}`}
+                                          >
+                                            <ShiftBadge
+                                              key={j}
+                                              onClick={() => {
+                                                if (readonly) return;
+                                                changeFocus?.({
+                                                  shiftNurseName: row.shiftNurse.name,
+                                                  shiftNurseId: row.shiftNurse.shiftNurseId,
+                                                  day: j,
+                                                });
+                                                sendEvent(event.focus_cell);
+                                              }}
+                                              shiftType={
+                                                current === null
+                                                  ? request === null
+                                                    ? null
+                                                    : wardShiftTypeMap.get(request)
+                                                  : wardShiftTypeMap.get(current)
+                                              }
+                                              isOnlyRequest={current === null && request !== null}
+                                              className={`z-10 ${
+                                                readonly ? 'cursor-default' : 'cursor-pointer'
+                                              } ${
+                                                isFocused &&
+                                                'outline outline-[.125rem] outline-main-1'
+                                              }`}
+                                              forwardRef={
+                                                isFocused
+                                                  ? (focusedCellRef as unknown as RefObject<HTMLParagraphElement>)
+                                                  : null
+                                              }
+                                            />
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                    {rowIndex !== rows.length - 1
+                                      ? !readonly && (
+                                          <div
+                                            className="absolute bottom-0 w-full"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              editDivision(
+                                                currentShiftTeam.shiftTeamId,
+                                                row.shiftNurse.priority,
+                                                1,
+                                                year.toString() +
+                                                  '-' +
+                                                  month.toString().padStart(2, '0')
+                                              );
+                                              sendEvent(event.create_division_md);
+                                            }}
+                                          >
+                                            <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
+                                            <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                            <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
+                                          </div>
+                                        )
+                                      : level !== requestShift.divisionShiftNurses.length - 1 &&
+                                        !readonly && (
+                                          <div
+                                            className="absolute bottom-0 h-[.0625rem] w-full bg-red opacity-0 hover:opacity-100"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              editDivision(
+                                                currentShiftTeam.shiftTeamId,
+                                                row.shiftNurse.priority,
+                                                -1,
+                                                year.toString() +
+                                                  '-' +
+                                                  month.toString().padStart(2, '0')
+                                              );
+                                              sendEvent(event.delete_division_md);
+                                            }}
+                                          >
+                                            <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
+                                            <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible" />
+                                          </div>
+                                        )}
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
+                        </div>
+                      )}
+                    </Droppable>
+                  )
+                ) : null;
+              })}
+          </div>
+        </DragDropContext>
+      </div>
+      <div className="flex flex-1 flex-col">
+        <div className="my-[.75rem] flex items-center">
+          <p className="font-apple text-[1.25rem] font-semibold text-main-1">신청 내역</p>
+          <p className="ml-auto cursor-pointer font-apple text-[.875rem] font-medium text-main-2">
+            * 미처리 신청 8개
+          </p>
+        </div>
+        <div className="max-h-[calc(100vh-9rem)] overflow-scroll rounded-[1.25rem] bg-white py-[.0625rem] scrollbar-hide">
+          {dutyRequestList?.map((dutyRequest, i) => (
+            <div
+              key={i}
+              className="flex h-[3.25rem] items-center border-b-[.0625rem] border-sub-4.5 pl-[1.875rem] pr-[.75rem] last:border-b-0"
+            >
+              <p className="mr-[.625rem] font-apple text-[1rem] text-sub-1">
+                {dutyRequest.nurseName} / {dutyRequest.date}일
+              </p>
+              <ShiftBadge shiftType={wardShiftTypeMap.get(dutyRequest.wardShiftTypeId)} />
+              <div className="ml-auto flex h-[1.75rem] w-[5.625rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
+                <button
+                  className={twMerge(
+                    'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
+                    dutyRequest.isAccepted === true && 'bg-main-1 text-white'
+                  )}
+                >
+                  수락
+                </button>
+                <button
+                  className={twMerge(
+                    'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
+                    dutyRequest.isAccepted === false && 'bg-sub-2 text-white'
+                  )}
+                >
+                  거절
+                </button>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   ) : null;
