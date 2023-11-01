@@ -10,7 +10,6 @@ const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO
     })
   ).data;
 
-/** DELETE `/nurses/${nurseId}` */
 const getNurse = async (nurseId: number) =>
   (await axiosInstance.get<Nurse>(`/nurses/${nurseId}`)).data;
 

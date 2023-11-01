@@ -123,16 +123,13 @@ const useEditShift = (activeEffect = false) => {
   const { mutate: mutateShift, status: changeStatus } = useMutation(
     ({
       wardId,
-      shift,
       focus,
       shiftTypeId,
     }: {
       wardId: number;
-      shift: Shift;
       focus: Focus;
       shiftTypeId: number | null;
-    }) =>
-      updateShift(wardId, year, month, shift.days[focus.day].day, focus.shiftNurseId, shiftTypeId),
+    }) => updateShift(wardId, year, month, focus.day + 1, focus.shiftNurseId, shiftTypeId),
     {
       onMutate: async ({ focus, shiftTypeId }) => {
         await queryClient.cancelQueries(['shift']);
@@ -337,7 +334,7 @@ const useEditShift = (activeEffect = false) => {
       )
         return;
 
-      mutateShift({ wardId, shift, focus, shiftTypeId });
+      mutateShift({ wardId, focus, shiftTypeId });
     },
     [focus, shift]
   );

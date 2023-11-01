@@ -22,6 +22,7 @@ import { getWard } from '@libs/api/ward';
 import { produce } from 'immer';
 import useEditShift from '@hooks/shift/useEditShift';
 import useAuth from '@hooks/auth/useAuth';
+import useRequestShift from '@hooks/shift/useRequestShift';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -38,6 +39,9 @@ const useEditShiftTeam = () => {
   const {
     queryKey: { shiftQueryKey },
   } = useEditShift();
+  const {
+    queryKey: { requestShiftQueryKey },
+  } = useRequestShift();
   const { data: ward } = useQuery(getWardQueryKey, () => getWard(wardId!), {
     enabled: wardId !== null,
   });
@@ -49,6 +53,7 @@ const useEditShiftTeam = () => {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
         queryClient.invalidateQueries(shiftQueryKey);
+        queryClient.invalidateQueries(requestShiftQueryKey);
       },
       onError: (error) => {
         console.log(error);
@@ -132,6 +137,7 @@ const useEditShiftTeam = () => {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
         queryClient.invalidateQueries(shiftQueryKey);
+        queryClient.invalidateQueries(requestShiftQueryKey);
       },
     }
   );
@@ -174,8 +180,10 @@ const useEditShiftTeam = () => {
       }) => {
         await queryClient.cancelQueries(getWardQueryKey);
         await queryClient.cancelQueries(shiftQueryKey);
+        await queryClient.cancelQueries(requestShiftQueryKey);
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
         const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
+        const oldReqShift = queryClient.getQueryData<RequestShift>(requestShiftQueryKey);
         oldWard &&
           queryClient.setQueryData<Ward>(
             getWardQueryKey,
@@ -238,21 +246,60 @@ const useEditShiftTeam = () => {
             })
           );
 
-        return { oldWard, oldShift };
+        oldReqShift &&
+          queryClient.setQueryData<RequestShift>(
+            requestShiftQueryKey,
+            produce(oldReqShift, (draft) => {
+              const sourceRows = draft.divisionShiftNurses.find((x) =>
+                x.some((y) => y.shiftNurse.nurseId === nurseId)
+              );
+              if (sourceRows === undefined) return;
+              const row = sourceRows.find((x) => x.shiftNurse.nurseId === nurseId)!;
+
+              sourceRows.splice(
+                sourceRows.findIndex((x) => x.shiftNurse.nurseId === nurseId),
+                1
+              );
+
+              let desticationRow = draft.divisionShiftNurses.find((x) =>
+                x.some((y) => y.shiftNurse.priority === prevPriority)
+              );
+
+              if (desticationRow) {
+                const index = desticationRow.findIndex(
+                  (x) => x.shiftNurse.priority === prevPriority
+                );
+                desticationRow.splice(index === -1 ? 0 : index + 1, 0, row);
+              } else {
+                desticationRow = draft.divisionShiftNurses.find((x) =>
+                  x.some((y) => y.shiftNurse.priority === nextPriority)
+                )!;
+                const index = desticationRow.findIndex(
+                  (x) => x.shiftNurse.priority === nextPriority
+                );
+                desticationRow.splice(index === -1 ? 0 : index, 0, row);
+              }
+            })
+          );
+
+        return { oldWard, oldShift, oldReqShift };
       },
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
-        queryClient.invalidateQueries(['shift']);
+        queryClient.invalidateQueries(shiftQueryKey);
+        queryClient.invalidateQueries(requestShiftQueryKey);
       },
       onError: (_, __, context) => {
         if (
           context === undefined ||
           context.oldShift === undefined ||
+          context.oldReqShift === undefined ||
           context.oldWard === undefined
         )
           return;
         queryClient.setQueryData(getWardQueryKey, context.oldWard);
-        queryClient.setQueryData(['shift'], context.oldShift);
+        queryClient.setQueryData(shiftQueryKey, context.oldShift);
+        queryClient.setQueryData(requestShiftQueryKey, context.oldReqShift);
       },
     }
   );

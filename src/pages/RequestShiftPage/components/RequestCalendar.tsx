@@ -23,7 +23,7 @@ export default function ShiftCalendar() {
       wardShiftTypeMap,
       currentShiftTeam,
     },
-    actions: { changeFocus, foldLevel },
+    actions: { changeFocus, foldLevel, changeRequestShift, acceptRequest },
   } = useRequestShift();
   const {
     state: { shiftTeams },
@@ -253,19 +253,24 @@ export default function ShiftCalendar() {
                                       )}
                                     </div>
                                     <div className="flex h-full px-[1.0625rem]">
-                                      {row.wardReqShiftList.map((current, j) => {
-                                        const request = row.wardReqShiftList[j];
+                                      {row.wardReqShiftList.map((current, date) => {
+                                        const requestDutyRequest =
+                                          dutyRequestList?.find(
+                                            (x) =>
+                                              x.nurseId === row.shiftNurse.nurseId &&
+                                              x.date === date
+                                          ) || null;
                                         const isSaturday =
-                                          requestShift.days[j].dayType === 'saturday';
+                                          requestShift.days[date].dayType === 'saturday';
                                         const isSunday =
-                                          requestShift.days[j].dayType === 'sunday' ||
-                                          requestShift.days[j].dayType === 'holiday';
+                                          requestShift.days[date].dayType === 'sunday' ||
+                                          requestShift.days[date].dayType === 'holiday';
                                         const isFocused =
                                           focus?.shiftNurseId === row.shiftNurse.shiftNurseId &&
-                                          focus.day === j;
+                                          focus.day === date;
                                         return (
                                           <div
-                                            key={j}
+                                            key={date}
                                             className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
                                           ${
                                             isSunday
@@ -276,27 +281,30 @@ export default function ShiftCalendar() {
                                                 : 'bg-[#FFE1E680]'
                                               : ''
                                           } 
-                                          ${j === focus?.day && 'bg-main-4'}`}
+                                          ${date === focus?.day && 'bg-main-4'}`}
                                           >
                                             <ShiftBadge
-                                              key={j}
                                               onClick={() => {
                                                 if (readonly) return;
                                                 changeFocus?.({
                                                   shiftNurseName: row.shiftNurse.name,
                                                   shiftNurseId: row.shiftNurse.shiftNurseId,
-                                                  day: j,
+                                                  day: date,
                                                 });
                                                 sendEvent(event.focus_cell);
                                               }}
                                               shiftType={
                                                 current === null
-                                                  ? request === null
+                                                  ? requestDutyRequest === null
                                                     ? null
-                                                    : wardShiftTypeMap.get(request)
+                                                    : wardShiftTypeMap.get(
+                                                        requestDutyRequest.wardShiftTypeId
+                                                      )
                                                   : wardShiftTypeMap.get(current)
                                               }
-                                              isOnlyRequest={current === null && request !== null}
+                                              isOnlyRequest={
+                                                current === null && requestDutyRequest !== null
+                                              }
                                               className={`z-10 ${
                                                 readonly ? 'cursor-default' : 'cursor-pointer'
                                               } ${
@@ -375,39 +383,65 @@ export default function ShiftCalendar() {
         <div className="my-[.75rem] flex items-center">
           <p className="font-apple text-[1.25rem] font-semibold text-main-1">신청 내역</p>
           <p className="ml-auto cursor-pointer font-apple text-[.875rem] font-medium text-main-2">
-            * 미처리 신청 8개
+            * 미처리 신청 {dutyRequestList?.filter((x) => x.isAccepted === null).length}개
           </p>
         </div>
         <div className="max-h-[calc(100vh-9rem)] overflow-scroll rounded-[1.25rem] bg-white py-[.0625rem] scrollbar-hide">
-          {dutyRequestList?.map((dutyRequest, i) => (
-            <div
-              key={i}
-              className="flex h-[3.25rem] items-center border-b-[.0625rem] border-sub-4.5 pl-[1.875rem] pr-[.75rem] last:border-b-0"
-            >
-              <p className="mr-[.625rem] font-apple text-[1rem] text-sub-1">
-                {dutyRequest.nurseName} / {dutyRequest.date}일
-              </p>
-              <ShiftBadge shiftType={wardShiftTypeMap.get(dutyRequest.wardShiftTypeId)} />
-              <div className="ml-auto flex h-[1.75rem] w-[5.625rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
-                <button
-                  className={twMerge(
-                    'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
-                    dutyRequest.isAccepted === true && 'bg-main-1 text-white'
-                  )}
+          {dutyRequestList?.map((dutyRequest, i) => {
+            const focus: Focus = {
+              shiftNurseName: dutyRequest.nurseName,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+              shiftNurseId: requestShift.divisionShiftNurses
+                .flatMap((x) => x)
+                .find((x) => x.shiftNurse.nurseId === dutyRequest.nurseId)?.shiftNurse
+                .shiftNurseId!,
+              day: dutyRequest.date,
+            };
+
+            return (
+              <div
+                key={i}
+                className="flex h-[3.25rem] items-center border-b-[.0625rem] border-sub-4.5 pl-[1.875rem] pr-[.75rem] last:border-b-0"
+              >
+                <p
+                  className="mr-[.625rem] cursor-pointer font-apple text-[1rem] text-sub-1"
+                  onClick={() => {
+                    if (readonly) return;
+                    changeFocus(focus);
+                    sendEvent(event.focus_cell);
+                  }}
                 >
-                  수락
-                </button>
-                <button
-                  className={twMerge(
-                    'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
-                    dutyRequest.isAccepted === false && 'bg-sub-2 text-white'
-                  )}
-                >
-                  거절
-                </button>
+                  {dutyRequest.nurseName} / {dutyRequest.date}일
+                </p>
+                <ShiftBadge shiftType={wardShiftTypeMap.get(dutyRequest.wardShiftTypeId)} />
+                <div className="ml-auto flex h-[1.75rem] w-[5.625rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
+                  <button
+                    className={twMerge(
+                      'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
+                      dutyRequest.isAccepted === true && 'bg-main-1 text-white'
+                    )}
+                    onClick={() => {
+                      changeRequestShift(focus, dutyRequest.wardShiftTypeId);
+                      acceptRequest(dutyRequest.wardReqShiftId, true);
+                    }}
+                  >
+                    수락
+                  </button>
+                  <button
+                    className={twMerge(
+                      'flex h-[1.5rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1rem] text-sub-2.5',
+                      dutyRequest.isAccepted === false && 'bg-sub-2 text-white'
+                    )}
+                    onClick={() => {
+                      acceptRequest(dutyRequest.wardReqShiftId, false);
+                    }}
+                  >
+                    거절
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
