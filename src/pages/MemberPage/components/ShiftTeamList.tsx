@@ -13,7 +13,7 @@ import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/shiftTeam';
 import ROUTE from '@libs/constant/path';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import { groupBy } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -94,7 +94,7 @@ function ShiftTeamList() {
         selectNurse(shiftTeams[selectedShiftTeamIndex + 1].nurses[0].nurseId);
       }
     }
-    sendEvent(event.move_nurse_focus);
+    sendEvent(events.memberPage.moveNurseFocus);
   };
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
@@ -155,7 +155,7 @@ function ShiftTeamList() {
         );
       }
     }
-    sendEvent(event.move_nurse);
+    sendEvent(events.memberPage.moveNurse);
   };
 
   useEffect(() => {
@@ -172,7 +172,7 @@ function ShiftTeamList() {
           className="ml-[16.125rem] flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0625rem] border-main-3 bg-white px-[.75rem] font-apple text-base text-main-2"
           onClick={() => {
             createShiftTeam();
-            sendEvent(event.create_shift_team);
+            sendEvent(events.memberPage.createShiftTeam);
           }}
         >
           <PlusIcon className="h-[1.5rem] w-[1.5rem] stroke-main-2" />팀 추가하기
@@ -227,7 +227,7 @@ function ShiftTeamList() {
                   className="h-[1.875rem] w-[1.875rem] cursor-pointer"
                   onClick={() => {
                     setOpenMenu(shiftTeam.shiftTeamId);
-                    sendEvent(event.open_shift_team_menu);
+                    sendEvent(events.memberPage.openShiftTeamMenu);
                   }}
                 />
                 {openMenu === shiftTeam.shiftTeamId && (
@@ -333,7 +333,7 @@ function ShiftTeamList() {
                                 ref={provided.innerRef}
                                 onClick={() => {
                                   selectNurse(nurse.nurseId);
-                                  sendEvent(event.focus_nurse);
+                                  sendEvent(events.memberPage.focusNurse);
                                 }}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -371,7 +371,7 @@ function ShiftTeamList() {
                                           .toString()
                                           .padStart(2, '0')}`
                                       );
-                                      sendEvent(event.create_division);
+                                      sendEvent(events.memberPage.createDivision);
                                     }}
                                   >
                                     <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
@@ -398,7 +398,7 @@ function ShiftTeamList() {
                                             .toString()
                                             .padStart(2, '0')}`
                                         );
-                                        sendEvent(event.delete_division);
+                                        sendEvent(events.memberPage.deleteDivision);
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />

@@ -8,6 +8,7 @@ import {
 } from '@assets/svg';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
+import { events, sendEvent } from 'analytics';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -63,7 +64,10 @@ function LandingPage() {
                 className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
                   focus === 'web' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
-                onClick={() => webSection.current?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  webSection.current?.scrollIntoView({ behavior: 'smooth' });
+                  sendEvent(events.landingPage.header.web);
+                }}
               >
                 웹 주요 기능
               </p>
@@ -71,7 +75,10 @@ function LandingPage() {
                 className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
                   focus === 'mobile' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
-                onClick={() => mobileSection.current?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  mobileSection.current?.scrollIntoView({ behavior: 'smooth' });
+                  sendEvent(events.landingPage.header.mobile);
+                }}
               >
                 모바일 앱 주요 기능
               </p>
@@ -81,6 +88,9 @@ function LandingPage() {
                 href="https://abr.ge/bv13wa"
                 target="_blank"
                 className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5 underline"
+                onClick={() => {
+                  sendEvent(events.landingPage.header.download);
+                }}
               >
                 다운로드
               </a>
@@ -88,6 +98,9 @@ function LandingPage() {
                 href="http://ye620.channel.io"
                 target="_blank"
                 className="font-apple text-[1.125rem] font-medium text-sub-2.5"
+                onClick={() => {
+                  sendEvent(events.landingPage.header.ask);
+                }}
               >
                 문의하기
               </a>
@@ -112,7 +125,7 @@ function LandingPage() {
       </div>
 
       {/*메인*/}
-      <div className='h-[100svh] min-h-[740px] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pt-[60px]  xl:relative xl:bg-[url("/img/landing_1.png")] xl:pt-0'>
+      <div className='h-real-screen min-h-[660px] w-screen bg-[url("/img/landing_mobile_1.png")] bg-cover bg-center bg-no-repeat pb-[6.25rem] pt-[60px] xl:relative xl:bg-[url("/img/landing_1.png")] xl:py-0'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:container xl:relative xl:top-[50%] xl:h-fit xl:translate-y-[-50%] xl:pt-0">
           <h1 className="font-line text-[32px] font-bold leading-[42px] text-main-1 xl:text-[4rem] xl:leading-[5.4375rem] xl:text-white">
             근무표,
@@ -135,7 +148,7 @@ function LandingPage() {
               일정 관리의 모든 여정이 더 편리해지는 경험을 제공합니다.
             </p>
           </div>
-          <div className="mt-[43svh] flex items-center gap-[8px] xl:mt-[5.1875rem]">
+          <div className="mt-auto flex items-center gap-[8px] xl:mt-[5.1875rem]">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
@@ -156,14 +169,20 @@ function LandingPage() {
                 {!accountMe && (
                   <div
                     className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                    onClick={() => demoTry()}
+                    onClick={() => {
+                      demoTry();
+                      sendEvent(events.landingPage.demoStart);
+                    }}
                   >
                     데모 테스트 해보기
                   </div>
                 )}
                 <div
                   className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                  onClick={() => navigate(ROUTE.MAKE)}
+                  onClick={() => {
+                    navigate(ROUTE.MAKE);
+                    sendEvent(events.landingPage.makeDuty);
+                  }}
                 >
                   <Logo className="w-[17px] xl:w-[1.6875rem]" />
                   근무표 만들기
@@ -204,9 +223,9 @@ function LandingPage() {
       <div
         id="web"
         ref={webSection}
-        className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_2.png")]'
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_2.png")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_2.png")]'
       >
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
+        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
               Web
@@ -229,7 +248,7 @@ function LandingPage() {
       </div>
 
       {/*메인 3*/}
-      <div className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.png")]'>
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
@@ -258,7 +277,7 @@ function LandingPage() {
       <div
         id="mobile"
         ref={mobileSection}
-        className='xl:h-[${innerHeight}] h-[100svh] w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_4.png")]'
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_4.png")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_4.png")]'
       >
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
@@ -283,7 +302,7 @@ function LandingPage() {
       </div>
 
       {/*메인 5*/}
-      <div className='h-[100svh] w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:h-[100svh]  xl:bg-[url("/img/landing_5.png")]'>
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_5.png")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_5.png")]'>
         <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
           <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
             <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
@@ -375,10 +394,20 @@ function LandingPage() {
           </div>
 
           <div className="xl:flex-1">
-            <a className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]">
+            <a
+              className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]"
+              onClick={() => {
+                sendEvent(events.landingPage.footer.question);
+              }}
+            >
               자주 묻는 질문
             </a>
-            <a className="mb-[72px] mt-[24px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-[1.5rem] xl:text-[1.25rem]">
+            <a
+              className="mb-[72px] mt-[24px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-[1.5rem] xl:text-[1.25rem]"
+              onClick={() => {
+                sendEvent(events.landingPage.footer.partnership);
+              }}
+            >
               제휴 문의
             </a>
           </div>
@@ -389,6 +418,9 @@ function LandingPage() {
             className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
+            onClick={() => {
+              sendEvent(events.landingPage.footer.terms);
+            }}
           >
             이용 약관
           </a>
@@ -396,6 +428,9 @@ function LandingPage() {
             className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
+            onClick={() => {
+              sendEvent(events.landingPage.footer.terms);
+            }}
           >
             개인 정보 처리 방침
           </a>

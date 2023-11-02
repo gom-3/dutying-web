@@ -13,7 +13,6 @@ function AuthzLayout() {
   } = useAuth();
 
   useEffect(() => {
-    console.log(isAuth, accountMe);
     if (!isAuth) {
       location.replace(ROUTE.LOGIN);
     }

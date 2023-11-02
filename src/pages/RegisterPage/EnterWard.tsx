@@ -43,7 +43,6 @@ function EnterWard() {
       const ward = await getWardByCode(code);
       setWard(ward);
       setError(false);
-      setWard(ward);
       setOpen(true);
     } catch (error) {
       setError(true);

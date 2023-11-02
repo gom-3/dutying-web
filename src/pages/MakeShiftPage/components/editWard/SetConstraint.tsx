@@ -2,7 +2,8 @@
 import { ArrowDownIcon } from '@assets/svg';
 import Toggle from '@components/Toggle';
 import useEditShift from '@hooks/shift/useEditShift';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
+
 import { match } from 'ts-pattern';
 
 const Select = ({
@@ -56,7 +57,10 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousWorkVal: parseInt(e.target.value),
                       });
-                      sendEvent(event.change_constraint_value, 'maxContinuousWorkVal');
+                      sendEvent(
+                        events.makePage.editWardModal.changeConstraintValue,
+                        'maxContinuousWorkVal'
+                      );
                     }}
                     className="w-[4.125rem]"
                   />
@@ -75,7 +79,10 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(event.change_constraint_value, 'maxContinuousNightVal');
+                      sendEvent(
+                        events.makePage.editWardModal.changeConstraintValue,
+                        'maxContinuousNightVal'
+                      );
                     }}
                     className="w-[4.125rem]"
                   />
@@ -94,7 +101,10 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minContinuousNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(event.change_constraint_value, 'minContinuousNightVal');
+                      sendEvent(
+                        events.makePage.editWardModal.changeConstraintValue,
+                        'minContinuousNightVal'
+                      );
                     }}
                     className="w-[4.125rem]"
                   />
@@ -113,7 +123,10 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minNightIntervalVal: parseInt(e.target.value),
                       });
-                      sendEvent(event.change_constraint_value, 'minNightIntervalVal');
+                      sendEvent(
+                        events.makePage.editWardModal.changeConstraintValue,
+                        'minNightIntervalVal'
+                      );
                     }}
                     className="w-[4.125rem]"
                   />
@@ -131,7 +144,10 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minOffAssignAfterNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(event.change_constraint_value, 'minOffAssignAfterNightVal');
+                      sendEvent(
+                        events.makePage.editWardModal.changeConstraintValue,
+                        'minOffAssignAfterNightVal'
+                      );
                     }}
                     className="w-[4.125rem]"
                   />
@@ -147,7 +163,7 @@ const SetConstraint = () => {
                     ...wardConstraint,
                     [key]: isActive ? false : true,
                   });
-                  sendEvent(isActive ? event.inactive_constraint : event.active_constraint);
+                  sendEvent(events.makePage.editWardModal.changeConstraintActivation);
                 }}
               />
               {isActive ? (
