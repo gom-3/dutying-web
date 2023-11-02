@@ -1,19 +1,13 @@
-import {
-  DutyIconSelected,
-  NextIcon,
-  PenIcon,
-  PrevIcon,
-  SaveCompleteIcon,
-  SavingIcon,
-} from '@assets/svg';
+import { NextIcon, PenIcon, PrevIcon, SaveCompleteIcon, SavingIcon } from '@assets/svg';
 import Button from '@components/Button';
 import Select from '@components/Select';
 import useRequestShift from '@hooks/shift/useRequestShift';
+import { events, sendEvent } from 'analytics';
 
 function Toolbar() {
   const {
     state: { month, changeStatus, currentShiftTeam, shiftTeams, readonly },
-    actions: { changeMonth, changeShiftTeam, toggleEditMode, createNextMonthShift },
+    actions: { changeMonth, changeShiftTeam, toggleEditMode },
   } = useRequestShift();
 
   return (
@@ -26,12 +20,18 @@ function Toolbar() {
 
       <div className="absolute flex items-center">
         <PrevIcon
-          onClick={() => changeMonth('prev')}
+          onClick={() => {
+            changeMonth('prev');
+            sendEvent(events.requestPage.toolbar.changeMonth);
+          }}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
         <p className="mx-[.625rem] font-poppins text-2xl text-main-1">{month}월</p>
         <NextIcon
-          onClick={() => changeMonth('next')}
+          onClick={() => {
+            changeMonth('next');
+            sendEvent(events.requestPage.toolbar.changeMonth);
+          }}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
       </div>
@@ -59,12 +59,13 @@ function Toolbar() {
             }))}
             className="ml-[1.875rem] h-[2.875rem] w-[10.5rem] font-apple text-[1.25rem] font-semibold text-main-1"
             selectClassName="outline-[.0938rem] outline-main-1"
-            onChange={(e) =>
+            onChange={(e) => {
               changeShiftTeam(
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 shiftTeams!.find((shiftTeam) => shiftTeam.shiftTeamId === parseInt(e.target.value))!
-              )
-            }
+              );
+              sendEvent(events.requestPage.toolbar.changeShiftTeam);
+            }}
           />
         )}
       </div>
@@ -76,16 +77,8 @@ function Toolbar() {
             className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 px-[.75rem] text-[1.25rem] font-semibold"
             onClick={() => toggleEditMode()}
           >
-            이번달 신청근무 수정하기
+            수정하기
             <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
-          </Button>
-          <Button
-            type="outline"
-            className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] px-[.75rem] text-[1.25rem] font-semibold"
-            onClick={() => createNextMonthShift()}
-          >
-            다음달 신청근무 수정하기
-            <DutyIconSelected className="h-[1.5rem] w-[1.5rem]" />
           </Button>
         </div>
       ) : (

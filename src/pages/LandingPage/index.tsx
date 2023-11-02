@@ -8,6 +8,7 @@ import {
 } from '@assets/svg';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
+import { events, sendEvent } from 'analytics';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -63,7 +64,10 @@ function LandingPage() {
                 className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
                   focus === 'web' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
-                onClick={() => webSection.current?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  webSection.current?.scrollIntoView({ behavior: 'smooth' });
+                  sendEvent(events.landingPage.header.web);
+                }}
               >
                 웹 주요 기능
               </p>
@@ -71,7 +75,10 @@ function LandingPage() {
                 className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
                   focus === 'mobile' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
-                onClick={() => mobileSection.current?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  mobileSection.current?.scrollIntoView({ behavior: 'smooth' });
+                  sendEvent(events.landingPage.header.mobile);
+                }}
               >
                 모바일 앱 주요 기능
               </p>
@@ -81,6 +88,9 @@ function LandingPage() {
                 href="https://abr.ge/bv13wa"
                 target="_blank"
                 className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5 underline"
+                onClick={() => {
+                  sendEvent(events.landingPage.header.download);
+                }}
               >
                 다운로드
               </a>
@@ -88,6 +98,9 @@ function LandingPage() {
                 href="http://ye620.channel.io"
                 target="_blank"
                 className="font-apple text-[1.125rem] font-medium text-sub-2.5"
+                onClick={() => {
+                  sendEvent(events.landingPage.header.ask);
+                }}
               >
                 문의하기
               </a>
@@ -156,14 +169,20 @@ function LandingPage() {
                 {!accountMe && (
                   <div
                     className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                    onClick={() => demoTry()}
+                    onClick={() => {
+                      demoTry();
+                      sendEvent(events.landingPage.demoStart);
+                    }}
                   >
                     데모 테스트 해보기
                   </div>
                 )}
                 <div
                   className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                  onClick={() => navigate(ROUTE.MAKE)}
+                  onClick={() => {
+                    navigate(ROUTE.MAKE);
+                    sendEvent(events.landingPage.makeDuty);
+                  }}
                 >
                   <Logo className="w-[17px] xl:w-[1.6875rem]" />
                   근무표 만들기
@@ -375,10 +394,20 @@ function LandingPage() {
           </div>
 
           <div className="xl:flex-1">
-            <a className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]">
+            <a
+              className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]"
+              onClick={() => {
+                sendEvent(events.landingPage.footer.question);
+              }}
+            >
               자주 묻는 질문
             </a>
-            <a className="mb-[72px] mt-[24px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-[1.5rem] xl:text-[1.25rem]">
+            <a
+              className="mb-[72px] mt-[24px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-[1.5rem] xl:text-[1.25rem]"
+              onClick={() => {
+                sendEvent(events.landingPage.footer.partnership);
+              }}
+            >
               제휴 문의
             </a>
           </div>
@@ -389,6 +418,9 @@ function LandingPage() {
             className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
+            onClick={() => {
+              sendEvent(events.landingPage.footer.terms);
+            }}
           >
             이용 약관
           </a>
@@ -396,6 +428,9 @@ function LandingPage() {
             className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
+            onClick={() => {
+              sendEvent(events.landingPage.footer.terms);
+            }}
           >
             개인 정보 처리 방침
           </a>

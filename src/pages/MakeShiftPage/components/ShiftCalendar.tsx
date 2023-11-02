@@ -5,7 +5,7 @@ import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -88,7 +88,7 @@ export default function ShiftCalendar() {
         );
       }
 
-      sendEvent(event.move_nurse_md);
+      sendEvent(events.makePage.calendar.moveNurse);
     },
     [shiftTeams, shift, currentShiftTeam]
   );
@@ -212,7 +212,7 @@ export default function ShiftCalendar() {
                     key={level}
                     className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
                     onClick={() => {
-                      sendEvent(event.fold_division);
+                      sendEvent(events.makePage.calendar.foldDivision);
                       foldLevel(level);
                     }}
                   >
@@ -233,7 +233,7 @@ export default function ShiftCalendar() {
                               <FoldDutyIcon
                                 className="absolute left-[50%] top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                                 onClick={() => {
-                                  sendEvent(event.spread_division);
+                                  sendEvent(events.makePage.calendar.spreadDivision);
                                   foldLevel(level);
                                 }}
                               />
@@ -289,7 +289,7 @@ export default function ShiftCalendar() {
                                       <button
                                         className="h-[1.875rem] w-[1.875rem] rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4"
                                         onClick={() => {
-                                          sendEvent(event.focus_carried);
+                                          sendEvent(events.makePage.calendar.focusCarried);
                                         }}
                                         onKeyDown={(e) => {
                                           e.preventDefault();
@@ -303,7 +303,7 @@ export default function ShiftCalendar() {
                                               row.shiftNurse.shiftNurseId,
                                               row.shiftNurse.carried - 1
                                             );
-                                          sendEvent(event.change_carried);
+                                          sendEvent(events.makePage.calendar.changeCarried);
                                         }}
                                       >
                                         {row.shiftNurse.carried}
@@ -369,7 +369,7 @@ export default function ShiftCalendar() {
                                                 shiftNurseId: row.shiftNurse.shiftNurseId,
                                                 day: j,
                                               });
-                                              sendEvent(event.focus_cell);
+                                              sendEvent(events.makePage.calendar.focusCell);
                                             }}
                                             shiftType={
                                               current === null
@@ -439,7 +439,7 @@ export default function ShiftCalendar() {
                                                 '-' +
                                                 month.toString().padStart(2, '0')
                                             );
-                                            sendEvent(event.create_division_md);
+                                            sendEvent(events.makePage.calendar.createDivision);
                                           }}
                                         >
                                           <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
@@ -461,7 +461,7 @@ export default function ShiftCalendar() {
                                                 '-' +
                                                 month.toString().padStart(2, '0')
                                             );
-                                            sendEvent(event.delete_division_md);
+                                            sendEvent(events.makePage.calendar.deleteDivision);
                                           }}
                                         >
                                           <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />

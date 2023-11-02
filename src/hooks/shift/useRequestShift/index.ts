@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { acceptRequestShift, getReqShift, getRequestList, updateReqShift } from '@libs/api/shift';
 import { match } from 'ts-pattern';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { shallow } from 'zustand/shallow';
 import { getShiftTeams } from '@libs/api/shiftTeam';
@@ -130,7 +130,7 @@ const useRequestShift = (activeEffect = false) => {
         );
 
         sendEvent(
-          event.change_shift_rq,
+          events.requestPage.changeShift,
           `${focus.shiftNurseName} / ${day + 1}일 | ` +
             match(edit)
               .with({ prevShiftType: null }, () => `추가 → ${edit.nextShiftType?.shortName}`)
@@ -184,7 +184,7 @@ const useRequestShift = (activeEffect = false) => {
           setState('month', month + 1);
         }
       }
-      sendEvent(event.change_month);
+      sendEvent(events.requestPage.toolbar.changeMonth);
     },
     [month, year]
   );
@@ -259,10 +259,7 @@ const useRequestShift = (activeEffect = false) => {
           ctrlKey,
           requestShift,
           focus,
-          (focus: Focus | null) => {
-            setState('focus', focus);
-            sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
-          }
+          (focus: Focus | null) => setState('focus', focus)
         );
       }
       keydownEventMapper(
@@ -273,7 +270,10 @@ const useRequestShift = (activeEffect = false) => {
             changeFocusedShift(shiftType.wardShiftTypeId);
             moveFocus('right', ctrlKey, requestShift, focus, (focus: Focus | null) => {
               setState('focus', focus);
-              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+              sendEvent(
+                ctrlKey ? events.requestPage.moveCellFocus : events.requestPage.moveCellFocus,
+                e.key
+              );
             });
           },
         })),
@@ -283,7 +283,10 @@ const useRequestShift = (activeEffect = false) => {
             changeFocusedShift(null);
             moveFocus('left', ctrlKey, requestShift, focus, (focus: Focus | null) => {
               setState('focus', focus);
-              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+              sendEvent(
+                ctrlKey ? events.requestPage.moveCellFocus : events.requestPage.moveCellFocus,
+                e.key
+              );
             });
           },
         },
@@ -359,10 +362,7 @@ const useRequestShift = (activeEffect = false) => {
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => {
-        setState('currentShiftTeam', shiftTeam);
-        sendEvent(event.change_shift_team);
-      },
+      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
     },
   };
 };

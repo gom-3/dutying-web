@@ -16,7 +16,7 @@ import {
 } from '@assets/svg';
 import Button from '@components/Button';
 import { shiftToExcel } from '@libs/util/shiftToExcel';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
 import Draggable from 'react-draggable';
@@ -56,12 +56,18 @@ function Toolbar() {
 
       <div className="absolute flex items-center">
         <PrevIcon
-          onClick={() => changeMonth('prev')}
+          onClick={() => {
+            changeMonth('prev');
+            sendEvent(events.makePage.toolbar.changeMonth);
+          }}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
         <p className="mx-[.625rem] font-poppins text-2xl text-main-1">{month}월</p>
         <NextIcon
-          onClick={() => changeMonth('next')}
+          onClick={() => {
+            changeMonth('next');
+            sendEvent(events.makePage.toolbar.changeMonth);
+          }}
           className="h-[1.875rem] w-[1.875rem] cursor-pointer"
         />
         <p className="ml-[1.25rem] font-apple text-[.875rem] text-main-1">
@@ -75,7 +81,7 @@ function Toolbar() {
           className="mr-[1.25rem] flex h-[2.5rem] w-[7.9375rem] items-center justify-center rounded-[3.125rem] border-[.0313rem] border-main-2 bg-main-4 text-base font-normal"
           onClick={() => {
             currentSetup === null ? setCurrentSetup('constraint') : setCurrentSetup(null);
-            sendEvent(event.open_edit_modal);
+            sendEvent(events.makePage.toolbar.openEditWardModal);
           }}
         >
           <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-main-1" />
@@ -85,7 +91,7 @@ function Toolbar() {
 
       {currentSetup !== null &&
         createPortal(
-          <Draggable onStop={() => sendEvent(event.move_edit_modal)}>
+          <Draggable>
             <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex flex-col rounded-[1.25rem] bg-white shadow-shadow-3">
               <div className="flex h-[2.75rem] cursor-move items-center rounded-t-[1.25rem] bg-sub-5">
                 <div
@@ -130,12 +136,12 @@ function Toolbar() {
         className="h-[1.625rem] w-[1.625rem] cursor-pointer"
         onClick={() => {
           setOpenInfo(!openInfo);
-          sendEvent(event.open_shift_info_modal);
+          sendEvent(events.makePage.toolbar.openShiftInfoModal);
         }}
       />
       {openInfo &&
         createPortal(
-          <Draggable onStop={() => sendEvent(event.move_shift_info_modal)}>
+          <Draggable>
             <div className="absolute left-[17.625rem] top-[5.5rem] z-[1001] flex w-[29.125rem] flex-col rounded-[.625rem] bg-white shadow-shadow-3">
               <div className="flex h-[1.625rem] cursor-move items-center rounded-t-[.625rem] bg-sub-5 pl-[2.5rem]">
                 <p className="bottom-0 font-apple text-[.875rem] text-sub-2.5">근무 유형 보기</p>
@@ -169,7 +175,12 @@ function Toolbar() {
               }`}
               onClick={() => {
                 toggleLayer('fault');
-                sendEvent(showLayer.fault ? event.off_layer : event.on_layer, 'fault');
+                sendEvent(
+                  showLayer.fault
+                    ? events.makePage.toolbar.offLayer
+                    : events.makePage.toolbar.onLayer,
+                  'fault'
+                );
               }}
             >
               <div
@@ -191,7 +202,12 @@ function Toolbar() {
               }`}
               onClick={() => {
                 toggleLayer('check');
-                sendEvent(showLayer.check ? event.off_layer : event.on_layer, 'check');
+                sendEvent(
+                  showLayer.check
+                    ? events.makePage.toolbar.offLayer
+                    : events.makePage.toolbar.onLayer,
+                  'check'
+                );
               }}
             >
               <div
@@ -213,7 +229,12 @@ function Toolbar() {
               }`}
               onClick={() => {
                 toggleLayer('slash');
-                sendEvent(showLayer.slash ? event.off_layer : event.on_layer, 'slash');
+                sendEvent(
+                  showLayer.slash
+                    ? events.makePage.toolbar.offLayer
+                    : events.makePage.toolbar.onLayer,
+                  'slash'
+                );
               }}
             >
               <div
@@ -245,14 +266,14 @@ function Toolbar() {
               className="h-[1.625rem] w-[1.625rem] cursor-pointer"
               onClick={() => {
                 moveHistory(-1);
-                sendEvent(event.undo_toolbar);
+                sendEvent(events.makePage.toolbar.undoBytoolbar);
               }}
             />
             <HistoryNextIcon
               className="h-[1.625rem] w-[1.625rem] cursor-pointer"
               onClick={() => {
                 moveHistory(1);
-                sendEvent(event.redo_toolbar);
+                sendEvent(events.makePage.toolbar.redoByToolbar);
               }}
             />
           </div>
@@ -283,27 +304,34 @@ function Toolbar() {
         <div className="ml-auto flex gap-[10px]">
           <Button
             type="fill"
-            className="flex h-[2.5rem] w-[11.25rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 text-[1.25rem] font-semibold"
-            onClick={() => toggleEditMode()}
-          >
-            근무표 수정하기
-            <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
-          </Button>
-          <Button
-            type="fill"
-            className="flex h-[2.5rem] w-[11.25rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 text-[1.25rem] font-semibold"
+            className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 pl-[.75rem] pr-[.5rem] text-[1.25rem] font-semibold"
             onClick={() => {
-              shift && shiftToExcel(month, shift);
-              sendEvent(event.download_excel);
+              toggleEditMode();
+              sendEvent(events.makePage.toolbar.changeEditMode);
             }}
           >
-            근무표 공유하기
+            수정하기
+            <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
+          </Button>
+          {/* @TODO 이미지 저장 구현 */}
+          <Button
+            type="fill"
+            className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 pl-[.75rem] pr-[.5rem] text-[1.25rem] font-semibold"
+            onClick={() => {
+              shift && shiftToExcel(month, shift);
+              sendEvent(events.makePage.toolbar.downloadExcel);
+            }}
+          >
+            저장하기
             <ShareIcon className="h-[1.5rem] w-[1.5rem]" />
           </Button>
           <Button
             type="outline"
             className="flex h-[2.5rem] w-[14.75rem] items-center justify-center gap-[.5rem] rounded-[.625rem] text-[1.25rem] font-semibold"
-            onClick={() => createNextMonthShift()}
+            onClick={() => {
+              createNextMonthShift();
+              sendEvent(events.makePage.toolbar.editNextMonth);
+            }}
           >
             다음달 근무표 만들기
             <DutyIconSelected className="h-[1.5rem] w-[1.5rem]" />

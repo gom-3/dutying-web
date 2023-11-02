@@ -5,7 +5,7 @@ import { WardShiftsDTO, getShift, updateShift, updateShifts } from '@libs/api/sh
 import { getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { shallow } from 'zustand/shallow';
 import useEditShiftStore from './store';
@@ -180,7 +180,7 @@ const useEditShift = (activeEffect = false) => {
         );
 
         sendEvent(
-          event.change_shift,
+          events.makePage.changeShift,
           `${focus.shiftNurseName} / ${day + 1}일 | ` +
             match(edit)
               .with({ prevShiftType: null }, () => `추가 → ${edit.nextShiftType?.shortName}`)
@@ -304,7 +304,6 @@ const useEditShift = (activeEffect = false) => {
           setState('month', month + 1);
         }
       }
-      sendEvent(event.change_month);
     },
     [month, year]
   );
@@ -412,10 +411,10 @@ const useEditShift = (activeEffect = false) => {
       if (ctrlKey && e.key === 'z') {
         if (e.shiftKey) {
           moveHistory(1);
-          sendEvent(event.redo_key);
+          sendEvent(events.makePage.redoBykey);
         } else {
           moveHistory(-1);
-          sendEvent(event.undo_key);
+          sendEvent(events.makePage.undoBykey);
         }
       }
 
@@ -428,7 +427,10 @@ const useEditShift = (activeEffect = false) => {
           focus,
           (focus: Focus | null) => {
             setState('focus', focus);
-            sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+            sendEvent(
+              ctrlKey ? events.makePage.moveCellFocus : events.makePage.moveCellFocus,
+              e.key
+            );
           }
         );
       }
@@ -440,7 +442,10 @@ const useEditShift = (activeEffect = false) => {
             changeFocusedShift(shiftType.wardShiftTypeId);
             moveFocus('right', ctrlKey, shift, focus, (focus: Focus | null) => {
               setState('focus', focus);
-              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+              sendEvent(
+                ctrlKey ? events.makePage.moveCellFocus : events.makePage.moveCellFocus,
+                e.key
+              );
             });
           },
         })),
@@ -450,7 +455,10 @@ const useEditShift = (activeEffect = false) => {
             changeFocusedShift(null);
             moveFocus('left', ctrlKey, shift, focus, (focus: Focus | null) => {
               setState('focus', focus);
-              sendEvent(ctrlKey ? event.move_cell_focus_end : event.move_cell_focus, e.key);
+              sendEvent(
+                ctrlKey ? events.makePage.moveCellFocus : events.makePage.moveCellFocus,
+                e.key
+              );
             });
           },
         },
@@ -552,10 +560,7 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => {
-        setState('currentShiftTeam', shiftTeam);
-        sendEvent(event.change_shift_team);
-      },
+      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
     },
   };
 };

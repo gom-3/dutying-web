@@ -4,7 +4,7 @@ import TimeInput from '@components/TimeInput';
 import TextField from '@components/TextField';
 import { useState } from 'react';
 import CreateShiftModal from './CreateShiftModal';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 function SetShiftType() {
@@ -20,10 +20,10 @@ function SetShiftType() {
     if (shiftTypeId) {
       editShiftType(shiftTypeId, shiftType);
       setTempShiftType(null);
-      sendEvent(event.edit_shift_type);
+      sendEvent(events.makePage.editWardModal.editShiftType);
     } else {
       addShiftType(shiftType);
-      sendEvent(event.create_shift_type);
+      sendEvent(events.makePage.editWardModal.createShiftType);
     }
     setTempShiftType(null);
   };
@@ -61,7 +61,7 @@ function SetShiftType() {
                   ...shiftType,
                   shortName: e.target.value.slice(0, 1).toUpperCase(),
                 });
-                sendEvent(event.change_shift_type_name);
+                sendEvent(events.makePage.editWardModal.changeShiftTypeName);
               }}
             />
           </div>
@@ -75,7 +75,7 @@ function SetShiftType() {
                   initTime={shiftType.startTime}
                   onTimeChange={(value) => {
                     editShiftType(shiftType.wardShiftTypeId, { ...shiftType, startTime: value });
-                    sendEvent(event.change_shift_type_time);
+                    sendEvent(events.makePage.editWardModal.changeShiftTypeTime);
                   }}
                 />
                 <p className="font-poppins text-[1.25rem]">~</p>
@@ -84,7 +84,7 @@ function SetShiftType() {
                   initTime={shiftType.endTime}
                   onTimeChange={(value) => {
                     editShiftType(shiftType.wardShiftTypeId, { ...shiftType, endTime: value });
-                    sendEvent(event.change_shift_type_time);
+                    sendEvent(events.makePage.editWardModal.changeShiftTypeTime);
                   }}
                 />
               </>
@@ -102,7 +102,7 @@ function SetShiftType() {
               className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
               onClick={() => {
                 editShiftType(shiftType.wardShiftTypeId, { ...shiftType, isOff: !shiftType.isOff });
-                sendEvent(event.change_shift_type_off_type);
+                sendEvent(events.makePage.editWardModal.changeShiftTypeOffType);
               }}
             >
               {shiftType.isOff ? '휴가' : '근무'}
@@ -127,7 +127,7 @@ function SetShiftType() {
               onClick={() => {
                 setTempShiftType(shiftType);
                 setOpenModal(true);
-                sendEvent(event.open_shift_type_edit_modal);
+                sendEvent(events.makePage.editWardModal.openEditModal);
               }}
             />
           </div>
@@ -138,7 +138,7 @@ function SetShiftType() {
           className="flex cursor-pointer gap-[.4375rem]"
           onClick={() => {
             setOpenModal(true);
-            sendEvent(event.open_shift_type_edit_modal);
+            sendEvent(events.makePage.editWardModal.openEditModal);
           }}
         >
           <PlusIcon className="h-[1.25rem] w-[1.25rem] stroke-main-2" />

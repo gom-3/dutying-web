@@ -3,7 +3,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import { DragIcon, FoldDutyIcon, LinkedIcon, PlusIcon2, UnlinkedIcon } from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import useUIConfig from '@hooks/useUIConfig';
@@ -86,7 +86,7 @@ export default function ShiftCalendar() {
         );
       }
 
-      sendEvent(event.move_nurse_md);
+      sendEvent(events.requestPage.calendar.moveNurse);
     },
     [shiftTeams, requestShift, currentShiftTeam]
   );
@@ -175,7 +175,7 @@ export default function ShiftCalendar() {
                       key={level}
                       className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
                       onClick={() => {
-                        sendEvent(event.fold_division);
+                        sendEvent(events.requestPage.calendar.foldDivision);
                         foldLevel(level);
                       }}
                     >
@@ -196,7 +196,7 @@ export default function ShiftCalendar() {
                                 <FoldDutyIcon
                                   className="absolute left-[50%] top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[-50%] translate-y-[-50%] cursor-pointer"
                                   onClick={() => {
-                                    sendEvent(event.spread_division);
+                                    sendEvent(events.requestPage.calendar.spreadDivision);
                                     foldLevel(level);
                                   }}
                                 />
@@ -291,7 +291,7 @@ export default function ShiftCalendar() {
                                                   shiftNurseId: row.shiftNurse.shiftNurseId,
                                                   day: date,
                                                 });
-                                                sendEvent(event.focus_cell);
+                                                sendEvent(events.requestPage.calendar.focusCell);
                                               }}
                                               shiftType={
                                                 current === null
@@ -335,7 +335,7 @@ export default function ShiftCalendar() {
                                                   '-' +
                                                   month.toString().padStart(2, '0')
                                               );
-                                              sendEvent(event.create_division_md);
+                                              sendEvent(events.requestPage.calendar.createDivision);
                                             }}
                                           >
                                             <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
@@ -357,7 +357,7 @@ export default function ShiftCalendar() {
                                                   '-' +
                                                   month.toString().padStart(2, '0')
                                               );
-                                              sendEvent(event.delete_division_md);
+                                              sendEvent(events.requestPage.calendar.deleteDivision);
                                             }}
                                           >
                                             <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
@@ -408,7 +408,6 @@ export default function ShiftCalendar() {
                   onClick={() => {
                     if (readonly) return;
                     changeFocus(focus);
-                    sendEvent(event.focus_cell);
                   }}
                 >
                   {dutyRequest.nurseName} / {dutyRequest.date}일
@@ -423,6 +422,7 @@ export default function ShiftCalendar() {
                     onClick={() => {
                       changeRequestShift(focus, dutyRequest.wardShiftTypeId);
                       acceptRequest(dutyRequest.wardReqShiftId, true);
+                      sendEvent(events.requestPage.acceptRequest, 'true');
                     }}
                   >
                     수락
@@ -434,6 +434,7 @@ export default function ShiftCalendar() {
                     )}
                     onClick={() => {
                       acceptRequest(dutyRequest.wardReqShiftId, false);
+                      sendEvent(events.requestPage.acceptRequest, 'false');
                     }}
                   >
                     거절

@@ -2,7 +2,7 @@
 import { CancelIcon, CheckedIcon, UncheckedIcon2 } from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -48,7 +48,7 @@ function NurseEditModal() {
             className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
             onChange={(e) => {
               handleChange('name', e.target.value);
-              sendEvent(event.change_nurse_name);
+              sendEvent(events.makePage.editNurseModal.changeNurseName);
             }}
             value={writeNurse?.name || ''}
           />
@@ -56,7 +56,7 @@ function NurseEditModal() {
             className="ml-auto flex h-[1.25rem] w-[1.75rem] cursor-pointer items-center justify-center rounded-[.3125rem] bg-sub-5 font-apple text-[.875rem] text-[#A2A6F5]"
             onClick={() => {
               handleChange('gender', writeNurse?.gender === '남' ? '여' : '남');
-              sendEvent(event.change_nurse_gender);
+              sendEvent(events.makePage.editNurseModal.changeNurseGender);
             }}
           >
             {writeNurse?.gender}
@@ -75,7 +75,7 @@ function NurseEditModal() {
             className="h-[2.5rem] font-poppins text-[1.25rem] text-sub-3"
             onChange={(e) => {
               handleChange('employmentDate', e.target.value);
-              sendEvent(event.change_nurse_employment_date);
+              sendEvent(events.makePage.editNurseModal.changeNurseEmploymentDate);
             }}
             value={writeNurse?.employmentDate || ''}
           />
@@ -92,7 +92,7 @@ function NurseEditModal() {
             className="h-[2.5rem] font-poppins text-[1.25rem] text-sub-3"
             onChange={(e) => {
               handleChange('phoneNum', e.target.value);
-              sendEvent(event.change_nurse_phone);
+              sendEvent(events.makePage.editNurseModal.changeNursePhone);
             }}
             value={writeNurse?.phoneNum || ''}
           />
@@ -121,7 +121,7 @@ function NurseEditModal() {
                           !isPossible;
                       })
                     );
-                    sendEvent(event.change_nurse_shift_types);
+                    sendEvent(events.makePage.editNurseModal.changeNurseShiftTypes);
                   }}
                 >
                   {name}
@@ -139,7 +139,7 @@ function NurseEditModal() {
                 fill="#B08BFF"
                 onClick={() => {
                   handleChange('isWorker', false);
-                  sendEvent(event.change_nurse_is_worker);
+                  sendEvent(events.makePage.editNurseModal.changeNurseIsWorker);
                 }}
               />
             </div>
@@ -150,7 +150,7 @@ function NurseEditModal() {
                 className="h-[1.25rem] w-[1.25rem] cursor-pointer"
                 onClick={() => {
                   handleChange('isWorker', true);
-                  sendEvent(event.change_nurse_is_worker);
+                  sendEvent(events.makePage.editNurseModal.changeNurseIsWorker);
                 }}
               />
             </div>
@@ -166,7 +166,7 @@ function NurseEditModal() {
                 fill="#B08BFF"
                 onClick={() => {
                   handleChange('isDutyManager', false);
-                  sendEvent(event.change_nurse_is_manager);
+                  sendEvent(events.makePage.editNurseModal.changeNurseIsManager);
                 }}
               />
             </div>
@@ -177,7 +177,7 @@ function NurseEditModal() {
                 className="h-[1.25rem] w-[1.25rem] cursor-pointer"
                 onClick={() => {
                   handleChange('isDutyManager', true);
-                  sendEvent(event.change_nurse_is_manager);
+                  sendEvent(events.makePage.editNurseModal.changeNurseIsManager);
                 }}
               />
             </div>
@@ -192,7 +192,7 @@ function NurseEditModal() {
           className="mx-[2.5rem] mt-[.9375rem] h-[10.8125rem] resize-none rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-2 font-apple text-sm text-sub-1"
           onChange={(e) => {
             handleChange('memo', e.target.value);
-            sendEvent(event.change_nurse_memo);
+            sendEvent(events.makePage.editNurseModal.changeNurseMemo);
           }}
         />
 
