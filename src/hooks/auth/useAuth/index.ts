@@ -8,6 +8,7 @@ import ROUTE from '@libs/constant/path';
 import useInitStore from '@hooks/useInitStore';
 import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import { useEffect } from 'react';
+import { events, sendEvent } from 'analytics';
 
 const useAuth = (activeEffect = false) => {
   const [
@@ -40,6 +41,7 @@ const useAuth = (activeEffect = false) => {
 
   const handleLogout = async () => {
     initStore();
+    sendEvent(events.auth.logut);
   };
 
   const handleLogin = (accessToken: string, nextPageUrl?: string) => {
@@ -48,6 +50,7 @@ const useAuth = (activeEffect = false) => {
     initEditShiftStore();
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     location.replace(nextPageUrl || '/make');
+    sendEvent(events.auth.login);
   };
 
   const { mutate: demoTry } = useMutation(demoStart(), {

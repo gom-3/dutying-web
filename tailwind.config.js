@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      height: {
+        'real-screen': 'calc(var(--vh) * 100)',
+      },
+
       scale: {
         '-1': '-1',
       },
@@ -33,6 +37,9 @@ export default {
         'shadow-2': '.1875rem .25rem 1.25rem 0rem #D2C7E7',
         'shadow-3': '.25rem .25rem 1.1875rem 0rem #68519533',
       },
+    },
+    minHeight: {
+      'real-screen': 'calc(var(--vh) * 100)',
     },
   },
   plugins: [require('tailwind-scrollbar-hide')],

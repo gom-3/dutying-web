@@ -1,4 +1,4 @@
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
 import { match } from 'ts-pattern';
@@ -31,7 +31,7 @@ function Panel() {
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
-            sendEvent(event.change_panel_tab, 'histories');
+            sendEvent(events.makePage.panel.changePanelTab, 'histories');
           }}
         >
           기록
@@ -41,7 +41,7 @@ function Panel() {
           ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
-            sendEvent(event.change_panel_tab, 'faults');
+            sendEvent(events.makePage.panel.changePanelTab, 'faults');
           }}
         >
           <p className="relative">
@@ -60,7 +60,6 @@ function Panel() {
                 className="cursor-pointer border-b-[.0313rem] border-sub-4 px-[.8125rem] py-[.625rem] font-apple text-[.75rem] text-sub-2 last:border-none"
                 onClick={() => {
                   changeFocus(fault.focus);
-                  sendEvent(event.focus_fault);
                 }}
               >
                 {fault.focus.shiftNurseName} / {fault.focus.day + 1}일: {fault.message}
@@ -77,7 +76,11 @@ function Panel() {
                   }`}
                   onClick={() => {
                     const diff = histories.history.length - index - 1 - histories.current;
-                    sendEvent(diff > 0 ? event.redo_panel : event.undo_panel);
+                    sendEvent(
+                      diff > 0
+                        ? events.makePage.panel.redoBypanel
+                        : events.makePage.panel.undoByPanel
+                    );
                     moveHistory(diff);
                   }}
                 >
@@ -113,7 +116,7 @@ function Panel() {
         className="flex h-[1.875rem] w-full cursor-pointer items-center justify-center  font-apple text-[.625rem] text-main-3"
         onClick={() => {
           setOpen(!open);
-          sendEvent(open ? event.fold_panel : event.spread_panel);
+          sendEvent(open ? events.makePage.panel.foldPanel : events.makePage.panel.spreadPanel);
         }}
       >
         {open ? '닫기' : '펼치기'}

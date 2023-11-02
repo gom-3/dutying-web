@@ -8,274 +8,402 @@ interface Event {
   action: string;
 }
 
-export const event = {
-  change_month: {
-    category: 'click',
-    action: 'change_month',
-  },
-  change_shift_team: {
-    category: 'select',
-    action: 'change_shift_team',
-  },
-  focus_carried: {
-    category: 'click',
-    action: 'focus_carried',
-  },
-  change_carried: {
-    category: 'key_down',
-    action: 'change_carried',
-  },
-  move_nurse_md: {
-    category: 'drag',
-    action: 'move_nurse(md)',
-  },
-  fold_division: {
-    category: 'click',
-    action: 'fold_division',
-  },
-  spread_division: {
-    category: 'click',
-    action: 'spread_division',
-  },
-  create_division_md: {
-    category: 'click',
-    action: 'create_division(md)',
-  },
-  delete_division_md: {
-    category: 'click',
-    action: 'delete_division(md)',
-  },
-  focus_cell: {
-    category: 'click',
-    action: 'focus_cell',
-  },
-  change_shift: {
-    category: 'key_down',
-    action: 'change_shift',
-  },
-  move_cell_focus: {
-    category: 'key_down',
-    action: 'move_cell_focus',
-  },
-  move_cell_focus_end: {
-    category: 'key_down',
-    action: 'move_cell_focus_end',
-  },
-  change_panel_tab: {
-    category: 'click',
-    action: 'change_panel_tab',
-  },
-  spread_panel: {
-    category: 'click',
-    action: 'spread_panel',
-  },
-  fold_panel: {
-    category: 'click',
-    action: 'fold_panel',
-  },
-  undo_toolbar: {
-    category: 'click',
-    action: 'undo(toolbar)',
-  },
-  undo_key: {
-    category: 'key_down',
-    action: 'undo(key)',
-  },
-  undo_panel: {
-    category: 'click',
-    action: 'undo(panel)',
-  },
-  redo_toolbar: {
-    category: 'click',
-    action: 'redo(toolbar)',
-  },
-  redo_key: {
-    category: 'key_down',
-    action: 'redo(key)',
-  },
-  redo_panel: {
-    category: 'click',
-    action: 'redo(panel)',
-  },
-  focus_fault: {
-    category: 'click',
-    action: 'focus_fault',
-  },
-  off_layer: {
-    category: 'click',
-    action: 'off_layer',
-  },
-  on_layer: {
-    category: 'click',
-    action: 'on_layer',
-  },
-  open_edit_modal: {
-    category: 'click',
-    action: 'open_edit_modal',
-  },
-  move_edit_modal: {
-    category: 'drag',
-    action: 'move_edit_modal',
-  },
-  change_constraint_value: {
-    category: 'select',
-    action: 'change_constraint_value',
-  },
-  active_constraint: {
-    category: 'toggle',
-    action: 'active_constraint',
-  },
-  inactive_constraint: {
-    category: 'toggle',
-    action: 'inactive_constraint',
-  },
-  change_shift_type_name: {
-    category: 'input_text',
-    action: 'change_shift_type_name',
-  },
-  change_shift_type_short_name: {
-    category: 'input_text',
-    action: 'change_shift_type_short_name',
-  },
-  change_shift_type_time: {
-    category: 'input_text',
-    action: 'change_shift_type_time',
-  },
-  change_shift_type_color: {
-    category: 'input_color',
-    action: 'change_shift_type_color',
-  },
-  change_shift_type_off_type: {
-    category: 'toggle',
-    action: 'change_shift_type_off_type',
-  },
-  create_shift_type: {
-    category: 'click',
-    action: 'create_shift_type',
-  },
-  edit_shift_type: {
-    category: 'click',
-    action: 'edit_shift_type',
-  },
-  open_shift_type_edit_modal: {
-    category: 'click',
-    action: 'open_shift_type_edit_modal',
-  },
-  open_shift_info_modal: {
-    category: 'click',
-    action: 'open_shift_info_modal',
-  },
-  move_shift_info_modal: {
-    category: 'drag',
-    action: 'move_shift_info_modal',
-  },
-  download_excel: {
-    category: 'click',
-    action: 'download_excel',
-  },
-  change_month_rq: {
-    category: 'click',
-    action: 'change_month(rq)',
-  },
-  change_shift_team_rq: {
-    category: 'select',
-    action: 'change_shift_team(rq)',
-  },
-  fold_division_rq: {
-    category: 'click',
-    action: 'fold_division(rq)',
-  },
-  spread_division_rq: {
-    category: 'click',
-    action: 'spread_division(rq)',
-  },
-  change_shift_rq: {
-    category: 'key_down',
-    action: 'change_shift(rq)',
-  },
-  move_focus_rq: {
-    category: 'key_down',
-    action: 'move_focus(rq)',
-  },
-  move_focus_end_rq: {
-    category: 'key_down',
-    action: 'move_focus_end(rq)',
-  },
-  create_shift_team: {
-    category: 'click',
-    action: 'create_shift_team',
-  },
-  move_nurse: {
-    category: 'drag',
-    action: 'move_nurse',
-  },
-  create_division: {
-    category: 'click',
-    action: 'create_division',
-  },
-  delete_division: {
-    category: 'click',
-    action: 'delete_division',
-  },
-  open_shift_team_menu: {
-    category: 'click',
-    action: 'open_shift_team_menu',
-  },
-  focus_nurse: {
-    category: 'click',
-    action: 'focus_nurse',
-  },
-  move_nurse_focus: {
-    category: 'key_down',
-    action: 'move_nurse_focus',
-  },
-  change_nurse_name: {
-    category: 'input_text',
-    action: 'change_nurse_name',
-  },
-  change_nurse_gender: {
-    category: 'input_text',
-    action: 'change_nurse_gender',
-  },
-  change_nurse_employment_date: {
-    category: 'input_text',
-    action: 'change_nurse_employment_date',
-  },
-  change_nurse_phone: {
-    category: 'input_text',
-    action: 'change_nurse_phone',
-  },
-  change_nurse_shift_types: {
-    category: 'toggle',
-    action: 'change_nurse_shift_types',
-  },
-  change_nurse_is_worker: {
-    category: 'toggle',
-    action: 'change_nurse_is_worker',
-  },
-  change_nurse_is_manager: {
-    category: 'toggle',
-    action: 'change_nurse_is_manager',
-  },
-  change_nurse_memo: {
-    category: 'input_text',
-    action: 'change_nurse_memo',
-  },
-  fold_navigation: {
-    category: 'click',
-    action: 'fold_navigation',
-  },
-  spread_navigation: {
-    category: 'click',
-    action: 'spread_navigation',
-  },
-  navigate: {
-    category: 'click',
-    action: 'navigate',
-  },
-  login: {
-    category: 'auth',
-    action: 'login',
+export const events = {
+  landingPage: {
+    header: {
+      web: {
+        category: 'landingPage',
+        action: 'landingPage_header_web',
+      },
+      mobile: {
+        category: 'landingPage',
+        action: 'landingPage_header_mobile',
+      },
+      download: {
+        category: 'landingPage',
+        action: 'landingPage_header_download',
+      },
+      ask: {
+        category: 'landingPage',
+        action: 'landingPage_header_ask',
+      },
+    },
+    footer: {
+      partnership: {
+        category: 'landingPage',
+        action: 'landingPage_footer_partnership',
+      },
+      question: {
+        category: 'landingPage',
+        action: 'landingPage_footer_question',
+      },
+      terms: {
+        category: 'landingPage',
+        action: 'landingPage_footer_terms',
+      },
+    },
+    demoStart: {
+      category: 'landingPage',
+      action: 'landingPage_demoStart',
+    },
+    makeDuty: {
+      category: 'landingPage',
+      action: 'landingPage_makeDuty',
+    },
+  },
+  makePage: {
+    toolbar: {
+      openEditWardModal: {
+        category: 'makePage',
+        action: 'makePage_toolbar_openEditWardModal',
+      },
+      openShiftInfoModal: {
+        category: 'makePage',
+        action: 'makePage_toolbar_openShiftInfoModal',
+      },
+      downloadExcel: {
+        category: 'makePage',
+        action: 'makePage_toolbar_downloadExcel',
+      },
+      downloadImage: {
+        category: 'makePage',
+        action: 'makePage_toolbar_downloadImage',
+      },
+      changeEditMode: {
+        category: 'makePage',
+        action: 'makePage_toolbar_changeEditMode',
+      },
+      editNextMonth: {
+        category: 'makePage',
+        action: 'makePage_toolbar_editNextMonth',
+      },
+      changeMonth: {
+        category: 'makePage',
+        action: 'makePage_toolbar_changeMonth',
+      },
+      changeShiftTeam: {
+        category: 'makePage',
+        action: 'makePage_toolbar_changeShiftTeam',
+      },
+      offLayer: {
+        category: 'makePage',
+        action: 'makePage_toolbar_offLayer',
+      },
+      onLayer: {
+        category: 'makePage',
+        action: 'makePage_toolbar_onLayer',
+      },
+      undoBytoolbar: {
+        category: 'makePage',
+        action: 'makePage_toolbar_undoBytoolbar',
+      },
+      redoByToolbar: {
+        category: 'makePage',
+        action: 'makePage_toolbar_redoByToolbar',
+      },
+    },
+    panel: {
+      changePanelTab: {
+        category: 'makePage',
+        action: 'makePage_panel_changePanelTab',
+      },
+      spreadPanel: {
+        category: 'makePage',
+        action: 'makePage_panel_spreadPanel',
+      },
+      foldPanel: {
+        category: 'makePage',
+        action: 'makePage_panel_foldPanel',
+      },
+      undoByPanel: {
+        category: 'makePage',
+        action: 'makePage_panel_undoByPanel',
+      },
+      redoBypanel: {
+        category: 'makePage',
+        action: 'makePage_panel_redoBypanel',
+      },
+    },
+    editNurseModal: {
+      changeNurseName: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseName',
+      },
+      changeNurseGender: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseGender',
+      },
+      changeNurseEmploymentDate: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseEmploymentDate',
+      },
+      changeNursePhone: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNursePhone',
+      },
+      changeNurseShiftTypes: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseShiftTypes',
+      },
+      changeNurseIsWorker: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseIsWorker',
+      },
+      changeNurseIsManager: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseIsManager',
+      },
+      changeNurseMemo: {
+        category: 'makePage',
+        action: 'makePage_editNurseModal_changeNurseMemo',
+      },
+    },
+    editWardModal: {
+      changeConstraintValue: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeConstraintValue',
+      },
+      changeConstraintActivation: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeConstraintActivation',
+      },
+      changeShiftTypeName: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeShiftTypeName',
+      },
+      changeShiftTypeShortName: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeShiftTypeShortName',
+      },
+      changeShiftTypeTime: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeShiftTypeTime',
+      },
+      changeShiftTypeColor: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeShiftTypeColor',
+      },
+      changeShiftTypeOffType: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_changeShiftTypeOffType',
+      },
+      createShiftType: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_createShiftType',
+      },
+      editShiftType: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_editShiftType',
+      },
+      openEditModal: {
+        category: 'makePage',
+        action: 'makePage_editWardModal_openEditModal',
+      },
+    },
+    calendar: {
+      focusCarried: {
+        category: 'makePage',
+        action: 'makePage_calendar_focusCarried',
+      },
+      changeCarried: {
+        category: 'makePage',
+        action: 'makePage_calendar_changeCarried',
+      },
+      moveNurse: {
+        category: 'makePage',
+        action: 'makePage_calendar_moveNurse',
+      },
+      foldDivision: {
+        category: 'makePage',
+        action: 'makePage_calendar_foldDivision',
+      },
+      spreadDivision: {
+        category: 'makePage',
+        action: 'makePage_calendar_spreadDivision',
+      },
+      createDivision: {
+        category: 'makePage',
+        action: 'makePage_calendar_createDivision',
+      },
+      deleteDivision: {
+        category: 'makePage',
+        action: 'makePage_calendar_deleteDivision',
+      },
+      focusCell: {
+        category: 'makePage',
+        action: 'makePage_calendar_focusCell',
+      },
+    },
+    changeShift: {
+      category: 'makePage',
+      action: 'makePage_changeShift',
+    },
+    moveCellFocus: {
+      category: 'makePage',
+      action: 'makePage_moveCellFocus',
+    },
+    undoBykey: {
+      category: 'makePage',
+      action: 'makePage_undoBykey',
+    },
+    redoBykey: {
+      category: 'makePage',
+      action: 'makePage_redoBykey',
+    },
+  },
+  requestPage: {
+    toolbar: {
+      changeMonth: {
+        category: 'requestPage',
+        action: 'requestPage_toolbar_changeMonth',
+      },
+      changeShiftTeam: {
+        category: 'requestPage',
+        action: 'requestPage_toolbar_changeShiftTeam',
+      },
+      changeEditMode: {
+        category: 'makePage',
+        action: 'requestPage_toolbar_changeEditMode',
+      },
+    },
+    calendar: {
+      focusCarried: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_focusCarried',
+      },
+      changeCarried: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_changeCarried',
+      },
+      moveNurse: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_moveNurse',
+      },
+      foldDivision: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_foldDivision',
+      },
+      spreadDivision: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_spreadDivision',
+      },
+      createDivision: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_createDivision',
+      },
+      deleteDivision: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_deleteDivision',
+      },
+      focusCell: {
+        category: 'requestPage',
+        action: 'requestPage_calendar_focusCell',
+      },
+    },
+    changeShift: {
+      category: 'requestPage',
+      action: 'requestPage_changeShift',
+    },
+    moveCellFocus: {
+      category: 'requestPage',
+      action: 'requestPage_moveCellFocus',
+    },
+    acceptRequest: {
+      category: 'requestPage',
+      action: 'requestPage_acceptRequest',
+    },
+    rejectRequest: {
+      category: 'requestPage',
+      action: 'requestPage_rejectRequest',
+    },
+  },
+  memberPage: {
+    createShiftTeam: {
+      category: 'memberPage',
+      action: 'memberPage_createShiftTeam',
+    },
+    moveNurse: {
+      category: 'memberPage',
+      action: 'memberPage_moveNurse',
+    },
+    createDivision: {
+      category: 'memberPage',
+      action: 'memberPage_createDivision',
+    },
+    deleteDivision: {
+      category: 'memberPage',
+      action: 'memberPage_deleteDivision',
+    },
+    openShiftTeamMenu: {
+      category: 'memberPage',
+      action: 'memberPage_openShiftTeamMenu',
+    },
+    focusNurse: {
+      category: 'memberPage',
+      action: 'memberPage_focusNurse',
+    },
+    moveNurseFocus: {
+      category: 'memberPage',
+      action: 'memberPage_moveNurseFocus',
+    },
+    editNurseDrawer: {
+      changeNurseName: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseName',
+      },
+      changeNurseGender: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseGender',
+      },
+      changeNurseEmploymentDate: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseEmploymentDate',
+      },
+      changeNursePhone: {
+        category: 'memberPage',
+        action: 'memberPage_changeNursePhone',
+      },
+      changeNurseShiftTypes: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseShiftTypes',
+      },
+      changeNurseIsWorker: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseIsWorker',
+      },
+      changeNurseIsManager: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseIsManager',
+      },
+      changeNurseMemo: {
+        category: 'memberPage',
+        action: 'memberPage_changeNurseMemo',
+      },
+    },
+  },
+  navigationBar: {
+    foldNavigation: {
+      category: 'navigationBar',
+      action: 'navigationBar_foldNavigation',
+    },
+    spreadNavigation: {
+      category: 'navigationBar',
+      action: 'navigationBar_spreadNavigation',
+    },
+    navigate: {
+      category: 'navigationBar',
+      action: 'navigationBar_navigate',
+    },
+  },
+  auth: {
+    login: {
+      category: 'auth',
+      action: 'auth_login',
+    },
+    logut: {
+      category: 'auth',
+      action: 'auth_logut',
+    },
   },
 };
 

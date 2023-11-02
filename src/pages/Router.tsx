@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@components/Layouts/MainLayout';
-import RequestPage from './RequestShiftPage';
 import MakeShiftPage from './MakeShiftPage';
 import MemberPage from './MemberPage';
 import ROUTE from '@libs/constant/path';
@@ -13,6 +12,7 @@ import AuthzLayout from '@components/Layouts/AuthzLayout';
 import EnterWard from './RegisterPage/EnterWard';
 import RegisterWard from './RegisterPage/RegisterWard';
 import RefreshPage from './RefreshPage';
+import RequestShiftPage from './RequestShiftPage';
 
 export const Router = () => {
   return (
@@ -31,7 +31,7 @@ export const Router = () => {
         <Route path={ROUTE.REGISTER_WARD} element={<RegisterWard />} />
         <Route element={<MainLayout />}>
           <Route path={ROUTE.MAKE} element={<MakeShiftPage />} />
-          <Route path={ROUTE.REQUEST} element={<RequestPage />} />
+          <Route path={ROUTE.REQUEST} element={<RequestShiftPage />} />
           <Route path={ROUTE.MEMBER} element={<MemberPage />} />
         </Route>
       </Route>

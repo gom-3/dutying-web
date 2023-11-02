@@ -1,7 +1,7 @@
 import { FoldIcon } from '@assets/svg';
 import { useState, useEffect } from 'react';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
-import { event, sendEvent } from 'analytics';
+import { events, sendEvent } from 'analytics';
 import useAuth from '@hooks/auth/useAuth';
 
 interface Props {
@@ -34,7 +34,9 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
         <div
           onClick={() => {
             setIsFold(!isFold);
-            sendEvent(isFold ? event.spread_navigation : event.fold_navigation);
+            sendEvent(
+              isFold ? events.navigationBar.spreadNavigation : events.navigationBar.foldNavigation
+            );
           }}
         >
           <FoldIcon
