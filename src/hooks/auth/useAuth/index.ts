@@ -48,9 +48,9 @@ const useAuth = (activeEffect = false) => {
     setState('isAuth', true);
     setState('accessToken', accessToken);
     initEditShiftStore();
+    sendEvent(events.auth.login);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     location.replace(nextPageUrl || '/make');
-    sendEvent(events.auth.login);
   };
 
   const { mutate: demoTry } = useMutation(demoStart(), {
