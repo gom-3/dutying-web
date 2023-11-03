@@ -36,8 +36,6 @@ const dependencies = {
   'react-hook-form': 'react-hook-form',
   'react-hot-toast': 'react-hot-toast',
   'react-loader-spinner': 'react-loader-spinner',
-  'react-router': 'react-router',
-  'react-router-dom': 'react-router-dom',
   'ts-pattern': 'ts-pattern',
   yup: 'yup',
   zustand: 'zustand',
@@ -49,7 +47,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-router-dom', 'react-dom'],
+          vendor: ['react', 'react-router-dom', 'react-dom', 'react-router', 'react-router-dom'],
           ...renderChunks(dependencies),
         },
       },

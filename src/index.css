@@ -151,14 +151,14 @@ body::-webkit-scrollbar {
 
 @font-face {
   font-family: 'LINESeedKR';
-  src: url('./assets/fonts/subset-LINESeedKR-Th.woff2') format('woff2');
+  src: url('./assets/fonts/subset-LINESeedSansKR-Thin.woff2') format('woff2');
   font-weight: 100;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'LINESeedKR';
-  src: url('./assets/fonts/subset-LINESeedKR-Rg.woff2') format('woff2');
+  src: url('./assets/fonts/subset-LINESeedSansKR-Regular.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
