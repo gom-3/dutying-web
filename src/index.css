@@ -10,6 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  font-display: swap;
 }
 
 body::-webkit-scrollbar {
@@ -87,148 +88,148 @@ body::-webkit-scrollbar {
 /* 100 Thin */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoT.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoT.woff2') format('woff2');
   font-weight: 100;
+  font-display: swap;
 }
 /* 200 Ulta Light */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoUL.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoUL.woff2') format('woff2');
   font-weight: 200;
+  font-display: swap;
 }
 /* 300 Light */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoL.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoL.woff2') format('woff2');
   font-weight: 300;
+  font-display: swap;
 }
 /* 400 Regular */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoR.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoR.woff2') format('woff2');
   font-weight: 400;
+  font-display: swap;
 }
 /* 500 Medium */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoM.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoM.woff2') format('woff2');
   font-weight: 500;
+  font-display: swap;
 }
 /* 600 Semi Bold */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoSB.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoSB.woff2') format('woff2');
   font-weight: 600;
+  font-display: swap;
 }
 /* 700 Bold */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoB.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoB.woff2') format('woff2');
   font-weight: 700;
+  font-display: swap;
 }
 /* 800 Extra Bold */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoEB.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoEB.woff2') format('woff2');
   font-weight: 800;
+  font-display: swap;
 }
 /* 900 Heavy */
 @font-face {
   font-family: 'Apple-SDG';
-  font-style: normal;
-  src: url('./assets/fonts/AppleSDGothicNeoH.ttf');
+  src: url('./assets/fonts/subset-AppleSDGothicNeoH.woff2') format('woff2');
   font-weight: 900;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'LINESeedKR';
-  font-style: normal;
-  src: url('./assets/fonts/LINESeedKR-Th.ttf');
+  src: url('./assets/fonts/subset-LINESeedSansKR-Thin.woff2') format('woff2');
   font-weight: 100;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'LINESeedKR';
-  font-style: normal;
-  src: url('./assets/fonts/LINESeedKR-Rg.ttf');
+  src: url('./assets/fonts/subset-LINESeedSansKR-Regular.woff2') format('woff2');
   font-weight: 400;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'LINESeedKR';
-  font-style: normal;
-  src: url('./assets/fonts/LINESeedKR-Bd.ttf');
+  src: url('./assets/fonts/subset-LINESeedSansKR-Bold.woff2') format('woff2');
   font-weight: 700;
+  font-display: swap;
 }
 
 /* 100 Thin */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Thin.ttf');
+  src: url('./assets/fonts/subset-Poppins-Thin.woff2') format('woff2');
   font-weight: 100;
+  font-display: swap;
 }
 /* 200 Ulta Light */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-ExtraLight.ttf');
+  src: url('./assets/fonts/subset-Poppins-ExtraLight.woff2') format('woff2');
   font-weight: 200;
+  font-display: swap;
 }
 /* 300 Light */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Light.ttf');
+  src: url('./assets/fonts/subset-Poppins-Light.woff2') format('woff2');
   font-weight: 300;
+  font-display: swap;
 }
 /* 400 Regular */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Regular.ttf');
+  src: url('./assets/fonts/subset-Poppins-Regular.woff2') format('woff2');
   font-weight: 400;
+  font-display: swap;
 }
 /* 500 Medium */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Medium.ttf');
+  src: url('./assets/fonts/subset-Poppins-Medium.woff2') format('woff2');
   font-weight: 500;
+  font-display: swap;
 }
 /* 600 Semi Bold */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-SemiBold.ttf');
+  src: url('./assets/fonts/subset-Poppins-SemiBold.woff2') format('woff2');
   font-weight: 600;
+  font-display: swap;
 }
 /* 700 Bold */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Bold.ttf');
+  src: url('./assets/fonts/subset-Poppins-Bold.woff2') format('woff2');
   font-weight: 700;
+  font-display: swap;
 }
 /* 800 Extra Bold */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-ExtraBold.ttf');
+  src: url('./assets/fonts/subset-Poppins-ExtraBold.woff2') format('woff2');
   font-weight: 800;
+  font-display: swap;
 }
 /* 900 Heavy */
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  src: url('./assets/fonts/Poppins-Black.ttf');
+  src: url('./assets/fonts/subset-Poppins-Black.woff2') format('woff2');
   font-weight: 900;
+  font-display: swap;
 }

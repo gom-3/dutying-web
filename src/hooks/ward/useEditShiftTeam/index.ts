@@ -55,8 +55,7 @@ const useEditShiftTeam = () => {
         queryClient.invalidateQueries(shiftQueryKey);
         queryClient.invalidateQueries(requestShiftQueryKey);
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         alert('간호사 정보 수정이 실패했습니다.');
       },
     }
@@ -76,8 +75,7 @@ const useEditShiftTeam = () => {
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         alert('간호사 추가에 실패했습니다.');
       },
     }

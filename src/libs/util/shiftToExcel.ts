@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as Excel from 'exceljs';
 
-export const shiftToExcel = (month: number, shift: Shift) => {
+export const shiftToExcel = async (month: number, shift: Shift) => {
+  const Excel = await import('exceljs');
+
   const flatRows = shift.divisionShiftNurses.flatMap((row) => row);
 
   const workbook = new Excel.Workbook();
@@ -18,12 +20,12 @@ export const shiftToExcel = (month: number, shift: Shift) => {
       key: day.day.toString(),
       width: 3,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
-    })) as Excel.Column[]),
+    })) as any),
     ...(shift.wardShiftTypes.map((x) => ({
       key: x.shortName,
       width: 8,
       style: { alignment: { horizontal: 'center', vertical: 'middle' } },
-    })) as Excel.Column[]),
+    })) as any),
     {
       key: 'WO',
       width: 8,
