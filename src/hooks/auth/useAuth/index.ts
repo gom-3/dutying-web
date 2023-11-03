@@ -50,7 +50,7 @@ const useAuth = (activeEffect = false) => {
     initEditShiftStore();
     sendEvent(events.auth.login);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    location.replace(nextPageUrl || '/make');
+    navigate(nextPageUrl || '/make');
     sendEvent(events.auth.login);
   };
 

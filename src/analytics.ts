@@ -1,7 +1,6 @@
 import ReactGA from 'react-ga4';
 import ReactPixel from 'react-facebook-pixel';
-import { logEvent } from 'firebase/analytics';
-import { analytics, hackleClient } from 'initializeApp';
+import airbridge from 'airbridge-web-sdk-loader';
 
 interface Event {
   category: string;
@@ -415,7 +414,8 @@ export const sendEvent = (event: Event, label?: string) => {
       label,
     });
     ReactPixel.trackCustom(event.action, { label });
-    hackleClient.track({ key: event.action, properties: { label } });
-    analytics && logEvent(analytics, event.action, { label });
+    airbridge.events.send(event.category, {
+      action: event.action,
+    });
   }
 };

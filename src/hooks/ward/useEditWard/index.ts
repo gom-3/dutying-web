@@ -30,8 +30,7 @@ const useEditWard = () => {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         alert('근무 설정 수정에 실패하였습니다.');
       },
     }
