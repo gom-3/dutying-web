@@ -3,10 +3,11 @@ import ROUTE from '@libs/constant/path';
 import useInterval from '@libs/util/useInterval';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
 function AuthzLayout() {
   const [demoRemainTime, setDemoRemainTime] = useState<string | null>(null);
+  const navigate = useNavigate();
   const {
     state: { isAuth, accountMe, demoStartDate },
     actions: { handleLogout },
@@ -14,10 +15,10 @@ function AuthzLayout() {
 
   useEffect(() => {
     if (!isAuth) {
-      location.replace(ROUTE.LOGIN);
+      navigate(ROUTE.LOGIN);
     }
     if (accountMe && accountMe.status !== 'LINKED' && accountMe.status !== 'DEMO') {
-      if (location.pathname !== ROUTE.REGISTER) location.replace(ROUTE.REGISTER);
+      if (location.pathname !== ROUTE.REGISTER) navigate(ROUTE.REGISTER);
     }
   }, [isAuth, accountMe]);
 
