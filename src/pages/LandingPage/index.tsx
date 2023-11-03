@@ -395,15 +395,8 @@ function LandingPage() {
 
           <div className="xl:flex-1">
             <a
+              href="http://ye620.channel.io"
               className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]"
-              onClick={() => {
-                sendEvent(events.landingPage.footer.question);
-              }}
-            >
-              자주 묻는 질문
-            </a>
-            <a
-              className="mb-[72px] mt-[24px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-[1.5rem] xl:text-[1.25rem]"
               onClick={() => {
                 sendEvent(events.landingPage.footer.partnership);
               }}
