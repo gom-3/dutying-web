@@ -62,3 +62,4 @@ export { default as UncheckedIcon } from './UncheckedIcon';
 export { default as UncheckedIcon2 } from './UncheckedIcon2';
 export { default as UnlinkedIcon } from './UnlinkedIcon';
 export { default as XIcon } from './XIcon';
+export { default as SuccessCircleIcon } from './SuccessCircleIcon';

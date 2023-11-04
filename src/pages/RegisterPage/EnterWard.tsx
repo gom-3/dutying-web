@@ -23,14 +23,25 @@ function EnterWard() {
   const navigate = useNavigate();
   const clickAwayRef = useOnclickOutside(() => setFocusedIndex(-1));
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = async (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')) {
+      e.preventDefault();
+      const code = (await navigator.clipboard.readText())
+        .trim()
+        .toUpperCase()
+        .replace(/[^0-9a-zA-Z]/g, '')
+        .slice(0, 6);
+      setCodeList(code.split(''));
+      return;
+    }
     match(e.key)
       .with('ArrowRight', 'ArrowDown', () => setFocusedIndex(Math.min(5, focusedIndex + 1)))
       .with('ArrowLeft', 'ArrowUp', () => setFocusedIndex(Math.max(0, focusedIndex - 1)))
       .with('Backspace', () => {
         setCodeList(codeList.map((code, index) => (index === focusedIndex ? null : code)));
+        setFocusedIndex(Math.max(0, focusedIndex - 1));
       })
-      .with(Pattern.string.regex(/[0-9a-zA-Z]/), () => {
+      .with(Pattern.string.regex(/[0-9a-zA-Z]/).maxLength(1), () => {
         setCodeList(
           codeList.map((code, index) => (index === focusedIndex ? e.key.toUpperCase() : code))
         );
