@@ -54,4 +54,5 @@ type WaitingNurse = {
   gender: string;
   phoneNum: string;
   employmentDate: boolean;
+  profileImgBase64: string;
 };

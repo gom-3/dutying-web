@@ -75,7 +75,11 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                   <div className="mt-[1.5rem] flex h-[calc(100%-5.9375rem)] flex-col gap-[1rem] overflow-scroll scrollbar-hide">
                     {watingNurses?.map((waitingNurse) => (
                       <div className="flex h-[4.5rem] shrink-0 items-center rounded-[.625rem] border-[.0625rem] border-sub-4.5 bg-main-bg px-[1.25rem]">
-                        <img className="rounded-full" src="" alt="" />
+                        <img
+                          className="h-[2rem] w-[2rem] rounded-full"
+                          src={waitingNurse.profileImgBase64}
+                          alt=""
+                        />
                         <p className="ml-[.625rem] font-apple text-[1.5rem] font-medium text-sub-1">
                           {waitingNurse.name}
                         </p>

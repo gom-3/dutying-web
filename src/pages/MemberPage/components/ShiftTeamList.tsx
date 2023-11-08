@@ -355,7 +355,7 @@ function ShiftTeamList() {
                                       borderBottom: '.625rem solid none',
                                     }}
                                   />
-                                  연동 되지 않은 가상의 프로필입니다.
+                                  연동 되지 않은 가상의 간호사입니다.
                                   <UnlinkedIcon className="h-[1.25rem] w-[1.25rem]" />
                                 </div>
                                 {index !== divisionNurses.length - 1 ? (

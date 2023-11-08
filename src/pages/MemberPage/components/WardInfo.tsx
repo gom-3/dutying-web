@@ -12,7 +12,6 @@ function WardInfo() {
     state: { watingNurses },
   } = useEditWard();
   const [open, setOpen] = useState(false);
-  console.log(watingNurses);
   return (
     <div className="flex gap-[1.25rem]">
       <div className="flex flex-col gap-[.4375rem] ">
