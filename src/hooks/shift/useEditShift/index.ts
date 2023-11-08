@@ -311,6 +311,12 @@ const useEditShift = (activeEffect = false) => {
   const changeFocusedShift = useCallback(
     (shiftTypeId: number | null) => {
       if (!wardId || !focus || !shift) return;
+      console.log(
+        shift.divisionShiftNurses
+          .flatMap((x) => x)
+          .find((x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId)!.wardShiftList[focus.day],
+        shiftTypeId
+      );
       if (
         shift.divisionShiftNurses
           .flatMap((x) => x)

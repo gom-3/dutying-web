@@ -134,63 +134,21 @@ function LandingPage() {
           </h1>
           <div className="mt-[2.1875rem] hidden items-center gap-[8px] xl:flex">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
-              Web
-            </div>
-            <p className="font-apple text-[14px] font-medium text-white">
-              근무표를 더 쉽고 빠르게 작성할 수 있도록 도와드립니다.
-            </p>
-          </div>
-          <div className="mt-[.5625rem] hidden items-center gap-[8px] xl:flex">
-            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
             <p className="font-apple text-[14px] font-medium text-white">
               일정 관리의 모든 여정이 더 편리해지는 경험을 제공합니다.
             </p>
           </div>
-          <div className="mt-auto flex items-center gap-[8px] xl:mt-[5.1875rem]">
+          <div className="mt-[.5625rem] hidden items-center gap-[8px] xl:flex">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
-            <p className="font-apple text-[14px] font-medium text-white xl:text-sub-2">
-              근무표 작성 (수간호사 용)
+            <p className="font-apple text-[14px] font-medium text-white">
+              근무표를 더 쉽고 빠르게 작성할 수 있도록 도와드립니다.
             </p>
           </div>
-          <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-[3.125rem]">
-            {accountMe?.status === 'DEMO' ? (
-              <div
-                className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                onClick={() => navigate(ROUTE.MAKE)}
-              >
-                데모 테스트 마저 하기
-              </div>
-            ) : (
-              <>
-                {!accountMe && (
-                  <div
-                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                    onClick={() => {
-                      demoTry();
-                      sendEvent(events.landingPage.demoStart);
-                    }}
-                  >
-                    데모 테스트 해보기
-                  </div>
-                )}
-                <div
-                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
-                  onClick={() => {
-                    navigate(ROUTE.MAKE);
-                    sendEvent(events.landingPage.makeDuty);
-                  }}
-                >
-                  <Logo className="w-[17px] xl:w-[1.6875rem]" />
-                  근무표 만들기
-                </div>
-              </>
-            )}
-          </div>
-          <div className="mt-[43px] flex items-center gap-[8px] xl:mt-[2.5rem]">
+          <div className="mt-auto flex items-center gap-[8px] xl:mt-[5.1875rem]">
             <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
@@ -198,7 +156,7 @@ function LandingPage() {
               근무 일정 관리 (일반 간호사 용)
             </p>
           </div>
-          <div className="mt-[15px] flex h-[38px] shrink-0 gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
+          <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-[3.125rem]">
             <a
               href="https://abr.ge/bv13wa"
               target="_blank"
@@ -216,60 +174,48 @@ function LandingPage() {
               App Store
             </a>
           </div>
-        </div>
-      </div>
-
-      {/*메인 2*/}
-      <div
-        id="web"
-        ref={webSection}
-        className='h-real-screen w-screen bg-[url("/img/landing_mobile_2.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_2.webp")]'
-      >
-        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+          <div className="mt-[43px] flex items-center gap-[8px] xl:mt-[2.8125rem]">
+            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
-              근무표 만들기
+            <p className="font-apple text-[14px] font-medium text-white xl:text-sub-2">
+              근무표 작성 (수간호사 용)
             </p>
           </div>
-
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
-            복잡한 근무표 작성을 <br /> 간편하게 자동으로!
-          </h1>
-
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
-            직접 편집한 제약 조건들에 딱 맞는
-            <br />
-            근무표를 작성해드릴게요.
-          </p>
-        </div>
-      </div>
-
-      {/*메인 3*/}
-      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.webp")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.webp")]'>
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
-              Web
-            </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
-              근무표 만들기
-            </p>
+          <div className="mt-[15px] flex h-[38px] shrink-0 gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
+            {accountMe?.status === 'DEMO' ? (
+              <div
+                className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                onClick={() => navigate(ROUTE.MAKE)}
+              >
+                데모 테스트 마저 하기
+              </div>
+            ) : (
+              <>
+                {!accountMe && (
+                  <div
+                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                    onClick={() => {
+                      demoTry();
+                      sendEvent(events.landingPage.demoStart);
+                    }}
+                  >
+                    근무표 작성 체험하기
+                  </div>
+                )}
+                <div
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                  onClick={() => {
+                    navigate(ROUTE.MAKE);
+                    sendEvent(events.landingPage.makeDuty);
+                  }}
+                >
+                  <Logo className="w-[17px] xl:w-[1.6875rem]" />
+                  근무표 만들기
+                </div>
+              </>
+            )}
           </div>
-
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
-            더 꼼꼼하게,
-            <br />
-            하지만 더 편리하게
-          </h1>
-
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
-            근무표 작성을 돕기 위한
-            <br />
-            여러 보조 기능들이 마련되어 있습니다.
-          </p>
         </div>
       </div>
 
@@ -327,6 +273,60 @@ function LandingPage() {
         </div>
       </div>
 
+      {/*메인 2*/}
+      <div
+        id="web"
+        ref={webSection}
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_2.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_2.webp")]'
+      >
+        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
+          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
+            <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+              Web
+            </div>
+            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
+              근무표 만들기
+            </p>
+          </div>
+
+          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
+            복잡한 근무표 작성을 <br /> 간편하게 자동으로!
+          </h1>
+
+          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+            직접 편집한 제약 조건들에 딱 맞는
+            <br />
+            근무표를 작성해드릴게요.
+          </p>
+        </div>
+      </div>
+
+      {/*메인 3*/}
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.webp")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.webp")]'>
+        <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
+          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
+            <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+              Web
+            </div>
+            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
+              근무표 만들기
+            </p>
+          </div>
+
+          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
+            더 꼼꼼하게,
+            <br />
+            하지만 더 편리하게
+          </h1>
+
+          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+            근무표 작성을 돕기 위한
+            <br />
+            여러 보조 기능들이 마련되어 있습니다.
+          </p>
+        </div>
+      </div>
+
       {/* 푸터 */}
       <div className="h-[770px] w-screen xl:h-[31.25rem]">
         <div className="mx-auto mt-[62px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[6.875rem] xl:flex-row-reverse xl:items-stretch xl:px-[11.25rem]">
@@ -334,40 +334,6 @@ function LandingPage() {
             <h1 className="font-apple text-[16px] font-semibold text-sub-2 xl:mt-0 xl:text-[1.25rem]">
               듀팅 다운로드
             </h1>
-            <div className="xl:mt-[1.5rem] xl:flex xl:w-full xl:items-center xl:gap-[1rem]">
-              <div className="mt-[32px] font-apple text-[14px] font-medium text-sub-2.5 xl:mt-0 xl:w-[6rem]">
-                웹
-              </div>
-              <div className="mt-[12px] flex h-[38px] gap-[10px] xl:mt-0">
-                {accountMe?.status === 'DEMO' ? (
-                  <div
-                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
-                    onClick={() => navigate(ROUTE.MAKE)}
-                  >
-                    데모 테스트 마저 하기
-                  </div>
-                ) : (
-                  <>
-                    {!accountMe && (
-                      <div
-                        className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
-                        onClick={() => demoTry()}
-                      >
-                        데모 테스트 해보기
-                      </div>
-                    )}
-                    <div
-                      className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
-                      onClick={() => navigate(ROUTE.MAKE)}
-                    >
-                      <Logo className="w-[17px] xl:w-[1.6875rem]" />
-                      근무표 만들기
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
             <div className="xl:mt-[1.5rem] xl:flex xl:w-full xl:items-center xl:gap-[1rem]">
               <div className="mt-[24px] font-apple text-[14px] font-medium text-sub-2.5 xl:mt-0 xl:w-[6rem]">
                 모바일 앱
@@ -389,6 +355,46 @@ function LandingPage() {
                   <AppstoreGrayIcon className="w-[19px]" />
                   App Store
                 </a>
+              </div>
+            </div>
+
+            <div className="xl:mt-[1.5rem] xl:flex xl:w-full xl:items-center xl:gap-[1rem]">
+              <div className="mt-[32px] font-apple text-[14px] font-medium text-sub-2.5 xl:mt-0 xl:w-[6rem]">
+                웹
+              </div>
+              <div className="mt-[12px] flex h-[38px] gap-[10px] xl:mt-0">
+                {accountMe?.status === 'DEMO' ? (
+                  <div
+                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                    onClick={() => navigate(ROUTE.MAKE)}
+                  >
+                    데모 테스트 마저 하기
+                  </div>
+                ) : (
+                  <>
+                    {!accountMe && (
+                      <div
+                        className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                        onClick={() => {
+                          demoTry();
+                          sendEvent(events.landingPage.demoStart);
+                        }}
+                      >
+                        근무표 작성 체험하기
+                      </div>
+                    )}
+                    <div
+                      className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                      onClick={() => {
+                        navigate(ROUTE.MAKE);
+                        sendEvent(events.landingPage.makeDuty);
+                      }}
+                    >
+                      <Logo className="w-[17px] xl:w-[1.6875rem]" />
+                      근무표 만들기
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

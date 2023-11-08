@@ -1,28 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  UpdateNurseDTO,
-  updateNurse as patchNurse,
-  updateNurseOrder,
-  updateNurseShiftType,
-  updateNurseShiftTypeRequest,
-  updateShiftTeamDivision,
-} from '@libs/api/nurse';
-import useEditNurseStore from './store';
+import * as nurseApi from '@libs/api/nurse';
+import * as shiftTeamApi from '@libs/api/shiftTeam';
 import { shallow } from 'zustand/shallow';
-import {
-  UpdateShiftTeamDTO,
-  addNurseIntoShiftTeam,
-  createShiftTeam,
-  deleteShiftTeam,
-  removeNurseFromShiftTeam,
-  updateShiftTeam,
-} from '@libs/api/shiftTeam';
 import { getWard } from '@libs/api/ward';
 import { produce } from 'immer';
+import useEditNurseStore from './store';
 import useEditShift from '@hooks/shift/useEditShift';
-import useAuth from '@hooks/auth/useAuth';
 import useRequestShift from '@hooks/shift/useRequestShift';
+import useAuth from '@hooks/auth/useAuth';
 
 const useEditShiftTeam = () => {
   const [selectedNurseId, setState] = useEditNurseStore(
@@ -47,8 +33,8 @@ const useEditShiftTeam = () => {
   });
 
   const { mutate: updateNurseMutate } = useMutation(
-    ({ nurseId, updateNurseDTO }: { nurseId: number; updateNurseDTO: UpdateNurseDTO }) =>
-      patchNurse(nurseId, updateNurseDTO),
+    ({ nurseId, updateNurseDTO }: { nurseId: number; updateNurseDTO: nurseApi.UpdateNurseDTO }) =>
+      nurseApi.updateNurse(nurseId, updateNurseDTO),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -63,7 +49,7 @@ const useEditShiftTeam = () => {
 
   const { mutate: addNurseMutate } = useMutation(
     ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
-      addNurseIntoShiftTeam(wardId, shiftTeamId, {
+      shiftTeamApi.addNurseIntoShiftTeam(wardId, shiftTeamId, {
         name: `간호사${Math.floor(Math.random() * 10000)}`,
         phoneNum: '01012345678',
         gender: '여',
@@ -83,7 +69,7 @@ const useEditShiftTeam = () => {
 
   const { mutate: deleteNurseMutate } = useMutation(
     ({ wardId, nurseId, shiftTeamId }: { wardId: number; nurseId: number; shiftTeamId: number }) =>
-      removeNurseFromShiftTeam(wardId, shiftTeamId, nurseId),
+      shiftTeamApi.removeNurseFromShiftTeam(wardId, shiftTeamId, nurseId),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
@@ -97,15 +83,15 @@ const useEditShiftTeam = () => {
     }: {
       nurseId: number;
       nurseShiftTypeId: number;
-      change: updateNurseShiftTypeRequest;
-    }) => updateNurseShiftType(nurseId, nurseShiftTypeId, change),
+      change: nurseApi.updateNurseShiftTypeRequest;
+    }) => nurseApi.updateNurseShiftType(nurseId, nurseShiftTypeId, change),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
   );
 
   const { mutate: createShiftTeamMutate } = useMutation(
-    (wardId: number) => createShiftTeam(wardId),
+    (wardId: number) => shiftTeamApi.createShiftTeam(wardId),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
@@ -113,7 +99,7 @@ const useEditShiftTeam = () => {
 
   const { mutate: deleteShiftTeamMutate } = useMutation(
     ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
-      deleteShiftTeam(wardId, shiftTeamId),
+      shiftTeamApi.deleteShiftTeam(wardId, shiftTeamId),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
@@ -130,7 +116,7 @@ const useEditShiftTeam = () => {
       prevPriority: number;
       changeValue: number;
       patchYearMonth: string;
-    }) => updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue, patchYearMonth),
+    }) => nurseApi.updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue, patchYearMonth),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -158,7 +144,7 @@ const useEditShiftTeam = () => {
       nextPriority: number;
       patchYearMonth: string;
     }) =>
-      updateNurseOrder(
+      nurseApi.updateNurseOrder(
         nurseId,
         shiftTeamId,
         nextShiftTeamId,
@@ -310,8 +296,8 @@ const useEditShiftTeam = () => {
     }: {
       wardId: number;
       shiftTeamId: number;
-      updateShiftTeamDTO: UpdateShiftTeamDTO;
-    }) => updateShiftTeam(wardId, shiftTeamId, updateShiftTeamDTO),
+      updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO;
+    }) => shiftTeamApi.updateShiftTeam(wardId, shiftTeamId, updateShiftTeamDTO),
     {
       onMutate: ({ shiftTeamId, updateShiftTeamDTO }) => {
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
@@ -333,6 +319,65 @@ const useEditShiftTeam = () => {
     }
   );
 
+  const addNurse = (shiftTeamId: number) => {
+    wardId && addNurseMutate({ wardId, shiftTeamId });
+  };
+  const deleteNurse = (shiftTeamId: number, nurseId: number) => {
+    wardId && deleteNurseMutate({ wardId, nurseId, shiftTeamId });
+  };
+  const selectNurse = (nurseId: number | null) => {
+    setState('selectedNurseId', nurseId);
+  };
+  const updateNurse = (nurseId: number, updateNurseDTO: nurseApi.UpdateNurseDTO) => {
+    updateNurseMutate({ nurseId, updateNurseDTO });
+  };
+  const updateNurseShift = (
+    nurseId: number,
+    nurseShiftTypeId: number,
+    change: nurseApi.updateNurseShiftTypeRequest
+  ) => {
+    updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change });
+  };
+  const createShiftTeam = () => {
+    wardId && createShiftTeamMutate(wardId);
+  };
+  const deleteShiftTeam = (shiftTeamId: number) => {
+    wardId && deleteShiftTeamMutate({ wardId, shiftTeamId });
+  };
+  const editDivision = (
+    shiftTeamId: number,
+    prevPriority: number,
+    changeValue: number,
+    patchYearMonth: string
+  ) => {
+    editDivisionMutate({ shiftTeamId, prevPriority, changeValue, patchYearMonth });
+  };
+  const moveNurseOrder = (
+    nurseId: number,
+    shiftTeamId: number,
+    nextShiftTeamId: number,
+    divisionNum: number,
+    prevPriority: number,
+    nextPriority: number,
+    patchYearMonth: string
+  ) => {
+    moveNurseOrderMutate({
+      nurseId,
+      shiftTeamId,
+      nextShiftTeamId,
+      divisionNum,
+      prevPriority,
+      nextPriority,
+      patchYearMonth,
+    });
+  };
+  const updateShiftTeam = (
+    shiftTeamId: number,
+    updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO
+  ) => {
+    wardId && updateShiftTeamMutate({ wardId, shiftTeamId, updateShiftTeamDTO });
+  };
+
   return {
     state: {
       ward,
@@ -342,46 +387,16 @@ const useEditShiftTeam = () => {
       shiftTeams: ward?.shiftTeams,
     },
     actions: {
-      addNurse: (shiftTeamId: number) => wardId && addNurseMutate({ wardId, shiftTeamId }),
-      deleteNurse: (shiftTeamId: number, nurseId: number) =>
-        wardId && deleteNurseMutate({ wardId, nurseId, shiftTeamId }),
-      selectNurse: (nurseId: number | null) => setState('selectedNurseId', nurseId),
-      updateNurse: (nurseId: number, updateNurseDTO: UpdateNurseDTO) =>
-        updateNurseMutate({ nurseId, updateNurseDTO }),
-      updateNurseShift: (
-        nurseId: number,
-        nurseShiftTypeId: number,
-        change: updateNurseShiftTypeRequest
-      ) => updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change }),
-      createShiftTeam: () => wardId && createShiftTeamMutate(wardId),
-      deleteShiftTeam: (shiftTeamId: number) =>
-        wardId && deleteShiftTeamMutate({ wardId, shiftTeamId }),
-      editDivision: (
-        shiftTeamId: number,
-        prevPriority: number,
-        changeValue: number,
-        patchYearMonth: string
-      ) => editDivisionMutate({ shiftTeamId, prevPriority, changeValue, patchYearMonth }),
-      moveNurseOrder: (
-        nurseId: number,
-        shiftTeamId: number,
-        nextShiftTeamId: number,
-        divisionNum: number,
-        prevPriority: number,
-        nextPriority: number,
-        patchYearMonth: string
-      ) =>
-        moveNurseOrderMutate({
-          nurseId,
-          shiftTeamId,
-          nextShiftTeamId,
-          divisionNum,
-          prevPriority,
-          nextPriority,
-          patchYearMonth,
-        }),
-      updateShiftTeam: (shiftTeamId: number, updateShiftTeamDTO: UpdateShiftTeamDTO) =>
-        wardId && updateShiftTeamMutate({ wardId, shiftTeamId, updateShiftTeamDTO }),
+      addNurse,
+      deleteNurse,
+      selectNurse,
+      updateNurse,
+      updateNurseShift,
+      createShiftTeam,
+      deleteShiftTeam,
+      editDivision,
+      moveNurseOrder,
+      updateShiftTeam,
     },
   };
 };

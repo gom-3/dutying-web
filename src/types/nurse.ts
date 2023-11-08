@@ -46,3 +46,13 @@ type Nurse = {
   /** 구분 내 인덱스 */
   priority: number;
 };
+
+type WaitingNurse = {
+  waitingNurseId: number;
+  nurseId: number;
+  name: string;
+  gender: string;
+  phoneNum: string;
+  employmentDate: boolean;
+  profileImgBase64: string;
+};

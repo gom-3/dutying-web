@@ -1,7 +1,6 @@
 import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
 import axiosInstance from '@libs/api/client';
-import { useMutation } from '@tanstack/react-query';
 import { demoStart, getAccountMe } from '@libs/api/auth';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
@@ -48,24 +47,21 @@ const useAuth = (activeEffect = false) => {
     setState('isAuth', true);
     setState('accessToken', accessToken);
     initEditShiftStore();
-    sendEvent(events.auth.login);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    navigate(nextPageUrl || '/make');
+    location.replace(nextPageUrl || '/make');
     sendEvent(events.auth.login);
   };
 
-  const { mutate: demoTry } = useMutation(demoStart(), {
-    onSuccess: (data) => {
-      handleLogin(data.accessToken);
-      setState('accessToken', data.accessToken);
-      setState('accountId', data.accountResDto.accountId);
-      setState('nurseId', data.accountResDto.nurseId);
-      setState('wardId', data.accountResDto.wardId);
-      setState('isAuth', true);
-      setState('demoStartDate', new Date());
-      navigate(ROUTE.MAKE);
-    },
-  });
+  const demoTry = async () => {
+    const data = await demoStart();
+    setState('accessToken', data.accessToken);
+    setState('accountId', data.accountResDto.accountId);
+    setState('nurseId', data.accountResDto.nurseId);
+    setState('wardId', data.accountResDto.wardId);
+    setState('isAuth', true);
+    setState('demoStartDate', new Date());
+    navigate(ROUTE.MAKE);
+  };
 
   const handleGetAccountMe = async () => {
     const account = await getAccountMe();
