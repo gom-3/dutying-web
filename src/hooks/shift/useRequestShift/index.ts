@@ -60,9 +60,8 @@ const useRequestShift = (activeEffect = false) => {
   const { data: dutyRequestList } = useQuery(
     dutyRequestQueryKey,
     () => getRequestList(wardId!, currentShiftTeam!.shiftTeamId, year, month),
-    // () => getRequestList(wardId!, currentShiftTeam!.shiftTeamId, year, month),
     {
-      enabled: wardId !== null,
+      enabled: wardId !== null && currentShiftTeam !== null,
     }
   );
 

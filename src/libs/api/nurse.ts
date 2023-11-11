@@ -1,6 +1,9 @@
 import axiosInstance from './client';
 
-export type CreateNurseDTO = Pick<Nurse, 'name' | 'phoneNum' | 'gender' | 'isWorker'>;
+export type CreateNurseDTO = Pick<
+  Nurse,
+  'name' | 'phoneNum' | 'gender' | 'isWorker' | 'employmentDate'
+>;
 
 const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO) =>
   (

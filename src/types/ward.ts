@@ -4,6 +4,8 @@ type Ward = {
   wardId: number;
   /** 병동 이름 */
   name: string;
+  /** 병동 코드 */
+  code: string;
   /** 병원 이름 */
   hospitalName: string;
   /** 간호사 수 */
