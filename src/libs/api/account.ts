@@ -5,10 +5,18 @@ const getAccount = async (accountId: number) =>
 
 const getAccountMeWaiting = async () => (await axiosInstance.get<Ward>(`/accounts/waiting`)).data;
 
-const editAccount = async (accountId: number) =>
-  (await axiosInstance.put<Account>(`/accounts/${accountId}`)).data;
+export type EditAccountDTO = {
+  name: string;
+  profileImgBase64: string;
+};
+const editAccount = async (accountId: number, editAccountDTO: EditAccountDTO) =>
+  (await axiosInstance.put<Account>(`/accounts/${accountId}`, editAccountDTO)).data;
 
 const eidtAccountStatus = async (accountId: number, status: Account['status']) =>
   (await axiosInstance.patch<Account>(`/accounts/${accountId}/status?status=${status}`)).data;
 
-export { getAccount, getAccountMeWaiting, editAccount, eidtAccountStatus };
+const initAccount = async (accountId: number, name: string, profileImgBase64: string) =>
+  (await axiosInstance.patch<Account>(`/accounts/${accountId}/init`, { name, profileImgBase64 }))
+    .data;
+
+export { getAccount, getAccountMeWaiting, editAccount, eidtAccountStatus, initAccount };

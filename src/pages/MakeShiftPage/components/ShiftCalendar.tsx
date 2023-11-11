@@ -9,7 +9,7 @@ import { events, sendEvent } from 'analytics';
 import useEditShift from '@hooks/shift/useEditShift';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
-import useUIConfig from '@hooks/useUIConfig';
+import useUIConfig from '@hooks/ui/useUIConfig';
 
 export default function ShiftCalendar() {
   const {

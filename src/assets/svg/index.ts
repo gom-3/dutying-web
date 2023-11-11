@@ -63,3 +63,5 @@ export { default as UncheckedIcon2 } from './UncheckedIcon2';
 export { default as UnlinkedIcon } from './UnlinkedIcon';
 export { default as XIcon } from './XIcon';
 export { default as SuccessCircleIcon } from './SuccessCircleIcon';
+export { default as RandomIcon } from './RandomIcon';
+export { default as CameraIcon } from './CameraIcon';

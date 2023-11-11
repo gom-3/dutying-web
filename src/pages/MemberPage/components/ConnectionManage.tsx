@@ -23,7 +23,7 @@ interface ConnectionManageProps {
 
 function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
   const {
-    state: { watingNurses },
+    state: { ward, watingNurses },
     actions: { cancelWaiting, approveWatingNurses, connectWatingNurses },
   } = useEditWard();
 
@@ -64,7 +64,12 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between">
-                  <h1 className="font-apple text-[1.75rem] font-semibold text-text-1">연동 관리</h1>
+                  <div className="flex items-center gap-4">
+                    <h1 className="font-apple text-[1.75rem] font-semibold text-text-1">
+                      연동 관리
+                    </h1>
+                    <p className="font-apple text-[1.4rem] text-sub-2">병동 코드: {ward?.code}</p>
+                  </div>
                   <CancelIcon
                     className="h-[1.875rem] w-[1.875rem]"
                     onClick={() => setOpen(false)}
@@ -72,54 +77,60 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                 </div>
                 <div className="h-full overflow-hidden pt-[2.625rem]">
                   <p className="font-apple text-[1rem] font-medium text-sub-3">신청 내역</p>
-                  <div className="mt-[1.5rem] flex h-[calc(100%-5.9375rem)] flex-col gap-[1rem] overflow-scroll scrollbar-hide">
-                    {watingNurses?.map((waitingNurse) => (
-                      <div className="flex h-[4.5rem] shrink-0 items-center rounded-[.625rem] border-[.0625rem] border-sub-4.5 bg-main-bg px-[1.25rem]">
-                        <img
-                          className="h-[2rem] w-[2rem] rounded-full"
-                          src={waitingNurse.profileImgBase64}
-                          alt=""
-                        />
-                        <p className="ml-[.625rem] font-apple text-[1.5rem] font-medium text-sub-1">
-                          {waitingNurse.name}
-                        </p>
-                        <div
-                          className={`ml-[2rem] flex h-[1.25rem] w-[1.75rem] items-center justify-center rounded-[.3125rem] bg-sub-5 font-apple text-[.875rem] ${
-                            waitingNurse.gender === '남' ? 'text-[#A2A6F5]' : 'text-[#F5A2C5]'
-                          }`}
-                        >
-                          {waitingNurse.gender}
-                        </div>
-                        <p className="ml-[1rem] font-poppins text-[1.25rem] font-medium text-sub-1">
-                          {waitingNurse.phoneNum.slice(0, 3) +
-                            '-' +
-                            waitingNurse.phoneNum.slice(3, 7) +
-                            '-' +
-                            waitingNurse.phoneNum.slice(7, 11)}
-                        </p>
-                        <div className="ml-auto flex h-[2.875rem] w-[9.125rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
-                          <button
-                            className="flex h-[2.375rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1.5rem] text-sub-2.5 hover:bg-main-1 hover:text-white"
-                            onClick={() => {
-                              setStep(1);
-                              setCurrentWaitingNurse(waitingNurse);
-                            }}
+                  {watingNurses?.length === 0 ? (
+                    <div className="flex h-[calc(100%-80px)] items-center justify-center font-apple text-[1.7rem] text-sub-2">
+                      연동 신청을 한 간호사가 없습니다.
+                    </div>
+                  ) : (
+                    <div className="mt-[1.5rem] flex h-[calc(100%-5.9375rem)] flex-col gap-[1rem] overflow-scroll scrollbar-hide">
+                      {watingNurses?.map((waitingNurse) => (
+                        <div className="flex h-[4.5rem] shrink-0 items-center rounded-[.625rem] border-[.0625rem] border-sub-4.5 bg-main-bg px-[1.25rem]">
+                          <img
+                            className="h-[2rem] w-[2rem] rounded-full"
+                            src={waitingNurse.profileImgBase64}
+                            alt=""
+                          />
+                          <p className="ml-[.625rem] font-apple text-[1.5rem] font-medium text-sub-1">
+                            {waitingNurse.name}
+                          </p>
+                          <div
+                            className={`ml-[2rem] flex h-[1.25rem] w-[1.75rem] items-center justify-center rounded-[.3125rem] bg-sub-5 font-apple text-[.875rem] ${
+                              waitingNurse.gender === '남' ? 'text-[#A2A6F5]' : 'text-[#F5A2C5]'
+                            }`}
                           >
-                            수락
-                          </button>
-                          <button
-                            className="flex h-[2.375rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1.5rem] text-sub-2.5 hover:bg-sub-2 hover:text-white"
-                            onClick={() =>
-                              confirm('정말 거절하시겠습니까?') &&
-                              cancelWaiting(waitingNurse.nurseId)
-                            }
-                          >
-                            거절
-                          </button>
+                            {waitingNurse.gender}
+                          </div>
+                          <p className="ml-[1rem] font-poppins text-[1.25rem] font-medium text-sub-1">
+                            {waitingNurse.phoneNum.slice(0, 3) +
+                              '-' +
+                              waitingNurse.phoneNum.slice(3, 7) +
+                              '-' +
+                              waitingNurse.phoneNum.slice(7, 11)}
+                          </p>
+                          <div className="ml-auto flex h-[2.875rem] w-[9.125rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
+                            <button
+                              className="flex h-[2.375rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1.5rem] text-sub-2.5 hover:bg-main-1 hover:text-white"
+                              onClick={() => {
+                                setStep(1);
+                                setCurrentWaitingNurse(waitingNurse);
+                              }}
+                            >
+                              수락
+                            </button>
+                            <button
+                              className="flex h-[2.375rem] flex-1 items-center justify-center rounded-[.3125rem] font-poppins text-[1.5rem] text-sub-2.5 hover:bg-sub-2 hover:text-white"
+                              onClick={() =>
+                                confirm('정말 거절하시겠습니까?') &&
+                                cancelWaiting(waitingNurse.nurseId)
+                              }
+                            >
+                              거절
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))
