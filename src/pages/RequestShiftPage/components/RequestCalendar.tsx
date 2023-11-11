@@ -6,7 +6,7 @@ import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { events, sendEvent } from 'analytics';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
-import useUIConfig from '@hooks/useUIConfig';
+import useUIConfig from '@hooks/ui/useUIConfig';
 import useRequestShift from '@hooks/shift/useRequestShift';
 import { twMerge } from 'tailwind-merge';
 

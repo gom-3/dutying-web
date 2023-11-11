@@ -8,6 +8,7 @@ import useInitStore from '@hooks/useInitStore';
 import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import { useEffect } from 'react';
 import { events, sendEvent } from 'analytics';
+import useLoading from '@hooks/ui/useLoading';
 
 const useAuth = (activeEffect = false) => {
   const [
@@ -34,6 +35,7 @@ const useAuth = (activeEffect = false) => {
     ],
     shallow
   );
+  const { setLoading } = useLoading();
   const initStore = useInitStore();
   const { initState: initEditShiftStore } = useEditShiftStore();
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ const useAuth = (activeEffect = false) => {
   };
 
   const demoTry = async () => {
+    setLoading(true);
     const data = await demoStart();
     setState('accessToken', data.accessToken);
     setState('accountId', data.accountResDto.accountId);
@@ -61,6 +64,7 @@ const useAuth = (activeEffect = false) => {
     setState('isAuth', true);
     setState('demoStartDate', new Date());
     navigate(ROUTE.MAKE);
+    setLoading(false);
   };
 
   const handleGetAccountMe = async () => {

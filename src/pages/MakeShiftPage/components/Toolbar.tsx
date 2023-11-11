@@ -29,7 +29,7 @@ import SetDesignTheme from './editWard/SetDesignTheme';
 
 function Toolbar() {
   const {
-    state: { month, shift, changeStatus, showLayer, currentShiftTeam, shiftTeams, readonly },
+    state: { year, month, shift, changeStatus, showLayer, currentShiftTeam, shiftTeams, readonly },
     actions: {
       changeMonth,
       toggleLayer,
@@ -309,6 +309,7 @@ function Toolbar() {
               toggleEditMode();
               sendEvent(events.makePage.toolbar.changeEditMode);
             }}
+            disabled={new Date(year, month + 1, 1) <= new Date()}
           >
             수정하기
             <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
@@ -322,7 +323,7 @@ function Toolbar() {
               sendEvent(events.makePage.toolbar.downloadExcel);
             }}
           >
-            저장하기
+            다운로드
             <ShareIcon className="h-[1.5rem] w-[1.5rem]" />
           </Button>
           <Button

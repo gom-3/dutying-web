@@ -1,4 +1,4 @@
-import useUIConfig from '@hooks/useUIConfig';
+import useUIConfig from '@hooks/ui/useUIConfig';
 import { Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
