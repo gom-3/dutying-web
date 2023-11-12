@@ -94,10 +94,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
     maxContinuousWork: {
       type: 'wrong',
       isActive: wardConstraint.maxContinuousWork,
-      regExp: new RegExp(
-        `(?<=[^den])[den]{${wardConstraint.maxContinuousWorkVal + 1},}(?=[^den])`,
-        'g'
-      ),
+      regExp: new RegExp(`[den][den]{${wardConstraint.maxContinuousWorkVal - 1},}[den]`, 'g'),
       message: `근무는 연속 ${wardConstraint.maxContinuousWorkVal}일을 초과할 수 없습니다.`,
       value: wardConstraint.maxContinuousWorkVal,
       label: '연속 근무 수',
@@ -121,10 +118,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
     minContinuousNight: {
       type: 'bad',
       isActive: wardConstraint.minContinuousNight,
-      regExp: new RegExp(
-        `(?<!(n|-))n{1,${wardConstraint.minContinuousNightVal - 1}}(?!(n|-))`,
-        'g'
-      ),
+      regExp: new RegExp(`[^n-]n{1,${wardConstraint.minContinuousNightVal - 1}}[^n-]`, 'g'),
       message: `나이트 근무는 최소 ${wardConstraint.minContinuousNightVal}일 이상 배정해야 합니다.`,
       value: wardConstraint.minContinuousNightVal,
       label: '연속 나이트',
