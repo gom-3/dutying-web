@@ -35,6 +35,7 @@ const useRegister = () => {
         setLoading(false);
       },
       onSuccess: () => {
+        // @TODO 편집 모드 ON
         accountMe &&
           changeAccountStatusMutate({ accountId: accountMe.accountId, status: 'LINKED' });
       },

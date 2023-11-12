@@ -1,0 +1,15 @@
+.tutorial {
+  font-family: Apple-SDG, sans-serif;
+}
+
+.TutorialOverlay {
+  backdrop-filter: none;
+}
+
+.InfoBox {
+  z-index: 9999;
+}
+
+.HighlightedElement {
+  z-index: 9999;
+}

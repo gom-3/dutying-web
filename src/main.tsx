@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import App from 'App';
 import './index.css';
 import initializeApp from './initializeApp';
-import Loading from 'Loading';
+import Loading from '@components/Loading';
 
 const queryClient = new QueryClient({
   defaultOptions: {

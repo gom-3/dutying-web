@@ -4,11 +4,13 @@ import ShiftCalendar from './components/ShiftCalendar';
 import Panel from './components/Panel';
 import useEditShift from '@hooks/shift/useEditShift';
 import NurseEditModal from './components/NurseEditModal';
+import MakeTutorial from '@components/Tutorial/MakeTutorial';
 
 const MakeShiftPage = () => {
   const {
     state: { shift },
   } = useEditShift(true);
+
   return (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col">
       <Toolbar />
@@ -25,6 +27,7 @@ const MakeShiftPage = () => {
         <Panel />
       </div>
       <NurseEditModal />
+      <MakeTutorial />
     </div>
   );
 };

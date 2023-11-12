@@ -1,6 +1,6 @@
 import useLoading from '@hooks/ui/useLoading';
 import Lottie from 'react-lottie';
-import loadingLottie from './assets/animation/loading.json';
+import loadingLottie from '../assets/animation/loading.json';
 
 const Loading = () => {
   const { loading } = useLoading();
