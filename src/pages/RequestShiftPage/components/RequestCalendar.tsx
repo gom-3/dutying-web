@@ -116,7 +116,7 @@ export default function ShiftCalendar() {
   }, [focus]);
 
   return requestShift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
-    <div className="flex">
+    <div id="calendar" className="flex">
       <div ref={clickAwayRef} className="flex flex-col">
         <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
           <div className="flex gap-[1.25rem]">
@@ -284,6 +284,11 @@ export default function ShiftCalendar() {
                                           ${date === focus?.day && 'bg-main-4'}`}
                                           >
                                             <ShiftBadge
+                                              id={
+                                                rowIndex === 0 && date === 0
+                                                  ? 'cell_sample'
+                                                  : undefined
+                                              }
                                               onClick={() => {
                                                 if (readonly) return;
                                                 changeFocus?.({
@@ -379,7 +384,7 @@ export default function ShiftCalendar() {
           </div>
         </DragDropContext>
       </div>
-      <div className="flex flex-1 flex-col">
+      <div id="nurse_request_list" className="flex flex-1 flex-col">
         <div className="my-[.75rem] flex items-center">
           <p className="font-apple text-[1.25rem] font-semibold text-main-1">신청 내역</p>
           <p className="ml-auto cursor-pointer font-apple text-[.875rem] font-medium text-main-2">

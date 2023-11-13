@@ -11,7 +11,10 @@ function CountDutyByDay() {
 
   return (
     shift && (
-      <div className="rounded-[1.25rem] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]">
+      <div
+        id="count_by_day"
+        className="rounded-[1.25rem] bg-[#FDFCFE] shadow-[0rem_-0.25rem_2.125rem_0rem_#EDE9F5]"
+      >
         {shift.wardShiftTypes
           .filter((x) => x.isCounted)
           .map((wardShiftType, index) => (

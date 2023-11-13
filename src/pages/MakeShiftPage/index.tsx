@@ -9,6 +9,7 @@ const MakeShiftPage = () => {
   const {
     state: { shift },
   } = useEditShift(true);
+
   return (
     <div className="mx-auto flex h-screen w-fit min-w-[104.625rem] flex-col">
       <Toolbar />

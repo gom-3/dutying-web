@@ -12,6 +12,7 @@ function RefreshPage() {
 
   const refresh = async () => {
     try {
+      axiosInstance.defaults.headers.common['Authorization'] = undefined;
       const accessToken = (await axiosInstance.post('/token/refresh')).data.accessToken;
       handleLogin(accessToken);
     } catch (error) {

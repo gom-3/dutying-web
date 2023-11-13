@@ -61,6 +61,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
     if (value == time) {
       return;
     }
+    if (value === '') onTimeChange?.(value);
     if (isValid(value)) {
       if (value.length === 2 && lastValue.current.length === 3) value = value.slice(0, 1);
       if (value.length === 2 && lastValue.current.length === 1) value += ':';

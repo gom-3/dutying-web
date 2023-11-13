@@ -8,6 +8,8 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+
+  withCredentials: true,
 });
 
 // 응답 인터셉터 처리
@@ -19,7 +21,7 @@ axiosInstance.interceptors.response.use(
       .with(401, () => {
         location.replace(ROUTE.REFRESH);
       })
-      .with(400, 403, 404, () => {
+      .with(400, 404, () => {
         toast.error('에러가 발생했습니다. 다시 시도해주세요.');
       });
 
