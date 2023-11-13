@@ -48,7 +48,7 @@ const MakeTutorial = () => {
     highlightIds: ['count_by_nurse'],
     title: '근무표 만들기',
     info: '이곳은 간호사별 근무 수입니다. 간호사별로 근무가 얼마나 채워져있는지 볼 수 있어요. WO는 주말 OFF를 의미합니다.',
-    infoBoxAlignment: 'center',
+    infoBoxAlignment: 'right',
   });
 
   config.steps.set(5, {
