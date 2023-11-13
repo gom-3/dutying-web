@@ -6,12 +6,16 @@ import * as accountApi from '@libs/api/account';
 import { useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
 import useLoading from '@hooks/ui/useLoading';
+import useTutorial from '@hooks/ui/useTutorial';
 
 const useRegister = () => {
   const {
     state: { accountMe, accountId },
     actions: { handleGetAccountMe },
   } = useAuth();
+  const {
+    actions: { initTutorial },
+  } = useTutorial();
   const { setLoading } = useLoading();
   const navigate = useNavigate();
 
@@ -35,7 +39,7 @@ const useRegister = () => {
         setLoading(false);
       },
       onSuccess: () => {
-        // @TODO 편집 모드 ON
+        initTutorial();
         accountMe &&
           changeAccountStatusMutate({ accountId: accountMe.accountId, status: 'LINKED' });
       },

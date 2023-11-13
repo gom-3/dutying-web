@@ -80,9 +80,6 @@ dependencies:
   react-router-dom:
     specifier: ^6.14.2
     version: 6.14.2(react-dom@18.2.0)(react@18.2.0)
-  react-tutorial-overlay:
-    specifier: github:flare-space/react-tutorial-overlay
-    version: github.com/flare-space/react-tutorial-overlay/202600c9de7a00f0444c7fc431033201367867ff(react-dom@18.2.0)(react@18.2.0)
   ts-pattern:
     specifier: ^5.0.4
     version: 5.0.4
@@ -5778,17 +5775,4 @@ packages:
       immer: 10.0.2
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
-
-  github.com/flare-space/react-tutorial-overlay/202600c9de7a00f0444c7fc431033201367867ff(react-dom@18.2.0)(react@18.2.0):
-    resolution: {tarball: https://codeload.github.com/flare-space/react-tutorial-overlay/tar.gz/202600c9de7a00f0444c7fc431033201367867ff}
-    id: github.com/flare-space/react-tutorial-overlay/202600c9de7a00f0444c7fc431033201367867ff
-    name: react-tutorial-overlay
-    version: 1.0.0
-    peerDependencies:
-      react: ^18.2.0
-      react-dom: ^18.2.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false

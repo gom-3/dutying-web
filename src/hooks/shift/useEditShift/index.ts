@@ -18,6 +18,7 @@ import {
 } from './handlers';
 import { getShiftTeams } from '@libs/api/shiftTeam';
 import useAuth from '@hooks/auth/useAuth';
+import useLoading from '@hooks/ui/useLoading';
 
 const useEditShift = (activeEffect = false) => {
   const [
@@ -57,6 +58,7 @@ const useEditShift = (activeEffect = false) => {
   const {
     state: { wardId },
   } = useAuth();
+  const { setLoading } = useLoading();
 
   const queryClient = useQueryClient();
 
@@ -528,7 +530,6 @@ const useEditShift = (activeEffect = false) => {
       ) {
         e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
       }
-
       const ctrlKey = e.ctrlKey || e.metaKey;
 
       if (ctrlKey && e.key === 'z') {
@@ -616,6 +617,7 @@ const useEditShift = (activeEffect = false) => {
 
   useEffect(() => {
     if (activeEffect && shift) {
+      window.dispatchEvent(new Event('resize'));
       const wardShiftTypeMap = new Map<number, WardShiftType>();
       shift.wardShiftTypes.forEach((wardShiftType) => {
         wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
@@ -640,6 +642,19 @@ const useEditShift = (activeEffect = false) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [activeEffect, focus, shift, editHistory, handleKeyDown]);
+
+  useEffect(() => {
+    if (activeEffect) {
+      if (shiftStatus === 'loading') {
+        setLoading(true);
+      } else {
+        setLoading(false);
+      }
+    }
+    return () => {
+      setLoading(false);
+    };
+  }, [shiftStatus]);
 
   return {
     queryKey: {

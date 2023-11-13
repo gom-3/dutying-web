@@ -4,7 +4,6 @@ import ShiftCalendar from './components/ShiftCalendar';
 import Panel from './components/Panel';
 import useEditShift from '@hooks/shift/useEditShift';
 import NurseEditModal from './components/NurseEditModal';
-import MakeTutorial from '@components/Tutorial/MakeTutorial';
 
 const MakeShiftPage = () => {
   const {
@@ -27,7 +26,6 @@ const MakeShiftPage = () => {
         <Panel />
       </div>
       <NurseEditModal />
-      <MakeTutorial />
     </div>
   );
 };

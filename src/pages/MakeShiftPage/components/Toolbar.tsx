@@ -46,7 +46,10 @@ function Toolbar() {
   >(null);
 
   return (
-    <div className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pr-[1rem] pt-[1.875rem]">
+    <div
+      id="toolbar"
+      className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pr-[1rem] pt-[1.875rem]"
+    >
       <div className="flex gap-[1.25rem]">
         <div className="w-[3.375rem]"></div>
         <div className="w-[4.375rem]"></div>
@@ -303,7 +306,7 @@ function Toolbar() {
       {readonly ? (
         <div className="ml-auto flex gap-[10px]">
           <Button
-            id="El1"
+            id="editButton"
             type="fill"
             className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 pl-[.75rem] pr-[.5rem] text-[1.25rem] font-semibold"
             onClick={() => {
@@ -317,6 +320,7 @@ function Toolbar() {
           </Button>
           {/* @TODO 이미지 저장 구현 */}
           <Button
+            id="El2"
             type="fill"
             className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 pl-[.75rem] pr-[.5rem] text-[1.25rem] font-semibold"
             onClick={() => {

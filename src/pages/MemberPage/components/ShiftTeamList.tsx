@@ -182,6 +182,7 @@ function ShiftTeamList() {
         <div className="mb-8 flex items-start gap-[2.5rem]">
           {shiftTeams?.map((shiftTeam) => (
             <div
+              id="shift_team_list"
               ref={clickAwayRef}
               className="mt-[1.375rem] flex w-[18.75rem] flex-col rounded-[.9375rem] border-[.0625rem] border-sub-4.5 shadow-banner"
               key={shiftTeam.shiftTeamId}
@@ -318,6 +319,7 @@ function ShiftTeamList() {
                           >
                             {(provided) => (
                               <div
+                                id="nurse_sample"
                                 className={`group relative flex h-[3.5rem] w-full cursor-pointer select-none items-center justify-center  
                               ${
                                 selectedNurse?.nurseId === nurse.nurseId

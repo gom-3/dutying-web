@@ -42,8 +42,7 @@
     "react-router-dom": "^6.14.2",
     "ts-pattern": "^5.0.4",
     "yup": "^1.3.0",
-    "zustand": "^4.3.9",
-    "react-tutorial-overlay": "github:flare-space/react-tutorial-overlay"
+    "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@svgr/cli": "^8.0.1",

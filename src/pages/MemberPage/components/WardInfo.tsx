@@ -13,7 +13,7 @@ function WardInfo() {
   } = useEditWard();
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex gap-[1.25rem]">
+    <div id="ward_info" className="flex gap-[1.25rem]">
       <div className="flex flex-col gap-[.4375rem] ">
         <p className="font-apple text-base font-medium  text-sub-3">병원 정보</p>
         <div className="flex h-[4.375rem] min-w-[17.5rem] rounded-[.9375rem] border-[.0625rem] border-sub-4 bg-sub-5 px-[1.75rem] py-[.625rem]">

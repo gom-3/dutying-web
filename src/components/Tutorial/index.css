@@ -1,15 +1,90 @@
-.tutorial {
-  font-family: Apple-SDG, sans-serif;
-}
-
 .TutorialOverlay {
+  z-index: 998;
+  background: #00000020;
   backdrop-filter: none;
 }
 
 .InfoBox {
+  display: flex;
+  flex-direction: column;
   z-index: 9999;
+  height: 15.625rem !important;
+  box-shadow: 5px 5px 15px 0px rgba(149, 81, 146, 0.3) !important;
+  font-family: Apple-SDG, sans-serif !important;
+}
+
+.InfoBox > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.InfoTitle {
+  font-size: 1.4rem !important;
+}
+
+.InfoContent {
+  height: auto !important;
+  flex: 1;
+  font-size: 1.2rem !important;
+  color: #242428;
+}
+
+.BoxFooter {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  flex-shrink: 0;
+}
+
+.InfoSteps {
+  color: #93939d;
+  font-size: 1rem;
 }
 
 .HighlightedElement {
-  z-index: 9999;
+  z-index: 999;
+  border-width: 3px !important;
+  border-radius: 0.9375rem !important;
+}
+
+.ButtonWrapper {
+  display: flex;
+}
+
+.ButtonWrapper > .TutorialButton:nth-child(1),
+.ButtonWrapper > .TutorialButton:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem !important;
+  height: 2rem !important;
+  font-size: 1rem !important;
+  color: #844aff !important;
+  font-weight: 500 !important;
+  border-radius: 0.3125rem !important;
+  border: 1px solid #844aff !important;
+}
+
+.ButtonWrapper > .TutorialButton:nth-child(1).disabled,
+.ButtonWrapper > .TutorialButton:nth-child(2).disabled {
+  color: #ababb4 !important;
+  border: 1px solid #ababb4 !important;
+  border-radius: 0.3125rem !important;
+}
+
+.ButtonWrapper > .TutorialButton:nth-child(1):hover,
+.ButtonWrapper > .TutorialButton:nth-child(2):hover {
+  color: white !important;
+}
+
+.InfoTitle > .TutorialButton {
+  font-size: 1rem !important;
+  font-weight: 500;
+  font-size: 0.875rem54529895298650225205022 !important;
+  border: none !important;
+  background: none !important;
+  color: #b08bff !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.15rem !important;
 }

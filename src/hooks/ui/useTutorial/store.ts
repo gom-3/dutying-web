@@ -5,18 +5,19 @@ import { produce } from 'immer';
 interface State {
   showMakeTutorial: boolean;
   showRequestTutorial: boolean;
-  showManageTutorial: boolean;
+  showMemberTutorial: boolean;
 }
 
 interface Store extends State {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: (key: keyof State, value: any) => void;
+  initState: () => void;
 }
 
 const initialState: State = {
   showMakeTutorial: true,
   showRequestTutorial: true,
-  showManageTutorial: true,
+  showMemberTutorial: true,
 };
 
 export const useTutorialStore = create<Store>()(
@@ -34,10 +35,10 @@ export const useTutorialStore = create<Store>()(
       }),
       {
         name: 'useTutorialStore',
-        partialize: ({ showMakeTutorial, showRequestTutorial, showManageTutorial }: Store) => ({
+        partialize: ({ showMakeTutorial, showRequestTutorial, showMemberTutorial }: Store) => ({
           showMakeTutorial,
           showRequestTutorial,
-          showManageTutorial,
+          showMemberTutorial,
         }),
       }
     )
