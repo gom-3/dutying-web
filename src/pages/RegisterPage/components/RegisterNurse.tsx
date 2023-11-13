@@ -116,7 +116,7 @@ function RegisterNurse() {
       <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">
         회원 정보
       </h1>
-      <div className="mt-[3.75rem] flex w-full min-w-[500px] shrink-0 justify-between rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
+      <div className="mt-[3.75rem] flex w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
         <div className="flex flex-col items-center gap-[1.875rem]">
           <div className="self-start font-apple text-[1.25rem] text-sub-3">프로필 이미지</div>
           <div className="h-[8.75rem] w-[8.75rem] rounded-full border-[.625rem] border-sub-4">
@@ -149,7 +149,7 @@ function RegisterNurse() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between">
+        <div className="ml-[5.25rem] flex flex-col justify-between">
           <div>
             <label
               htmlFor="name"
@@ -228,35 +228,37 @@ function RegisterNurse() {
           />
         </div>
         <div className="mb-[1.25rem] mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
-        <div className="flex flex-1 items-center gap-[4.375rem]">
-          <div>
+        <div className="flex flex-1 items-center">
+          <div className="w-[16.875rem]">
             <p className="font-apple text-[1.25rem] text-sub-3">교대 근무자</p>
             <p className="font-apple text-[.875rem] text-main-2">* 근무표에 본인이 표시되나요?</p>
           </div>
-          <div
-            className="flex cursor-pointer items-center justify-center"
-            onClick={() => setValue('isWorker', true)}
-          >
-            {watchIsWorker ? (
-              <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-            ) : (
-              <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-            )}
-            <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-              네
+          <div className="ml-[5.25rem] flex gap-[1.875rem]">
+            <div
+              className="flex cursor-pointer items-center justify-center"
+              onClick={() => setValue('isWorker', true)}
+            >
+              {watchIsWorker ? (
+                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+              ) : (
+                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+              )}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
+                네
+              </div>
             </div>
-          </div>
-          <div
-            className="flex cursor-pointer items-center justify-center"
-            onClick={() => setValue('isWorker', false)}
-          >
-            {!watchIsWorker ? (
-              <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-            ) : (
-              <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-            )}
-            <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-              아니오
+            <div
+              className="flex cursor-pointer items-center justify-center"
+              onClick={() => setValue('isWorker', false)}
+            >
+              {!watchIsWorker ? (
+                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+              ) : (
+                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
+              )}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
+                아니오
+              </div>
             </div>
           </div>
         </div>

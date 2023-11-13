@@ -1,5 +1,6 @@
 import {
   BackIcon,
+  CancelIcon,
   EnterIcon,
   FullLogo,
   LogoSymbolFill,
@@ -20,6 +21,7 @@ import { produce } from 'immer';
 import { useNavigate } from 'react-router';
 import useRegister from '@hooks/auth/useRegister';
 import ROUTE from '@libs/constant/path';
+import { CreateShiftTypeDTO } from '@libs/api/shiftType';
 
 const schema = yup.object().shape({
   name: yup
@@ -120,6 +122,24 @@ function RegisterWard() {
       </div>
       <form
         onSubmit={handleSubmit((d) => {
+          if (
+            wardShiftTypes.some((x) => {
+              if (x.name === '') {
+                alert('근무 이름을 입력해주세요.');
+                return true;
+              }
+              if (!x.isOff && (x.startTime === '' || x.endTime === '')) {
+                alert(`${x.name}근무의 근무 시간을 입력해주세요.`);
+                return true;
+              }
+              if (x.shortName === '') {
+                alert(`${x.name}근무의 근무 약자를 입력해주세요.`);
+                return true;
+              }
+            })
+          ) {
+            return;
+          }
           createWrad({
             name: d.name,
             hospitalName: d.hospitalName,
@@ -298,13 +318,23 @@ function RegisterWard() {
                 setOpenModal(false);
               }}
               shiftType={tempShiftType}
-              onSubmit={(shiftType) =>
-                setWardShiftTypes(
-                  produce(wardShiftTypes, (draft) => {
-                    draft.push(shiftType);
-                  })
-                )
-              }
+              onSubmit={(shiftType: CreateShiftTypeDTO) => {
+                console.log(shiftType, tempShiftType?.wardShiftTypeId);
+                if (tempShiftType?.wardShiftTypeId) {
+                  setWardShiftTypes(
+                    produce(wardShiftTypes, (draft) => {
+                      draft[tempShiftType?.wardShiftTypeId] = shiftType;
+                    })
+                  );
+                } else {
+                  setWardShiftTypes(
+                    produce(wardShiftTypes, (draft) => {
+                      draft.push(shiftType);
+                    })
+                  );
+                }
+                setTempShiftType(null);
+              }}
               onDelete={() =>
                 tempShiftType &&
                 setWardShiftTypes(
@@ -336,9 +366,23 @@ function RegisterWard() {
           </div>
           {shiftTeams.map((shiftTeam, index) => (
             <div key={index} className="mt-[1.25rem]">
-              <div className="flex h-[2.25rem] w-[11.25rem] items-center justify-center gap-[.75rem] rounded-t-[.625rem] bg-sub-2 font-apple text-white">
-                <p className="text-[1.25rem] font-medium">간호사 {index + 1}팀</p>
-                <p className="text-[.875rem]">{shiftTeam.length}명</p>
+              <div className="flex justify-between">
+                <div className="flex">
+                  <div className="flex h-[2.25rem] w-[11.25rem] items-center justify-center gap-[.75rem] rounded-t-[.625rem] bg-sub-2 font-apple text-white">
+                    <p className="text-[1.25rem] font-medium">간호사 {index + 1}팀</p>
+                    <p className="text-[.875rem]">{shiftTeam.length}명</p>
+                  </div>
+                </div>
+                <CancelIcon
+                  className="h-[1.5rem] w-[1.5rem] cursor-pointer self-center"
+                  onClick={() => {
+                    setShiftTeams(
+                      produce(shiftTeams, (draft) => {
+                        draft.splice(index, 1);
+                      })
+                    );
+                  }}
+                />
               </div>
               <div className="flex w-full flex-wrap gap-[.625rem] rounded-[.625rem] rounded-tl-none border-[.0313rem] border-sub-3 bg-main-bg p-[1.875rem]">
                 {shiftTeam.map((name, nameIndex) => (

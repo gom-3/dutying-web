@@ -87,7 +87,7 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                         <div className="flex h-[4.5rem] shrink-0 items-center rounded-[.625rem] border-[.0625rem] border-sub-4.5 bg-main-bg px-[1.25rem]">
                           <img
                             className="h-[2rem] w-[2rem] rounded-full"
-                            src={waitingNurse.profileImgBase64}
+                            src={'data:image/png;base64,' + waitingNurse.profileImgBase64}
                             alt=""
                           />
                           <p className="ml-[.625rem] font-apple text-[1.5rem] font-medium text-sub-1">

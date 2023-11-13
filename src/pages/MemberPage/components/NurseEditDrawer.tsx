@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CheckedIcon, FoldIcon, UncheckedIcon2 } from '@assets/svg';
+import Button from '@components/Button';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { events, sendEvent } from 'analytics';
@@ -222,12 +223,22 @@ function NurseEditDrawer() {
         >
           간호사 삭제
         </button>
-        <button
-          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+        <Button
+          id="nurse_edit_drawer"
+          className="flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-main-1 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+          disabled={
+            selectedNurse?.name === writeNurse?.name &&
+            selectedNurse?.employmentDate === writeNurse?.employmentDate &&
+            selectedNurse?.phoneNum === writeNurse?.phoneNum &&
+            selectedNurse?.isWorker === writeNurse?.isWorker &&
+            selectedNurse?.isDutyManager === writeNurse?.isDutyManager &&
+            selectedNurse?.memo === writeNurse?.memo &&
+            selectedNurse?.nurseShiftTypes.length === writeNurse?.nurseShiftTypes.length
+          }
           onClick={() => save()}
         >
           저장
-        </button>
+        </Button>
       </div>
     </div>
   );

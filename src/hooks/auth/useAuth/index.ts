@@ -9,6 +9,7 @@ import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import { useEffect } from 'react';
 import { events, sendEvent } from 'analytics';
 import useLoading from '@hooks/ui/useLoading';
+import useTutorial from '@hooks/ui/useTutorial';
 
 const useAuth = (activeEffect = false) => {
   const [
@@ -38,6 +39,9 @@ const useAuth = (activeEffect = false) => {
   const { setLoading } = useLoading();
   const initStore = useInitStore();
   const { initState: initEditShiftStore } = useEditShiftStore();
+  const {
+    actions: { initTutorial },
+  } = useTutorial();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -56,6 +60,7 @@ const useAuth = (activeEffect = false) => {
 
   const demoTry = async () => {
     setLoading(true);
+    initTutorial();
     const data = await demoStart();
     setState('accessToken', data.accessToken);
     setState('accountId', data.accountResDto.accountId);

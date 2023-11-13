@@ -5,7 +5,8 @@ import { Toaster } from 'react-hot-toast';
 import App from 'App';
 import './index.css';
 import initializeApp from './initializeApp';
-import Loading from 'Loading';
+import Loading from '@components/Loading';
+import Tutorial from '@components/Tutorial';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +25,7 @@ const element = (
       <App />
       <Toaster position="bottom-center" containerClassName="toaster" />
       <Loading />
+      <Tutorial />
     </BrowserRouter>
   </QueryClientProvider>
 );

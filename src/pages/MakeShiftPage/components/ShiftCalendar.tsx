@@ -98,27 +98,26 @@ export default function ShiftCalendar() {
       const focusRect = focusedCellRef.current?.getBoundingClientRect();
       const container = containerRef.current;
       if (!focusRect || !container) return;
-
       // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
-      if (focusRect.x + focusRect.width - container.offsetLeft > container.clientWidth)
-        container.scroll({
+      if (focusRect.x + focusRect.width > window.innerWidth)
+        window.scroll({
           left: focusRect.left + container.scrollLeft,
         });
       // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
-      if (focusRect.x - container.offsetLeft < 0) container.scroll({ left: 0 });
+      if (focusRect.x - container.offsetLeft < 0) window.scroll({ left: 0 });
       // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
       if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
-        container.scroll({
+        window.scroll({
           top: focusRect.top + container.scrollTop,
         });
       // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
       if (focusRect.y - container.offsetTop < 0)
-        container.scroll({ top: focusRect.top + window.scrollY - 132 });
+        window.scroll({ top: focusRect.top + window.scrollY - 132 });
     }
   }, [focus]);
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
-    <div ref={clickAwayRef} className="flex w-full flex-col">
+    <div id="calendar" ref={clickAwayRef} className="flex w-full flex-col bg-[#FDFCFE]">
       <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
         <div className="flex gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
@@ -361,6 +360,9 @@ export default function ShiftCalendar() {
                                             />
                                           )}
                                           <ShiftBadge
+                                            id={
+                                              rowIndex === 0 && j === 0 ? 'cell_sample' : undefined
+                                            }
                                             key={j}
                                             onClick={() => {
                                               if (readonly) return;
@@ -396,6 +398,7 @@ export default function ShiftCalendar() {
                                     })}
                                   </div>
                                   <div
+                                    id="count_by_nurse"
                                     className="relative flex shrink-0 items-center gap-2 px-[1.5625rem] text-center"
                                     key={rowIndex}
                                   >

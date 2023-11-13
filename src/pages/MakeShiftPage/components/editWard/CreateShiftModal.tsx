@@ -29,6 +29,23 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
 
   const modalRoot = document.querySelector('#modal-root');
 
+  const handleSubmit = () => {
+    if (writeShift.name === '') {
+      alert('근무 이름을 입력해주세요.');
+      return;
+    }
+    if (!writeShift.isOff && (writeShift.startTime === '' || writeShift.endTime === '')) {
+      alert('근무 시간을 입력해주세요.');
+      return;
+    }
+    if (writeShift.shortName === '') {
+      alert('근무 약자를 입력해주세요.');
+      return;
+    }
+    onSubmit(writeShift);
+    close();
+  };
+
   useEffect(() => {
     if (open === false) setWriteShift(initialValue);
   }, [open]);
@@ -99,14 +116,14 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 <div className="flex items-center gap-[.9375rem]">
                   <TimeInput
                     className="h-[3.375rem] w-[8.75rem] text-center text-[1.5rem]"
-                    value={writeShift.startTime}
-                    onChange={(e) => setWriteShift({ ...writeShift, startTime: e.target.value })}
+                    initTime={writeShift.startTime}
+                    onTimeChange={(time) => setWriteShift({ ...writeShift, startTime: time })}
                   />
                   <p className="font-poppins text-[1.5rem] text-sub-3">~</p>
                   <TimeInput
                     className="h-[3.375rem] w-[8.75rem] text-center text-[1.5rem]"
-                    value={writeShift.endTime}
-                    onChange={(e) => setWriteShift({ ...writeShift, endTime: e.target.value })}
+                    initTime={writeShift.endTime}
+                    onTimeChange={(time) => setWriteShift({ ...writeShift, endTime: time })}
                   />
                 </div>
               </div>
@@ -144,10 +161,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
               <Button
                 className="absolute bottom-[1.875rem] right-[2.625rem] h-[2.5rem] w-[4.6875rem] text-[1.25rem] font-semibold"
                 type="outline"
-                onClick={() => {
-                  onSubmit(writeShift);
-                  close();
-                }}
+                onClick={handleSubmit}
               >
                 저장
               </Button>
