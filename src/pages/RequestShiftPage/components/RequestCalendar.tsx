@@ -127,7 +127,7 @@ export default function ShiftCalendar() {
               이름
             </div>
             <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
-              이월
+              연동
             </div>
             <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
               {requestShift.days.map((item, j) => (

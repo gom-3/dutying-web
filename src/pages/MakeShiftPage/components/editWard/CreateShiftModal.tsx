@@ -24,6 +24,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     isDefault: false,
     shortName: '',
     isCounted: true,
+    classification: 'OTHER_WORK',
   };
   const [writeShift, setWriteShift] = useState(initialValue);
 
@@ -78,7 +79,10 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 className={`h-[2.5rem] flex-1 cursor-pointer border-b-[.3125rem] text-center font-apple text-[1.25rem] font-medium ${
                   !writeShift.isOff ? 'border-main-1 text-main-1' : 'border-sub-4.5 text-sub-3'
                 }`}
-                onClick={() => setWriteShift({ ...writeShift, isOff: false })}
+                onClick={() => {
+                  if (writeShift.isDefault) return;
+                  setWriteShift({ ...writeShift, isOff: false, classification: 'OTHER_WORK' });
+                }}
               >
                 근무
               </div>
@@ -86,7 +90,10 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 className={`h-[2.5rem] flex-1 cursor-pointer border-b-[.3125rem] text-center font-apple text-[1.25rem] font-medium ${
                   writeShift.isOff ? 'border-main-1 text-main-1' : 'border-sub-4.5 text-sub-3'
                 }`}
-                onClick={() => setWriteShift({ ...writeShift, isOff: true })}
+                onClick={() => {
+                  if (writeShift.isDefault) return;
+                  setWriteShift({ ...writeShift, isOff: true, classification: 'OTHER_LEAVE' });
+                }}
               >
                 휴가
               </div>
@@ -100,11 +107,17 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
                 onChange={(e) => setWriteShift({ ...writeShift, name: e.target.value })}
               />
             </div>
-            <div className="w-[10%]">
-              <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">약자</p>
+            <div className="">
+              <div className="flex items-center gap-4">
+                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-base text-sub-3">약자</p>
+                <p className="mb-[.625rem] mt-[1.875rem] font-apple text-[.75rem] text-main-2 ">
+                  * 기본 근무 유형인 D, E, N, O의 약자는 수정하실 수 없습니다
+                </p>
+              </div>
               <TextField
-                className="h-[3.375rem] px-0 text-center font-apple text-[1.5rem] font-medium text-sub-1"
+                className="h-[3.375rem] w-[3.375rem] px-0 text-center font-apple text-[1.5rem] font-medium text-sub-1"
                 value={writeShift.shortName}
+                readOnly={writeShift.isDefault}
                 onChange={(e) => setWriteShift({ ...writeShift, shortName: e.target.value })}
               />
             </div>
