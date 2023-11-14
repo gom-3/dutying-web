@@ -15,13 +15,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { match } from 'ts-pattern';
 import { useEffect, useState } from 'react';
-import TimeInput from '@components/TimeInput';
 import CreateShiftModal from '@pages/MakeShiftPage/components/editWard/CreateShiftModal';
 import { produce } from 'immer';
 import { useNavigate } from 'react-router';
 import useRegister from '@hooks/auth/useRegister';
 import ROUTE from '@libs/constant/path';
 import { CreateShiftTypeDTO } from '@libs/api/shiftType';
+import { CreateWardDTO } from '@libs/api/ward';
 
 const schema = yup.object().shape({
   name: yup
@@ -36,7 +36,7 @@ const schema = yup.object().shape({
 
 function RegisterWard() {
   const [shiftTeams, setShiftTeams] = useState<string[][]>([[]]);
-  const [wardShiftTypes, setWardShiftTypes] = useState([
+  const [wardShiftTypes, setWardShiftTypes] = useState<CreateWardDTO['wardShiftTypes']>([
     {
       name: '데이',
       shortName: 'D',
@@ -45,6 +45,7 @@ function RegisterWard() {
       color: '#4DC2AD',
       isDefault: true,
       isOff: false,
+      classification: 'DAY',
     },
     {
       name: '이브닝',
@@ -54,6 +55,7 @@ function RegisterWard() {
       color: '#FF8BA5',
       isDefault: true,
       isOff: false,
+      classification: 'EVENING',
     },
     {
       name: '나이트',
@@ -63,6 +65,7 @@ function RegisterWard() {
       color: '#3580FF',
       isDefault: true,
       isOff: false,
+      classification: 'NIGHT',
     },
     {
       name: '오프',
@@ -72,6 +75,7 @@ function RegisterWard() {
       color: '#465B7A',
       isDefault: true,
       isOff: true,
+      classification: 'OFF',
     },
   ]);
   const {
@@ -219,84 +223,34 @@ function RegisterWard() {
                   {shiftType.name}
                 </div>
                 <div className="flex flex-1 items-center justify-center text-[1.25rem]">
-                  <TextField
-                    className="h-[2rem] w-[2rem] rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-                    value={shiftType.shortName}
-                    onClick={(e) => {
-                      e.currentTarget.select();
-                    }}
-                    onChange={(e) => {
-                      setWardShiftTypes(
-                        produce(wardShiftTypes, (draft) => {
-                          draft[index].shortName = e.target.value.slice(0, 1).toUpperCase();
-                        })
-                      );
-                    }}
-                  />
+                  <p className="h-[2rem] w-[2rem] rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] text-sub-1 outline-[.0313rem] outline-sub-4.5">
+                    {shiftType.shortName}
+                  </p>
                 </div>
                 <div className="flex flex-[3] items-center justify-center gap-[1.125rem]">
                   {shiftType.isOff ? (
                     <p className="font-poppins text-[1.25rem] font-light text-sub-2.5">-</p>
                   ) : (
                     <>
-                      <TimeInput
-                        className="h-[1.875rem] w-full rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-                        initTime={shiftType.startTime}
-                        onTimeChange={(value) => {
-                          setWardShiftTypes(
-                            produce(wardShiftTypes, (draft) => {
-                              draft[index].startTime = value;
-                            })
-                          );
-                        }}
-                      />
+                      <p className="h-[1.875rem] w-full rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] text-sub-1 outline-[.0313rem] outline-sub-4.5">
+                        {shiftType.startTime}
+                      </p>
                       <p className="font-poppins text-[1.25rem] font-light text-sub-2.5">~</p>
-                      <TimeInput
-                        className="h-[1.875rem] w-full rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-                        initTime={shiftType.endTime}
-                        onTimeChange={(value) => {
-                          setWardShiftTypes(
-                            produce(wardShiftTypes, (draft) => {
-                              draft[index].endTime = value;
-                            })
-                          );
-                        }}
-                      />
+                      <p className="h-[1.875rem] w-full rounded-[.3125rem] bg-white p-0 text-center text-[1.25rem] text-sub-1 outline-[.0313rem] outline-sub-4.5">
+                        {shiftType.endTime}
+                      </p>
                     </>
                   )}
                 </div>
 
                 <div className="relative flex flex-1  items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
-                  <label
-                    htmlFor={`pick_color_${index}`}
+                  <div
                     className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
                     style={{ backgroundColor: shiftType.color }}
                   />
-                  <input
-                    id={`pick_color_${index}`}
-                    className="absolute h-[2rem] w-[2rem] cursor-pointer opacity-0"
-                    type="color"
-                    value={shiftType.color}
-                    onChange={(e) => {
-                      setWardShiftTypes(
-                        produce(wardShiftTypes, (draft) => {
-                          draft[index].color = e.target.value;
-                        })
-                      );
-                    }}
-                  />
                 </div>
                 <div className="flex flex-1 justify-center">
-                  <div
-                    className="cursor-pointer rounded-[1.875rem] border-[.0313rem] border-main-2 px-[.875rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
-                    onClick={() => {
-                      setWardShiftTypes(
-                        produce(wardShiftTypes, (draft) => {
-                          draft[index].isOff = !draft[index].isOff;
-                        })
-                      );
-                    }}
-                  >
+                  <div className="rounded-[1.875rem] border-[.0313rem] border-main-2 px-[.875rem] py-[.3125rem] font-apple text-[.875rem] text-main-2">
                     {shiftType.isOff ? '휴가' : '근무'}
                   </div>
                 </div>
@@ -319,7 +273,6 @@ function RegisterWard() {
               }}
               shiftType={tempShiftType}
               onSubmit={(shiftType: CreateShiftTypeDTO) => {
-                console.log(shiftType, tempShiftType?.wardShiftTypeId);
                 if (tempShiftType?.wardShiftTypeId) {
                   setWardShiftTypes(
                     produce(wardShiftTypes, (draft) => {
