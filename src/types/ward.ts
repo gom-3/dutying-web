@@ -49,6 +49,7 @@ type WardShiftType = {
   isOff: boolean;
   /** 합계에 포함할 것인지 */
   isCounted: boolean;
+  classification: 'DAY' | 'EVENING' | 'NIGHT' | 'OTHER_WORK' | 'OFF' | 'OTHER_LEAVE';
 };
 
 type ShiftNurse = {

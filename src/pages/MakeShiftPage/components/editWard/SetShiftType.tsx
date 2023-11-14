@@ -50,43 +50,22 @@ function SetShiftType() {
             {shiftType.name}
           </div>
           <div className="flex flex-1 items-center justify-center text-[1.25rem]">
-            <TextField
-              className="h-[2rem] w-[2rem] rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-              value={shiftType.shortName}
-              onClick={(e) => {
-                e.currentTarget.select();
-              }}
-              onChange={(e) => {
-                editShiftType(shiftType.wardShiftTypeId, {
-                  ...shiftType,
-                  shortName: e.target.value.slice(0, 1).toUpperCase(),
-                });
-                sendEvent(events.makePage.editWardModal.changeShiftTypeName);
-              }}
-            />
+            <p className="h-[2rem] w-[2rem] rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+              {shiftType.shortName}
+            </p>
           </div>
           <div className="flex flex-[3] items-center justify-center gap-[1.125rem]">
             {shiftType.isOff ? (
               <p className="font-poppins text-[1.25rem]">-</p>
             ) : (
               <>
-                <TimeInput
-                  className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-                  initTime={shiftType.startTime}
-                  onTimeChange={(value) => {
-                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, startTime: value });
-                    sendEvent(events.makePage.editWardModal.changeShiftTypeTime);
-                  }}
-                />
+                <p className="h-[2rem] w-full rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+                  {shiftType.startTime}
+                </p>
                 <p className="font-poppins text-[1.25rem]">~</p>
-                <TimeInput
-                  className="h-[2rem] w-full rounded-[.3125rem] bg-main-bg p-0 text-center text-[1.25rem] font-light text-sub-1 outline-[.0313rem] outline-sub-4.5"
-                  initTime={shiftType.endTime}
-                  onTimeChange={(value) => {
-                    editShiftType(shiftType.wardShiftTypeId, { ...shiftType, endTime: value });
-                    sendEvent(events.makePage.editWardModal.changeShiftTypeTime);
-                  }}
-                />
+                <p className="h-[2rem] w-full rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+                  {shiftType.endTime}
+                </p>
               </>
             )}
           </div>
