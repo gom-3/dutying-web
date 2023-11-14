@@ -245,7 +245,7 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
       >
         <div className="flex flex-1 flex-col">
           <div id="InfoTitle" className="flex items-center">
-            <p className="truncate text-[1rem] font-semibold text-main-1">
+            <p className="truncate text-[1.25rem] font-semibold text-main-1">
               {config.steps.get(step)?.title}
             </p>
             <button
@@ -260,7 +260,7 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
               .get(step)
               ?.info?.split('\n')
               .map((x, i) => (
-                <p key={i} className="text-[.875rem] font-medium text-sub-1">
+                <p key={i} className="text-[1rem] font-medium text-sub-1">
                   {x}
                 </p>
               ))}
