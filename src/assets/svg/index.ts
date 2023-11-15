@@ -66,3 +66,6 @@ export { default as SuccessCircleIcon } from './SuccessCircleIcon';
 export { default as RandomIcon } from './RandomIcon';
 export { default as CameraIcon } from './CameraIcon';
 export { default as HelpIcon } from './HelpIcon';
+export { default as BackCircle } from './BackCircle';
+export { default as NextCircle } from './NextCircle';
+export { default as AppleIcon } from './AppleIcon';
