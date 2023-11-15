@@ -91,6 +91,15 @@ const acceptRequestShift = async (wardId: number, reqShiftId: number, isAccepted
     })
   ).data;
 
+const postShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
+  (
+    await axiosInstance.patch(
+      `/wards/${wardId}/shift-teams/${shiftTeamId}/post?year=${year}&month=${month
+        .toString()
+        .padStart(2, '0')}`
+    )
+  ).data;
+
 export {
   getReqShift,
   getShift,
@@ -99,4 +108,5 @@ export {
   updateShifts,
   updateReqShift,
   acceptRequestShift,
+  postShift,
 };

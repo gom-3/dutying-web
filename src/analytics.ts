@@ -100,6 +100,10 @@ export const events = {
         category: 'makePage',
         action: 'makePage_toolbar_redoByToolbar',
       },
+      postShift: {
+        category: 'makePage',
+        action: 'makePage_toolbar_postShift',
+      },
     },
     panel: {
       changePanelTab: {

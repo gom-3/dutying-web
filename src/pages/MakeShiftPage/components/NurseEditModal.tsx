@@ -5,7 +5,7 @@ import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { events, sendEvent } from 'analytics';
 import { produce } from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function NurseEditModal() {
@@ -14,6 +14,7 @@ function NurseEditModal() {
     actions: { selectNurse, updateNurse },
   } = useEditShiftTeam();
   const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (key: keyof Nurse, value: any) => {
@@ -22,7 +23,10 @@ function NurseEditModal() {
   };
 
   useEffect(() => {
-    if (selectedNurse) setWriteNurse(selectedNurse);
+    if (selectedNurse) {
+      nameRef.current?.focus();
+      setWriteNurse(selectedNurse);
+    }
   }, [selectedNurse]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,6 +60,7 @@ function NurseEditModal() {
         <div className="my-[1.25rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
           <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
           <TextField
+            ref={nameRef}
             autoFocus
             className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
             onChange={(e) => {

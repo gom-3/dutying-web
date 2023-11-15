@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { WardShiftsDTO, getShift, updateShift, updateShifts } from '@libs/api/shift';
+import { WardShiftsDTO, getShift, updateShift, updateShifts, postShift } from '@libs/api/shift';
 import { getWardConstraint, updateWardConstraint } from '@libs/api/ward';
 import { updateNurseCarry } from '@libs/api/nurse';
 import { match } from 'ts-pattern';
@@ -370,6 +370,20 @@ const useEditShift = (activeEffect = false) => {
     }
   );
 
+  const { mutate: postShiftMutate, isLoading: postShiftLoading } = useMutation(
+    ({
+      wardId,
+      shiftTeamId,
+      year,
+      month,
+    }: {
+      wardId: number;
+      shiftTeamId: number;
+      year: number;
+      month: number;
+    }) => postShift(wardId, shiftTeamId, year, month)
+  );
+
   const changeMonth = useCallback(
     (type: 'prev' | 'next') => {
       if (type === 'prev') {
@@ -680,6 +694,7 @@ const useEditShift = (activeEffect = false) => {
       showLayer,
       currentShiftTeam,
       shiftTeams,
+      postShiftLoading,
     },
     actions: {
       toggleEditMode: handleToggleEditMode,
@@ -703,6 +718,15 @@ const useEditShift = (activeEffect = false) => {
           [key]: !showLayer[key],
         }),
       changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
+      postShift: () => {
+        if (!wardId || !currentShiftTeam) return;
+        postShiftMutate({
+          wardId,
+          shiftTeamId: currentShiftTeam.shiftTeamId,
+          year,
+          month,
+        });
+      },
     },
   };
 };
