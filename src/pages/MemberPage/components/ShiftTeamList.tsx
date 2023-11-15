@@ -2,6 +2,7 @@
 import {
   DragIcon,
   InfoIcon,
+  MinusIcon,
   MoreIcon,
   PersonIcon,
   PlusIcon,
@@ -401,7 +402,8 @@ function ShiftTeamList() {
                                       }}
                                     >
                                       <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-[50%]" />
-                                      <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] peer-hover:visible" />
+                                      <div className="invisible absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-red peer-hover:visible" />
+                                      <MinusIcon className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
                                     </div>
                                   )
                                 )}

@@ -261,8 +261,8 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                     : '팀을 선택해주시면 해당 팀에 계정이 추가됩니다.'}
                 </p>
                 <div
-                  className={`mb-8 flex items-start gap-[2.5rem] ${
-                    connectMode === 'add' && 'mt-[6.375rem]'
+                  className={`mb-8 flex h-[calc(100%-5rem)] items-start gap-[2.5rem] overflow-y-scroll scrollbar-hide ${
+                    connectMode === 'add' && 'pt-[6.375rem]'
                   }`}
                 >
                   {shiftTeams?.map((shiftTeam) => (
@@ -276,10 +276,10 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                     >
                       {connectMode === 'add' ? (
                         toAddShiftTeamId === shiftTeam.shiftTeamId ? (
-                          <CheckedIcon className="absolute left-[50%] top-[-1.5rem] h-[2.25rem] w-[2.25rem] translate-x-[-50%] translate-y-[-100%] cursor-pointer checked:bg-main-1" />
+                          <CheckedIcon className="absolute left-[50%] top-[-1.5rem] h-[2.25rem] w-[2.25rem] translate-x-[-50%] translate-y-[-100%] cursor-pointer" />
                         ) : (
                           <UncheckedIcon2
-                            className="absolute left-[50%] top-[-1.5rem] h-[2.25rem] w-[2.25rem] translate-x-[-50%] translate-y-[-100%] cursor-pointer checked:bg-main-1"
+                            className="absolute left-[50%] top-[-1.5rem] h-[2.25rem] w-[2.25rem] translate-x-[-50%] translate-y-[-100%] cursor-pointer"
                             onClick={() => setToAddShiftTeamId(shiftTeam.shiftTeamId)}
                           />
                         )
