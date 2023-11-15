@@ -525,11 +525,11 @@ const useEditShift = (activeEffect = false) => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (
-        ['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1
-      ) {
-        e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
-      }
+      // if (
+      //   ['Ctrl', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) != -1
+      // ) {
+      //   e.preventDefault(); // Key 입력으로 화면이 이동하는 것을 막습니다.
+      // }
       const ctrlKey = e.ctrlKey || e.metaKey;
 
       if (ctrlKey && e.key === 'z') {
