@@ -72,10 +72,16 @@ const LoginPage = () => {
         </div>
         <div className="flex font-apple text-[1rem] text-sub-3">
           버튼을 누르면
-          <a href="" className="ml-[.5rem] underline underline-offset-[.1875rem]">
+          <a
+            href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
+            className="ml-[.5rem] underline underline-offset-[.1875rem]"
+          >
             서비스 약관,
           </a>
-          <a href="" className="ml-[.5rem] underline underline-offset-[.1875rem]">
+          <a
+            href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
+            className="ml-[.5rem] underline underline-offset-[.1875rem]"
+          >
             개인정보 취급 방침
           </a>
           에 동의하신 것으로 간주합니다.
