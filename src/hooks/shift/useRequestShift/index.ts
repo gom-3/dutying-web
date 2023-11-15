@@ -316,6 +316,7 @@ const useRequestShift = (activeEffect = false) => {
 
   useEffect(() => {
     if (activeEffect && requestShift) {
+      window.dispatchEvent(new Event('resize'));
       const wardShiftTypeMap = new Map<number, WardShiftType>();
       requestShift.wardShiftTypes.forEach((wardShiftType) => {
         wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);

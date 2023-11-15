@@ -11,6 +11,7 @@ import {
 } from '@assets/svg';
 import TextField from '@components/TextField';
 import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import useTutorial from '@hooks/ui/useTutorial';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { UpdateShiftTeamDTO } from '@libs/api/shiftTeam';
 import ROUTE from '@libs/constant/path';
@@ -39,6 +40,9 @@ function ShiftTeamList() {
     shiftTeamId: number;
     updateShiftTeamDTO: UpdateShiftTeamDTO;
   } | null>(null);
+  const {
+    state: { showMemberTutorial },
+  } = useTutorial();
   const setEditShiftStore = useEditShiftStore((state) => state.setState);
 
   const navigate = useNavigate();
@@ -160,6 +164,8 @@ function ShiftTeamList() {
   };
 
   useEffect(() => {
+    if (shiftTeams && showMemberTutorial) window.dispatchEvent(new Event('resize'));
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [shiftTeams, selectedNurse]);
