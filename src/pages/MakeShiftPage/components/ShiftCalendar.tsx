@@ -117,9 +117,9 @@ export default function ShiftCalendar() {
   }, [focus]);
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
-    <div id="calendar" ref={clickAwayRef} className="flex w-full flex-col bg-[#FDFCFE]">
-      <div className="z-20 my-[.75rem] flex h-[1.875rem] items-center gap-[1.25rem] bg-[#FDFCFE] pr-[1rem]">
-        <div className="flex gap-[1.25rem]">
+    <div id="calendar" ref={clickAwayRef} className="flex w-full flex-col overflow-hidden">
+      <div className="z-20 flex items-center gap-[1.25rem] bg-[#FDFCFE] py-[.75rem] pr-[1rem]">
+        <div className="flex h-[1.875rem] gap-[1.25rem]">
           <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
             {/* 구분 */}
           </div>
