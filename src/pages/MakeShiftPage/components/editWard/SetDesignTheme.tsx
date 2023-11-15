@@ -26,7 +26,7 @@ const SetDesignTheme = () => {
         </div>
       </div>
       <div className="border-bg flex h-[4.625rem] items-center border-b-[.0313rem] px-[2.5rem] last:border-none">
-        <p className="font-apple text-[1.25rem] text-sub-1">토/일 배경색 구분</p>
+        <p className="font-apple text-[1.25rem] text-sub-1">근무 유형 표시 스타일</p>
         <div className="bg-bg ml-auto flex h-[2.75rem] w-[8rem] cursor-pointer justify-between gap-[.25rem] rounded-[.3125rem] border-[.0625rem] border-main-4 p-[.25rem]">
           <div
             className={`flex flex-1 items-center justify-center rounded-[.3125rem] font-apple text-[1.25rem] font-medium ${

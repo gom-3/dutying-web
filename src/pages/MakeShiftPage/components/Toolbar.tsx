@@ -111,7 +111,7 @@ function Toolbar() {
                 `}
                   onClick={() => setCurrentSetup('shiftType')}
                 >
-                  근무 형태
+                  근무 유형
                 </div>
                 <div
                   className={`flex h-full w-[9.375rem] cursor-pointer items-center justify-center rounded-t-[1.25rem] font-apple text-base 
@@ -305,6 +305,19 @@ function Toolbar() {
 
       {readonly ? (
         <div className="ml-auto flex gap-[10px]">
+          <Button
+            id="editButton"
+            type="fill"
+            className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 pl-[.75rem] pr-[.5rem] text-[1.25rem] font-semibold"
+            onClick={() => {
+              toggleEditMode();
+              sendEvent(events.makePage.toolbar.changeEditMode);
+            }}
+            disabled={new Date(year, month + 1, 1) <= new Date()}
+          >
+            게시하기
+            <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
+          </Button>
           <Button
             id="editButton"
             type="fill"
