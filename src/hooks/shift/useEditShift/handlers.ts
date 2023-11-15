@@ -137,7 +137,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
       regExp: new RegExp(`(ed|nd|ne|nod)`, 'g'),
       message: `ND/ED/NE/NOD 형태의 근무는 권장되지 않습니다.`,
       value: null,
-      label: 'ND / ED / NE / NOD 근무 형태 불가능',
+      label: 'ND / ED / NE / NOD 근무 패턴 불가능',
     },
     excludeNightBeforeReqOff: {
       type: 'bad',

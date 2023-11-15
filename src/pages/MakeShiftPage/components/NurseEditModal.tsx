@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CancelIcon, CheckedIcon, UncheckedIcon2 } from '@assets/svg';
+import Button from '@components/Button';
 import TextField from '@components/TextField';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import { events, sendEvent } from 'analytics';
 import { produce } from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function NurseEditModal() {
@@ -13,6 +14,7 @@ function NurseEditModal() {
     actions: { selectNurse, updateNurse },
   } = useEditShiftTeam();
   const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (key: keyof Nurse, value: any) => {
@@ -21,8 +23,22 @@ function NurseEditModal() {
   };
 
   useEffect(() => {
-    if (selectedNurse) setWriteNurse(selectedNurse);
+    if (selectedNurse) {
+      nameRef.current?.focus();
+      setWriteNurse(selectedNurse);
+    }
   }, [selectedNurse]);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') selectNurse(null);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return createPortal(
     <div
@@ -44,6 +60,7 @@ function NurseEditModal() {
         <div className="my-[1.25rem] flex h-[2.625rem] w-full items-center px-[2.5rem]">
           <div className="h-[2.625rem] w-[2.625rem] rounded-full bg-gray-400 " />
           <TextField
+            ref={nameRef}
             autoFocus
             className="ml-[1.25rem] h-[2.625rem] w-[10.125rem] px-3 text-[1.875rem] font-semibold text-text-1"
             onChange={(e) => {
@@ -188,20 +205,29 @@ function NurseEditModal() {
           메모
         </p>
         <textarea
-          value={writeNurse?.memo}
+          value={writeNurse?.memo || ''}
           className="mx-[2.5rem] mt-[.9375rem] h-[10.8125rem] resize-none rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-2 font-apple text-sm text-sub-1"
           onChange={(e) => {
             handleChange('memo', e.target.value);
             sendEvent(events.makePage.editNurseModal.changeNurseMemo);
           }}
         />
-
-        <button
-          className="mb-[1.625rem] ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] w-[4.375rem] items-center justify-center rounded-[3.125rem] bg-main-3 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+        <Button
+          id="nurse_edit_drawer"
+          className="mb-[1.625rem] ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] w-[4.375rem] items-center justify-center rounded-[3.125rem] bg-main-1 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+          disabled={
+            selectedNurse?.name === writeNurse?.name &&
+            selectedNurse?.employmentDate === writeNurse?.employmentDate &&
+            selectedNurse?.phoneNum === writeNurse?.phoneNum &&
+            selectedNurse?.isWorker === writeNurse?.isWorker &&
+            selectedNurse?.isDutyManager === writeNurse?.isDutyManager &&
+            selectedNurse?.memo === writeNurse?.memo &&
+            selectedNurse?.nurseShiftTypes.length === writeNurse?.nurseShiftTypes.length
+          }
           onClick={() => writeNurse && updateNurse(writeNurse.nurseId, writeNurse)}
         >
           저장
-        </button>
+        </Button>
       </div>
     </div>,
     document.getElementById('nurse-modal-root')!

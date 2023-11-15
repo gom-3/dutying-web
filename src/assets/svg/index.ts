@@ -69,3 +69,5 @@ export { default as HelpIcon } from './HelpIcon';
 export { default as BackCircle } from './BackCircle';
 export { default as NextCircle } from './NextCircle';
 export { default as AppleIcon } from './AppleIcon';
+export { default as CopyIcon } from './CopyIcon';
+export { default as MinusIcon } from './MinusIcon';

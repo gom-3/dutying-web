@@ -415,7 +415,7 @@ export default function ShiftCalendar() {
                     changeFocus(focus);
                   }}
                 >
-                  {dutyRequest.nurseName} / {dutyRequest.date}일
+                  {dutyRequest.nurseName} / {dutyRequest.date + 1}일
                 </p>
                 <ShiftBadge shiftType={wardShiftTypeMap.get(dutyRequest.wardShiftTypeId)} />
                 <div className="ml-auto flex h-[1.75rem] w-[5.625rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
