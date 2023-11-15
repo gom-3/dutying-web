@@ -307,7 +307,6 @@ function Toolbar() {
       {readonly ? (
         <div className="ml-auto flex gap-[10px]">
           <Button
-            id="editButton"
             type="fill"
             className="flex h-[2.5rem] items-center justify-center rounded-[.625rem] bg-main-2 px-[.75rem] text-[1.25rem] font-semibold"
             onClick={() => {
