@@ -23,7 +23,7 @@ interface ConnectionManageProps {
 
 function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
   const {
-    state: { ward, watingNurses },
+    state: { watingNurses },
     actions: { cancelWaiting, approveWatingNurses, connectWatingNurses },
   } = useEditWard();
 
@@ -68,7 +68,6 @@ function ConnectionManage({ open, setOpen }: ConnectionManageProps) {
                     <h1 className="font-apple text-[1.75rem] font-semibold text-text-1">
                       연동 관리
                     </h1>
-                    <p className="font-apple text-[1.4rem] text-sub-2">병동 코드: {ward?.code}</p>
                   </div>
                   <CancelIcon
                     className="h-[1.875rem] w-[1.875rem]"

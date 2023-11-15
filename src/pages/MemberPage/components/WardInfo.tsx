@@ -1,8 +1,9 @@
-import { LinkedIcon } from '@assets/svg';
+import { CopyIcon, LinkedIcon } from '@assets/svg';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import useEditWard from '@hooks/ward/useEditWard';
 import { useState } from 'react';
 import ConnectionManage from './ConnectionManage';
+import toast from 'react-hot-toast';
 
 function WardInfo() {
   const {
@@ -55,6 +56,25 @@ function WardInfo() {
             </p>
             <p className="font-apple text-[.875rem] text-sub-2.5">명</p>
           </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-[.4375rem] ">
+        <div className="flex items-center gap-[.25rem]">
+          <p className="font-apple text-base font-medium  text-main-3">병동 코드</p>
+          <CopyIcon
+            className="h-[1.5rem] w-[1.5rem] cursor-pointer"
+            onClick={() => {
+              ward &&
+                toast.promise(navigator.clipboard.writeText(ward.code), {
+                  loading: '복사 중입니다...',
+                  success: '복사 완료!',
+                  error: '복사를 실패했습니다.',
+                });
+            }}
+          />
+        </div>
+        <div className="flex h-[4.375rem] min-w-[9.25rem] items-center justify-center rounded-[.9375rem] border-[.0625rem] border-main-3 bg-white px-[1rem]">
+          <p className="spacing font-poppins text-[1.75rem] text-main-2">{ward?.code}</p>
         </div>
       </div>
       <div className="flex flex-col gap-[.4375rem] ">

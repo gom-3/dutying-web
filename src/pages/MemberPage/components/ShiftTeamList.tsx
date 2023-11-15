@@ -169,7 +169,7 @@ function ShiftTeamList() {
         <h1 className="font-apple text-[1.75rem] font-semibold text-text-1">팀</h1>
         <p className="font-apple text-base text-sub-2.5">팀당 근무표 1개 생성 가능합니다.</p>
         <button
-          className="ml-[16.125rem] flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0625rem] border-main-3 bg-white px-[.75rem] font-apple text-base text-main-2"
+          className="ml-[1.125rem] flex h-[2.25rem] items-center gap-[.5rem] rounded-[.3125rem] border-[.0625rem] border-main-3 bg-white px-[.75rem] font-apple text-base text-main-2"
           onClick={() => {
             createShiftTeam();
             sendEvent(events.memberPage.createShiftTeam);
@@ -236,9 +236,6 @@ function ShiftTeamList() {
                     className="absolute right-0 top-[3.75rem] z-30 flex h-[14rem] w-[14.375rem] flex-col rounded-[.625rem] bg-white shadow-[4px_4px_42px_0px_rgba(104,81,149,0.25)]"
                     ref={clickAwayMenuRef}
                   >
-                    <div className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none">
-                      팀 초대하기
-                    </div>
                     <div
                       className="relative flex flex-1 cursor-pointer items-center gap-[.3125rem] border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
                       onClick={() => {
@@ -246,7 +243,7 @@ function ShiftTeamList() {
                         setOpenMenu(null);
                       }}
                     >
-                      가상 간호사 만들기
+                      간호사 만들기
                       <InfoIcon className="peer h-[1.25rem] w-[1.25rem]" />
                       <div className="invisible absolute right-[-21.5rem] top-[50%] z-30 flex w-[22.75rem] translate-y-[-50%] items-center gap-[.5rem] rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
                         <div
