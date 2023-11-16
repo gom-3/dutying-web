@@ -15,8 +15,8 @@ import './index.css';
 const LoginPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex w-screen justify-center">
-      <div className="hidden flex-1 md:block">
+    <div className="flex w-screen">
+      <div className="hidden h-screen w-[calc(100vh/1080*1140)] 2xl:block">
         <Carousel
           autoPlay
           infiniteLoop
@@ -39,12 +39,12 @@ const LoginPage = () => {
             />
           )}
         >
-          <div className='h-screen min-w-full bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
-          <div className='h-screen min-w-full bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
-          <div className='h-screen min-w-full bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
         </Carousel>
       </div>
-      <div className="flex h-screen w-[48.75rem] flex-col items-center justify-between px-[6.5625rem] pb-[6.25rem] pt-[8.75rem]">
+      <div className="z-10 flex h-screen min-w-[48.75rem] flex-1 shrink-0 flex-col items-center justify-between bg-white px-[6.5625rem] pb-[6.25rem] pt-[8.75rem]">
         <div className="flex cursor-pointer" onClick={() => navigate(ROUTE.ROOT)}>
           <LogoSymbolFill className="mr-[2.3438rem] h-[3.125rem] w-[2.9688rem]" />
           <FullLogo className="h-[3.125rem] w-[11.3125rem]" />
@@ -55,7 +55,7 @@ const LoginPage = () => {
             href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao?nextPageUrl=${
               location.origin
             }/make`}
-            className="mt-[2.625rem] flex h-[7.625rem] w-[40rem] items-center justify-center rounded-[1.25rem] border bg-[#FEE500] shadow-banner"
+            className="mt-[2.625rem] flex h-[6.25rem] w-[35.625rem] items-center justify-center rounded-[1.25rem] border bg-[#FEE500] shadow-banner"
           >
             <KakaoIcon className="mr-[3.125rem] h-[2.125rem] w-[2.25rem]" />
             <div className="font-apple text-[2rem] text-sub-1">카카오 계정으로 시작하기</div>
@@ -64,7 +64,7 @@ const LoginPage = () => {
             href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/apple?nextPageUrl=${
               location.origin
             }/make`}
-            className="mt-[1.5rem] flex h-[7.625rem] w-[40rem] items-center justify-center rounded-[1.25rem] border bg-[#231F20] shadow-banner"
+            className="mt-[1.5rem] flex h-[6.25rem] w-[35.625rem] items-center justify-center rounded-[1.25rem] border bg-[#231F20] shadow-banner"
           >
             <AppleIcon className="mr-[3.125rem] h-[2.125rem] w-[2.25rem]" />
             <div className="font-apple text-[2rem] text-white">Apple 계정으로 시작하기</div>

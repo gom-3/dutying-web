@@ -214,7 +214,7 @@ function NurseEditModal() {
         />
         <Button
           id="nurse_edit_drawer"
-          className="mb-[1.625rem] ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] w-[4.375rem] items-center justify-center rounded-[3.125rem] bg-main-1 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
+          className="mb-[1.625rem] ml-auto mr-[2.5rem] mt-[1.5625rem] flex h-[2.25rem] items-center justify-center rounded-[3.125rem] bg-main-1 px-[1.25rem] py-[.5rem] font-apple text-base font-medium text-white"
           disabled={
             selectedNurse?.name === writeNurse?.name &&
             selectedNurse?.employmentDate === writeNurse?.employmentDate &&
