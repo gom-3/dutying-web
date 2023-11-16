@@ -18,11 +18,12 @@ const LoginPage = () => {
     <div className="flex w-screen">
       <div className="hidden h-screen w-[calc(100vh/1080*1140)] min-w-0 shrink xl:block">
         <Carousel
-          // autoPlay
+          autoPlay
           infiniteLoop
           dynamicHeight
           stopOnHover
           showArrows
+          interval={3000}
           showIndicators={false}
           showThumbs={false}
           statusFormatter={(current, total) => `${current} / ${total}`}
