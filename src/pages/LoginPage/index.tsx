@@ -16,9 +16,9 @@ const LoginPage = () => {
   const navigate = useNavigate();
   return (
     <div className="flex w-screen">
-      <div className="hidden h-screen w-[calc(100vh/1080*1140)] 2xl:block">
+      <div className="hidden h-screen w-[calc(100vh/1080*1140)] min-w-0 shrink xl:block">
         <Carousel
-          autoPlay
+          // autoPlay
           infiniteLoop
           dynamicHeight
           stopOnHover
@@ -39,9 +39,9 @@ const LoginPage = () => {
             />
           )}
         >
-          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
-          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
-          <div className='h-screen w-[calc(100vh/1080*1140)] min-w-[1px] bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
         </Carousel>
       </div>
       <div className="z-10 flex h-screen min-w-[48.75rem] flex-1 shrink-0 flex-col items-center justify-between bg-white px-[6.5625rem] pb-[6.25rem] pt-[8.75rem]">
