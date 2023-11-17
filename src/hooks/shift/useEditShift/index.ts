@@ -19,6 +19,7 @@ import {
 import { getShiftTeams } from '@libs/api/shiftTeam';
 import useAuth from '@hooks/auth/useAuth';
 import useLoading from '@hooks/ui/useLoading';
+import toast from 'react-hot-toast';
 
 const useEditShift = (activeEffect = false) => {
   const [
@@ -201,85 +202,6 @@ const useEditShift = (activeEffect = false) => {
           context.oldEditHistory === undefined
         )
           return;
-        queryClient.setQueryData(shiftQueryKey, context.oldShift);
-        setState('editHistory', context.oldEditHistory);
-      },
-    }
-  );
-
-  const { mutate: mutateShifts } = useMutation(
-    ({ wardId, wardShiftsDTO }: { wardId: number; wardShiftsDTO: WardShiftsDTO }) =>
-      updateShifts(wardId, wardShiftsDTO),
-    {
-      onMutate: async ({ wardShiftsDTO }) => {
-        await queryClient.cancelQueries(['shift']);
-        const oldShift = queryClient.getQueryData<Shift>(shiftQueryKey);
-        const oldEditHistory = editHistory;
-        const oldFocus = focus;
-
-        if (!oldShift || !wardShiftTypeMap) return;
-
-        const editList = wardShiftsDTO.map((eidtShift) => {
-          const nurse = findNurse(oldShift, eidtShift.shiftNurseId)!;
-          const focus = {
-            shiftNurseName: nurse.name,
-            shiftNurseId: nurse.shiftNurseId,
-            day: parseInt(eidtShift.date.split('-')[2]) - 1,
-          };
-          const oldShiftTypeId = oldShift.divisionShiftNurses
-            .flatMap((x) => x)
-            .find((x) => x.shiftNurse.shiftNurseId === eidtShift.shiftNurseId)!.wardShiftList[
-            focus.day
-          ];
-
-          return {
-            nurseName: nurse.name,
-            focus,
-            prevShiftType:
-              oldShiftTypeId !== null ? wardShiftTypeMap.get(oldShiftTypeId) || null : null,
-            nextShiftType:
-              eidtShift.wardShiftTypeId !== null
-                ? wardShiftTypeMap.get(eidtShift.wardShiftTypeId) || null
-                : null,
-            dateString: new Date().toLocaleString(),
-          };
-        });
-
-        setState(
-          'editHistory',
-          produce(oldEditHistory, (draft) => {
-            const histories = draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId);
-            if (histories) {
-              histories.history = histories.history
-                .slice(0, histories.current + 1)
-                .concat(editList);
-              histories.current = histories.history.length - 1;
-            } else {
-              draft.set(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId, {
-                current: editList.length - 1,
-                history: editList,
-              });
-            }
-          })
-        );
-
-        queryClient.setQueryData<Shift>(
-          shiftQueryKey,
-          produce(oldShift, (draft) => {
-            wardShiftsDTO.forEach((wardShift) => {
-              draft.divisionShiftNurses
-                .flatMap((x) => x)
-                .find((x) => x.shiftNurse.shiftNurseId === wardShift.shiftNurseId)!.wardShiftList[
-                parseInt(wardShift.date.split('-')[2]) - 1
-              ] = wardShift.wardShiftTypeId;
-            });
-          })
-        );
-
-        return { oldShift, oldEditHistory, oldFocus };
-      },
-      onError: (_, __, context) => {
-        if (context === undefined || context.oldShift === undefined) return;
         queryClient.setQueryData(shiftQueryKey, context.oldShift);
         setState('editHistory', context.oldEditHistory);
       },
@@ -505,36 +427,44 @@ const useEditShift = (activeEffect = false) => {
 
   const pasteShift = async () => {
     if (!wardId || !shift || !focus || !wardShiftTypeMap) return;
-    const shiftNameTable = (await navigator.clipboard.readText())
-      .replace(/\r/g, '')
-      .split('\n')
-      .map((x) => x.split('\t'));
-    const wardShiftsDTO = [];
-    const flatNurses = shift.divisionShiftNurses.flatMap((x) => x);
-    const startNurseIndex = flatNurses.findIndex(
-      (x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId
-    );
-    for (let i = 0; i < shiftNameTable.length; i++) {
-      for (let j = 0; j < shiftNameTable[i].length; j++) {
-        const row = flatNurses[startNurseIndex + i];
-        const wardShiftType = shift.wardShiftTypes.find((x) => {
-          return x.shortName === shiftNameTable[i][j];
-        });
-        if (!wardShiftType || !row || focus.day + j + 1 > shift.days.length) continue;
+    setLoading(true);
+    try {
+      const shiftNameTable = (await navigator.clipboard.readText())
+        .replace(/\r/g, '')
+        .split('\n')
+        .map((x) => x.split('\t'));
+      const updateShiftPromises: Promise<void>[] = [];
+      const flatNurses = shift.divisionShiftNurses.flatMap((x) => x);
+      const startNurseIndex = flatNurses.findIndex(
+        (x) => x.shiftNurse.shiftNurseId === focus.shiftNurseId
+      );
+      for (let i = 0; i < shiftNameTable.length; i++) {
+        const wardShiftsDTO = [];
+        for (let j = 0; j < shiftNameTable[i].length; j++) {
+          const row = flatNurses[startNurseIndex + i];
+          const wardShiftType = shift.wardShiftTypes.find((x) => {
+            return x.shortName === shiftNameTable[i][j];
+          });
+          if (!wardShiftType || !row || focus.day + j + 1 > shift.days.length) continue;
 
-        wardShiftsDTO.push({
-          shiftNurseId: row.shiftNurse.shiftNurseId,
-          date: `${year}-${month.toString().padStart(2, '0')}-${(focus.day + j + 1)
-            .toString()
-            .padStart(2, '0')}`,
-          wardShiftTypeId: wardShiftType.wardShiftTypeId,
-        });
+          wardShiftsDTO.push({
+            shiftNurseId: row.shiftNurse.shiftNurseId,
+            date: `${year}-${month.toString().padStart(2, '0')}-${(focus.day + j + 1)
+              .toString()
+              .padStart(2, '0')}`,
+            wardShiftTypeId: wardShiftType.wardShiftTypeId,
+          });
+        }
+        updateShiftPromises.push(updateShifts(wardId, wardShiftsDTO));
       }
+      await Promise.all(updateShiftPromises);
+      await queryClient.invalidateQueries(shiftQueryKey);
+    } catch (e) {
+      console.error(e);
+      toast.error('붙여넣기에 실패했습니다..');
+    } finally {
+      setLoading(false);
     }
-    mutateShifts({
-      wardId,
-      wardShiftsDTO,
-    });
   };
 
   const handleKeyDown = useCallback(
