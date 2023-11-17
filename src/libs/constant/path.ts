@@ -7,10 +7,10 @@ const ROUTE = {
   REFRESH: '/refresh',
   REDIRECT: '/oauth2/redirect',
   ONBOARDING: '/onboarding',
-  HOME: '/home',
   MAKE: '/make',
   REQUEST: '/request',
   MEMBER: '/member',
+  PROFILE: '/profile',
 };
 
 export default ROUTE;

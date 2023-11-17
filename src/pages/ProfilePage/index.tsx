@@ -2,65 +2,57 @@ import { CameraIcon, CheckedIcon, RandomIcon, UncheckedIcon } from '@assets/svg'
 import TextField from '@components/TextField';
 import Button from '@components/Button';
 import Select from '@components/Select';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { match } from 'ts-pattern';
-import { CreateNurseDTO } from '@libs/api/nurse';
-import useRegister from '@hooks/auth/useRegister';
 import { profileImages } from '@assets/profileImage';
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
 import useAuth from '@hooks/auth/useAuth';
+import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import useEditAccount from '@hooks/account/useEditAccount';
 
-const schema = yup
-  .object()
-  .shape({
-    name: yup
-      .string()
-      .required()
-      .matches(/^[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\s]{1,50}$/),
-    phoneNum: yup
-      .string()
-      .required()
-      .matches(/^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/),
-    gender: yup.string().required(),
-    isWorker: yup.boolean().required(),
-    profileImage: yup.string().required(),
-    employmentDate: yup
-      .string()
-      .required()
-      .matches(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/),
-  })
-  .required();
-
-function RegisterNurse() {
+function ProfilePage() {
   const {
-    formState: { errors, isValid },
-    watch,
-    setValue,
-    register,
-    handleSubmit,
-  } = useForm<CreateNurseDTO & { profileImage: string }>({
-    defaultValues: {
-      gender: '여',
-      isWorker: true,
-      profileImage: '',
-    },
-    mode: 'onTouched',
-    resolver: yupResolver(schema),
-  });
-  const {
-    actions: { registerAccountAndNurse },
-  } = useRegister();
+    state: { shiftTeams, selectedNurse },
+    actions: { selectNurse },
+  } = useEditShiftTeam();
   const {
     state: { accountMe },
+    actions: { handleLogout },
   } = useAuth();
-  const watchIsWorker = watch('isWorker');
-  const watchProfileImage = watch('profileImage');
+  const { handleEditProfile, deleteAccount, quitWard } = useEditAccount();
+
+  const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    profileImages[Math.floor(Math.random() * 30)]
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleChange = (key: keyof Nurse, value: any) => {
+    if (!writeNurse) return;
+    setWriteNurse({ ...writeNurse, [key]: value });
+  };
+
+  const save = () => {
+    writeNurse && profileImage && handleEditProfile(writeNurse, profileImage);
+  };
+
+  useEffect(() => {
+    if (shiftTeams && accountMe)
+      selectNurse(
+        shiftTeams.flatMap((x) => x.nurses).find((x) => x.accountId === accountMe.accountId)
+          ?.nurseId || null
+      );
+  }, [accountMe, shiftTeams]);
+
+  useEffect(() => {
+    console.log(selectedNurse, accountMe);
+    if (selectedNurse && accountMe && selectedNurse?.accountId === accountMe?.accountId) {
+      setWriteNurse(selectedNurse);
+      setProfileImage(accountMe.profileImgBase64);
+    }
+  }, [selectedNurse, accountMe]);
 
   const handleRandomProfileImage = () => {
-    setValue('profileImage', profileImages[Math.floor(Math.random() * 30)]);
+    setProfileImage(profileImages[Math.floor(Math.random() * 30)]);
   };
 
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -79,7 +71,7 @@ function RegisterNurse() {
     try {
       const compressedFile = await imageCompression(e.target.files[0], options);
       const base64Image = await convertBase64(compressedFile);
-      setValue('profileImage', base64Image.replace(/data.*;base64,/, ''));
+      setProfileImage(base64Image.replace(/data.*;base64,/, ''));
     } catch (error) {
       console.log(error);
     }
@@ -98,30 +90,23 @@ function RegisterNurse() {
     });
   };
 
-  useEffect(() => {
-    if (watchProfileImage == '') {
-      if (accountMe?.profileImgBase64) {
-        setValue('profileImage', accountMe.profileImgBase64);
-      } else {
-        handleRandomProfileImage();
-      }
-    }
-  }, [accountMe]);
-
   return (
-    <form
-      onSubmit={handleSubmit(registerAccountAndNurse)}
-      className="my-auto flex w-full flex-col items-center justify-center"
-    >
-      <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">
-        회원 정보
-      </h1>
-      <div className="mt-[3.75rem] flex w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
+    <div className="mx-auto flex h-full w-full max-w-[76.5rem] flex-col items-center justify-center px-8">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="font-apple text-[2rem] font-semibold text-text-1">프로필 설정</h1>
+        <button
+          className="flex h-[2.5rem] items-center justify-center rounded-[1.875rem] border-[.0625rem] border-sub-3 bg-white px-[1rem] font-apple text-[1.4375rem] font-medium text-sub-3"
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
+      </div>
+      <div className="mt-[2.625rem] flex w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
         <div className="flex flex-col items-center gap-[1.875rem]">
           <div className="self-start font-apple text-[1.25rem] text-sub-3">프로필 이미지</div>
           <div className="h-[8.75rem] w-[8.75rem] rounded-full border-[.625rem] border-sub-4">
             <img
-              src={'data:image/png;base64,' + watchProfileImage}
+              src={'data:image/png;base64,' + profileImage}
               className="h-full w-full rounded-full object-cover object-center"
             />
           </div>
@@ -160,13 +145,14 @@ function RegisterNurse() {
             <TextField
               id="name"
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
-              error={match(errors.name?.type)
-                .with(
-                  'matches',
-                  () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.'
-                )
-                .otherwise(() => undefined)}
-              {...register('name')}
+              value={writeNurse?.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+              // error={match(errors.name?.type)
+              //   .with(
+              //     'matches',
+              //     () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.'
+              //   )
+              //   .otherwise(() => undefined)}
             />
           </div>
           <div className="flex gap-[2.8125rem]">
@@ -181,7 +167,8 @@ function RegisterNurse() {
                 id="gender"
                 className="h-[3.75rem] w-full font-apple text-[1.5rem] font-medium text-sub-1"
                 selectClassName="outline-sub-4 focus:outline-main-1"
-                {...register('gender')}
+                value={writeNurse?.gender}
+                onChange={(e) => handleChange('gender', e.target.value)}
                 options={[
                   { label: '여', value: '여' },
                   { label: '남', value: '남' },
@@ -198,10 +185,11 @@ function RegisterNurse() {
               <TextField
                 id="phoneNum"
                 className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
-                error={match(errors.phoneNum?.type)
-                  .with('matches', () => '전화번호 형식을 지켜주세요.')
-                  .otherwise(() => undefined)}
-                {...register('phoneNum')}
+                value={writeNurse?.phoneNum}
+                onChange={(e) => handleChange('phoneNum', e.target.value)}
+                // error={match(errors.phoneNum?.type)
+                //   .with('matches', () => '전화번호 형식을 지켜주세요.')
+                //   .otherwise(() => undefined)}
                 placeholder="01012341234"
               />
             </div>
@@ -221,10 +209,11 @@ function RegisterNurse() {
             id="employmentDate"
             placeholder="YYYY-MM-DD"
             className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1 placeholder:text-center"
-            error={match(errors.employmentDate?.type)
-              .with('matches', () => 'YYYY-MM-DD 형식으로 입력해주세요.')
-              .otherwise(() => undefined)}
-            {...register('employmentDate')}
+            value={writeNurse?.employmentDate}
+            onChange={(e) => handleChange('employmentDate', e.target.value)}
+            // error={match(errors.employmentDate?.type)
+            //   .with('matches', () => 'YYYY.MM.DD 형식으로 입력해주세요.')
+            //   .otherwise(() => undefined)}
           />
         </div>
         <div className="mb-[1.25rem] mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
@@ -236,9 +225,9 @@ function RegisterNurse() {
           <div className="ml-[5.25rem] flex gap-[1.875rem]">
             <div
               className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', true)}
+              onClick={() => handleChange('isWorker', true)}
             >
-              {watchIsWorker ? (
+              {writeNurse?.isWorker ? (
                 <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
               ) : (
                 <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
@@ -249,9 +238,9 @@ function RegisterNurse() {
             </div>
             <div
               className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', false)}
+              onClick={() => handleChange('isWorker', false)}
             >
-              {!watchIsWorker ? (
+              {!writeNurse?.isWorker ? (
                 <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
               ) : (
                 <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
@@ -263,15 +252,39 @@ function RegisterNurse() {
           </div>
         </div>
       </div>
-
-      <Button
-        disabled={!isValid}
-        className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"
-      >
-        다음
-      </Button>
-    </form>
+      <div className="mt-[2.5rem] flex w-full items-start justify-between">
+        <div className="flex flex-col gap-[1rem]">
+          <div
+            className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2"
+            onClick={deleteAccount}
+          >
+            회원 탈퇴
+          </div>
+          <div
+            className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2"
+            onClick={quitWard}
+          >
+            병동 나가기
+          </div>
+        </div>
+        <Button
+          onClick={() => save()}
+          className="h-[3.75rem] w-[7.5rem] text-center text-[2rem] font-semibold"
+          disabled={
+            selectedNurse?.name === writeNurse?.name &&
+            selectedNurse?.employmentDate === writeNurse?.employmentDate &&
+            selectedNurse?.phoneNum === writeNurse?.phoneNum &&
+            selectedNurse?.isWorker === writeNurse?.isWorker &&
+            selectedNurse?.isDutyManager === writeNurse?.isDutyManager &&
+            selectedNurse?.memo === writeNurse?.memo &&
+            selectedNurse?.nurseShiftTypes.length === writeNurse?.nurseShiftTypes.length
+          }
+        >
+          저장
+        </Button>
+      </div>
+    </div>
   );
 }
 
-export default RegisterNurse;
+export default ProfilePage;

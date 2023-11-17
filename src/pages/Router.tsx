@@ -13,6 +13,7 @@ const RegisterWard = lazy(() => import('./RegisterPage/RegisterWard'));
 const MakeShiftPage = lazy(() => import('./MakeShiftPage'));
 const RequestShiftPage = lazy(() => import('./RequestShiftPage'));
 const MemberPage = lazy(() => import('./MemberPage'));
+const ProfilePage = lazy(() => import('./ProfilePage'));
 
 export const Router = () => {
   return (
@@ -34,6 +35,7 @@ export const Router = () => {
             <Route path={ROUTE.MAKE} element={<MakeShiftPage />} />
             <Route path={ROUTE.REQUEST} element={<RequestShiftPage />} />
             <Route path={ROUTE.MEMBER} element={<MemberPage />} />
+            <Route path={ROUTE.PROFILE} element={<ProfilePage />} />
           </Route>
         </Route>
       </Routes>

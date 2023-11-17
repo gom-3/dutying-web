@@ -164,6 +164,10 @@ const useEditWard = () => {
   };
 
   return {
+    queryKey: {
+      getWardQueryKey,
+      getWardWaitingNursesQueryKey,
+    },
     state: {
       ward,
       watingNurses,
