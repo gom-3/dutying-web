@@ -10,6 +10,7 @@ const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO
     await axiosInstance.post<Nurse>(`/nurses?accountId=${accountId}`, {
       ...createNurse,
       phoneNum: createNurse.phoneNum.replace(/-+/g, ''),
+      employmentDate: createNurse.employmentDate.replace(/-/g, ''),
     })
   ).data;
 

@@ -90,6 +90,7 @@ function NurseEditModal() {
           <TextField
             type="date"
             className="h-[2.5rem] font-poppins text-[1.25rem] text-sub-3"
+            placeholder="YYYY-MM-DD"
             onChange={(e) => {
               handleChange('employmentDate', e.target.value);
               sendEvent(events.makePage.editNurseModal.changeNurseEmploymentDate);

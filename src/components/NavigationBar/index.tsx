@@ -5,6 +5,7 @@ import { events, sendEvent } from 'analytics';
 import useAuth from '@hooks/auth/useAuth';
 import useTutorial from '@hooks/ui/useTutorial';
 import ROUTE from '@libs/constant/path';
+import { useNavigate } from 'react-router';
 
 interface Props {
   isFold: boolean;
@@ -19,6 +20,7 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
   const {
     actions: { setMakeTutorial, setMemberTutorial, setRequestTutorial },
   } = useTutorial();
+  const navigate = useNavigate();
 
   const handleResetTutorial = () => {
     console.log(window.location.pathname);
@@ -73,7 +75,10 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
             <HelpIcon className="h-[3.125rem] w-[3.125rem] rounded-full" />
             <div className="mt-2 text-[1rem] text-sub-3">가이드</div>
           </div>
-          <div className="flex cursor-pointer flex-col items-center">
+          <div
+            className="flex cursor-pointer flex-col items-center"
+            onClick={() => navigate(ROUTE.PROFILE)}
+          >
             <img
               src={
                 accountMe?.profileImgBase64

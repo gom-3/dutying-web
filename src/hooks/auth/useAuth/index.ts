@@ -2,7 +2,7 @@ import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
 import axiosInstance from '@libs/api/client';
 import { demoStart, getAccountMe } from '@libs/api/auth';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
 import useInitStore from '@hooks/useInitStore';
 import useEditShiftStore from '@hooks/shift/useEditShift/store';
@@ -36,6 +36,7 @@ const useAuth = (activeEffect = false) => {
     ],
     shallow
   );
+  const { pathname } = useLocation();
   const { setLoading } = useLoading();
   const initStore = useInitStore();
   const { initState: initEditShiftStore } = useEditShiftStore();
@@ -47,6 +48,7 @@ const useAuth = (activeEffect = false) => {
   const handleLogout = async () => {
     initStore();
     sendEvent(events.auth.logut);
+    if (pathname !== ROUTE.ROOT) navigate(ROUTE.ROOT);
   };
 
   const handleLogin = (accessToken: string, nextPageUrl?: string) => {
@@ -83,7 +85,9 @@ const useAuth = (activeEffect = false) => {
 
   useEffect(() => {
     if (_loaded && activeEffect) {
-      handleGetAccountMe();
+      if (demoStartDate && new Date(demoStartDate).getTime() + 3540000 - new Date().getTime() <= 0)
+        handleLogout();
+      else handleGetAccountMe();
     }
   }, [activeEffect, accessToken, _loaded]);
 

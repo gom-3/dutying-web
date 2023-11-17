@@ -19,4 +19,14 @@ const initAccount = async (accountId: number, name: string, profileImgBase64: st
   (await axiosInstance.patch<Account>(`/accounts/${accountId}/init`, { name, profileImgBase64 }))
     .data;
 
-export { getAccount, getAccountMeWaiting, editAccount, eidtAccountStatus, initAccount };
+const deleteAccount = async (accountId: number) =>
+  (await axiosInstance.delete<Account>(`/accounts/${accountId}`)).data;
+
+export {
+  getAccount,
+  getAccountMeWaiting,
+  editAccount,
+  eidtAccountStatus,
+  initAccount,
+  deleteAccount,
+};

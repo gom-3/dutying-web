@@ -63,6 +63,9 @@ const approveWatingNurses = async (wardId: number, waitingNurseId: number, shift
 const deleteWatingNurses = async (wardId: number, nurseId: number) =>
   (await axiosInstance.delete(`/wards/${wardId}/waiting-nurses?nurseId=${nurseId}`)).data;
 
+const quitWard = async (wardId: number) =>
+  (await axiosInstance.delete(`/wards/${wardId}/quit`)).data;
+
 export {
   getWardConstraint,
   updateWardConstraint,
@@ -75,4 +78,5 @@ export {
   connectWatingNurses,
   approveWatingNurses,
   deleteWatingNurses,
+  quitWard,
 };
