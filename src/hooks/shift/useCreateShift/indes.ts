@@ -21,6 +21,10 @@ function useCreateShift() {
 
   const autoCompleteShift = async () => {
     if (!shift || !wardShiftTypeMap || !wardId) return;
+    if (shift?.divisionShiftNurses.flatMap((x) => x).length < 12) {
+      toast.error('자동완성 기능을 사용하시려면 최소 12명의 간호사가 필요합니다');
+      return;
+    }
     if (
       !confirm(
         '근무표를 자동으로 채우시겠습니까?\n신청 근무를 최대한 반영한 채 채워집니다.\n총 2분~3분이 소요됩니다!'

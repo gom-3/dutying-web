@@ -438,6 +438,7 @@ export default function ShiftCalendar() {
                       dutyRequest.isAccepted === false && 'bg-sub-2 text-white'
                     )}
                     onClick={() => {
+                      changeRequestShift(focus, null);
                       acceptRequest(dutyRequest.wardReqShiftId, false);
                       sendEvent(events.requestPage.acceptRequest, 'false');
                     }}

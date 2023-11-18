@@ -13,7 +13,7 @@ function Button({ type = 'fill', children, className, ...props }: Props) {
     <button
       className={twMerge(
         `rounded-[50px] border-[.125rem] font-apple text-[2.25rem] font-semibold disabled:bg-main-3 ${
-          type === 'outline' ? 'border-main-1 text-main-1' : 'bg-main-1 text-white'
+          type === 'outline' ? 'border-main-1 text-main-1 transition-all' : 'bg-main-1 text-white'
         } ${className}`
       )}
       {...props}
