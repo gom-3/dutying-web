@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
         location.replace(ROUTE.REFRESH);
       })
       .with(400, 404, () => {
-        toast.error('에러가 발생했습니다. 다시 시도해주세요.');
+        toast.error(error.response.data.message || '에러가 발생했습니다. 다시 시도해주세요.');
       });
 
     return Promise.reject({ code: error.response.status, message: error.response.data.message });
