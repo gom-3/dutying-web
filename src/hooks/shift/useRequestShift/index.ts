@@ -17,7 +17,7 @@ const useRequestShift = (activeEffect = false) => {
     month,
     focus,
     foldedLevels,
-    currentShiftTeam,
+    currentShiftTeamId,
     oldCurrentShiftTeamId,
     wardShiftTypeMap,
     readonly,
@@ -28,7 +28,7 @@ const useRequestShift = (activeEffect = false) => {
       state.month,
       state.focus,
       state.foldedLevels,
-      state.currentShiftTeam,
+      state.currentShiftTeamId,
       state.oldCurrentShiftTeamId,
       state.wardShiftTypeMap,
       state.readonly,
@@ -42,47 +42,47 @@ const useRequestShift = (activeEffect = false) => {
 
   const queryClient = useQueryClient();
 
-  const requestShiftQueryKey = ['requestShift', wardId, year, month, currentShiftTeam];
+  const requestShiftQueryKey = ['requestShift', wardId, year, month, currentShiftTeamId];
   const shiftTeamQueryKey = ['shiftTeams', wardId];
-  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
-  const dutyRequestQueryKey = ['dutyRequest', wardId, year, month, currentShiftTeam];
+  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeamId, wardId];
+  const dutyRequestQueryKey = ['dutyRequest', wardId, year, month, currentShiftTeamId];
 
   const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: wardId != null,
     onSuccess: (data) => {
-      if (currentShiftTeam) {
-        data.every((x) => x.shiftTeamId !== currentShiftTeam.shiftTeamId) &&
-          setState('currentShiftTeam', data[0]);
-      } else setState('currentShiftTeam', data[0]);
+      if (currentShiftTeamId) {
+        data.every((x) => x.shiftTeamId !== currentShiftTeamId) &&
+          setState('currentShiftTeamId', data[0].shiftTeamId);
+      } else setState('currentShiftTeamId', data[0].shiftTeamId);
     },
   });
 
   const { data: dutyRequestList } = useQuery(
     dutyRequestQueryKey,
-    () => getRequestList(wardId!, currentShiftTeam!.shiftTeamId, year, month),
+    () => getRequestList(wardId!, currentShiftTeamId!, year, month),
     {
-      enabled: wardId !== null && currentShiftTeam !== null,
+      enabled: wardId !== null && currentShiftTeamId !== null,
     }
   );
 
   const { data: requestShift, status: shiftStatus } = useQuery(
     requestShiftQueryKey,
-    () => getReqShift(wardId!, currentShiftTeam!.shiftTeamId, year, month),
+    () => getReqShift(wardId!, currentShiftTeamId!, year, month),
     {
-      enabled: wardId !== null && currentShiftTeam !== null,
+      enabled: wardId !== null && currentShiftTeamId !== null,
       onSuccess: (data) => {
         if (data === null) return;
 
         if (
           !foldedLevels ||
           !oldCurrentShiftTeamId ||
-          (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeam?.shiftTeamId)
+          (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeamId)
         ) {
           setState(
             'foldedLevels',
             data.divisionShiftNurses.map(() => false)
           );
-          setState('oldCurrentShiftTeamId', currentShiftTeam?.shiftTeamId);
+          setState('oldCurrentShiftTeamId', currentShiftTeamId);
         }
       },
     }
@@ -356,7 +356,7 @@ const useRequestShift = (activeEffect = false) => {
       shiftStatus,
       wardShiftTypeMap,
       readonly,
-      currentShiftTeam,
+      currentShiftTeam: shiftTeams?.find((x) => x.shiftTeamId === currentShiftTeamId) || null,
       shiftTeams,
     },
     actions: {
@@ -369,7 +369,8 @@ const useRequestShift = (activeEffect = false) => {
       foldLevel,
       changeMonth,
       changeFocus: (focus: Focus | null) => setState('focus', focus),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
+      changeShiftTeam: (shiftTeam: ShiftTeam) =>
+        setState('currentShiftTeamId', shiftTeam.shiftTeamId),
     },
   };
 };

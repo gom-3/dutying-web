@@ -5,7 +5,7 @@ import { produce } from 'immer';
 interface State {
   year: number;
   month: number;
-  currentShiftTeam: ShiftTeam | null;
+  currentShiftTeamId: number | null;
   oldCurrentShiftTeamId: number | null;
   focus: Focus | null;
   focusedDayInfo: DayInfo | null;
@@ -32,7 +32,7 @@ const initialState: State = {
   year: new Date().getFullYear(),
   month: new Date().getMonth() + 1,
   focus: null,
-  currentShiftTeam: null,
+  currentShiftTeamId: null,
   oldCurrentShiftTeamId: null,
   focusedDayInfo: null,
   foldedLevels: null,
@@ -94,7 +94,7 @@ const useEditShiftStore = create<Store>()(
           editHistory,
           readonly,
           showLayer,
-          currentShiftTeam,
+          currentShiftTeamId,
           oldCurrentShiftTeamId,
         }: Store) => ({
           year,
@@ -102,7 +102,7 @@ const useEditShiftStore = create<Store>()(
           editHistory,
           readonly,
           showLayer,
-          currentShiftTeam,
+          currentShiftTeamId,
           oldCurrentShiftTeamId,
         }),
       }

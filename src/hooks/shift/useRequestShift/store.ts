@@ -7,7 +7,7 @@ interface State {
   month: number;
   focus: Focus | null;
   foldedLevels: boolean[] | null;
-  currentShiftTeam: ShiftTeam | null;
+  currentShiftTeamId: number | null;
   oldCurrentShiftTeamId: number | null;
   wardShiftTypeMap: Map<number, WardShiftType> | null;
   readonly: boolean;
@@ -23,7 +23,7 @@ const initialState: State = {
   year: new Date().getFullYear(),
   month: new Date().getMonth() + 2,
   focus: null,
-  currentShiftTeam: null,
+  currentShiftTeamId: null,
   oldCurrentShiftTeamId: null,
   foldedLevels: null,
   wardShiftTypeMap: null,
@@ -45,10 +45,10 @@ export const useRequestShiftStore = create<Store>()(
       }),
       {
         name: 'useRequestShiftStore',
-        partialize: ({ year, month, currentShiftTeam, oldCurrentShiftTeamId }: Store) => ({
+        partialize: ({ year, month, currentShiftTeamId, oldCurrentShiftTeamId }: Store) => ({
           year,
           month,
-          currentShiftTeam,
+          currentShiftTeamId,
           oldCurrentShiftTeamId,
         }),
       }
