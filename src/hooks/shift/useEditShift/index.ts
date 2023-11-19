@@ -25,7 +25,7 @@ const useEditShift = (activeEffect = false) => {
   const [
     year,
     month,
-    currentShiftTeam,
+    currentShiftTeamId,
     oldCurrentShiftTeamId,
     focus,
     focusedDayInfo,
@@ -41,7 +41,7 @@ const useEditShift = (activeEffect = false) => {
     (state) => [
       state.year,
       state.month,
-      state.currentShiftTeam,
+      state.currentShiftTeamId,
       state.oldCurrentShiftTeamId,
       state.focus,
       state.focusedDayInfo,
@@ -63,25 +63,25 @@ const useEditShift = (activeEffect = false) => {
 
   const queryClient = useQueryClient();
 
-  const shiftQueryKey = ['shift', wardId, year, month, currentShiftTeam];
+  const shiftQueryKey = ['shift', wardId, year, month, currentShiftTeamId];
   const shiftTeamQueryKey = ['shiftTeams', wardId];
-  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeam, wardId];
+  const wardConstraintQueryKey = ['wardConstraint', currentShiftTeamId, wardId];
 
   const { data: shiftTeams } = useQuery(shiftTeamQueryKey, () => getShiftTeams(wardId!), {
     enabled: wardId != null,
     onSuccess: (data) => {
-      if (currentShiftTeam) {
-        data.every((x) => x.shiftTeamId !== currentShiftTeam.shiftTeamId) &&
-          setState('currentShiftTeam', data[0]);
-      } else setState('currentShiftTeam', data[0]);
+      if (currentShiftTeamId) {
+        data.every((x) => x.shiftTeamId !== currentShiftTeamId) &&
+          setState('currentShiftTeamId', data[0].shiftTeamId);
+      } else setState('currentShiftTeamId', data[0].shiftTeamId);
     },
   });
 
   const { data: wardConstraint } = useQuery(
     wardConstraintQueryKey,
-    () => getWardConstraint(wardId!, currentShiftTeam!.shiftTeamId),
+    () => getWardConstraint(wardId!, currentShiftTeamId!),
     {
-      enabled: wardId !== null && currentShiftTeam !== null,
+      enabled: wardId !== null && currentShiftTeamId !== null,
     }
   );
   const { mutate: updateWardConstraintMutate } = useMutation(
@@ -103,22 +103,22 @@ const useEditShift = (activeEffect = false) => {
 
   const { data: shift, status: shiftStatus } = useQuery(
     shiftQueryKey,
-    () => getShift(wardId!, currentShiftTeam!.shiftTeamId, year, month),
+    () => getShift(wardId!, currentShiftTeamId!, year, month),
     {
-      enabled: wardId !== null && currentShiftTeam !== null,
+      enabled: wardId !== null && currentShiftTeamId !== null,
       onSuccess: (data) => {
         if (data === null) return;
 
         if (
           !foldedLevels ||
           !oldCurrentShiftTeamId ||
-          (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeam?.shiftTeamId)
+          (oldCurrentShiftTeamId && oldCurrentShiftTeamId !== currentShiftTeamId)
         ) {
           setState(
             'foldedLevels',
             data.divisionShiftNurses.map(() => false)
           );
-          setState('oldCurrentShiftTeamId', currentShiftTeam?.shiftTeamId);
+          setState('oldCurrentShiftTeamId', currentShiftTeamId);
         }
       },
     }
@@ -157,13 +157,13 @@ const useEditShift = (activeEffect = false) => {
         setState(
           'editHistory',
           produce(oldEditHistory, (draft) => {
-            const histories = draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId);
+            const histories = draft.get(year + ',' + month + ',' + currentShiftTeamId);
             if (histories) {
               histories.history = histories.history.slice(0, histories.current + 1);
               histories.history.push(edit);
               histories.current = histories.history.length - 1;
             } else {
-              draft.set(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId, {
+              draft.set(year + ',' + month + ',' + currentShiftTeamId, {
                 current: 0,
                 history: [edit],
               });
@@ -245,7 +245,7 @@ const useEditShift = (activeEffect = false) => {
         setState(
           'editHistory',
           produce(editHistory, (draft) => {
-            draft.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)!.current += diff;
+            draft.get(year + ',' + month + ',' + currentShiftTeamId)!.current += diff;
           })
         );
 
@@ -378,10 +378,8 @@ const useEditShift = (activeEffect = false) => {
 
   const moveHistory = (diff: number) => {
     if (diff === 0 || !wardId) return;
-    if (!editHistory.get(year + ',' + month + ',' + currentShiftTeam!.shiftTeamId)) return;
-    const { current, history } = editHistory.get(
-      year + ',' + month + ',' + currentShiftTeam!.shiftTeamId
-    )!;
+    if (!editHistory.get(year + ',' + month + ',' + currentShiftTeamId)) return;
+    const { current, history } = editHistory.get(year + ',' + month + ',' + currentShiftTeamId)!;
     const changesMap = new Map<string, number | null>();
 
     let lastFocus = focus!;
@@ -612,7 +610,7 @@ const useEditShift = (activeEffect = false) => {
       shift,
       focus,
       faults,
-      histories: editHistory.get(year + ',' + month + ',' + currentShiftTeam?.shiftTeamId),
+      histories: editHistory.get(year + ',' + month + ',' + currentShiftTeamId),
       focusedDayInfo,
       foldedLevels,
       changeStatus,
@@ -622,7 +620,7 @@ const useEditShift = (activeEffect = false) => {
       wardConstraint,
       readonly,
       showLayer,
-      currentShiftTeam,
+      currentShiftTeam: shiftTeams?.find((x) => x.shiftTeamId === currentShiftTeamId) || null,
       shiftTeams,
       postShiftLoading,
     },
@@ -636,10 +634,10 @@ const useEditShift = (activeEffect = false) => {
       moveHistory,
       updateConstraint: (constraint: WardConstraint) =>
         wardId &&
-        currentShiftTeam &&
+        currentShiftTeamId &&
         updateWardConstraintMutate({
           wardId,
-          shiftTeamId: currentShiftTeam.shiftTeamId,
+          shiftTeamId: currentShiftTeamId,
           constraint,
         }),
       toggleLayer: (key: 'fault' | 'check' | 'slash') =>
@@ -647,12 +645,12 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeam', shiftTeam),
+      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeamId', shiftTeam),
       postShift: () => {
-        if (!wardId || !currentShiftTeam) return;
+        if (!wardId || !currentShiftTeamId) return;
         postShiftMutate({
           wardId,
-          shiftTeamId: currentShiftTeam.shiftTeamId,
+          shiftTeamId: currentShiftTeamId,
           year,
           month,
         });
