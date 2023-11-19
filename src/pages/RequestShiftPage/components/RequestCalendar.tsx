@@ -23,7 +23,7 @@ export default function ShiftCalendar() {
       wardShiftTypeMap,
       currentShiftTeam,
     },
-    actions: { changeFocus, foldLevel, changeRequestShift, acceptRequest },
+    actions: { changeFocus, foldLevel, acceptRequest },
   } = useRequestShift();
   const {
     state: { shiftTeams },
@@ -235,12 +235,7 @@ export default function ShiftCalendar() {
                                         <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
                                       )}
                                     </div>
-                                    <div
-                                      className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
-                                      onClick={() => {
-                                        selectNurse(row.shiftNurse.nurseId);
-                                      }}
-                                    >
+                                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline">
                                       {row.shiftNurse.name}
                                     </div>
                                     <div className="flex w-[1.875rem] shrink-0 items-center justify-center text-center font-apple text-[1.25rem] text-sub-1">
@@ -258,7 +253,7 @@ export default function ShiftCalendar() {
                                           dutyRequestList?.find(
                                             (x) =>
                                               x.nurseId === row.shiftNurse.nurseId &&
-                                              x.date === date
+                                              x.date - 1 === date
                                           ) || null;
                                         const isSaturday =
                                           requestShift.days[date].dayType === 'saturday';
@@ -400,7 +395,7 @@ export default function ShiftCalendar() {
                 .flatMap((x) => x)
                 .find((x) => x.shiftNurse.nurseId === dutyRequest.nurseId)?.shiftNurse
                 .shiftNurseId!,
-              day: dutyRequest.date,
+              day: dutyRequest.date - 1,
             };
 
             return (
@@ -415,7 +410,7 @@ export default function ShiftCalendar() {
                     changeFocus(focus);
                   }}
                 >
-                  {dutyRequest.nurseName} / {dutyRequest.date + 1}일
+                  {dutyRequest.nurseName} / {dutyRequest.date}일
                 </p>
                 <ShiftBadge shiftType={wardShiftTypeMap.get(dutyRequest.wardShiftTypeId)} />
                 <div className="ml-auto flex h-[1.75rem] w-[5.625rem] items-center justify-center gap-[.125rem] rounded-[.3125rem] border-[.0313rem] border-sub-4 bg-sub-5 p-[.125rem]">
@@ -425,7 +420,6 @@ export default function ShiftCalendar() {
                       dutyRequest.isAccepted === true && 'bg-main-1 text-white'
                     )}
                     onClick={() => {
-                      changeRequestShift(focus, dutyRequest.wardShiftTypeId);
                       acceptRequest(dutyRequest.wardReqShiftId, true);
                       sendEvent(events.requestPage.acceptRequest, 'true');
                     }}
