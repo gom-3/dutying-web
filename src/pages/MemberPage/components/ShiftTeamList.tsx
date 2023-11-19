@@ -269,7 +269,7 @@ function ShiftTeamList() {
                     <div
                       className="flex flex-1 cursor-pointer items-center border-b-[.0625rem] border-main-3 px-[1.5625rem] font-apple text-[1.25rem] font-medium text-sub-2 last:border-none"
                       onClick={() => {
-                        setEditShiftStore('currentShiftTeam', shiftTeam);
+                        setEditShiftStore('currentShiftTeamId', shiftTeam);
                         navigate(ROUTE.MAKE);
                       }}
                     >
