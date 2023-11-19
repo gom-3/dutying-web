@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { DragIcon, FoldDutyIcon, LinkedIcon, PlusIcon2, UnlinkedIcon } from '@assets/svg';
+import {
+  DragIcon,
+  FoldDutyIcon,
+  LinkedIcon,
+  MinusIcon,
+  PlusIcon2,
+  UnlinkedIcon,
+} from '@assets/svg';
 import ShiftBadge from '@components/ShiftBadge';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { events, sendEvent } from 'analytics';
@@ -235,7 +242,7 @@ export default function ShiftCalendar() {
                                         <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
                                       )}
                                     </div>
-                                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline">
+                                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">
                                       {row.shiftNurse.name}
                                     </div>
                                     <div className="flex w-[1.875rem] shrink-0 items-center justify-center text-center font-apple text-[1.25rem] text-sub-1">
@@ -323,30 +330,31 @@ export default function ShiftCalendar() {
                                     </div>
                                     {rowIndex !== rows.length - 1
                                       ? !readonly && (
-                                          <div
-                                            className="absolute bottom-0 w-full"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              editDivision(
-                                                currentShiftTeam.shiftTeamId,
-                                                row.shiftNurse.priority,
-                                                1,
-                                                year.toString() +
-                                                  '-' +
-                                                  month.toString().padStart(2, '0')
-                                              );
-                                              sendEvent(events.requestPage.calendar.createDivision);
-                                            }}
-                                          >
-                                            <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
+                                          <>
+                                            <div
+                                              className="justify-cente group peer absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-65%] translate-y-[50%] items-center"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                editDivision(
+                                                  currentShiftTeam.shiftTeamId,
+                                                  row.shiftNurse.priority,
+                                                  1,
+                                                  year.toString() +
+                                                    '-' +
+                                                    month.toString().padStart(2, '0')
+                                                );
+                                                sendEvent(events.makePage.calendar.createDivision);
+                                              }}
+                                            >
+                                              <PlusIcon2 className="invisible h-[1.25rem] w-[1.25rem] group-hover:visible" />
+                                            </div>
                                             <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
-                                            <PlusIcon2 className="invisible absolute bottom-0 left-0  h-[1.25rem] w-[1.25rem] translate-x-[-100%] translate-y-[50%] peer-hover:visible" />
-                                          </div>
+                                          </>
                                         )
                                       : level !== requestShift.divisionShiftNurses.length - 1 &&
                                         !readonly && (
                                           <div
-                                            className="absolute bottom-0 h-[.0625rem] w-full bg-red opacity-0 hover:opacity-100"
+                                            className="absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-65%] translate-y-[calc(50%+.1563rem)] items-center"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               editDivision(
@@ -357,11 +365,10 @@ export default function ShiftCalendar() {
                                                   '-' +
                                                   month.toString().padStart(2, '0')
                                               );
-                                              sendEvent(events.requestPage.calendar.deleteDivision);
+                                              sendEvent(events.makePage.calendar.deleteDivision);
                                             }}
                                           >
-                                            <div className="peer absolute bottom-0 h-[.8rem] w-full translate-y-[50%]" />
-                                            <div className="peer-hover:bg-red-600 absolute bottom-0 h-[.0938rem] w-full translate-y-[100%] bg-transparent peer-hover:visible" />
+                                            <MinusIcon className="h-[1.25rem] w-[1.25rem] opacity-0 hover:opacity-100" />
                                           </div>
                                         )}
                                   </div>
