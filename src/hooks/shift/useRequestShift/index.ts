@@ -169,6 +169,10 @@ const useRequestShift = (activeEffect = false) => {
   const changeMonth = useCallback(
     (type: 'prev' | 'next') => {
       if (type === 'prev') {
+        if (new Date(year, month, 1) <= new Date() && !readonly) {
+          alert('두달 전 신청 근무는 수정하실 수 없습니다');
+          setState('readonly', true);
+        }
         if (month === 1) {
           setState('month', 12);
           setState('year', year - 1);
@@ -176,6 +180,10 @@ const useRequestShift = (activeEffect = false) => {
           setState('month', month - 1);
         }
       } else if (type === 'next') {
+        if (new Date(year, month - 1, 1) > new Date()) {
+          alert('두달 뒤 신청 근무는 아직 수정하실  수 없습니다.');
+          return;
+        }
         if (month === 12) {
           setState('month', 1);
           setState('year', year + 1);
@@ -183,9 +191,8 @@ const useRequestShift = (activeEffect = false) => {
           setState('month', month + 1);
         }
       }
-      sendEvent(events.requestPage.toolbar.changeMonth);
     },
-    [month, year]
+    [month, year, readonly]
   );
 
   const changeFocusedShift = useCallback(
