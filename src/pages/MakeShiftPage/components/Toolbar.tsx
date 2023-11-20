@@ -360,6 +360,7 @@ function Toolbar() {
           <Button
             type="fill"
             className="h-[2.5rem] w-[8.25rem] rounded-[3.125rem] border-none bg-[rgba(171,171,180,0.80)] text-[1.25rem] font-semibold text-white"
+            onClick={() => alert('아직 준비중인 기능입니다!')}
           >
             자동 채우기
           </Button>
