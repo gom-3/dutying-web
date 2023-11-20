@@ -6,6 +6,7 @@ import {
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
+import Event from '@components/Event';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
 import { events, sendEvent } from 'analytics';
@@ -18,6 +19,7 @@ function LandingPage() {
     actions: { handleLogout, demoTry },
   } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [focus, setFocus] = useState('top');
 
   const webSection = useRef<HTMLDivElement>(null);
@@ -43,8 +45,15 @@ function LandingPage() {
     return () => document.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  useEffect(() => {
+    if (new Date() < new Date('2023-11-22')) {
+      setOpen(true);
+    }
+  }, []);
+
   return (
     <div className="flex w-screen flex-col">
+      <Event open={open} onClose={() => setOpen(false)} />
       {/* 헤더 */}
       <div className="fixed top-0 z-10 h-[60px] w-full bg-white xl:h-[4.5rem]">
         <div className="mx-auto flex h-full w-[85%] items-center xl:container">
