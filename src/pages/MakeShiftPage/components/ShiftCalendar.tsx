@@ -432,7 +432,7 @@ export default function ShiftCalendar() {
                                     ? !readonly && (
                                         <>
                                           <div
-                                            className="justify-cente group peer absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-65%] translate-y-[50%] items-center"
+                                            className="justify-cente group peer absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-80%] translate-y-[50%] items-center"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               editDivision(
