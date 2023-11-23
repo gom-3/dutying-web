@@ -365,16 +365,13 @@ const useEditShift = (activeEffect = false) => {
     [focus, shift]
   );
 
-  const foldLevel = useCallback(
-    (level: number) => {
-      if (!shift || !foldedLevels) return;
-      setState(
-        'foldedLevels',
-        foldedLevels.map((x, index) => (index === level ? !x : x))
-      );
-    },
-    [shift, foldedLevels]
-  );
+  const foldLevel = (level: number) => {
+    if (!shift || !foldedLevels) return;
+    setState(
+      'foldedLevels',
+      foldedLevels.map((x, index) => (index === level ? !x : x))
+    );
+  };
 
   const moveHistory = (diff: number) => {
     if (diff === 0 || !wardId) return;
