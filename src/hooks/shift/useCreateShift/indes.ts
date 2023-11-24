@@ -12,6 +12,7 @@ function useCreateShift() {
   const {
     queryKey: { shiftQueryKey },
     state: { year, month, shift, wardShiftTypeMap },
+    actions: { postShift },
   } = useEditShift();
   const {
     state: { wardId },
@@ -105,6 +106,7 @@ function useCreateShift() {
       }
       await Promise.all(updateShiftPromises);
       await queryClient.invalidateQueries(shiftQueryKey);
+      postShift();
     } catch (e) {
       console.error(e);
       toast.error('근무표 생성에 실패했습니다..');
