@@ -564,10 +564,12 @@ const useEditShift = (activeEffect = false) => {
       shift.wardShiftTypes.forEach((wardShiftType) => {
         wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
       });
-      setState(
-        'foldedLevels',
-        shift.divisionShiftNurses.map(() => false)
-      );
+      if (foldedLevels && foldedLevels?.length !== shift.divisionShiftNurses.length) {
+        setState(
+          'foldedLevels',
+          shift.divisionShiftNurses.map(() => false)
+        );
+      }
       setState('wardShiftTypeMap', wardShiftTypeMap);
     }
   }, [activeEffect, shift]);

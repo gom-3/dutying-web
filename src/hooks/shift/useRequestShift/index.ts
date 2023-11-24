@@ -328,10 +328,12 @@ const useRequestShift = (activeEffect = false) => {
       requestShift.wardShiftTypes.forEach((wardShiftType) => {
         wardShiftTypeMap.set(wardShiftType.wardShiftTypeId, wardShiftType);
       });
-      setState(
-        'foldedLevels',
-        requestShift.divisionShiftNurses.map(() => false)
-      );
+      if (foldedLevels && foldedLevels?.length !== requestShift.divisionShiftNurses.length) {
+        setState(
+          'foldedLevels',
+          requestShift.divisionShiftNurses.map(() => false)
+        );
+      }
       setState('wardShiftTypeMap', wardShiftTypeMap);
     }
   }, [activeEffect, requestShift]);
