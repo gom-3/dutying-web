@@ -22,8 +22,8 @@ function useCreateShift() {
 
   const autoCompleteShift = async () => {
     if (!shift || !wardShiftTypeMap || !wardId) return;
-    if (shift?.divisionShiftNurses.flatMap((x) => x).length < 12) {
-      toast.error('자동완성 기능을 사용하시려면 최소 12명의 간호사가 필요합니다');
+    if (shift?.divisionShiftNurses.flatMap((x) => x).length < 10) {
+      toast.error('자동완성 기능을 사용하시려면 최소 10명의 간호사가 필요합니다');
       return;
     }
     if (
@@ -37,7 +37,7 @@ function useCreateShift() {
     try {
       const duty = (
         await axiosInstance.post<string[][]>(
-          'https://ml.dutying.net/duty/make',
+          'https://ml.dutying.net/make',
           {
             names: shift.divisionShiftNurses
               .flatMap((x) => x)
