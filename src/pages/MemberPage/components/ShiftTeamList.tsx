@@ -106,7 +106,6 @@ function ShiftTeamList() {
     if (!destination || !shiftTeams) return null;
     if (source.droppableId === destination.droppableId && destination.index === source.index)
       return;
-
     const [sourceShiftTeamId] = source.droppableId.split(',');
     const [destinationShiftTeamId, destinationDivision] = destination.droppableId.split(',');
 
