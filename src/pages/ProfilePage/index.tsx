@@ -44,7 +44,6 @@ function ProfilePage() {
   }, [accountMe, shiftTeams]);
 
   useEffect(() => {
-    console.log(selectedNurse, accountMe);
     if (selectedNurse && accountMe && selectedNurse?.accountId === accountMe?.accountId) {
       setWriteNurse(selectedNurse);
       setProfileImage(accountMe.profileImgBase64);

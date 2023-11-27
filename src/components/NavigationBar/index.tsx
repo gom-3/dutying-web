@@ -23,7 +23,6 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
   const navigate = useNavigate();
 
   const handleResetTutorial = () => {
-    console.log(window.location.pathname);
     switch (window.location.pathname) {
       case ROUTE.MAKE:
         setMakeTutorial(true);
