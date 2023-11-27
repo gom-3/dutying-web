@@ -651,7 +651,7 @@ const useEditShift = (activeEffect = false) => {
           ...showLayer,
           [key]: !showLayer[key],
         }),
-      changeShiftTeam: (shiftTeam: ShiftTeam) => setState('currentShiftTeamId', shiftTeam),
+      changeShiftTeam: (shiftTeamId: number) => setState('currentShiftTeamId', shiftTeamId),
       postShift: () => {
         if (!wardId || !currentShiftTeamId) return;
         postShiftMutate({
