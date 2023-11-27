@@ -221,11 +221,13 @@ const useEditShiftTeam = () => {
               } else {
                 desticationRow = draft.divisionShiftNurses.find((x) =>
                   x.some((y) => y.shiftNurse.priority === nextPriority)
-                )!;
-                const index = desticationRow.findIndex(
-                  (x) => x.shiftNurse.priority === nextPriority
                 );
-                desticationRow.splice(index === -1 ? 0 : index, 0, row);
+                if (desticationRow) {
+                  const index = desticationRow.findIndex(
+                    (x) => x.shiftNurse.priority === nextPriority
+                  );
+                  desticationRow.splice(index === -1 ? 0 : index, 0, row);
+                }
               }
             })
           );
@@ -257,11 +259,13 @@ const useEditShiftTeam = () => {
               } else {
                 desticationRow = draft.divisionShiftNurses.find((x) =>
                   x.some((y) => y.shiftNurse.priority === nextPriority)
-                )!;
-                const index = desticationRow.findIndex(
-                  (x) => x.shiftNurse.priority === nextPriority
                 );
-                desticationRow.splice(index === -1 ? 0 : index, 0, row);
+                if (desticationRow) {
+                  const index = desticationRow.findIndex(
+                    (x) => x.shiftNurse.priority === nextPriority
+                  );
+                  desticationRow.splice(index === -1 ? 0 : index, 0, row);
+                }
               }
             })
           );

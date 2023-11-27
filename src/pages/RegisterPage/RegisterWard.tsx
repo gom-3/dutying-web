@@ -273,7 +273,6 @@ function RegisterWard() {
               }}
               shiftType={tempShiftType}
               onSubmit={(shiftType: CreateShiftTypeDTO) => {
-                console.log(tempShiftType);
                 if (tempShiftType && tempShiftType.wardShiftTypeId !== null) {
                   setWardShiftTypes(
                     produce(wardShiftTypes, (draft) => {
