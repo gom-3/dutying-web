@@ -296,12 +296,7 @@ function Toolbar() {
             }))}
             className="ml-[1.875rem] h-[2.875rem] w-[10.5rem] font-apple text-[1.25rem] font-semibold text-main-1"
             selectClassName="outline-[.0938rem] outline-main-1"
-            onChange={(e) =>
-              changeShiftTeam(
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                shiftTeams!.find((shiftTeam) => shiftTeam.shiftTeamId === parseInt(e.target.value))!
-              )
-            }
+            onChange={(e) => changeShiftTeam(parseInt(e.target.value))}
           />
         )}
       </div>
