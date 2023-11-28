@@ -5,6 +5,7 @@ import { produce } from 'immer';
 interface State {
   separateWeekendColor: boolean;
   shiftTypeColorStyle: 'background' | 'text';
+  shiftTypeRadiusStyle: number;
 }
 
 interface Store extends State {
@@ -16,6 +17,7 @@ interface Store extends State {
 const initialState: State = {
   separateWeekendColor: false,
   shiftTypeColorStyle: 'background',
+  shiftTypeRadiusStyle: 0,
 };
 
 export const useUIConfigStore = create<Store>()(
@@ -33,9 +35,14 @@ export const useUIConfigStore = create<Store>()(
       }),
       {
         name: 'useUIConfigStore',
-        partialize: ({ separateWeekendColor, shiftTypeColorStyle }: Store) => ({
+        partialize: ({
           separateWeekendColor,
           shiftTypeColorStyle,
+          shiftTypeRadiusStyle,
+        }: Store) => ({
+          separateWeekendColor,
+          shiftTypeColorStyle,
+          shiftTypeRadiusStyle,
         }),
       }
     )

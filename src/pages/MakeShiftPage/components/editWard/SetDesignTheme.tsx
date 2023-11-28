@@ -3,8 +3,12 @@ import useUIConfig from '@hooks/ui/useUIConfig';
 
 const SetDesignTheme = () => {
   const {
-    state: { separateWeekendColor, shiftTypeColorStyle },
-    actions: { handleChangeSeparateWeekendColor, handleShiftTypeColorStyle },
+    state: { separateWeekendColor, shiftTypeColorStyle, shiftTypeRadiusStyle },
+    actions: {
+      handleChangeSeparateWeekendColor,
+      handleShiftTypeColorStyle,
+      handleShiftTypeRadiusStyle,
+    },
   } = useUIConfig();
 
   return (
@@ -26,7 +30,7 @@ const SetDesignTheme = () => {
         </div>
       </div>
       <div className="border-bg flex h-[4.625rem] items-center border-b-[.0313rem] px-[2.5rem] last:border-none">
-        <p className="font-apple text-[1.25rem] text-sub-1">근무 유형 표시 스타일</p>
+        <p className="font-apple text-[1.25rem] text-sub-1">근무 유형 배경 스타일</p>
         <div className="bg-bg ml-auto flex h-[2.75rem] w-[8rem] cursor-pointer justify-between gap-[.25rem] rounded-[.3125rem] border-[.0625rem] border-main-4 p-[.25rem]">
           <div
             className={`flex flex-1 items-center justify-center rounded-[.3125rem] font-apple text-[1.25rem] font-medium ${
@@ -47,6 +51,31 @@ const SetDesignTheme = () => {
             onClick={() => handleShiftTypeColorStyle('text')}
           >
             글자
+          </div>
+        </div>
+      </div>
+      <div className="border-bg flex h-[4.625rem] items-center border-b-[.0313rem] px-[2.5rem] last:border-none">
+        <p className="font-apple text-[1.25rem] text-sub-1">근무 유형 테두리 스타일</p>
+        <div className="bg-bg ml-auto flex h-[2.75rem] w-[8rem] cursor-pointer justify-between gap-[.25rem] rounded-[.3125rem] border-[.0625rem] border-main-4 p-[.25rem]">
+          <div
+            className={`flex flex-1 items-center justify-center rounded-[.3125rem] font-apple text-[1.25rem] font-medium ${
+              shiftTypeRadiusStyle === 0
+                ? 'bg-sub-3 text-white'
+                : 'border-[.0625rem] border-sub-4.5 bg-white text-sub-3'
+            }`}
+            onClick={() => handleShiftTypeRadiusStyle(0)}
+          >
+            네모
+          </div>
+          <div
+            className={`flex flex-1 items-center justify-center rounded-[.3125rem] font-apple text-[1.25rem] font-medium ${
+              shiftTypeRadiusStyle !== 0
+                ? 'bg-sub-3 text-white'
+                : 'border-[.0625rem] border-sub-4.5 bg-white text-sub-3'
+            }`}
+            onClick={() => handleShiftTypeRadiusStyle(0.4063)}
+          >
+            둥글게
           </div>
         </div>
       </div>

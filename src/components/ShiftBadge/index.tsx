@@ -11,7 +11,7 @@ interface Props
 
 function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props }: Props) {
   const {
-    state: { shiftTypeColorStyle },
+    state: { shiftTypeColorStyle, shiftTypeRadiusStyle },
   } = useUIConfig();
 
   return (
@@ -26,11 +26,13 @@ function ShiftBadge({ shiftType, className, forwardRef, isOnlyRequest, ...props 
         shiftTypeColorStyle === 'background'
           ? {
               backgroundColor: shiftType ? shiftType.color : '#D6D6DE',
+              borderRadius: `${shiftTypeRadiusStyle}rem`,
             }
           : {
               border: '.0625rem solid #E7E7EF',
               backgroundColor: 'white',
               color: shiftType ? shiftType.color : 'black',
+              borderRadius: `${shiftTypeRadiusStyle}rem`,
             }
       }
       {...props}
