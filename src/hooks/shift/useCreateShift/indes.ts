@@ -37,7 +37,7 @@ function useCreateShift() {
     try {
       const duty = (
         await axiosInstance.post<string[][]>(
-          'http://13.125.224.136/make',
+          'https://ml-alpha.dutying.net/make',
           {
             names: shift.divisionShiftNurses
               .flatMap((x) => x)
