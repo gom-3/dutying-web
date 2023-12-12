@@ -317,7 +317,13 @@ const useRequestShift = (activeEffect = false) => {
   }, [readonly, requestShift]);
 
   const handleCreateNextMonthShift = useCallback(() => {
-    setState('month', new Date().getMonth() + 2);
+    const nextMonth = new Date().getMonth() + 2;
+    if (nextMonth > 12) {
+      setState('year', year + 1);
+      setState('month', 1);
+    } else {
+      setState('month', nextMonth);
+    }
     handleToggleEditMode();
   }, []);
 

@@ -312,6 +312,7 @@ const useEditShift = (activeEffect = false) => {
         if (new Date(year, month, 1) <= new Date() && !readonly) {
           alert('두달 전 근무는 수정하실 수 없습니다');
           setState('readonly', true);
+          return false;
         }
         if (month === 1) {
           setState('month', 12);
@@ -322,7 +323,7 @@ const useEditShift = (activeEffect = false) => {
       } else if (type === 'next') {
         if (new Date(year, month - 1, 1) > new Date()) {
           alert('두달 뒤 근무는 만드실 수 없습니다.');
-          return;
+          return false;
         }
         if (month === 12) {
           setState('month', 1);
@@ -331,6 +332,7 @@ const useEditShift = (activeEffect = false) => {
           setState('month', month + 1);
         }
       }
+      return true;
     },
     [month, year, readonly]
   );
@@ -550,7 +552,13 @@ const useEditShift = (activeEffect = false) => {
   }, [readonly, shift]);
 
   const handleCreateNextMonthShift = useCallback(() => {
-    setState('month', new Date().getMonth() + 2);
+    const nextMonth = new Date().getMonth() + 2;
+    if (nextMonth > 12) {
+      setState('year', year + 1);
+      setState('month', 1);
+    } else {
+      setState('month', nextMonth);
+    }
     handleToggleEditMode();
   }, []);
 
