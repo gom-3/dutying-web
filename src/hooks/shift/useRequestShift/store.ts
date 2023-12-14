@@ -21,7 +21,7 @@ interface Store extends State {
 
 const initialState: State = {
   year: new Date().getFullYear(),
-  month: new Date().getMonth() + 2,
+  month: new Date().getMonth() + 2 > 12 ? 1 : new Date().getMonth() + 2,
   focus: null,
   currentShiftTeamId: null,
   oldCurrentShiftTeamId: null,
