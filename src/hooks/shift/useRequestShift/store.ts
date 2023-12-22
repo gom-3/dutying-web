@@ -20,8 +20,8 @@ interface Store extends State {
 }
 
 const initialState: State = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth() + 2 > 12 ? 1 : new Date().getMonth() + 2,
+  year: new Date().getMonth() + 1 === 12 ? new Date().getFullYear() + 1 : new Date().getFullYear(),
+  month: new Date().getMonth() + 1 === 12 ? 1 : new Date().getMonth() + 2,
   focus: null,
   currentShiftTeamId: null,
   oldCurrentShiftTeamId: null,
