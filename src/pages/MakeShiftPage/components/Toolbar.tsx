@@ -26,7 +26,7 @@ import SetShiftType from './editWard/SetShiftType';
 import Select from '@components/Select';
 import { createPortal } from 'react-dom';
 import SetDesignTheme from './editWard/SetDesignTheme';
-import useCreateShift from '@hooks/shift/useCreateShift/indes';
+// import useCreateShift from '@hooks/shift/useCreateShift/indes';
 
 function Toolbar() {
   const {
@@ -41,7 +41,7 @@ function Toolbar() {
       postShift,
     },
   } = useEditShift();
-  const { autoCompleteShift } = useCreateShift();
+  // const { autoCompleteShift } = useCreateShift();
 
   const [openInfo, setOpenInfo] = useState(false);
   const [currentSetup, setCurrentSetup] = useState<
@@ -355,8 +355,9 @@ function Toolbar() {
       ) : (
         <div className="ml-[1.25rem] flex gap-[.875rem]">
           <Button
-            className="h-[2.5rem] rounded-[3.125rem] border-main-1 bg-white px-[1.25rem] text-[1.25rem] font-semibold text-main-1 transition-all hover:bg-main-1 hover:text-white"
-            onClick={autoCompleteShift}
+            type="fill"
+            className="h-[2.5rem] w-[8.25rem] rounded-[3.125rem] border-none bg-[rgba(171,171,180,0.80)] text-[1.25rem] font-semibold text-white"
+            onClick={() => alert('아직 준비중인 기능입니다!')}
           >
             자동 채우기
           </Button>
