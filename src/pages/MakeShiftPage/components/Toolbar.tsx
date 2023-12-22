@@ -41,7 +41,7 @@ function Toolbar() {
       postShift,
     },
   } = useEditShift();
-  const { autoCompleteShift } = useCreateShift();
+  // const { autoCompleteShift } = useCreateShift();
 
   const [openInfo, setOpenInfo] = useState(false);
   const [currentSetup, setCurrentSetup] = useState<
