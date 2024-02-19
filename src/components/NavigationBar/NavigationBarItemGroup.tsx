@@ -3,8 +3,6 @@ import ROUTE from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
-  // HomeIcon,
-  // HomeIconSelected,
   NurseIcon,
   NurseIconSelected,
   RequestIcon,
@@ -12,12 +10,6 @@ import {
 } from '@assets/svg';
 
 const items = [
-  // {
-  //   path: HOME,
-  //   icon: HomeIcon,
-  //   selectedIcon: HomeIconSelected,
-  //   text: '홈',
-  // },
   {
     path: ROUTE.MAKE,
     icon: DutyIcon,
