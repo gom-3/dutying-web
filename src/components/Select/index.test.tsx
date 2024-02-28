@@ -1,6 +1,6 @@
 import { render, screen, userEvent } from '@libs/util/test-utils';
 import Select from '.';
-import { expect, vi } from 'vitest';
+import { expect, vi, describe, it } from 'vitest';
 
 describe('Select 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {

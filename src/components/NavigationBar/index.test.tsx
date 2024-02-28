@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@libs/util/test-utils';
-import { describe, expect, vi } from 'vitest';
+import { describe, expect, vi, it } from 'vitest';
 import NavigationBar from '.';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import NavigationBarItem from './NavigationBarItem';
