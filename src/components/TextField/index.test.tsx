@@ -8,7 +8,7 @@ describe('TextField 컴포넌트', () => {
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
-  it('사용자 입력마다 onChange가 실행되어야 함', async () => {
+  it('사용자 입력마다 onChange가 호출되어야 함', async () => {
     const spy = vi.fn();
     render(<TextField onChange={spy} />);
     const input = screen.getByRole('textbox');

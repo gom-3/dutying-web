@@ -17,7 +17,6 @@ describe('TimeInput 컴포넌트', () => {
     render(<TimeInput />);
     const input = screen.getByRole('textbox');
     await userEvent.type(input, '12:34');
-
     expect(input).toHaveValue('12:34');
   });
 
@@ -25,17 +24,14 @@ describe('TimeInput 컴포넌트', () => {
     render(<TimeInput initTime="12:34" />);
     const input = screen.getByRole('textbox');
     await userEvent.type(input, '99:99');
-
     expect(input).toHaveValue('12:34');
   });
 
   it('사용자 입력마다 onTimeChange가 호출되어야 함', async () => {
     const mockOnTimeChange = vi.fn();
     render(<TimeInput onTimeChange={mockOnTimeChange} />);
-
     const input = screen.getByRole('textbox');
     await userEvent.type(input, '12:34');
-
     expect(mockOnTimeChange).toHaveBeenCalledWith('12:34');
   });
 });
