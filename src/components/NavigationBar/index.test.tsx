@@ -30,24 +30,21 @@ vi.mock('react-router', async () => {
   };
 });
 
-describe('NavigationBar', () => {
-  it('전체 렌더링', () => {
+describe('NavigationBar 컴포넌트', () => {
+  it('정상적으로 렌더링되어야 함', () => {
     render(<NavigationBar isFold={false} setIsFold={() => {}} />);
-
     expect(screen.getByText('가이드')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
-  it('접힘 상태일 때', () => {
+  it('isFold가 true일 때 접힘 상태로 렌더링되어야 함', () => {
     render(<NavigationBar isFold setIsFold={() => {}} />);
-
     const navigationBar = screen.getByTestId('navigation-bar');
     expect(navigationBar).toHaveClass('fixed translate-x-[-8rem]');
   });
 
-  it('펼침 상태일 때', () => {
+  it('isFold가 false일 때 펼친 상태로 렌더링되어야 함', () => {
     render(<NavigationBar isFold={false} setIsFold={() => {}} />);
-
     const navigationBar = screen.getByTestId('navigation-bar');
     expect(navigationBar).toHaveClass('sticky');
   });
@@ -67,20 +64,18 @@ const MockSelectedIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} style={{ fill: 'red' }} />
 );
 
-describe('NavigationBarGroup', () => {
-  it('기본 렌더링', () => {
+describe('NavigationBarGroup 컴포넌트', () => {
+  it('정상적으로 렌더링되어야 함', () => {
     render(<NavigationBarItemGroups />);
-
     expect(screen.getByText('근무표 만들기')).toBeInTheDocument();
     expect(screen.getByText('신청 근무 관리')).toBeInTheDocument();
     expect(screen.getByText('간호사 관리')).toBeInTheDocument();
   });
 
-  describe('NavigationBarItem', () => {
-    it('기본 렌더링과 라우팅 동작', async () => {
+  describe('NavigationBarItem 컴포넌트', () => {
+    it('정상적으로 렌더링되고 라우팅되어야 함', async () => {
       const mockPath = '/test-path';
       const mockText = 'Test';
-
       render(
         <NavigationBarItem
           path={mockPath}
@@ -89,17 +84,15 @@ describe('NavigationBarGroup', () => {
           text={mockText}
         />
       );
-
       const item = screen.getByText(mockText);
       expect(item).toBeInTheDocument();
-
       fireEvent.click(item);
       expect(mockNavigate).toHaveBeenCalledWith(mockPath);
     });
-    it('선택된 메뉴로 스타일 변경', () => {
+
+    it('선택된 메뉴로 스타일이 변경되어야 함', () => {
       const mockPath = '/selected-path';
       const mockText = 'Selected';
-
       render(
         <MemoryRouter initialEntries={[mockPath]}>
           <Routes>
@@ -117,7 +110,6 @@ describe('NavigationBarGroup', () => {
           </Routes>
         </MemoryRouter>
       );
-
       const item = screen.getByText(mockText);
       expect(item).toHaveClass('text-main-1');
     });
