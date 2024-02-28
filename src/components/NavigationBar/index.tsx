@@ -48,6 +48,7 @@ const NavigationBar = ({ isFold, setIsFold }: Props) => {
   return (
     <div className="group fixed left-0 z-[997]">
       <div
+        data-testid="navigation-bar"
         className={`z-10 ${canHover && 'group-hover:translate-x-0'} ${
           !isFold ? 'sticky' : 'fixed'
         } top-0 duration-500 ease-out ${

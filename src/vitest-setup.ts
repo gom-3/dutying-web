@@ -1,4 +1,5 @@
 import { afterAll, afterEach, beforeAll } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Start server before all tests
 beforeAll(() => {});

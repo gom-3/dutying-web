@@ -10,6 +10,7 @@ const Toggle = ({ isOn, setIsOn }: ToggleProps) => {
 
   return (
     <div
+      data-testid="toggle"
       onClick={handleToggle}
       className={`relative h-[1rem] w-[1.875rem] cursor-pointer rounded-[1rem] transition-[0.8s] ${
         isOn ? 'bg-main-1' : 'bg-sub-4'
