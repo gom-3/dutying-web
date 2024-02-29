@@ -2,11 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["cypress"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -23,56 +20,26 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "src",
     "paths": {
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@assets": [
-        "assets"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@components": [
-        "components"
-      ],
-      "@constants/*": [
-        "constants/*"
-      ],
-      "@constants": [
-        "constants"
-      ],
-      "@libs/*": [
-        "libs/*"
-      ],
-      "@libs": [
-        "libs"
-      ],
-      "@hooks/*": [
-        "hooks/*"
-      ],
-      "@hooks": [
-        "hooks"
-      ],
-      "@types/*": [
-        "types/*"
-      ],
-      "@types": [
-        "types"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@pages": [
-        "pages"
-      ],
+      "@assets/*": ["assets/*"],
+      "@assets": ["assets"],
+      "@components/*": ["components/*"],
+      "@components": ["components"],
+      "@constants/*": ["constants/*"],
+      "@constants": ["constants"],
+      "@libs/*": ["libs/*"],
+      "@libs": ["libs"],
+      "@hooks/*": ["hooks/*"],
+      "@hooks": ["hooks"],
+      "@types/*": ["types/*"],
+      "@types": ["types"],
+      "@pages/*": ["pages/*"],
+      "@pages": ["pages"]
     }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src", "**/*.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
-  ],
+  ]
 }
