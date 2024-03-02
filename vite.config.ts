@@ -2,8 +2,12 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+interface Chunks {
+  [key: string]: string[];
+}
+
 const renderChunks = (deps: Record<string, string>) => {
-  const chunks = {};
+  const chunks: Chunks = {};
   Object.keys(deps).forEach((key) => {
     if (['react', 'react-router-dom', 'react-dom'].includes(key)) {
       return;
