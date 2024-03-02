@@ -1,4 +1,4 @@
-function login(pass?: boolean) {
+function login() {
   cy.findByText('로그인').click();
   cy.findByText('카카오 계정으로 시작하기').click();
 
@@ -9,10 +9,6 @@ function login(pass?: boolean) {
       '#mainContent > div > div > form > div.confirm_btn > button.btn_g.highlight.submit'
     ).click();
   });
-  if (pass) {
-    cy.wait(2000);
-    cy.findByText('건너뛰기').click();
-  }
 }
 
 function keyDownEvent(key: string, count: number, ctrl?: boolean, shift?: boolean) {
@@ -20,14 +16,15 @@ function keyDownEvent(key: string, count: number, ctrl?: boolean, shift?: boolea
     .fill(1)
     .forEach(() => cy.get('body').trigger('keydown', { key, ctrlKey: ctrl, shiftKey: shift }));
 }
-
 describe('근무 제작 페이지', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('host'));
-    login(true);
   });
 
   it('근무표 작성', () => {
+    cy.findAllByText('근무표 작성 체험하기').first().click();
+    cy.wait(2000);
+    cy.findByText('건너뛰기').click();
     cy.findByText('다음달 근무표 만들기').click();
     cy.get('#cell_sample').click();
 
