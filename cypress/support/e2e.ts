@@ -16,5 +16,10 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+Cypress.on('uncaught:exception', (err, _) => {
+  if(err.message.includes('접근이 거부되었습니다')) {
+    return false;
+  }
+})
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
