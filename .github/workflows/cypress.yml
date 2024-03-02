@@ -18,9 +18,6 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        with:
-          build: pnpm run build
-          start: pnpm run dev
         env:
           id: ${{ secrets.TESTING_ID }}
           pw: ${{ secrets.TESTING_PW }}
