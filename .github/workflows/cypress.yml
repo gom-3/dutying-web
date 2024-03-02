@@ -1,0 +1,27 @@
+name: Cypress E2E Test
+
+on: push
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: npm ci
+        run: pnpm install --frozen-lockfile
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: pnpm run build
+          start: pnpm run dev
+        env:
+          id: ${{ secrets.TESTING_ID }}
+          pw: ${{ secrets.TESTING_PW }}
+          host: ${{ secrets.TESTING_HOST }}
