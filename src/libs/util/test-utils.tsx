@@ -1,10 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const wrapper = ({ children }: { children: JSX.Element }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
 const customRender = (child: React.ReactElement, options = {}) =>

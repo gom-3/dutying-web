@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { produce } from 'immer';
 
-interface State {
+export interface State {
   year: number;
   month: number;
   currentShiftTeamId: number | null;
