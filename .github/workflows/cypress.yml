@@ -19,6 +19,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
-          id: ${{ secrets.TESTING_ID }}
-          pw: ${{ secrets.TESTING_PW }}
-          host: ${{ secrets.TESTING_HOST }}
+          CYPRESS_id: ${{ secrets.TESTING_ID }}
+          CYPRESS_pw: ${{ secrets.TESTING_PW }}
+          CYPRESS_host: ${{ secrets.TESTING_HOST }}
