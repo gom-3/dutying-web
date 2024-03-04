@@ -38,19 +38,18 @@ Cypress is used for end-to-end testing
 ```bash
 $ pnpm run e2e
 ```
-### Continuous Integration (CI)
+### Continuous Integration
 **Automatic Testing**
 
 Upon every push and pull request to the develop branch, our GitHub Actions workflow automatically initiates a series of tests.
-- vitest.yml
-- cypress.yml
+- <a href="https://github.com/gom-3/dutying-web/blob/develop/.github/workflows/cypress.yml">vitest.yml</a>
+- <a href="https://github.com/gom-3/dutying-web/blob/develop/.github/workflows/vitest.yml">cypress.yml</a>
 
 **Automatic Deployment**
 
 After passing all automated tests, the changes are automatically deployed to Vercel, ensuring that our application is always up-to-date with the latest verified builds. This step not only streamlines our deployment process but also guarantees that only thoroughly tested builds are deployed to production.
 
 ![image](https://github.com/gom-3/dutying-web/assets/73516336/0e04ebcb-bc1a-45e2-b63d-723d231575b2)
-
 
 ## Documentaion
 - <a href="https://gom3.notion.site/ce18d806df034effaf8e488f02f49cf4">Tutorial</a>
