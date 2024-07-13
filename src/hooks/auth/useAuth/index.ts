@@ -45,10 +45,10 @@ const useAuth = (activeEffect = false) => {
   } = useTutorial();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = async (fallBackPath?: string) => {
     initStore();
     sendEvent(events.auth.logut);
-    if (pathname !== ROUTE.ROOT) navigate(ROUTE.ROOT);
+    if (fallBackPath && pathname !== fallBackPath) navigate(fallBackPath);
   };
 
   const handleLogin = (accessToken: string, nextPageUrl?: string) => {
@@ -56,7 +56,11 @@ const useAuth = (activeEffect = false) => {
     setState('accessToken', accessToken);
     initEditShiftStore();
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    location.replace(nextPageUrl || '/make');
+    if (nextPageUrl === 'back') {
+      window.history.back();
+    } else {
+      location.replace(nextPageUrl || ROUTE.MAKE);
+    }
     sendEvent(events.auth.login);
   };
 
