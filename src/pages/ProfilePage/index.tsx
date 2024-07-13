@@ -8,6 +8,7 @@ import imageCompression from 'browser-image-compression';
 import useAuth from '@hooks/auth/useAuth';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
 import useEditAccount from '@hooks/account/useEditAccount';
+import ROUTE from '@libs/constant/path';
 
 function ProfilePage() {
   const {
@@ -95,7 +96,7 @@ function ProfilePage() {
         <h1 className="font-apple text-[2rem] font-semibold text-text-1">프로필 설정</h1>
         <button
           className="flex h-[2.5rem] items-center justify-center rounded-[1.875rem] border-[.0625rem] border-sub-3 bg-white px-[1rem] font-apple text-[1.4375rem] font-medium text-sub-3"
-          onClick={handleLogout}
+          onClick={() => handleLogout(ROUTE.ROOT)}
         >
           로그아웃
         </button>

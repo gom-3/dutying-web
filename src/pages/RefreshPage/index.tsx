@@ -1,6 +1,8 @@
 import useAuth from '@hooks/auth/useAuth';
 import axiosInstance from '@libs/api/client';
+import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { TailSpin } from 'react-loader-spinner';
 import { useNavigate } from 'react-router';
 
@@ -15,10 +17,11 @@ function RefreshPage() {
       axiosInstance.defaults.headers.common['Authorization'] = undefined;
       const accessToken = (await axiosInstance.post('/token/refresh')).data.accessToken;
       handleLogin(accessToken);
+      window.history.back();
     } catch (error) {
-      alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+      toast.error('로그인이 만료되었습니다. 다시 로그인해주세요.');
       handleLogout();
-      navigate('/login');
+      navigate(ROUTE.ROOT);
     }
   };
 
