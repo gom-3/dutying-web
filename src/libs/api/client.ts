@@ -19,7 +19,9 @@ axiosInstance.interceptors.response.use(
   (error) => {
     match(error.response.status)
       .with(401, () => {
-        location.replace(ROUTE.REFRESH);
+        if (window.location.pathname !== ROUTE.REFRESH) {
+          location.replace(ROUTE.REFRESH);
+        }
       })
       .with(400, 404, () => {
         toast.error(error.response.data.message || '에러가 발생했습니다. 다시 시도해주세요.');
