@@ -11,17 +11,10 @@ function PendingEnter() {
       <h1 className="font-apple text-[3rem] font-semibold text-main-1">
         {accountWaitingWard?.hospitalName} {accountWaitingWard?.name}
       </h1>
-      <p className="mt-[3.75rem] font-apple text-[1.5rem] font-medium text-main-2">
-        병동 입장 승인 대기중입니다.
-      </p>
+      <p className="mt-[3.75rem] font-apple text-[1.5rem] font-medium text-main-2">병동 입장 승인 대기중입니다.</p>
       <button
-        onClick={() =>
-          accountMe &&
-          accountMe.nurseId &&
-          accountWaitingWard &&
-          cancelWaiting(accountWaitingWard.wardId, accountMe.nurseId)
-        }
-        className="mt-[8rem] rounded-[.625rem] border-[.0625rem] border-red px-[2.25rem] py-[.425rem] font-apple text-[1.5rem] text-red"
+        onClick={() => accountMe && accountMe.nurseId && accountWaitingWard && cancelWaiting(accountWaitingWard.wardId, accountMe.nurseId)}
+        className="mt-32 rounded-[.625rem] border-[.0625rem] border-red px-9 py-[.425rem] font-apple text-[1.5rem] text-red"
       >
         입장 취소
       </button>

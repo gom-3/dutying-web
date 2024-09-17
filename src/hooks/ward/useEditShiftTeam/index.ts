@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import * as nurseApi from '@libs/api/nurse';
-import * as shiftTeamApi from '@libs/api/shiftTeam';
-import { shallow } from 'zustand/shallow';
-import { getWard } from '@libs/api/ward';
 import { produce } from 'immer';
-import useEditNurseStore from './store';
+import useAuth from '@hooks/auth/useAuth';
 import useEditShift from '@hooks/shift/useEditShift';
 import useRequestShift from '@hooks/shift/useRequestShift';
-import useAuth from '@hooks/auth/useAuth';
+import * as nurseApi from '@libs/api/nurse';
+import * as shiftTeamApi from '@libs/api/shiftTeam';
+import { getWard } from '@libs/api/ward';
+import useEditNurseStore from './store';
 
 const useEditShiftTeam = () => {
-  const [selectedNurseId, setState] = useEditNurseStore(
-    (state) => [state.selectedNurseId, state.setState],
-    shallow
-  );
+  const { selectedNurseId, setState } = useEditNurseStore();
 
   const {
     state: { wardId },
@@ -33,8 +29,7 @@ const useEditShiftTeam = () => {
   });
 
   const { mutate: updateNurseMutate } = useMutation(
-    ({ nurseId, updateNurseDTO }: { nurseId: number; updateNurseDTO: nurseApi.UpdateNurseDTO }) =>
-      nurseApi.updateNurse(nurseId, updateNurseDTO),
+    ({ nurseId, updateNurseDTO }: { nurseId: number; updateNurseDTO: nurseApi.UpdateNurseDTO }) => nurseApi.updateNurse(nurseId, updateNurseDTO),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -76,47 +71,27 @@ const useEditShiftTeam = () => {
   );
 
   const { mutate: updateNurseShiftTypeMutate } = useMutation(
-    ({
-      nurseId,
-      nurseShiftTypeId,
-      change,
-    }: {
-      nurseId: number;
-      nurseShiftTypeId: number;
-      change: nurseApi.updateNurseShiftTypeRequest;
-    }) => nurseApi.updateNurseShiftType(nurseId, nurseShiftTypeId, change),
+    ({ nurseId, nurseShiftTypeId, change }: { nurseId: number; nurseShiftTypeId: number; change: nurseApi.updateNurseShiftTypeRequest }) =>
+      nurseApi.updateNurseShiftType(nurseId, nurseShiftTypeId, change),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
   );
 
-  const { mutate: createShiftTeamMutate } = useMutation(
-    (wardId: number) => shiftTeamApi.createShiftTeam(wardId),
-    {
-      onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
-    }
-  );
+  const { mutate: createShiftTeamMutate } = useMutation((wardId: number) => shiftTeamApi.createShiftTeam(wardId), {
+    onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
+  });
 
   const { mutate: deleteShiftTeamMutate } = useMutation(
-    ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) =>
-      shiftTeamApi.deleteShiftTeam(wardId, shiftTeamId),
+    ({ wardId, shiftTeamId }: { wardId: number; shiftTeamId: number }) => shiftTeamApi.deleteShiftTeam(wardId, shiftTeamId),
     {
       onSuccess: () => queryClient.invalidateQueries(getWardQueryKey),
     }
   );
 
   const { mutate: editDivisionMutate } = useMutation(
-    ({
-      shiftTeamId,
-      prevPriority,
-      changeValue,
-      patchYearMonth,
-    }: {
-      shiftTeamId: number;
-      prevPriority: number;
-      changeValue: number;
-      patchYearMonth: string;
-    }) => nurseApi.updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue, patchYearMonth),
+    ({ shiftTeamId, prevPriority, changeValue, patchYearMonth }: { shiftTeamId: number; prevPriority: number; changeValue: number; patchYearMonth: string }) =>
+      nurseApi.updateShiftTeamDivision(shiftTeamId, prevPriority, changeValue, patchYearMonth),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -143,25 +118,9 @@ const useEditShiftTeam = () => {
       prevPriority: number;
       nextPriority: number;
       patchYearMonth: string;
-    }) =>
-      nurseApi.updateNurseOrder(
-        nurseId,
-        shiftTeamId,
-        nextShiftTeamId,
-        divisionNum,
-        prevPriority,
-        nextPriority,
-        patchYearMonth
-      ),
+    }) => nurseApi.updateNurseOrder(nurseId, shiftTeamId, nextShiftTeamId, divisionNum, prevPriority, nextPriority, patchYearMonth),
     {
-      onMutate: async ({
-        nurseId,
-        shiftTeamId,
-        nextShiftTeamId,
-        prevPriority,
-        nextPriority,
-        divisionNum,
-      }) => {
+      onMutate: async ({ nurseId, shiftTeamId, nextShiftTeamId, prevPriority, nextPriority, divisionNum }) => {
         await queryClient.cancelQueries(getWardQueryKey);
         await queryClient.cancelQueries(shiftQueryKey);
         await queryClient.cancelQueries(requestShiftQueryKey);
@@ -172,18 +131,14 @@ const useEditShiftTeam = () => {
           queryClient.setQueryData<Ward>(
             getWardQueryKey,
             produce(oldWard, (draft) => {
-              const sourceNurses = draft.shiftTeams.find(
-                (shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId
-              )!.nurses;
+              const sourceNurses = draft.shiftTeams.find((shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId)!.nurses;
               const nurse = sourceNurses.find((nurse) => nurse.nurseId === nurseId)!;
 
               sourceNurses.splice(
                 sourceNurses.findIndex((x) => x.nurseId === nurseId),
                 1
               );
-              const destinationNurses = draft.shiftTeams.find(
-                (shiftTeam) => shiftTeam.shiftTeamId === nextShiftTeamId
-              )!.nurses;
+              const destinationNurses = draft.shiftTeams.find((shiftTeam) => shiftTeam.shiftTeamId === nextShiftTeamId)!.nurses;
 
               const index = destinationNurses.findIndex((x) => x.priority === nextPriority);
               destinationNurses.splice(index === -1 ? 0 : index, 0, {
@@ -198,9 +153,7 @@ const useEditShiftTeam = () => {
           queryClient.setQueryData<Shift>(
             shiftQueryKey,
             produce(oldShift, (draft) => {
-              const sourceRows = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.nurseId === nurseId)
-              );
+              const sourceRows = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.nurseId === nurseId));
               if (sourceRows === undefined) return;
               const row = sourceRows.find((x) => x.shiftNurse.nurseId === nurseId)!;
 
@@ -209,23 +162,15 @@ const useEditShiftTeam = () => {
                 1
               );
 
-              let desticationRow = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.priority === prevPriority)
-              );
+              let desticationRow = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.priority === prevPriority));
 
               if (desticationRow) {
-                const index = desticationRow.findIndex(
-                  (x) => x.shiftNurse.priority === prevPriority
-                );
+                const index = desticationRow.findIndex((x) => x.shiftNurse.priority === prevPriority);
                 desticationRow.splice(index === -1 ? 0 : index + 1, 0, row);
               } else {
-                desticationRow = draft.divisionShiftNurses.find((x) =>
-                  x.some((y) => y.shiftNurse.priority === nextPriority)
-                );
+                desticationRow = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.priority === nextPriority));
                 if (desticationRow) {
-                  const index = desticationRow.findIndex(
-                    (x) => x.shiftNurse.priority === nextPriority
-                  );
+                  const index = desticationRow.findIndex((x) => x.shiftNurse.priority === nextPriority);
                   desticationRow.splice(index === -1 ? 0 : index, 0, row);
                 }
               }
@@ -236,9 +181,7 @@ const useEditShiftTeam = () => {
           queryClient.setQueryData<RequestShift>(
             requestShiftQueryKey,
             produce(oldReqShift, (draft) => {
-              const sourceRows = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.nurseId === nurseId)
-              );
+              const sourceRows = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.nurseId === nurseId));
               if (sourceRows === undefined) return;
               const row = sourceRows.find((x) => x.shiftNurse.nurseId === nurseId)!;
 
@@ -247,23 +190,15 @@ const useEditShiftTeam = () => {
                 1
               );
 
-              let desticationRow = draft.divisionShiftNurses.find((x) =>
-                x.some((y) => y.shiftNurse.priority === prevPriority)
-              );
+              let desticationRow = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.priority === prevPriority));
 
               if (desticationRow) {
-                const index = desticationRow.findIndex(
-                  (x) => x.shiftNurse.priority === prevPriority
-                );
+                const index = desticationRow.findIndex((x) => x.shiftNurse.priority === prevPriority);
                 desticationRow.splice(index === -1 ? 0 : index + 1, 0, row);
               } else {
-                desticationRow = draft.divisionShiftNurses.find((x) =>
-                  x.some((y) => y.shiftNurse.priority === nextPriority)
-                );
+                desticationRow = draft.divisionShiftNurses.find((x) => x.some((y) => y.shiftNurse.priority === nextPriority));
                 if (desticationRow) {
-                  const index = desticationRow.findIndex(
-                    (x) => x.shiftNurse.priority === nextPriority
-                  );
+                  const index = desticationRow.findIndex((x) => x.shiftNurse.priority === nextPriority);
                   desticationRow.splice(index === -1 ? 0 : index, 0, row);
                 }
               }
@@ -278,13 +213,7 @@ const useEditShiftTeam = () => {
         queryClient.invalidateQueries(requestShiftQueryKey);
       },
       onError: (_, __, context) => {
-        if (
-          context === undefined ||
-          context.oldShift === undefined ||
-          context.oldReqShift === undefined ||
-          context.oldWard === undefined
-        )
-          return;
+        if (context === undefined || context.oldShift === undefined || context.oldReqShift === undefined || context.oldWard === undefined) return;
         queryClient.setQueryData(getWardQueryKey, context.oldWard);
         queryClient.setQueryData(shiftQueryKey, context.oldShift);
         queryClient.setQueryData(requestShiftQueryKey, context.oldReqShift);
@@ -293,15 +222,8 @@ const useEditShiftTeam = () => {
   );
 
   const { mutate: updateShiftTeamMutate } = useMutation(
-    ({
-      wardId,
-      shiftTeamId,
-      updateShiftTeamDTO,
-    }: {
-      wardId: number;
-      shiftTeamId: number;
-      updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO;
-    }) => shiftTeamApi.updateShiftTeam(wardId, shiftTeamId, updateShiftTeamDTO),
+    ({ wardId, shiftTeamId, updateShiftTeamDTO }: { wardId: number; shiftTeamId: number; updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO }) =>
+      shiftTeamApi.updateShiftTeam(wardId, shiftTeamId, updateShiftTeamDTO),
     {
       onMutate: ({ shiftTeamId, updateShiftTeamDTO }) => {
         const oldWard = queryClient.getQueryData<Ward>(getWardQueryKey);
@@ -310,9 +232,7 @@ const useEditShiftTeam = () => {
         queryClient.setQueryData<Ward>(
           getWardQueryKey,
           produce(oldWard, (draft) => {
-            const shiftTeam = draft.shiftTeams.find(
-              (shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId
-            )!;
+            const shiftTeam = draft.shiftTeams.find((shiftTeam) => shiftTeam.shiftTeamId === shiftTeamId)!;
             shiftTeam.name = updateShiftTeamDTO.name;
           })
         );
@@ -335,11 +255,7 @@ const useEditShiftTeam = () => {
   const updateNurse = (nurseId: number, updateNurseDTO: nurseApi.UpdateNurseDTO) => {
     updateNurseMutate({ nurseId, updateNurseDTO });
   };
-  const updateNurseShift = (
-    nurseId: number,
-    nurseShiftTypeId: number,
-    change: nurseApi.updateNurseShiftTypeRequest
-  ) => {
+  const updateNurseShift = (nurseId: number, nurseShiftTypeId: number, change: nurseApi.updateNurseShiftTypeRequest) => {
     updateNurseShiftTypeMutate({ nurseId, nurseShiftTypeId, change });
   };
   const createShiftTeam = () => {
@@ -348,12 +264,7 @@ const useEditShiftTeam = () => {
   const deleteShiftTeam = (shiftTeamId: number) => {
     wardId && deleteShiftTeamMutate({ wardId, shiftTeamId });
   };
-  const editDivision = (
-    shiftTeamId: number,
-    prevPriority: number,
-    changeValue: number,
-    patchYearMonth: string
-  ) => {
+  const editDivision = (shiftTeamId: number, prevPriority: number, changeValue: number, patchYearMonth: string) => {
     editDivisionMutate({ shiftTeamId, prevPriority, changeValue, patchYearMonth });
   };
   const moveNurseOrder = (
@@ -375,19 +286,14 @@ const useEditShiftTeam = () => {
       patchYearMonth,
     });
   };
-  const updateShiftTeam = (
-    shiftTeamId: number,
-    updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO
-  ) => {
+  const updateShiftTeam = (shiftTeamId: number, updateShiftTeamDTO: shiftTeamApi.UpdateShiftTeamDTO) => {
     wardId && updateShiftTeamMutate({ wardId, shiftTeamId, updateShiftTeamDTO });
   };
 
   return {
     state: {
       ward,
-      selectedNurse: ward?.shiftTeams
-        ?.flatMap((x) => x.nurses)
-        .find((nurse) => nurse.nurseId === selectedNurseId),
+      selectedNurse: ward?.shiftTeams?.flatMap((x) => x.nurses).find((nurse) => nurse.nurseId === selectedNurseId),
       shiftTeams: ward?.shiftTeams,
     },
     actions: {

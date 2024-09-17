@@ -1,9 +1,9 @@
-import Toolbar from './components/Toolbar';
-import CountDutyByDay from './components/CountDutyByDay';
-import ShiftCalendar from './components/ShiftCalendar';
-import Panel from './components/Panel';
 import useEditShift from '@hooks/shift/useEditShift';
+import CountDutyByDay from './components/CountDutyByDay';
 import NurseEditModal from './components/NurseEditModal';
+import Panel from './components/Panel';
+import ShiftCalendar from './components/ShiftCalendar';
+import Toolbar from './components/Toolbar';
 
 const MakeShiftPage = () => {
   const {
@@ -15,11 +15,9 @@ const MakeShiftPage = () => {
       <Toolbar />
       <ShiftCalendar />
       <div
-        className="sticky bottom-0 z-20 flex items-stretch gap-[1.25rem] bg-main-bg py-[1.25rem] pl-[15.9375rem]"
+        className="sticky bottom-0 z-20 flex items-stretch gap-5 bg-main-bg py-5 pl-[15.9375rem]"
         style={{
-          height: shift
-            ? `${shift.wardShiftTypes.filter((x) => x.isCounted).length * 2.5 + 2.5}rem`
-            : '0',
+          height: shift ? `${shift.wardShiftTypes.filter((x) => x.isCounted).length * 2.5 + 2.5}rem` : '0',
         }}
       >
         <CountDutyByDay />

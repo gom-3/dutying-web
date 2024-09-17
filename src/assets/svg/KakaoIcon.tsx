@@ -1,12 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgKakaoIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 36 34"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 36 34" {...props}>
     <path fill="url(#kakao_icon_svg__a)" d="M0 0h36v34H0z" />
     <defs>
       <pattern id="kakao_icon_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">

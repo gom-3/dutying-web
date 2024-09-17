@@ -1,41 +1,17 @@
-import { shallow } from 'zustand/shallow';
-import useAuthStore from './store';
-import axiosInstance from '@libs/api/client';
-import { demoStart, getAccountMe } from '@libs/api/auth';
-import { useLocation, useNavigate } from 'react-router';
-import ROUTE from '@libs/constant/path';
-import useInitStore from '@hooks/useInitStore';
-import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import { useEffect } from 'react';
-import { events, sendEvent } from 'analytics';
+import { useLocation, useNavigate } from 'react-router';
+import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import useLoading from '@hooks/ui/useLoading';
 import useTutorial from '@hooks/ui/useTutorial';
+import useInitStore from '@hooks/useInitStore';
+import { demoStart, getAccountMe } from '@libs/api/auth';
+import axiosInstance from '@libs/api/client';
+import ROUTE from '@libs/constant/path';
+import { events, sendEvent } from 'analytics';
+import useAuthStore from './store';
 
 const useAuth = (activeEffect = false) => {
-  const [
-    accountMe,
-    isAuth,
-    accessToken,
-    nurseId,
-    accountId,
-    wardId,
-    demoStartDate,
-    _loaded,
-    setState,
-  ] = useAuthStore(
-    (state) => [
-      state.accountMe,
-      state.isAuth,
-      state.accessToken,
-      state.nurseId,
-      state.accountId,
-      state.wardId,
-      state.demoStartDate,
-      state._loaded,
-      state.setState,
-    ],
-    shallow
-  );
+  const { accountMe, isAuth, accessToken, nurseId, accountId, wardId, demoStartDate, _loaded, setState } = useAuthStore();
   const { pathname } = useLocation();
   const { setLoading } = useLoading();
   const initStore = useInitStore();
@@ -89,8 +65,7 @@ const useAuth = (activeEffect = false) => {
 
   useEffect(() => {
     if (_loaded && activeEffect) {
-      if (demoStartDate && new Date(demoStartDate).getTime() + 3540000 - new Date().getTime() <= 0)
-        handleLogout();
+      if (demoStartDate && new Date(demoStartDate).getTime() + 3540000 - new Date().getTime() <= 0) handleLogout();
       else handleGetAccountMe();
     }
   }, [activeEffect, accessToken, _loaded]);

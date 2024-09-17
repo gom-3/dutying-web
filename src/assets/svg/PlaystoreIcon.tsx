@@ -1,20 +1,9 @@
 import type { SVGProps } from 'react';
 const SvgPlaystoreIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 19 20"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 19 20" {...props}>
     <path fill="url(#playstore_icon_svg__a)" d="M0 .298h18.175v19.474H0z" />
     <defs>
-      <pattern
-        id="playstore_icon_svg__a"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
+      <pattern id="playstore_icon_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">
         <use xlinkHref="#playstore_icon_svg__b" transform="matrix(.00112 0 0 .00104 -.003 0)" />
       </pattern>
       <image

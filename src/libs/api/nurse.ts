@@ -1,9 +1,6 @@
 import axiosInstance from './client';
 
-export type CreateNurseDTO = Pick<
-  Nurse,
-  'name' | 'phoneNum' | 'gender' | 'isWorker' | 'employmentDate'
->;
+export type CreateNurseDTO = Pick<Nurse, 'name' | 'phoneNum' | 'gender' | 'isWorker' | 'employmentDate'>;
 
 const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO) =>
   (
@@ -14,31 +11,16 @@ const createAccountNurse = async (accountId: number, createNurse: CreateNurseDTO
     })
   ).data;
 
-const getNurse = async (nurseId: number) =>
-  (await axiosInstance.get<Nurse>(`/nurses/${nurseId}`)).data;
+const getNurse = async (nurseId: number) => (await axiosInstance.get<Nurse>(`/nurses/${nurseId}`)).data;
 
-export type UpdateNurseDTO = Pick<
-  Nurse,
-  | 'name'
-  | 'phoneNum'
-  | 'gender'
-  | 'isWorker'
-  | 'employmentDate'
-  | 'isDutyManager'
-  | 'isWardManager'
-  | 'memo'
->;
-const updateNurse = async (nurseId: number, updatedNurse: UpdateNurseDTO) =>
-  (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, updatedNurse)).data;
+export type UpdateNurseDTO = Pick<Nurse, 'name' | 'phoneNum' | 'gender' | 'isWorker' | 'employmentDate' | 'isDutyManager' | 'isWardManager' | 'memo'>;
+const updateNurse = async (nurseId: number, updatedNurse: UpdateNurseDTO) => (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, updatedNurse)).data;
 
-const updateNurseStatus = async (nurseId: number, status: string) =>
-  (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, { status })).data;
+const updateNurseStatus = async (nurseId: number, status: string) => (await axiosInstance.patch<Nurse>(`/nurses/${nurseId}`, { status })).data;
 
-const connectNurse = async (nurseId: number) =>
-  (await axiosInstance.post(`/nurses/${nurseId}/connect`)).data;
+const connectNurse = async (nurseId: number) => (await axiosInstance.post(`/nurses/${nurseId}/connect`)).data;
 
-const unConnectNurse = async (nurseId: number) =>
-  (await axiosInstance.delete(`/nurses/${nurseId}/connect`)).data;
+const unConnectNurse = async (nurseId: number) => (await axiosInstance.delete(`/nurses/${nurseId}/connect`)).data;
 
 const updateNurseOrder = async (
   nurseId: number,
@@ -60,12 +42,7 @@ const updateNurseOrder = async (
     })
   ).data;
 
-const updateShiftTeamDivision = async (
-  shiftTeamId: number,
-  prevPriority: number,
-  changeValue: number,
-  patchYearMonth: string
-) =>
+const updateShiftTeamDivision = async (shiftTeamId: number, prevPriority: number, changeValue: number, patchYearMonth: string) =>
   (
     await axiosInstance.patch(`/nurses/division`, {
       shiftTeamId,
@@ -79,11 +56,8 @@ export type updateNurseShiftTypeRequest = {
   isPossible?: boolean;
   isPrefer?: boolean;
 };
-const updateNurseShiftType = async (
-  nurseId: number,
-  nurseShiftTypeId: number,
-  change: updateNurseShiftTypeRequest
-) => (await axiosInstance.patch(`/nurses/${nurseId}/shift-types/${nurseShiftTypeId}`, change)).data;
+const updateNurseShiftType = async (nurseId: number, nurseShiftTypeId: number, change: updateNurseShiftTypeRequest) =>
+  (await axiosInstance.patch(`/nurses/${nurseId}/shift-types/${nurseShiftTypeId}`, change)).data;
 
 const updateNurseCarry = async (shiftNurseId: number, value: number) =>
   (

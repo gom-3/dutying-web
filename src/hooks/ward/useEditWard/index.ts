@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as wardApi from '@libs/api/ward';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import * as shiftTypeApi from '@libs/api/shiftType';
 import useAuth from '@hooks/auth/useAuth';
 import useEditShift from '@hooks/shift/useEditShift';
+import * as shiftTypeApi from '@libs/api/shiftType';
+import * as wardApi from '@libs/api/ward';
 
 const useEditWard = () => {
   const {
@@ -21,17 +21,12 @@ const useEditWard = () => {
     enabled: wardId !== null,
   });
 
-  const { data: watingNurses } = useQuery(
-    getWardWaitingNursesQueryKey,
-    () => wardApi.getWatingNurses(wardId!),
-    {
-      enabled: wardId !== null,
-    }
-  );
+  const { data: watingNurses } = useQuery(getWardWaitingNursesQueryKey, () => wardApi.getWatingNurses(wardId!), {
+    enabled: wardId !== null,
+  });
 
   const { mutate: updateWardMutate } = useMutation(
-    ({ wardId, editWardDTO }: { wardId: number; editWardDTO: wardApi.EditWardDTO }) =>
-      wardApi.editWard(wardId, editWardDTO),
+    ({ wardId, editWardDTO }: { wardId: number; editWardDTO: wardApi.EditWardDTO }) => wardApi.editWard(wardId, editWardDTO),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -43,13 +38,8 @@ const useEditWard = () => {
   );
 
   const { mutate: createShiftTypeMutate } = useMutation(
-    ({
-      wardId,
-      createShiftTypeDTO,
-    }: {
-      wardId: number;
-      createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO;
-    }) => shiftTypeApi.createShiftType(wardId, createShiftTypeDTO),
+    ({ wardId, createShiftTypeDTO }: { wardId: number; createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO }) =>
+      shiftTypeApi.createShiftType(wardId, createShiftTypeDTO),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -58,15 +48,8 @@ const useEditWard = () => {
   );
 
   const { mutate: updateShiftTypeMutate } = useMutation(
-    ({
-      wardId,
-      shiftTypeId,
-      createShiftTypeDTO,
-    }: {
-      wardId: number;
-      shiftTypeId: number;
-      createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO;
-    }) => shiftTypeApi.updateShiftType(wardId, shiftTypeId, createShiftTypeDTO),
+    ({ wardId, shiftTypeId, createShiftTypeDTO }: { wardId: number; shiftTypeId: number; createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO }) =>
+      shiftTypeApi.updateShiftType(wardId, shiftTypeId, createShiftTypeDTO),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -76,8 +59,7 @@ const useEditWard = () => {
   );
 
   const { mutate: deleteShiftTypeMutate } = useMutation(
-    ({ wardId, shiftTypeId }: { wardId: number; shiftTypeId: number }) =>
-      shiftTypeApi.deleteShiftType(wardId, shiftTypeId),
+    ({ wardId, shiftTypeId }: { wardId: number; shiftTypeId: number }) => shiftTypeApi.deleteShiftType(wardId, shiftTypeId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -86,15 +68,8 @@ const useEditWard = () => {
   );
 
   const { mutate: approveWatingNursesMutate } = useMutation(
-    ({
-      wardId,
-      waitingNurseId,
-      shiftTeamId,
-    }: {
-      wardId: number;
-      waitingNurseId: number;
-      shiftTeamId: number;
-    }) => wardApi.approveWatingNurses(wardId, waitingNurseId, shiftTeamId),
+    ({ wardId, waitingNurseId, shiftTeamId }: { wardId: number; waitingNurseId: number; shiftTeamId: number }) =>
+      wardApi.approveWatingNurses(wardId, waitingNurseId, shiftTeamId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -104,15 +79,8 @@ const useEditWard = () => {
   );
 
   const { mutate: connectWatingNursesMutate } = useMutation(
-    ({
-      wardId,
-      waitingNurseId,
-      targetNurseId,
-    }: {
-      wardId: number;
-      waitingNurseId: number;
-      targetNurseId: number;
-    }) => wardApi.connectWatingNurses(wardId, waitingNurseId, targetNurseId),
+    ({ wardId, waitingNurseId, targetNurseId }: { wardId: number; waitingNurseId: number; targetNurseId: number }) =>
+      wardApi.connectWatingNurses(wardId, waitingNurseId, targetNurseId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -122,8 +90,7 @@ const useEditWard = () => {
   );
 
   const { mutate: cancelWaitingMutate } = useMutation(
-    ({ wardId, nurseId }: { wardId: number; nurseId: number }) =>
-      wardApi.deleteWatingNurses(wardId, nurseId),
+    ({ wardId, nurseId }: { wardId: number; nurseId: number }) => wardApi.deleteWatingNurses(wardId, nurseId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(getWardQueryKey);
@@ -140,10 +107,7 @@ const useEditWard = () => {
     if (wardId) createShiftTypeMutate({ wardId, createShiftTypeDTO });
   };
 
-  const editShiftType = (
-    shiftTypeId: number,
-    createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO
-  ) => {
+  const editShiftType = (shiftTypeId: number, createShiftTypeDTO: shiftTypeApi.CreateShiftTypeDTO) => {
     if (wardId) updateShiftTypeMutate({ wardId, shiftTypeId, createShiftTypeDTO });
   };
 

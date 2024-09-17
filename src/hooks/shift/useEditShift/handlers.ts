@@ -7,9 +7,7 @@ export const moveFocus = (
   focus: Focus,
   setFocus: (focus: Focus) => void
 ) => {
-  const flatNurses = shift.divisionShiftNurses
-    .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
-    .map((x) => x.shiftNurse);
+  const flatNurses = shift.divisionShiftNurses.flatMap<{ shiftNurse: ShiftNurse }>((x) => x).map((x) => x.shiftNurse);
   const { day, shiftNurseId } = focus;
   const dayCnt = shift.days.length;
   const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
@@ -60,9 +58,7 @@ export const moveFocus = (
         newNurseId = flatNurses[0].shiftNurseId;
         newDay = day;
       } else {
-        newNurseId = moveEnd
-          ? flatNurses[flatNurses.length - 1].shiftNurseId
-          : flatNurses[nurseIndex + 1].shiftNurseId;
+        newNurseId = moveEnd ? flatNurses[flatNurses.length - 1].shiftNurseId : flatNurses[nurseIndex + 1].shiftNurseId;
         newDay = day;
       }
       break;
@@ -78,10 +74,7 @@ export const moveFocus = (
   }
 };
 
-export const keydownEventMapper = (
-  e: KeyboardEvent,
-  ...op: { keys: string[]; callback: () => void }[]
-) => {
+export const keydownEventMapper = (e: KeyboardEvent, ...op: { keys: string[]; callback: () => void }[]) => {
   op.forEach(({ keys, callback }) => {
     if (keys.map((key) => key.toUpperCase()).indexOf(koToEn(e.key).toUpperCase()) != -1) {
       callback();
@@ -150,11 +143,7 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
   };
 };
 
-export const checkShift = (
-  shift: Shift,
-  checkFaultOptions: CheckFaultOptions,
-  wardShiftTypeMap: Map<number, WardShiftType>
-) => {
+export const checkShift = (shift: Shift, checkFaultOptions: CheckFaultOptions, wardShiftTypeMap: Map<number, WardShiftType>) => {
   const faults: Map<string, Fault> = new Map();
 
   for (let i = 0; i < shift.divisionShiftNurses.length; i++) {
@@ -184,18 +173,15 @@ export const checkShift = (
             day: match.index - 1,
           };
 
-          faults.set(
-            Object.values({ shiftNurseId: focus.shiftNurseId, day: focus.day }).join(','),
-            {
-              type: option.type,
-              faultType: key,
-              nurseName: row.shiftNurse.name,
-              focus,
-              message: option.message,
-              matchString: match[0],
-              length: match[0].length,
-            }
-          );
+          faults.set(Object.values({ shiftNurseId: focus.shiftNurseId, day: focus.day }).join(','), {
+            type: option.type,
+            faultType: key,
+            nurseName: row.shiftNurse.name,
+            focus,
+            message: option.message,
+            matchString: match[0],
+            length: match[0].length,
+          });
         }
       }
     }
@@ -205,9 +191,5 @@ export const checkShift = (
 };
 
 export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => {
-  return (
-    shift.divisionShiftNurses
-      .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
-      .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
-  );
+  return shift.divisionShiftNurses.flatMap<{ shiftNurse: ShiftNurse }>((x) => x).find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null;
 };

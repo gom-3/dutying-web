@@ -21,12 +21,12 @@ function FaultLayer({ fault, children }: Props) {
         //   }
         // `}
       >
-        <FaultDotIcon className="absolute right-0 top-[-0.85rem] h-[.75rem] w-[.75rem]" />
+        <FaultDotIcon className="absolute right-0 top-[-0.85rem] size-[.75rem]" />
         {children}
       </div>
       <div className="invisible absolute bottom-[-1.625rem] z-[31] whitespace-nowrap rounded-md bg-white px-2 py-1 font-apple text-sm text-sub-1 shadow-banner group-hover:visible">
         <div
-          className="absolute left-[50%] top-[-0.375rem] z-[31] h-0 w-0 translate-x-[-50%]"
+          className="absolute -top-1.5 left-1/2 z-[31] size-0 -translate-x-1/2"
           style={{
             borderTop: '.625rem solid none',
             borderLeft: '.4375rem solid transparent',

@@ -1,9 +1,8 @@
-import useUIConfig from '@hooks/ui/useUIConfig';
-import { Ref } from 'react';
+import type { Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
+import useUIConfig from '@hooks/ui/useUIConfig';
 
-interface Props
-  extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   shiftType: WardShiftType | null | undefined;
   forwardRef?: Ref<HTMLDivElement>;
   isOnlyRequest?: boolean;

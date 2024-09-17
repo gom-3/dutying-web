@@ -1,9 +1,11 @@
-import { fireEvent, render, screen } from '@libs/util/test-utils';
-import { describe, expect, vi, it } from 'vitest';
-import NavigationBar from '.';
+import type ReactRouter from 'react-router';
 import { MemoryRouter, Route, Routes } from 'react-router';
+import identity from 'lodash-es/identity';
+import { describe, expect, vi, it } from 'vitest';
+import { fireEvent, render, screen } from '@libs/util/test-utils';
 import NavigationBarItem from './NavigationBarItem';
 import NavigationBarItemGroups from './NavigationBarItemGroup';
+import NavigationBar from '.';
 
 const mockNavigate = vi.fn();
 
@@ -20,7 +22,7 @@ vi.mock('@hooks/ui/useTutorial', () => ({
 }));
 
 vi.mock('react-router', async () => {
-  const actual = (await vi.importActual('react-router')) as typeof import('react-router');
+  const actual = (await vi.importActual('react-router')) as typeof ReactRouter;
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -32,19 +34,19 @@ vi.mock('react-router', async () => {
 
 describe('NavigationBar 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {
-    render(<NavigationBar isFold={false} setIsFold={() => {}} />);
+    render(<NavigationBar isFold={false} toggleFold={identity} />);
     expect(screen.getByText('가이드')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
   it('isFold가 true일 때 접힘 상태로 렌더링되어야 함', () => {
-    render(<NavigationBar isFold setIsFold={() => {}} />);
+    render(<NavigationBar isFold toggleFold={identity} />);
     const navigationBar = screen.getByTestId('navigation-bar');
     expect(navigationBar).toHaveClass('fixed translate-x-[-8rem]');
   });
 
   it('isFold가 false일 때 펼친 상태로 렌더링되어야 함', () => {
-    render(<NavigationBar isFold={false} setIsFold={() => {}} />);
+    render(<NavigationBar isFold={false} toggleFold={identity} />);
     const navigationBar = screen.getByTestId('navigation-bar');
     expect(navigationBar).toHaveClass('sticky');
   });
@@ -60,9 +62,7 @@ vi.mock('analytics', () => ({
 }));
 
 const MockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} />;
-const MockSelectedIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} style={{ fill: 'red' }} />
-);
+const MockSelectedIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props} style={{ fill: 'red' }} />;
 
 describe('NavigationBarGroup 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {
@@ -76,14 +76,7 @@ describe('NavigationBarGroup 컴포넌트', () => {
     it('정상적으로 렌더링되고 라우팅되어야 함', async () => {
       const mockPath = '/test-path';
       const mockText = 'Test';
-      render(
-        <NavigationBarItem
-          path={mockPath}
-          SelectedIcon={MockSelectedIcon}
-          Icon={MockIcon}
-          text={mockText}
-        />
-      );
+      render(<NavigationBarItem path={mockPath} SelectedIcon={MockSelectedIcon} Icon={MockIcon} text={mockText} />);
       const item = screen.getByText(mockText);
       expect(item).toBeInTheDocument();
       fireEvent.click(item);
@@ -96,17 +89,7 @@ describe('NavigationBarGroup 컴포넌트', () => {
       render(
         <MemoryRouter initialEntries={[mockPath]}>
           <Routes>
-            <Route
-              path={mockPath}
-              element={
-                <NavigationBarItem
-                  path={mockPath}
-                  SelectedIcon={MockSelectedIcon}
-                  Icon={MockIcon}
-                  text={mockText}
-                />
-              }
-            />
+            <Route path={mockPath} element={<NavigationBarItem path={mockPath} SelectedIcon={MockSelectedIcon} Icon={MockIcon} text={mockText} />} />
           </Routes>
         </MemoryRouter>
       );

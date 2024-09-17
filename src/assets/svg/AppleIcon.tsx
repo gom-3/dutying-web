@@ -1,12 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgAppleIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 28 34"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 28 34" {...props}>
     <mask
       id="apple_icon_svg__b"
       width={28}

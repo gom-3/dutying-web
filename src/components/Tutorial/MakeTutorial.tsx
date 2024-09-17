@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import useTutorial from '@hooks/ui/useTutorial';
-import { createPortal } from 'react-dom';
-import { StepConfig, StepsConfig, TutorialOverlay } from './TutorialOverlay';
-import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import type { StepConfig, StepsConfig } from './TutorialOverlay';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import useEditShift from '@hooks/shift/useEditShift';
+import useEditShiftStore from '@hooks/shift/useEditShift/store';
+import useTutorial from '@hooks/ui/useTutorial';
+import { TutorialOverlay } from './TutorialOverlay';
 
 const MakeTutorial = () => {
   const {
@@ -76,11 +77,7 @@ const MakeTutorial = () => {
   }, [showMakeTutorial]);
 
   return (
-    showMakeTutorial &&
-    createPortal(
-      <TutorialOverlay config={config} closeCallback={() => setMakeTutorial(false)} />,
-      document.getElementById('tutorial')!
-    )
+    showMakeTutorial && createPortal(<TutorialOverlay config={config} closeCallback={() => setMakeTutorial(false)} />, document.getElementById('tutorial')!)
   );
 };
 

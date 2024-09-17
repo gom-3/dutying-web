@@ -1,20 +1,9 @@
 import type { SVGProps } from 'react';
 const SvgFullLogoTransparent = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 92 26"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 92 26" {...props}>
     <path fill="url(#full_logo_transparent_svg__a)" d="M.322 0h91.356v25.22H.322z" />
     <defs>
-      <pattern
-        id="full_logo_transparent_svg__a"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
+      <pattern id="full_logo_transparent_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">
         <use xlinkHref="#full_logo_transparent_svg__b" transform="scale(.00193 .007)" />
       </pattern>
       <image

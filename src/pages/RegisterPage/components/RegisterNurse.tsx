@@ -1,17 +1,18 @@
+import type { CreateNurseDTO } from '@libs/api/nurse';
+import type { ChangeEvent } from 'react';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import imageCompression from 'browser-image-compression';
+import { match } from 'ts-pattern';
+import * as yup from 'yup';
+import { profileImages } from '@assets/profileImage';
 import { CameraIcon, CheckedIcon, RandomIcon, UncheckedIcon } from '@assets/svg';
-import TextField from '@components/TextField';
+import useAuth from '@hooks/auth/useAuth';
+import useRegister from '@hooks/auth/useRegister';
 import Button from '@components/Button';
 import Select from '@components/Select';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { match } from 'ts-pattern';
-import { CreateNurseDTO } from '@libs/api/nurse';
-import useRegister from '@hooks/auth/useRegister';
-import { profileImages } from '@assets/profileImage';
-import { ChangeEvent, useEffect, useRef } from 'react';
-import imageCompression from 'browser-image-compression';
-import useAuth from '@hooks/auth/useAuth';
+import TextField from '@components/TextField';
 
 const schema = yup
   .object()
@@ -109,72 +110,49 @@ function RegisterNurse() {
   }, [accountMe]);
 
   return (
-    <form
-      onSubmit={handleSubmit(registerAccountAndNurse)}
-      className="my-auto flex w-full flex-col items-center justify-center"
-    >
-      <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">
-        회원 정보
-      </h1>
+    <form onSubmit={handleSubmit(registerAccountAndNurse)} className="my-auto flex w-full flex-col items-center justify-center">
+      <h1 className="absolute left-0 top-0 font-apple text-[2rem] font-semibold text-text-1">회원 정보</h1>
       <div className="mt-[3.75rem] flex w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
         <div className="flex flex-col items-center gap-[1.875rem]">
           <div className="self-start font-apple text-[1.25rem] text-sub-3">프로필 이미지</div>
-          <div className="h-[8.75rem] w-[8.75rem] rounded-full border-[.625rem] border-sub-4">
-            <img
-              src={'data:image/png;base64,' + watchProfileImage}
-              className="h-full w-full rounded-full object-cover object-center"
-            />
+          <div className="size-[8.75rem] rounded-full border-[.625rem] border-sub-4">
+            <img src={'data:image/png;base64,' + watchProfileImage} className="size-full rounded-full object-cover object-center" />
           </div>
           <div className="flex h-[2.625rem] w-[16.875rem] cursor-pointer">
             <div
-              className="flex flex-1 items-center justify-center gap-[.25rem] rounded-l-[.3125rem] border-[.0625rem] border-r-[0px] border-sub-3"
+              className="flex flex-1 items-center justify-center gap-[.25rem] rounded-l-[.3125rem] border-[.0625rem] border-r-0 border-sub-3"
               onClick={handleRandomProfileImage}
             >
-              <RandomIcon className="h-[1.25rem] w-[1.25rem]" />
+              <RandomIcon className="size-5" />
               <p className="font-apple text-[1.25rem] font-medium text-sub-2.5">랜덤 변경</p>
             </div>
             <div
               className="flex flex-1 items-center justify-center gap-[.25rem] rounded-r-[.3125rem] border-[.0625rem] border-sub-3"
               onClick={handleUploadImgae}
             >
-              <CameraIcon className="h-[1.25rem]" />
+              <CameraIcon className="h-5" />
               <p className="font-apple text-[1.25rem] font-medium text-sub-2.5">사진 등록</p>
-              <input
-                ref={imageInputRef}
-                type="file"
-                className="hidden"
-                onChange={handleChangeImage}
-                accept="image/*"
-              />
+              <input ref={imageInputRef} type="file" className="hidden" onChange={handleChangeImage} accept="image/*" />
             </div>
           </div>
         </div>
         <div className="ml-[5.25rem] flex flex-col justify-between">
           <div>
-            <label
-              htmlFor="name"
-              className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-            >
+            <label htmlFor="name" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
               이름
             </label>
             <TextField
               id="name"
               className="h-[3.75rem] py-[1.0625rem] font-apple text-[1.5rem] font-medium text-sub-1"
               error={match(errors.name?.type)
-                .with(
-                  'matches',
-                  () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.'
-                )
+                .with('matches', () => '이름은 1~50자 한/영문에 숫자나 특수문자를 사용할 수 없습니다.')
                 .otherwise(() => undefined)}
               {...register('name')}
             />
           </div>
           <div className="flex gap-[2.8125rem]">
             <div className="flex-[1]">
-              <label
-                htmlFor="gender"
-                className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-              >
+              <label htmlFor="gender" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
                 성별
               </label>
               <Select
@@ -189,10 +167,7 @@ function RegisterNurse() {
               />
             </div>
             <div className="flex-[2]">
-              <label
-                htmlFor="phoneNum"
-                className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-              >
+              <label htmlFor="phoneNum" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
                 전화 번호
               </label>
               <TextField
@@ -209,12 +184,9 @@ function RegisterNurse() {
         </div>
       </div>
 
-      <div className="mt-[1.25rem] w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
+      <div className="mt-5 w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
         <div className="w-[16.875rem]">
-          <label
-            htmlFor="employmentDate"
-            className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-          >
+          <label htmlFor="employmentDate" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
             입사 년도
           </label>
           <TextField
@@ -227,47 +199,26 @@ function RegisterNurse() {
             {...register('employmentDate')}
           />
         </div>
-        <div className="mb-[1.25rem] mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
+        <div className="mb-5 mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
         <div className="flex flex-1 items-center">
           <div className="w-[16.875rem]">
             <p className="font-apple text-[1.25rem] text-sub-3">교대 근무자</p>
             <p className="font-apple text-[.875rem] text-main-2">* 근무표에 본인이 표시되나요?</p>
           </div>
           <div className="ml-[5.25rem] flex gap-[1.875rem]">
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', true)}
-            >
-              {watchIsWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                네
-              </div>
+            <div className="flex cursor-pointer items-center justify-center" onClick={() => setValue('isWorker', true)}>
+              {watchIsWorker ? <CheckedIcon className="size-[1.875rem]" /> : <UncheckedIcon className="size-[1.875rem]" />}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">네</div>
             </div>
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => setValue('isWorker', false)}
-            >
-              {!watchIsWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                아니오
-              </div>
+            <div className="flex cursor-pointer items-center justify-center" onClick={() => setValue('isWorker', false)}>
+              {!watchIsWorker ? <CheckedIcon className="size-[1.875rem]" /> : <UncheckedIcon className="size-[1.875rem]" />}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">아니오</div>
             </div>
           </div>
         </div>
       </div>
 
-      <Button
-        disabled={!isValid}
-        className="mt-[2.5rem] h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold"
-      >
+      <Button disabled={!isValid} className="mt-10 h-[3.75rem] w-[7.5rem] self-end text-center text-[2rem] font-semibold">
         다음
       </Button>
     </form>

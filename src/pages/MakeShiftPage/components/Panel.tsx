@@ -1,9 +1,9 @@
-import { events, sendEvent } from 'analytics';
-import useEditShift from '@hooks/shift/useEditShift';
 import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { match } from 'ts-pattern';
 import { RestoreIcon, RestoreIconDisable } from '@assets/svg';
-import { twMerge } from 'tailwind-merge';
+import useEditShift from '@hooks/shift/useEditShift';
+import { events, sendEvent } from 'analytics';
 
 function Panel() {
   const {
@@ -15,19 +15,14 @@ function Panel() {
 
   return !readonly && shiftStatus === 'success' && shift ? (
     <div
-      className={twMerge(
-        'flex flex-col rounded-[1.25rem] bg-white shadow-banner',
-        open && 'absolute bottom-[1.25rem] right-[1.25rem] h-[300%] max-h-[50vh]'
-      )}
+      className={twMerge('flex flex-col rounded-[1.25rem] bg-white shadow-banner', open && 'absolute bottom-[1.25rem] right-[1.25rem] h-[300%] max-h-[50vh]')}
       style={{
-        width: `${
-          (shift.wardShiftTypes.filter((x) => x.isCounted).length + 1) * 2 + 1.25 + 1.25
-        }rem`,
+        width: `${(shift.wardShiftTypes.filter((x) => x.isCounted).length + 1) * 2 + 1.25 + 1.25}rem`,
       }}
     >
-      <div className="flex h-[2.5rem] w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
+      <div className="flex h-10 w-full border-b-[.0313rem] border-sub-4 font-apple text-base font-medium">
         <div
-          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
+          className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-tl-[1.25rem] border-r-[.0313rem] border-sub-4 
           ${currentTab === 'histories' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('histories');
@@ -37,7 +32,7 @@ function Panel() {
           기록
         </div>
         <div
-          className={`flex h-[2.5rem] flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
+          className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-tr-[1.25rem] 
           ${currentTab === 'faults' ? 'bg-main-4 text-sub-1' : 'bg-sub-5 text-sub-2.5'}`}
           onClick={() => {
             setCurrentTab('faults');
@@ -46,7 +41,7 @@ function Panel() {
         >
           <p className="relative">
             문제점
-            <span className="absolute right-0 top-0 flex h-[.875rem] w-[.875rem] translate-x-[100%] items-center justify-center rounded-full bg-main-2 font-apple text-[.625rem] text-white">
+            <span className="absolute right-0 top-0 flex size-[.875rem] translate-x-full items-center justify-center rounded-full bg-main-2 font-apple text-[.625rem] text-white">
               {[...faults.values()].length}
             </span>
           </p>
@@ -76,11 +71,7 @@ function Panel() {
                   }`}
                   onClick={() => {
                     const diff = histories.history.length - index - 1 - histories.current;
-                    sendEvent(
-                      diff > 0
-                        ? events.makePage.panel.redoBypanel
-                        : events.makePage.panel.undoByPanel
-                    );
+                    sendEvent(diff > 0 ? events.makePage.panel.redoBypanel : events.makePage.panel.undoByPanel);
                     moveHistory(diff);
                   }}
                 >
@@ -90,24 +81,11 @@ function Panel() {
                   <div className="h-full w-[.0313rem] bg-sub-3" />
                   <p className="shrink-0">
                     {match(history)
-                      .with(
-                        { prevShiftType: null },
-                        () => `추가 → ${history.nextShiftType?.shortName}`
-                      )
-                      .with(
-                        { nextShiftType: null },
-                        () => `${history.prevShiftType?.shortName} → 삭제`
-                      )
-                      .otherwise(
-                        () =>
-                          `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`
-                      )}
+                      .with({ prevShiftType: null }, () => `추가 → ${history.nextShiftType?.shortName}`)
+                      .with({ nextShiftType: null }, () => `${history.prevShiftType?.shortName} → 삭제`)
+                      .otherwise(() => `${history.prevShiftType?.shortName} → ${history.nextShiftType?.shortName}`)}
                   </p>
-                  {isPrev ? (
-                    <RestoreIconDisable className="ml-auto h-[1.125rem] w-[1.125rem]" />
-                  ) : (
-                    <RestoreIcon className="ml-auto h-[1.125rem] w-[1.125rem]" />
-                  )}
+                  {isPrev ? <RestoreIconDisable className="ml-auto size-[1.125rem]" /> : <RestoreIcon className="ml-auto size-[1.125rem]" />}
                 </div>
               );
             })}

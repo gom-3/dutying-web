@@ -1,10 +1,10 @@
-import useAuth from '@hooks/auth/useAuth';
-import axiosInstance from '@libs/api/client';
-import ROUTE from '@libs/constant/path';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { TailSpin } from 'react-loader-spinner';
 import { useNavigate } from 'react-router';
+import useAuth from '@hooks/auth/useAuth';
+import axiosInstance from '@libs/api/client';
+import ROUTE from '@libs/constant/path';
 
 function RefreshPage() {
   const {

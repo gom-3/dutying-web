@@ -203,10 +203,7 @@ export const demo1 = {
         },
         lastWardShiftList: [2, 3, 3, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 4, 2, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 2, 4, 4, 3, 3, 3, 4, 4,
-          2,
-        ],
+        wardShiftList: [4, 4, 4, 2, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 2, 4, 4, 3, 3, 3, 4, 4, 2],
         wardReqShiftList: [
           null,
           null,
@@ -253,10 +250,7 @@ export const demo1 = {
         },
         lastWardShiftList: [1, 2, 3, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 1, 1, 3, 3, 4, 4, 3, 3, 3, 4, 4, 1, 1, 2, 2, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 2,
-          3,
-        ],
+        wardShiftList: [4, 4, 1, 1, 3, 3, 4, 4, 3, 3, 3, 4, 4, 1, 1, 2, 2, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 2, 3],
         wardReqShiftList: [
           null,
           null,
@@ -303,10 +297,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 2, 4, 1, 1, 3, 3, 4, 4, 2, 2, 2, 4, 4, 1, 1, 1, 1, 4, 3, 3, 4, 4, 4, 2, 2, 4, 3, 3,
-          4,
-        ],
+        wardShiftList: [1, 1, 2, 4, 1, 1, 3, 3, 4, 4, 2, 2, 2, 4, 4, 1, 1, 1, 1, 4, 3, 3, 4, 4, 4, 2, 2, 4, 3, 3, 4],
         wardReqShiftList: [
           null,
           null,
@@ -355,10 +346,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 4, 2, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 3, 3, 4, 4, 4, 1, 1, 1, 2, 4, 4, 1, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 2, 2, 4, 4, 2, 2, 4,
-          1,
-        ],
+        wardShiftList: [3, 3, 3, 4, 4, 4, 1, 1, 1, 2, 4, 4, 1, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 2, 2, 4, 4, 2, 2, 4, 1],
         wardReqShiftList: [
           null,
           null,
@@ -405,10 +393,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 1, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 2, 4, 4, 4, 1, 1, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1,
-          4,
-        ],
+        wardShiftList: [2, 2, 4, 4, 4, 1, 1, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4],
         wardReqShiftList: [
           null,
           null,
@@ -455,10 +440,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 1, 2, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 4, 4, 4, 3, 3, 4, 4, 2, 2, 4, 1, 2, 2, 2, 4, 4, 4, 3, 3, 4, 4, 1, 2, 2, 2, 4, 1, 1, 1,
-          1,
-        ],
+        wardShiftList: [3, 4, 4, 4, 3, 3, 4, 4, 2, 2, 4, 1, 2, 2, 2, 4, 4, 4, 3, 3, 4, 4, 1, 2, 2, 2, 4, 1, 1, 1, 1],
         wardReqShiftList: [
           null,
           null,
@@ -505,10 +487,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 4, 2, 2, 2, 2, 4, 4, 1, 1, 4, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4,
-          2,
-        ],
+        wardShiftList: [1, 1, 4, 2, 2, 2, 2, 4, 4, 1, 1, 4, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2],
         wardReqShiftList: [
           null,
           null,
@@ -557,10 +536,7 @@ export const demo1 = {
         },
         lastWardShiftList: [1, 2, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 2, 3, 3, 4, 4, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4,
-          3,
-        ],
+        wardShiftList: [4, 4, 2, 3, 3, 4, 4, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 3],
         wardReqShiftList: [
           null,
           null,
@@ -607,10 +583,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 4, 1, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 2, 4, 1, 1, 4, 1, 1, 3, 3, 3, 4, 4, 1, 1, 1, 4, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2, 2, 2,
-          4,
-        ],
+        wardShiftList: [2, 2, 4, 1, 1, 4, 1, 1, 3, 3, 3, 4, 4, 1, 1, 1, 4, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2, 2, 2, 4],
         wardReqShiftList: [
           null,
           null,
@@ -657,10 +630,7 @@ export const demo1 = {
         },
         lastWardShiftList: [2, 3, 3, 4],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 2, 2, 2, 2, 4, 3, 3, 4, 4, 2, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 1, 1, 3, 3, 4, 4, 4, 1, 1,
-          1,
-        ],
+        wardShiftList: [4, 2, 2, 2, 2, 4, 3, 3, 4, 4, 2, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 1, 1, 3, 3, 4, 4, 4, 1, 1, 1],
         wardReqShiftList: [
           null,
           null,
@@ -707,10 +677,7 @@ export const demo1 = {
         },
         lastWardShiftList: [2, 2, 2, 4],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 3, 3, 3, 4, 4, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 4, 4, 2, 3, 3, 4, 4, 1, 1, 3, 3, 4, 4, 2,
-          2,
-        ],
+        wardShiftList: [4, 3, 3, 3, 4, 4, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 4, 4, 2, 3, 3, 4, 4, 1, 1, 3, 3, 4, 4, 2, 2],
         wardReqShiftList: [
           null,
           null,
@@ -757,10 +724,7 @@ export const demo1 = {
         },
         lastWardShiftList: [1, 2, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 4, 1, 1, 1, 4, 3, 3, 3, 4, 4, 4, 1, 4, 4, 2, 2, 2, 4, 1, 2, 3, 3, 4, 4, 4, 2, 2, 3, 3,
-          4,
-        ],
+        wardShiftList: [2, 4, 1, 1, 1, 4, 3, 3, 3, 4, 4, 4, 1, 4, 4, 2, 2, 2, 4, 1, 2, 3, 3, 4, 4, 4, 2, 2, 3, 3, 4],
         wardReqShiftList: [
           null,
           null,
@@ -809,10 +773,7 @@ export const demo1 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 1, 4, 4, 2, 2, 2, 4, 4, 2, 2, 3, 3, 3, 4, 4, 1, 1, 4, 3, 3, 4, 4, 1, 1, 1, 4, 2, 3,
-          3,
-        ],
+        wardShiftList: [1, 1, 1, 4, 4, 2, 2, 2, 4, 4, 2, 2, 3, 3, 3, 4, 4, 1, 1, 4, 3, 3, 4, 4, 1, 1, 1, 4, 2, 3, 3],
         wardReqShiftList: [
           null,
           null,
@@ -859,10 +820,7 @@ export const demo1 = {
         },
         lastWardShiftList: [2, 4, 4, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 3, 3, 4, 4, 1, 2, 2, 4, 3, 3, 4, 4, 1, 4, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 2, 2, 3, 3, 4,
-          4,
-        ],
+        wardShiftList: [3, 3, 3, 4, 4, 1, 2, 2, 4, 3, 3, 4, 4, 1, 4, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 2, 2, 3, 3, 4, 4],
         wardReqShiftList: [
           null,
           null,
@@ -1128,10 +1086,7 @@ export const demo2 = {
         },
         lastWardShiftList: [2, 3, 3, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 4, 2, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 2, 4, 4, 3, 3, 3, 4, 4,
-          2,
-        ],
+        wardShiftList: [4, 4, 4, 2, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 2, 4, 4, 3, 3, 3, 4, 4, 2],
         wardReqShiftList: [
           null,
           null,
@@ -1178,10 +1133,7 @@ export const demo2 = {
         },
         lastWardShiftList: [1, 2, 3, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 1, 1, 3, 3, 4, 4, 3, 3, 3, 4, 4, 1, 1, 2, 2, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 2,
-          3,
-        ],
+        wardShiftList: [4, 4, 1, 1, 3, 3, 4, 4, 3, 3, 3, 4, 4, 1, 1, 2, 2, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 4, 2, 3],
         wardReqShiftList: [
           null,
           null,
@@ -1228,10 +1180,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 2, 4, 1, 1, 3, 3, 4, 4, 2, 2, 2, 4, 4, 1, 1, 1, 1, 4, 3, 3, 4, 4, 4, 2, 2, 4, 3, 3,
-          4,
-        ],
+        wardShiftList: [1, 1, 2, 4, 1, 1, 3, 3, 4, 4, 2, 2, 2, 4, 4, 1, 1, 1, 1, 4, 3, 3, 4, 4, 4, 2, 2, 4, 3, 3, 4],
         wardReqShiftList: [
           null,
           null,
@@ -1280,10 +1229,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 4, 2, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 3, 3, 4, 4, 4, 1, 1, 1, 2, 4, 4, 1, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 2, 2, 4, 4, 2, 2, 4,
-          1,
-        ],
+        wardShiftList: [3, 3, 3, 4, 4, 4, 1, 1, 1, 2, 4, 4, 1, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 2, 2, 4, 4, 2, 2, 4, 1],
         wardReqShiftList: [
           null,
           null,
@@ -1330,10 +1276,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 1, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 2, 4, 4, 4, 1, 1, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1,
-          4,
-        ],
+        wardShiftList: [2, 2, 4, 4, 4, 1, 1, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4],
         wardReqShiftList: [
           null,
           null,
@@ -1380,10 +1323,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 1, 2, 3],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 4, 4, 4, 3, 3, 4, 4, 2, 2, 4, 1, 2, 2, 2, 4, 4, 4, 3, 3, 4, 4, 1, 2, 2, 2, 4, 1, 1, 1,
-          1,
-        ],
+        wardShiftList: [3, 4, 4, 4, 3, 3, 4, 4, 2, 2, 4, 1, 2, 2, 2, 4, 4, 4, 3, 3, 4, 4, 1, 2, 2, 2, 4, 1, 1, 1, 1],
         wardReqShiftList: [
           null,
           null,
@@ -1430,10 +1370,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 4, 2, 2, 2, 2, 4, 4, 1, 1, 4, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4,
-          2,
-        ],
+        wardShiftList: [1, 1, 4, 2, 2, 2, 2, 4, 4, 1, 1, 4, 4, 1, 3, 3, 3, 4, 4, 1, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2],
         wardReqShiftList: [
           null,
           null,
@@ -1482,10 +1419,7 @@ export const demo2 = {
         },
         lastWardShiftList: [1, 2, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 4, 2, 3, 3, 4, 4, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4,
-          3,
-        ],
+        wardShiftList: [4, 4, 2, 3, 3, 4, 4, 2, 2, 2, 4, 3, 3, 3, 4, 4, 1, 1, 1, 4, 4, 2, 2, 2, 4, 1, 1, 1, 1, 4, 3],
         wardReqShiftList: [
           null,
           null,
@@ -1532,10 +1466,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 4, 1, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 2, 4, 1, 1, 4, 1, 1, 3, 3, 3, 4, 4, 1, 1, 1, 4, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2, 2, 2,
-          4,
-        ],
+        wardShiftList: [2, 2, 4, 1, 1, 4, 1, 1, 3, 3, 3, 4, 4, 1, 1, 1, 4, 2, 2, 2, 4, 4, 3, 3, 3, 4, 4, 2, 2, 2, 4],
         wardReqShiftList: [
           null,
           null,
@@ -1582,10 +1513,7 @@ export const demo2 = {
         },
         lastWardShiftList: [2, 3, 3, 4],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 2, 2, 2, 2, 4, 3, 3, 4, 4, 2, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 1, 1, 3, 3, 4, 4, 4, 1, 1,
-          1,
-        ],
+        wardShiftList: [4, 2, 2, 2, 2, 4, 3, 3, 4, 4, 2, 2, 2, 4, 1, 3, 3, 3, 4, 4, 1, 1, 1, 3, 3, 4, 4, 4, 1, 1, 1],
         wardReqShiftList: [
           null,
           null,
@@ -1632,10 +1560,7 @@ export const demo2 = {
         },
         lastWardShiftList: [2, 2, 2, 4],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          4, 3, 3, 3, 4, 4, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 4, 4, 2, 3, 3, 4, 4, 1, 1, 3, 3, 4, 4, 2,
-          2,
-        ],
+        wardShiftList: [4, 3, 3, 3, 4, 4, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 4, 4, 2, 3, 3, 4, 4, 1, 1, 3, 3, 4, 4, 2, 2],
         wardReqShiftList: [
           null,
           null,
@@ -1682,10 +1607,7 @@ export const demo2 = {
         },
         lastWardShiftList: [1, 2, 2, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          2, 4, 1, 1, 1, 4, 3, 3, 3, 4, 4, 4, 1, 4, 4, 2, 2, 2, 4, 1, 2, 3, 3, 4, 4, 4, 2, 2, 3, 3,
-          4,
-        ],
+        wardShiftList: [2, 4, 1, 1, 1, 4, 3, 3, 3, 4, 4, 4, 1, 4, 4, 2, 2, 2, 4, 1, 2, 3, 3, 4, 4, 4, 2, 2, 3, 3, 4],
         wardReqShiftList: [
           null,
           null,
@@ -1734,10 +1656,7 @@ export const demo2 = {
         },
         lastWardShiftList: [4, 4, 1, 1],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          1, 1, 1, 4, 4, 2, 2, 2, 4, 4, 2, 2, 3, 3, 3, 4, 4, 1, 1, 4, 3, 3, 4, 4, 1, 1, 1, 4, 2, 3,
-          3,
-        ],
+        wardShiftList: [1, 1, 1, 4, 4, 2, 2, 2, 4, 4, 2, 2, 3, 3, 3, 4, 4, 1, 1, 4, 3, 3, 4, 4, 1, 1, 1, 4, 2, 3, 3],
         wardReqShiftList: [
           null,
           null,
@@ -1784,10 +1703,7 @@ export const demo2 = {
         },
         lastWardShiftList: [2, 4, 4, 2],
         lastWardReqShiftList: [null, null, null, null],
-        wardShiftList: [
-          3, 3, 3, 4, 4, 1, 2, 2, 4, 3, 3, 4, 4, 1, 4, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 2, 2, 3, 3, 4,
-          4,
-        ],
+        wardShiftList: [3, 3, 3, 4, 4, 1, 2, 2, 4, 3, 3, 4, 4, 1, 4, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 2, 2, 3, 3, 4, 4],
         wardReqShiftList: [
           null,
           null,

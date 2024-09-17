@@ -1,6 +1,6 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { produce } from 'immer';
 
 interface State {
   showMakeTutorial: boolean;

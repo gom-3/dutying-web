@@ -1,12 +1,12 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import useAuth from '../useAuth';
-import * as nurseApi from '@libs/api/nurse';
-import * as wardApi from '@libs/api/ward';
-import * as accountApi from '@libs/api/account';
 import { useNavigate } from 'react-router';
-import ROUTE from '@libs/constant/path';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import useLoading from '@hooks/ui/useLoading';
 import useTutorial from '@hooks/ui/useTutorial';
+import * as accountApi from '@libs/api/account';
+import * as nurseApi from '@libs/api/nurse';
+import * as wardApi from '@libs/api/ward';
+import ROUTE from '@libs/constant/path';
+import useAuth from '../useAuth';
 
 const useRegister = () => {
   const {
@@ -20,8 +20,7 @@ const useRegister = () => {
   const navigate = useNavigate();
 
   const { mutate: changeAccountStatusMutate } = useMutation(
-    ({ accountId, status }: { accountId: number; status: Account['status'] }) =>
-      accountApi.eidtAccountStatus(accountId, status),
+    ({ accountId, status }: { accountId: number; status: Account['status'] }) => accountApi.eidtAccountStatus(accountId, status),
     {
       onSuccess: ({ status }) => {
         handleGetAccountMe();
@@ -29,43 +28,35 @@ const useRegister = () => {
       },
     }
   );
-  const { mutate: createWardMutate } = useMutation(
-    (createWardDTO: wardApi.CreateWardDTO) => wardApi.createWrad(createWardDTO),
-    {
-      onMutate: () => {
-        setLoading(true);
-      },
-      onSettled: () => {
-        setLoading(false);
-      },
-      onSuccess: () => {
-        initTutorial();
-        accountMe &&
-          changeAccountStatusMutate({ accountId: accountMe.accountId, status: 'LINKED' });
-      },
-    }
-  );
+  const { mutate: createWardMutate } = useMutation((createWardDTO: wardApi.CreateWardDTO) => wardApi.createWrad(createWardDTO), {
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+    onSuccess: () => {
+      initTutorial();
+      accountMe && changeAccountStatusMutate({ accountId: accountMe.accountId, status: 'LINKED' });
+    },
+  });
 
-  const { mutate: enterWardMutate } = useMutation(
-    (wardId: number) => wardApi.addMeToWatingNurses(wardId),
-    {
-      onMutate: () => {
-        setLoading(true);
-      },
-      onSettled: () => {
-        setLoading(false);
-      },
-      onSuccess: () => {
-        if (!accountId) return;
-        changeAccountStatusMutate({ accountId, status: 'WARD_ENTRY_PENDING' });
-        navigate(ROUTE.REGISTER);
-      },
-    }
-  );
+  const { mutate: enterWardMutate } = useMutation((wardId: number) => wardApi.addMeToWatingNurses(wardId), {
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+    onSuccess: () => {
+      if (!accountId) return;
+      changeAccountStatusMutate({ accountId, status: 'WARD_ENTRY_PENDING' });
+      navigate(ROUTE.REGISTER);
+    },
+  });
 
   const { mutate: cancelWaitingMutate } = useMutation(
-    ({ wardId, nurseId }: { wardId: number; nurseId: number }) =>
-      wardApi.deleteWatingNurses(wardId, nurseId),
+    ({ wardId, nurseId }: { wardId: number; nurseId: number }) => wardApi.deleteWatingNurses(wardId, nurseId),
     {
       onSuccess: () => {
         if (!accountId) return;
@@ -75,17 +66,11 @@ const useRegister = () => {
     }
   );
 
-  const { data: accountWaitingWard } = useQuery(
-    ['accountWaitingWard'],
-    accountApi.getAccountMeWaiting,
-    {
-      enabled: accountMe?.status === 'WARD_ENTRY_PENDING',
-    }
-  );
+  const { data: accountWaitingWard } = useQuery(['accountWaitingWard'], accountApi.getAccountMeWaiting, {
+    enabled: accountMe?.status === 'WARD_ENTRY_PENDING',
+  });
 
-  const registerAccountAndNurse = async (
-    createNurseDTO: nurseApi.CreateNurseDTO & { profileImage: string }
-  ) => {
+  const registerAccountAndNurse = async (createNurseDTO: nurseApi.CreateNurseDTO & { profileImage: string }) => {
     if (!accountId || !accountMe) return;
     setLoading(true);
     if (accountMe.status === 'NURSE_INFO_PENDING') {

@@ -6,10 +6,7 @@ export type Step = {
   description: JSX.Element | null;
 };
 
-type CreateAccountRequestDTO = Pick<
-  Nurse,
-  'name' | 'gender' | 'phoneNum' | 'employmentDate' | 'isWorker'
->;
+type CreateAccountRequestDTO = Pick<Nurse, 'name' | 'gender' | 'phoneNum' | 'employmentDate' | 'isWorker'>;
 
 const useCreateAccount = () => {
   // 추후 server state로 변경

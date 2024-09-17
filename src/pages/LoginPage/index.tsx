@@ -1,14 +1,7 @@
-import {
-  AppleIcon,
-  BackCircle,
-  FullLogo,
-  KakaoIcon,
-  LogoSymbolFill,
-  NextCircle,
-} from '@assets/svg';
-import ROUTE from '@libs/constant/path';
-import { useNavigate } from 'react-router';
 import { Carousel } from 'react-responsive-carousel';
+import { useNavigate } from 'react-router';
+import { AppleIcon, BackCircle, FullLogo, KakaoIcon, LogoSymbolFill, NextCircle } from '@assets/svg';
+import ROUTE from '@libs/constant/path';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import './index.css';
 
@@ -27,22 +20,12 @@ const LoginPage = () => {
           showIndicators={false}
           showThumbs={false}
           statusFormatter={(current, total) => `${current} / ${total}`}
-          renderArrowPrev={(click) => (
-            <BackCircle
-              className="absolute left-[5rem] top-[50%] z-10 h-[3.25rem] w-[3.25rem] translate-y-[-50%] cursor-pointer"
-              onClick={click}
-            />
-          )}
-          renderArrowNext={(click) => (
-            <NextCircle
-              className="absolute right-[5rem] top-[50%] z-10 h-[3.25rem] w-[3.25rem] translate-y-[-50%] cursor-pointer"
-              onClick={click}
-            />
-          )}
+          renderArrowPrev={(click) => <BackCircle className="absolute left-20 top-1/2 z-10 size-[3.25rem] translate-y-1/2 cursor-pointer" onClick={click} />}
+          renderArrowNext={(click) => <NextCircle className="absolute right-20 top-1/2 z-10 size-[3.25rem] translate-y-1/2 cursor-pointer" onClick={click} />}
         >
-          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
-          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
-          <div className='h-screen w-full min-w-[1px] bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-px bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-px bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>
+          <div className='h-screen w-full min-w-px bg-[url("/img/login_3.webp")] bg-cover bg-center'></div>
         </Carousel>
       </div>
       <div className="z-10 flex h-screen min-w-[48.75rem] flex-1 shrink-0 flex-col items-center justify-between bg-white px-[6.5625rem] pb-[6.25rem] pt-[8.75rem]">
@@ -53,36 +36,26 @@ const LoginPage = () => {
         <div className="flex flex-col">
           <h1 className="font-apple text-[2rem] font-semibold text-text-1">로그인</h1>
           <a
-            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao?nextPageUrl=${
-              location.origin
-            }/make`}
+            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao?nextPageUrl=${location.origin}/make`}
             className="mt-[2.625rem] flex h-[6.25rem] w-[35.625rem] items-center justify-center rounded-[1.25rem] border bg-[#FEE500] shadow-banner"
           >
-            <KakaoIcon className="mr-[3.125rem] h-[2.125rem] w-[2.25rem]" />
+            <KakaoIcon className="mr-[3.125rem] h-[2.125rem] w-9" />
             <div className="font-apple text-[2rem] text-sub-1">카카오 계정으로 시작하기</div>
           </a>
           <a
-            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/apple?nextPageUrl=${
-              location.origin
-            }/make`}
-            className="mt-[1.5rem] flex h-[6.25rem] w-[35.625rem] items-center justify-center rounded-[1.25rem] border bg-[#231F20] shadow-banner"
+            href={`${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/apple?nextPageUrl=${location.origin}/make`}
+            className="mt-6 flex h-[6.25rem] w-[35.625rem] items-center justify-center rounded-[1.25rem] border bg-[#231F20] shadow-banner"
           >
-            <AppleIcon className="mr-[3.125rem] h-[2.125rem] w-[2.25rem]" />
+            <AppleIcon className="mr-[3.125rem] h-[2.125rem] w-9" />
             <div className="font-apple text-[2rem] text-white">Apple 계정으로 시작하기</div>
           </a>
         </div>
         <div className="flex font-apple text-[1rem] text-sub-3">
           버튼을 누르면
-          <a
-            href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
-            className="ml-[.5rem] underline underline-offset-[.1875rem]"
-          >
+          <a href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4" className="ml-[.5rem] underline underline-offset-[.1875rem]">
             서비스 약관,
           </a>
-          <a
-            href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
-            className="ml-[.5rem] underline underline-offset-[.1875rem]"
-          >
+          <a href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4" className="ml-[.5rem] underline underline-offset-[.1875rem]">
             개인정보 취급 방침
           </a>
           에 동의하신 것으로 간주합니다.

@@ -1,6 +1,6 @@
+import { expect, vi } from 'vitest';
 import { render, screen, userEvent } from '@libs/util/test-utils';
 import TextField from '.';
-import { expect, vi } from 'vitest';
 
 describe('TextField 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {
@@ -23,8 +23,6 @@ describe('TextField 컴포넌트', () => {
 
   it('error prop이 주어지면 TextField의 외곽선을 빨간색으로 변경해야 함', () => {
     render(<TextField error="error" />);
-    expect(screen.getByText('error').previousElementSibling).toHaveClass(
-      'outline-red focus:outline-red'
-    );
+    expect(screen.getByText('error').previousElementSibling).toHaveClass('outline-red focus:outline-red');
   });
 });

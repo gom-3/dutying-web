@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { match } from 'ts-pattern';
 import { ArrowDownIcon } from '@assets/svg';
-import Toggle from '@components/Toggle';
 import useEditShift from '@hooks/shift/useEditShift';
 import { events, sendEvent } from 'analytics';
-
-import { match } from 'ts-pattern';
+import Toggle from '@components/Toggle';
 
 const Select = ({
   value,
@@ -13,12 +12,12 @@ const Select = ({
 }: React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> & {
   options: number[];
 }) => (
-  <div className="relative mx-[.3125rem] h-[2.75rem] w-[4.1875rem]">
-    <ArrowDownIcon className="absolute right-[.625rem] top-[50%] h-[1.5625rem] w-[1.5625rem] translate-y-[-50%]" />
+  <div className="relative mx-[.3125rem] h-11 w-[4.1875rem]">
+    <ArrowDownIcon className="absolute right-[.625rem] top-1/2 size-[1.5625rem] translate-y-1/2" />
     <select
       value={value}
       onChange={onChange}
-      className="relative z-10 h-full w-full appearance-none rounded-[.3125rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-4"
+      className="relative z-10 size-full appearance-none rounded-[.3125rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-4"
     >
       {options?.map((option, _) => (
         <option key={_} value={option}>
@@ -40,10 +39,7 @@ const SetConstraint = () => {
     wardConstraint && (
       <div className="flex w-[36.25rem] flex-col font-apple">
         {Object.entries(checkFaultOptions).map(([key, { label, value, isActive }]) => (
-          <div
-            key={key}
-            className="flex h-[4.625rem] items-center border-b-[.0313rem] border-sub-4.5 px-[2.5rem] last:border-none"
-          >
+          <div key={key} className="flex h-[4.625rem] items-center border-b-[.0313rem] border-sub-4.5 px-10 last:border-none">
             <p className="text-[1.25rem] text-sub-1">{label}</p>
             {match(key)
               .with('maxContinuousWork', () => (
@@ -57,10 +53,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousWorkVal: parseInt(e.target.value),
                       });
-                      sendEvent(
-                        events.makePage.editWardModal.changeConstraintValue,
-                        'maxContinuousWorkVal'
-                      );
+                      sendEvent(events.makePage.editWardModal.changeConstraintValue, 'maxContinuousWorkVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -79,10 +72,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         maxContinuousNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(
-                        events.makePage.editWardModal.changeConstraintValue,
-                        'maxContinuousNightVal'
-                      );
+                      sendEvent(events.makePage.editWardModal.changeConstraintValue, 'maxContinuousNightVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -101,10 +91,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minContinuousNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(
-                        events.makePage.editWardModal.changeConstraintValue,
-                        'minContinuousNightVal'
-                      );
+                      sendEvent(events.makePage.editWardModal.changeConstraintValue, 'minContinuousNightVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -123,10 +110,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minNightIntervalVal: parseInt(e.target.value),
                       });
-                      sendEvent(
-                        events.makePage.editWardModal.changeConstraintValue,
-                        'minNightIntervalVal'
-                      );
+                      sendEvent(events.makePage.editWardModal.changeConstraintValue, 'minNightIntervalVal');
                     }}
                     className="w-[4.125rem]"
                   />
@@ -144,10 +128,7 @@ const SetConstraint = () => {
                         ...wardConstraint,
                         minOffAssignAfterNightVal: parseInt(e.target.value),
                       });
-                      sendEvent(
-                        events.makePage.editWardModal.changeConstraintValue,
-                        'minOffAssignAfterNightVal'
-                      );
+                      sendEvent(events.makePage.editWardModal.changeConstraintValue, 'minOffAssignAfterNightVal');
                     }}
                     className="w-[4.125rem]"
                   />

@@ -1,9 +1,9 @@
-import useAuth from '@hooks/auth/useAuth';
-import ROUTE from '@libs/constant/path';
-import useInterval from '@libs/util/useInterval';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Outlet, useNavigate } from 'react-router';
+import useAuth from '@hooks/auth/useAuth';
+import ROUTE from '@libs/constant/path';
+import useInterval from '@libs/util/useInterval';
 
 function AuthzLayout() {
   const [demoRemainTime, setDemoRemainTime] = useState<string | null>(null);
@@ -26,9 +26,7 @@ function AuthzLayout() {
     () => {
       if (demoStartDate && new Date(demoStartDate).getTime() + 3540000 - new Date().getTime() > 0) {
         setDemoRemainTime(
-          `듀팅 체험중 ${Math.ceil(
-            (new Date(demoStartDate).getTime() + 3540000 - new Date().getTime()) / 1000 / 60
-          )}:${Math.ceil(
+          `듀팅 체험중 ${Math.ceil((new Date(demoStartDate).getTime() + 3540000 - new Date().getTime()) / 1000 / 60)}:${Math.ceil(
             ((new Date(demoStartDate).getTime() + 3540000 - new Date().getTime()) / 1000) % 60
           )}`
         );
@@ -41,7 +39,7 @@ function AuthzLayout() {
 
   return (
     isAuth && (
-      <div className="h-full w-full">
+      <div className="size-full">
         <Helmet title={demoRemainTime || '듀팅 | Dutying'} />
         <Outlet />
       </div>

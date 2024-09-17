@@ -1,6 +1,6 @@
+import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { match } from 'ts-pattern';
-import { toast } from 'react-hot-toast';
 import ROUTE from '@libs/constant/path';
 
 const axiosInstance = axios.create({

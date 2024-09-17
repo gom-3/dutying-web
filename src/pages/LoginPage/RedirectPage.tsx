@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { TailSpin } from 'react-loader-spinner';
-import qs from 'qs';
+import { parse } from 'qs';
 import useAuth from '@hooks/auth/useAuth';
 
 const RedirectPage = () => {
@@ -9,7 +9,7 @@ const RedirectPage = () => {
   } = useAuth();
 
   useEffect(() => {
-    const query = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const query = parse(location.search, { ignoreQueryPrefix: true });
     const accessToken = query?.['accessToken'] as string;
     const nextPageUrl = query?.['nextPageUrl'] as string;
     if (accessToken) {
