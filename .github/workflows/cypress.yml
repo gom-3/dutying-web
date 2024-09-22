@@ -15,7 +15,7 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
       - name: npm ci
-        run: pnpm install --frozen-lockfile
+        run: PUPPETEER_DOWNLOAD_BASE_URL="https://storage.googleapis.com/chrome-for-testing-public" pnpm install --frozen-lockfile
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
