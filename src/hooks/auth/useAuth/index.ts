@@ -1,6 +1,6 @@
 import { shallow } from 'zustand/shallow';
 import useAuthStore from './store';
-import axiosInstance from '@libs/api/client';
+import axiosInstance, { setAccessToken } from '@libs/api/client';
 import { demoStart, getAccountMe } from '@libs/api/auth';
 import { useLocation, useNavigate } from 'react-router';
 import ROUTE from '@libs/constant/path';
@@ -86,6 +86,12 @@ const useAuth = (activeEffect = false) => {
     setState('nurseId', account.nurseId);
     setState('isAuth', true);
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (_loaded && activeEffect) {
