@@ -1,43 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "types": ["cypress", "@testing-library/cypress"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": "src",
-    "paths": {
-      "@assets/*": ["assets/*"],
-      "@assets": ["assets"],
-      "@components/*": ["components/*"],
-      "@components": ["components"],
-      "@constants/*": ["constants/*"],
-      "@constants": ["constants"],
-      "@libs/*": ["libs/*"],
-      "@libs": ["libs"],
-      "@hooks/*": ["hooks/*"],
-      "@hooks": ["hooks"],
-      "@types/*": ["types/*"],
-      "@types": ["types"],
-      "@pages/*": ["pages/*"],
-      "@pages": ["pages"]
-    }
-  },
-  "include": ["src", "**/*.ts"],
+  "files": [],
   "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
     {
       "path": "./tsconfig.node.json"
     }

@@ -5,7 +5,7 @@ import useLoading from '@hooks/ui/useLoading';
 import useTutorial from '@hooks/ui/useTutorial';
 import useInitStore from '@hooks/useInitStore';
 import { demoStart, getAccountMe } from '@libs/api/auth';
-import axiosInstance from '@libs/api/client';
+import axiosInstance, { setAccessToken } from '@libs/api/client';
 import ROUTE from '@libs/constant/path';
 import { events, sendEvent } from 'analytics';
 import useAuthStore from './store';
@@ -62,6 +62,12 @@ const useAuth = (activeEffect = false) => {
     setState('nurseId', account.nurseId);
     setState('isAuth', true);
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (_loaded && activeEffect) {
