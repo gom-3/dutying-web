@@ -42,7 +42,7 @@ function NurseEditModal() {
 
   return createPortal(
     <div
-      className={`ignore-onclickoutside fixed top-1/2 z-[999] h-[90vh] w-[25rem] translate-y-1/2 overflow-y-scroll rounded-[1.25rem] border-l-[.0625rem] border-sub-4.5 bg-white shadow-shadow-2 transition-all duration-500 ease-out scrollbar-hide ${
+      className={`ignore-onclickoutside fixed top-1/2 z-[999] h-[90vh] w-[25rem] -translate-y-1/2 overflow-y-scroll rounded-[1.25rem] border-l-[.0625rem] border-sub-4.5 bg-white shadow-shadow-2 transition-all duration-500 ease-out scrollbar-hide ${
         selectedNurse ? 'right-[3.125rem]' : 'right-[-25rem]'
       }`}
     >

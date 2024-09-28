@@ -20,8 +20,8 @@ const LoginPage = () => {
           showIndicators={false}
           showThumbs={false}
           statusFormatter={(current, total) => `${current} / ${total}`}
-          renderArrowPrev={(click) => <BackCircle className="absolute left-20 top-1/2 z-10 size-[3.25rem] translate-y-1/2 cursor-pointer" onClick={click} />}
-          renderArrowNext={(click) => <NextCircle className="absolute right-20 top-1/2 z-10 size-[3.25rem] translate-y-1/2 cursor-pointer" onClick={click} />}
+          renderArrowPrev={(click) => <BackCircle className="absolute left-20 top-1/2 z-10 size-[3.25rem] -translate-y-1/2 cursor-pointer" onClick={click} />}
+          renderArrowNext={(click) => <NextCircle className="absolute right-20 top-1/2 z-10 size-[3.25rem] -translate-y-1/2 cursor-pointer" onClick={click} />}
         >
           <div className='h-screen w-full min-w-px bg-[url("/img/login_1.webp")] bg-cover bg-center'></div>
           <div className='h-screen w-full min-w-px bg-[url("/img/login_2.webp")] bg-cover bg-center'></div>

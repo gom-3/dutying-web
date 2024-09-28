@@ -208,9 +208,9 @@ function ShiftTeamList() {
                     >
                       간호사 만들기
                       <InfoIcon className="peer size-5" />
-                      <div className="invisible absolute right-[-21.5rem] top-1/2 z-30 flex w-[22.75rem] translate-y-1/2 items-center gap-[.5rem] rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
+                      <div className="invisible absolute right-[-21.5rem] top-1/2 z-30 flex w-[22.75rem] -translate-y-1/2 items-center gap-[.5rem] rounded-[.3125rem] bg-white px-2 py-1 font-apple text-[.875rem] text-sub-2 shadow-shadow-2 peer-hover:visible">
                         <div
-                          className="absolute left-[-.4375rem] top-1/2 size-0 translate-y-1/2"
+                          className="absolute left-[-.4375rem] top-1/2 size-0 -translate-y-1/2"
                           style={{
                             borderTop: '.4375rem solid transparent',
                             borderLeft: '.625rem solid none',
@@ -264,7 +264,6 @@ function ShiftTeamList() {
                               <div
                                 id="nurse_sample"
                                 className={`group relative flex h-14 w-full cursor-pointer select-none items-center justify-center  
-                              ${selectedNurse?.nurseId === nurse.nurseId ? 'bg-main-4 text-main-1 underline underline-offset-2' : 'bg-white text-sub-1'}
                               ${
                                 shiftTeam.nurses.findIndex((x) => x.nurseId === nurse.nurseId) === shiftTeam.nurses.length - 1
                                   ? 'rounded-b-[.9375rem]'
@@ -313,7 +312,7 @@ function ShiftTeamList() {
                                     <div className="peer absolute bottom-0 z-30 h-[.8rem] w-full translate-y-1/2" />
                                     <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
                                     <PlusIcon2 className="invisible absolute bottom-0 left-0  size-5 -translate-x-full translate-y-1/2 peer-hover:visible" />
-                                    <p className="invisible absolute bottom-0 left-0 translate-x-[calc(.625rem-100%)] translate-y-1/2 font-apple text-[.75rem] text-sub-2.5 peer-hover:visible">
+                                    <p className="invisible absolute bottom-0 left-0 -translate-y-1/2 translate-x-[calc(.625rem-100%)] font-apple text-[.75rem] text-sub-2.5 peer-hover:visible">
                                       구분선
                                     </p>
                                   </div>

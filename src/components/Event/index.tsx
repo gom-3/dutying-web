@@ -30,8 +30,8 @@ const Event = ({ open, onClose }: PopupModalProps) => {
               showIndicators={false}
               showThumbs={false}
               statusFormatter={(current, total) => `${current} / ${total}`}
-              renderArrowPrev={(click) => <BackCircle className="absolute left-4 top-1/2 z-10 size-12 translate-y-1/2 cursor-pointer" onClick={click} />}
-              renderArrowNext={(click) => <NextCircle className="absolute right-4 top-1/2 z-10 size-12 translate-y-1/2 cursor-pointer" onClick={click} />}
+              renderArrowPrev={(click) => <BackCircle className="absolute left-4 top-1/2 z-10 size-12 -translate-y-1/2 cursor-pointer" onClick={click} />}
+              renderArrowNext={(click) => <NextCircle className="absolute right-4 top-1/2 z-10 size-12 -translate-y-1/2 cursor-pointer" onClick={click} />}
             >
               <div className='size-[35rem] min-w-[.0625rem] bg-[url("/img/event1.webp")] bg-cover bg-center'></div>
               <div className='size-[35rem] min-w-[.0625rem] bg-[url("/img/event2.webp")] bg-cover bg-center'></div>

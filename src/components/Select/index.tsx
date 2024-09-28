@@ -13,7 +13,7 @@ interface Props extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLS
 const Select = forwardRef(({ placeholder, value, onChange, options, className, selectClassName, ...props }: Props, ref: React.LegacyRef<HTMLSelectElement>) => {
   return (
     <div className={twMerge('relative h-[2.1875rem] w-[11.4375rem]', className)}>
-      <ArrowDownIcon className="absolute right-[.625rem] top-1/2 size-[1.5625rem] translate-y-1/2" />
+      <ArrowDownIcon className="absolute right-[.625rem] top-1/2 size-[1.5625rem] -translate-y-1/2" />
       <select
         ref={ref}
         value={value}

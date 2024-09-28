@@ -13,7 +13,7 @@ const Select = ({
   options: number[];
 }) => (
   <div className="relative mx-[.3125rem] h-11 w-[4.1875rem]">
-    <ArrowDownIcon className="absolute right-[.625rem] top-1/2 size-[1.5625rem] translate-y-1/2" />
+    <ArrowDownIcon className="absolute right-[.625rem] top-1/2 size-[1.5625rem] -translate-y-1/2" />
     <select
       value={value}
       onChange={onChange}

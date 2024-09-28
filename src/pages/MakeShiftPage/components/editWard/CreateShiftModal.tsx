@@ -59,7 +59,7 @@ function CreateShiftModal({ open, shiftType, close, onSubmit, onDelete }: Props)
     ? createPortal(
         <div className="fixed left-0 top-0 z-[1002] h-screen w-screen bg-[#00000066]" onClick={() => close()}>
           <div
-            className="absolute left-1/2 top-1/2  h-[41.375rem] w-[44.375rem] -translate-x-1/2 translate-y-1/2 rounded-[1.25rem] bg-white px-[2.625rem] py-[2.1875rem]"
+            className="absolute left-1/2 top-1/2  h-[41.375rem] w-[44.375rem] -translate-x-1/2 -translate-y-1/2 rounded-[1.25rem] bg-white px-[2.625rem] py-[2.1875rem]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center">

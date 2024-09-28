@@ -165,7 +165,7 @@ export default function ShiftCalendar() {
                             {!readonly && (
                               <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
                                 <FoldDutyIcon
-                                  className="absolute left-1/2 top-1/2 z-10 size-[1.375rem] -translate-x-1/2 translate-y-1/2 cursor-pointer"
+                                  className="absolute left-1/2 top-1/2 z-10 size-[1.375rem] -translate-x-1/2 -translate-y-1/2 cursor-pointer"
                                   onClick={() => {
                                     sendEvent(events.requestPage.calendar.spreadDivision);
                                     foldLevel(level);
@@ -198,8 +198,9 @@ export default function ShiftCalendar() {
                                     {...provided.dragHandleProps}
                                   >
                                     <div className="relative w-[2.125rem] shrink-0">
-                                      {!readonly && <DragIcon className="absolute -right-2.5 top-1/2 size-6 translate-y-1/2" />}
+                                      {!readonly && <DragIcon className="absolute -right-2.5 top-1/2 size-6 -translate-y-1/2" />}
                                     </div>
+                                    <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">{row.shiftNurse.name}</div>
                                     <div className="w-[4.375rem] shrink-0 truncate text-center font-apple text-[1.25rem] text-sub-1">{row.shiftNurse.name}</div>
                                     <div className="flex w-[1.875rem] shrink-0 items-center justify-center text-center font-apple text-[1.25rem] text-sub-1">
                                       {currentShiftTeam.nurses.find((x) => x.nurseId === row.shiftNurse.nurseId)?.isConnected ? (

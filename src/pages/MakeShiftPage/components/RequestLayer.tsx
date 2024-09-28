@@ -11,7 +11,7 @@ function RequestLayer({ isAccept, request, showCheck, showSlash }: Props) {
   return isAccept
     ? showCheck && (
         <div
-          className={`bg-[#06e73833]'} absolute left-[.0625rem] top-1/2 z-10 flex size-[2.125rem] translate-y-1/2 justify-center rounded-[.5625rem] border-[.125rem] border-[#06E738]
+          className={`bg-[#06e73833]'} absolute left-[.0625rem] top-1/2 z-10 flex size-[2.125rem] -translate-y-1/2 justify-center rounded-[.5625rem] border-[.125rem] border-[#06E738]
 `}
         >
           <RequestCheckIcon className="absolute right-0 top-[-0.85rem] size-[.75rem]" />
@@ -20,7 +20,7 @@ function RequestLayer({ isAccept, request, showCheck, showSlash }: Props) {
     : showSlash && (
         <>
           <div
-            className={`bg-[#0027f433]'} absolute left-[.0625rem] top-1/2 z-10 flex size-[2.125rem] translate-y-1/2 justify-center rounded-[.5625rem] border-[.125rem] border-[#0027F4]`}
+            className={`bg-[#0027f433]'} absolute left-[.0625rem] top-1/2 z-10 flex size-[2.125rem] -translate-y-1/2 justify-center rounded-[.5625rem] border-[.125rem] border-[#0027F4]`}
           >
             <RequestSlashIcon className="absolute right-0 top-[-0.85rem] size-[.75rem]" />
             <div className="invisible relative top-[-1.3125rem] z-[1] flex justify-center group-hover:visible">
