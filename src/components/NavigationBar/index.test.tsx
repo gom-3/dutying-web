@@ -42,7 +42,7 @@ describe('NavigationBar 컴포넌트', () => {
   it('isFold가 true일 때 접힘 상태로 렌더링되어야 함', () => {
     render(<NavigationBar isFold toggleFold={identity} />);
     const navigationBar = screen.getByTestId('navigation-bar');
-    expect(navigationBar).toHaveClass('fixed translate-x-[-8rem]');
+    expect(navigationBar).toHaveClass('fixed -translate-x-32');
   });
 
   it('isFold가 false일 때 펼친 상태로 렌더링되어야 함', () => {
