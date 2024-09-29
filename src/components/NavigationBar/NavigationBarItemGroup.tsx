@@ -1,13 +1,6 @@
-import NavigationBarItem from './NavigationBarItem';
+import { DutyIcon, DutyIconSelected, NurseIcon, NurseIconSelected, RequestIcon, RequestIconSelected } from '@assets/svg';
 import ROUTE from '@libs/constant/path';
-import {
-  DutyIcon,
-  DutyIconSelected,
-  NurseIcon,
-  NurseIconSelected,
-  RequestIcon,
-  RequestIconSelected,
-} from '@assets/svg';
+import NavigationBarItem from './NavigationBarItem';
 
 const items = [
   {
@@ -34,13 +27,7 @@ const NavigationBarItemGroups = () => {
   return (
     <div className="mt-[3.125rem]">
       {items.map((item) => (
-        <NavigationBarItem
-          key={item.path}
-          path={item.path}
-          Icon={item.icon}
-          SelectedIcon={item.selectedIcon}
-          text={item.text}
-        />
+        <NavigationBarItem key={item.path} path={item.path} Icon={item.icon} SelectedIcon={item.selectedIcon} text={item.text} />
       ))}
     </div>
   );

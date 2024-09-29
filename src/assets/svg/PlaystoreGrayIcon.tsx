@@ -1,10 +1,7 @@
 import type { SVGProps } from 'react';
 const SvgPlaystoreGrayIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 19" {...props}>
-    <path
-      fill="#595961"
-      d="M15.607 8.705a.891.891 0 0 1 .001 1.556L1.327 18.257A.891.891 0 0 1 0 17.48V1.518C0 .838.731.408 1.325.739l14.282 7.966Z"
-    />
+    <path fill="#595961" d="M15.607 8.705a.891.891 0 0 1 .001 1.556L1.327 18.257A.891.891 0 0 1 0 17.48V1.518C0 .838.731.408 1.325.739l14.282 7.966Z" />
     <mask
       id="playstore_gray_icon_svg__a"
       width={17}
@@ -16,27 +13,11 @@ const SvgPlaystoreGrayIcon = (props: SVGProps<SVGSVGElement>) => (
         maskType: 'alpha',
       }}
     >
-      <path
-        fill="#EDE4FF"
-        d="M15.607 8.705a.891.891 0 0 1 .001 1.556L1.327 18.257A.891.891 0 0 1 0 17.48V1.518C0 .838.731.408 1.325.739l14.282 7.966Z"
-      />
+      <path fill="#EDE4FF" d="M15.607 8.705a.891.891 0 0 1 .001 1.556L1.327 18.257A.891.891 0 0 1 0 17.48V1.518C0 .838.731.408 1.325.739l14.282 7.966Z" />
     </mask>
     <g mask="url(#playstore_gray_icon_svg__a)">
-      <path
-        fill="#595961"
-        fillRule="evenodd"
-        d="M0 19V.07L.233.2l9.162 9.282L0 19Z"
-        clipRule="evenodd"
-      />
-      <mask
-        id="playstore_gray_icon_svg__b"
-        width={15}
-        height={23}
-        x={-1}
-        y={-2.037}
-        fill="#000"
-        maskUnits="userSpaceOnUse"
-      >
+      <path fill="#595961" fillRule="evenodd" d="M0 19V.07L.233.2l9.162 9.282L0 19Z" clipRule="evenodd" />
+      <mask id="playstore_gray_icon_svg__b" width={15} height={23} x={-1} y={-2.037} fill="#000" maskUnits="userSpaceOnUse">
         <path fill="#fff" d="M-1-2.037h15v23H-1z" />
         <path
           fillRule="evenodd"

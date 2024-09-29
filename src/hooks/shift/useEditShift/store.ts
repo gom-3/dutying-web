@@ -1,6 +1,6 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { produce } from 'immer';
 
 export interface State {
   year: number;
@@ -88,15 +88,7 @@ const useEditShiftStore = create<Store>()(
           },
           removeItem: (name) => localStorage.removeItem(name),
         },
-        partialize: ({
-          year,
-          month,
-          editHistory,
-          readonly,
-          showLayer,
-          currentShiftTeamId,
-          oldCurrentShiftTeamId,
-        }: Store) => ({
+        partialize: ({ year, month, editHistory, readonly, showLayer, currentShiftTeamId, oldCurrentShiftTeamId }: Store) => ({
           year,
           month,
           editHistory,

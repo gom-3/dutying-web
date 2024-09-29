@@ -1,20 +1,9 @@
 import type { SVGProps } from 'react';
 const SvgLogoSymbolFill = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 29 30"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 29 30" {...props}>
     <path fill="url(#logo_symbol_fill_svg__a)" d="M0 0h28.5v30H0z" />
     <defs>
-      <pattern
-        id="logo_symbol_fill_svg__a"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
+      <pattern id="logo_symbol_fill_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">
         <use xlinkHref="#logo_symbol_fill_svg__b" transform="matrix(.00775 0 0 .00736 0 0)" />
       </pattern>
       <image

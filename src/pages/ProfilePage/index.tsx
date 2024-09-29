@@ -1,14 +1,15 @@
-import { CameraIcon, CheckedIcon, RandomIcon, UncheckedIcon } from '@assets/svg';
-import TextField from '@components/TextField';
-import Button from '@components/Button';
-import Select from '@components/Select';
-import { profileImages } from '@assets/profileImage';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
+import { profileImages } from '@assets/profileImage';
+import { CameraIcon, CheckedIcon, RandomIcon, UncheckedIcon } from '@assets/svg';
+import useEditAccount from '@hooks/account/useEditAccount';
 import useAuth from '@hooks/auth/useAuth';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
-import useEditAccount from '@hooks/account/useEditAccount';
 import ROUTE from '@libs/constant/path';
+import Button from '@components/Button';
+import Select from '@components/Select';
+import TextField from '@components/TextField';
 
 function ProfilePage() {
   const {
@@ -22,9 +23,7 @@ function ProfilePage() {
   const { handleEditProfile, deleteAccount, quitWard } = useEditAccount();
 
   const [writeNurse, setWriteNurse] = useState<Nurse | null>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(
-    profileImages[Math.floor(Math.random() * 30)]
-  );
+  const [profileImage, setProfileImage] = useState<string | null>(profileImages[Math.floor(Math.random() * 30)]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (key: keyof Nurse, value: any) => {
@@ -37,11 +36,7 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    if (shiftTeams && accountMe)
-      selectNurse(
-        shiftTeams.flatMap((x) => x.nurses).find((x) => x.accountId === accountMe.accountId)
-          ?.nurseId || null
-      );
+    if (shiftTeams && accountMe) selectNurse(shiftTeams.flatMap((x) => x.nurses).find((x) => x.accountId === accountMe.accountId)?.nurseId || null);
   }, [accountMe, shiftTeams]);
 
   useEffect(() => {
@@ -91,11 +86,11 @@ function ProfilePage() {
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-[76.5rem] flex-col items-center justify-center px-8">
+    <div className="mx-auto flex size-full max-w-[76.5rem] flex-col items-center justify-center px-8">
       <div className="flex w-full items-center justify-between">
         <h1 className="font-apple text-[2rem] font-semibold text-text-1">프로필 설정</h1>
         <button
-          className="flex h-[2.5rem] items-center justify-center rounded-[1.875rem] border-[.0625rem] border-sub-3 bg-white px-[1rem] font-apple text-[1.4375rem] font-medium text-sub-3"
+          className="flex h-10 items-center justify-center rounded-[1.875rem] border-[.0625rem] border-sub-3 bg-white px-4 font-apple text-[1.4375rem] font-medium text-sub-3"
           onClick={() => handleLogout(ROUTE.ROOT)}
         >
           로그아웃
@@ -104,42 +99,30 @@ function ProfilePage() {
       <div className="mt-[2.625rem] flex w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[2.625rem] pt-[1.875rem] shadow-banner">
         <div className="flex flex-col items-center gap-[1.875rem]">
           <div className="self-start font-apple text-[1.25rem] text-sub-3">프로필 이미지</div>
-          <div className="h-[8.75rem] w-[8.75rem] rounded-full border-[.625rem] border-sub-4">
-            <img
-              src={'data:image/png;base64,' + profileImage}
-              className="h-full w-full rounded-full object-cover object-center"
-            />
+          <div className="size-[8.75rem] rounded-full border-[.625rem] border-sub-4">
+            <img src={'data:image/png;base64,' + profileImage} className="size-full rounded-full object-cover object-center" />
           </div>
           <div className="flex h-[2.625rem] w-[16.875rem] cursor-pointer">
             <div
-              className="flex flex-1 items-center justify-center gap-[.25rem] rounded-l-[.3125rem] border-[.0625rem] border-r-[0px] border-sub-3"
+              className="flex flex-1 items-center justify-center gap-[.25rem] rounded-l-[.3125rem] border-[.0625rem] border-r-0 border-sub-3"
               onClick={handleRandomProfileImage}
             >
-              <RandomIcon className="h-[1.25rem] w-[1.25rem]" />
+              <RandomIcon className="size-5" />
               <p className="font-apple text-[1.25rem] font-medium text-sub-2.5">랜덤 변경</p>
             </div>
             <div
               className="flex flex-1 items-center justify-center gap-[.25rem] rounded-r-[.3125rem] border-[.0625rem] border-sub-3"
               onClick={handleUploadImgae}
             >
-              <CameraIcon className="h-[1.25rem]" />
+              <CameraIcon className="h-5" />
               <p className="font-apple text-[1.25rem] font-medium text-sub-2.5">사진 등록</p>
-              <input
-                ref={imageInputRef}
-                type="file"
-                className="hidden"
-                onChange={handleChangeImage}
-                accept="image/*"
-              />
+              <input ref={imageInputRef} type="file" className="hidden" onChange={handleChangeImage} accept="image/*" />
             </div>
           </div>
         </div>
         <div className="ml-[5.25rem] flex flex-col justify-between">
           <div>
-            <label
-              htmlFor="name"
-              className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-            >
+            <label htmlFor="name" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
               이름
             </label>
             <TextField
@@ -157,10 +140,7 @@ function ProfilePage() {
           </div>
           <div className="flex gap-[2.8125rem]">
             <div className="flex-[1]">
-              <label
-                htmlFor="gender"
-                className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-              >
+              <label htmlFor="gender" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
                 성별
               </label>
               <Select
@@ -176,10 +156,7 @@ function ProfilePage() {
               />
             </div>
             <div className="flex-[2]">
-              <label
-                htmlFor="phoneNum"
-                className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-              >
+              <label htmlFor="phoneNum" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
                 전화 번호
               </label>
               <TextField
@@ -197,12 +174,9 @@ function ProfilePage() {
         </div>
       </div>
 
-      <div className="mt-[1.25rem] w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
+      <div className="mt-5 w-full min-w-[500px] shrink-0 rounded-[1.25rem] bg-white px-[2.8125rem] pb-[3.75rem] pt-[1.875rem] shadow-banner">
         <div className="w-[16.875rem]">
-          <label
-            htmlFor="employmentDate"
-            className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3"
-          >
+          <label htmlFor="employmentDate" className="mb-[.9375rem] block font-apple text-[1.25rem] text-sub-3">
             입사 년도
           </label>
           <TextField
@@ -216,54 +190,30 @@ function ProfilePage() {
             //   .otherwise(() => undefined)}
           />
         </div>
-        <div className="mb-[1.25rem] mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
+        <div className="mb-5 mt-[1.875rem] h-[.0625rem] w-full bg-sub-4" />
         <div className="flex flex-1 items-center">
           <div className="w-[16.875rem]">
             <p className="font-apple text-[1.25rem] text-sub-3">교대 근무자</p>
             <p className="font-apple text-[.875rem] text-main-2">* 근무표에 본인이 표시되나요?</p>
           </div>
           <div className="ml-[5.25rem] flex gap-[1.875rem]">
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => handleChange('isWorker', true)}
-            >
-              {writeNurse?.isWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                네
-              </div>
+            <div className="flex cursor-pointer items-center justify-center" onClick={() => handleChange('isWorker', true)}>
+              {writeNurse?.isWorker ? <CheckedIcon className="size-[1.875rem]" /> : <UncheckedIcon className="size-[1.875rem]" />}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">네</div>
             </div>
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={() => handleChange('isWorker', false)}
-            >
-              {!writeNurse?.isWorker ? (
-                <CheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              ) : (
-                <UncheckedIcon className="h-[1.875rem] w-[1.875rem]" />
-              )}
-              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">
-                아니오
-              </div>
+            <div className="flex cursor-pointer items-center justify-center" onClick={() => handleChange('isWorker', false)}>
+              {!writeNurse?.isWorker ? <CheckedIcon className="size-[1.875rem]" /> : <UncheckedIcon className="size-[1.875rem]" />}
+              <div className="ml-[.625rem] flex items-center font-apple text-[1.25rem] font-normal text-sub-3">아니오</div>
             </div>
           </div>
         </div>
       </div>
-      <div className="mt-[2.5rem] flex w-full items-start justify-between">
-        <div className="flex flex-col gap-[1rem]">
-          <div
-            className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2"
-            onClick={deleteAccount}
-          >
+      <div className="mt-10 flex w-full items-start justify-between">
+        <div className="flex flex-col gap-4">
+          <div className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2" onClick={deleteAccount}>
             회원 탈퇴
           </div>
-          <div
-            className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2"
-            onClick={quitWard}
-          >
+          <div className="cursor-pointer font-apple text-[1.25rem] font-medium text-sub-2.5 underline underline-offset-2" onClick={quitWard}>
             병동 나가기
           </div>
         </div>

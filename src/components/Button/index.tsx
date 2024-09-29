@@ -1,10 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 
-interface Props
-  extends Omit<
-    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
-    'type'
-  > {
+interface Props extends Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, 'type'> {
   type?: 'outline' | 'fill' | 'button' | 'reset' | 'submit';
 }
 

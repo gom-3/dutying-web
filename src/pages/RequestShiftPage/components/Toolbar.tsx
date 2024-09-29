@@ -1,8 +1,8 @@
 import { NextIcon, PenIcon, PrevIcon, SaveCompleteIcon, SavingIcon } from '@assets/svg';
-import Button from '@components/Button';
-import Select from '@components/Select';
 import useRequestShift from '@hooks/shift/useRequestShift';
 import { events, sendEvent } from 'analytics';
+import Button from '@components/Button';
+import Select from '@components/Select';
 
 function Toolbar() {
   const {
@@ -11,14 +11,11 @@ function Toolbar() {
   } = useRequestShift();
 
   return (
-    <div
-      id="toolbar"
-      className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-[#FDFCFE] pb-[.75rem] pl-[1.25rem] pr-[1rem] pt-[1.875rem]"
-    >
-      <div className="flex gap-[1.25rem]">
+    <div id="toolbar" className="sticky top-0 z-30 flex h-[6.125rem] w-full items-center bg-main-bg pb-[.75rem] pl-5 pr-4 pt-[1.875rem]">
+      <div className="flex gap-5">
         <div className="w-[3.375rem]"></div>
         <div className="w-[4.375rem]"></div>
-        <div className="w-[1rem]"></div>
+        <div className="w-4"></div>
       </div>
 
       <div className="absolute flex items-center">
@@ -27,7 +24,7 @@ function Toolbar() {
             changeMonth('prev');
             sendEvent(events.requestPage.toolbar.changeMonth);
           }}
-          className="h-[1.875rem] w-[1.875rem] cursor-pointer"
+          className="size-[1.875rem] cursor-pointer"
         />
         <p className="mx-[.625rem] font-poppins text-2xl text-main-1">{month}월</p>
         <NextIcon
@@ -35,18 +32,14 @@ function Toolbar() {
             changeMonth('next');
             sendEvent(events.requestPage.toolbar.changeMonth);
           }}
-          className="h-[1.875rem] w-[1.875rem] cursor-pointer"
+          className="size-[1.875rem] cursor-pointer"
         />
       </div>
 
       {!readonly && (
         <>
           <div className="ml-auto flex gap-[.3125rem] font-apple text-[.875rem] text-sub-2.5">
-            {changeStatus === 'loading' ? (
-              <SavingIcon className="h-[1.25rem] w-[1.25rem]" />
-            ) : (
-              <SaveCompleteIcon className="h-[1.25rem] w-[1.25rem]" />
-            )}
+            {changeStatus === 'loading' ? <SavingIcon className="size-5" /> : <SaveCompleteIcon className="size-5" />}
             {changeStatus === 'loading' ? '저장중' : '저장 완료'}
           </div>
         </>
@@ -78,20 +71,16 @@ function Toolbar() {
           <Button
             id="editButton"
             type="fill"
-            className="flex h-[2.5rem] items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 px-[.75rem] text-[1.25rem] font-semibold"
+            className="flex h-10 items-center justify-center gap-[.5rem] rounded-[.625rem] bg-main-2 px-[.75rem] text-[1.25rem] font-semibold"
             onClick={() => toggleEditMode()}
           >
             수정하기
-            <PenIcon className="h-[1.5rem] w-[1.5rem] stroke-white" />
+            <PenIcon className="size-6 stroke-white" />
           </Button>
         </div>
       ) : (
-        <div className="ml-[1.25rem] flex gap-[.875rem]">
-          <Button
-            type="outline"
-            className="h-[2.5rem] w-[4.6875rem] rounded-[3.125rem] text-[1.25rem] font-semibold"
-            onClick={() => toggleEditMode()}
-          >
+        <div className="ml-5 flex gap-[.875rem]">
+          <Button type="outline" className="h-10 w-[4.6875rem] rounded-[3.125rem] text-[1.25rem] font-semibold" onClick={() => toggleEditMode()}>
             저장
           </Button>
         </div>

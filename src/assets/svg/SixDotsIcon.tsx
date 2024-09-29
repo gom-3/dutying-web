@@ -1,13 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgSixDotsIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={30}
-    height={30}
-    fill="none"
-    viewBox="0 0 30 30"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} fill="none" viewBox="0 0 30 30" {...props}>
     <path fill="#fff" d="M0 0h30v30H0V0Z" />
     <path
       fill="#93939D"

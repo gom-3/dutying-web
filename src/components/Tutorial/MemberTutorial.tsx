@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import useTutorial from '@hooks/ui/useTutorial';
-import { createPortal } from 'react-dom';
-import { StepConfig, StepsConfig, TutorialOverlay } from './TutorialOverlay';
+import type { StepConfig, StepsConfig } from './TutorialOverlay';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import useTutorial from '@hooks/ui/useTutorial';
 import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import { TutorialOverlay } from './TutorialOverlay';
 
 const MemberTutorial = () => {
   const {
@@ -69,11 +70,7 @@ const MemberTutorial = () => {
   }, [showMemberTutorial]);
 
   return (
-    showMemberTutorial &&
-    createPortal(
-      <TutorialOverlay config={config} closeCallback={() => setMemberTutorial(false)} />,
-      document.getElementById('tutorial')!
-    )
+    showMemberTutorial && createPortal(<TutorialOverlay config={config} closeCallback={() => setMemberTutorial(false)} />, document.getElementById('tutorial')!)
   );
 };
 

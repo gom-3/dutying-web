@@ -1,15 +1,11 @@
+import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 import useAuth from '@hooks/auth/useAuth';
 import useLoading from '@hooks/ui/useLoading';
 import useEditWard from '@hooks/ward/useEditWard';
-import {
-  editAccount,
-  eidtAccountStatus,
-  deleteAccount as deleteAccountApi,
-} from '@libs/api/account';
+import { editAccount, eidtAccountStatus, deleteAccount as deleteAccountApi } from '@libs/api/account';
 import { updateNurse } from '@libs/api/nurse';
 import { quitWard as quitWardApi } from '@libs/api/ward';
-import { useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 
 const useEditAccount = () => {
   const {

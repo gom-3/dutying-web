@@ -1,6 +1,6 @@
+import { expect, vi, describe, it } from 'vitest';
 import { render, screen, userEvent } from '@libs/util/test-utils';
 import Select from '.';
-import { expect, vi, describe, it } from 'vitest';
 
 describe('Select 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {
@@ -41,5 +41,5 @@ describe('Select 컴포넌트', () => {
     const selectedClassName = 'bg-red';
     render(<Select selectClassName={selectedClassName} />);
     expect(screen.getByRole('combobox')).toHaveClass(selectedClassName);
-  })
+  });
 });

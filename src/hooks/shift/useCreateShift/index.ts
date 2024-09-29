@@ -1,11 +1,11 @@
-import useLoading from '@hooks/ui/useLoading';
-import useEditShift from '../useEditShift';
-import { match } from 'ts-pattern';
-import axiosInstance from '@libs/api/client';
-import { useQueryClient } from '@tanstack/react-query';
-import useAuth from '@hooks/auth/useAuth';
-import { updateShifts } from '@libs/api/shift';
 import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
+import { match } from 'ts-pattern';
+import useAuth from '@hooks/auth/useAuth';
+import useLoading from '@hooks/ui/useLoading';
+import axiosInstance from '@libs/api/client';
+import { updateShifts } from '@libs/api/shift';
+import useEditShift from '../useEditShift';
 
 function useCreateShift() {
   const { setLoading } = useLoading();
@@ -26,12 +26,7 @@ function useCreateShift() {
       toast.error('자동완성 기능을 사용하시려면 최소 10명의 간호사가 필요합니다');
       return;
     }
-    if (
-      !confirm(
-        '근무표를 자동으로 채우시겠습니까?\n신청 근무를 최대한 반영한 채 채워집니다.\n약 1분~2분이 소요됩니다!'
-      )
-    )
-      return;
+    if (!confirm('근무표를 자동으로 채우시겠습니까?\n신청 근무를 최대한 반영한 채 채워집니다.\n약 1분~2분이 소요됩니다!')) return;
     setLoading(true);
 
     try {
@@ -96,9 +91,7 @@ function useCreateShift() {
 
           wardShiftsDTO.push({
             shiftNurseId: row.shiftNurse.shiftNurseId,
-            date: `${year}-${month.toString().padStart(2, '0')}-${(j + 1)
-              .toString()
-              .padStart(2, '0')}`,
+            date: `${year}-${month.toString().padStart(2, '0')}-${(j + 1).toString().padStart(2, '0')}`,
             wardShiftTypeId: wardShiftType === null ? null : wardShiftType.wardShiftTypeId,
           });
         }

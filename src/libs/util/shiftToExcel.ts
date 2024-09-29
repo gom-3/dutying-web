@@ -56,12 +56,7 @@ export const shiftToExcel = async (month: number, shift: Shift) => {
   shift.days.map((day) => {
     header.getCell(day.day.toString()).font = {
       color: {
-        argb:
-          day.dayType === 'workday'
-            ? 'FF000000'
-            : day.dayType === 'saturday'
-            ? 'FF2029FA'
-            : 'FFFA2D12',
+        argb: day.dayType === 'workday' ? 'FF000000' : day.dayType === 'saturday' ? 'FF2029FA' : 'FFFA2D12',
       },
     };
   });
@@ -70,29 +65,19 @@ export const shiftToExcel = async (month: number, shift: Shift) => {
     worksheet.addRow({
       name: dutyRow.shiftNurse.name,
       lastShift: dutyRow.lastWardShiftList
-        .map((current) =>
-          current !== null
-            ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName
-            : ''
-        )
+        .map((current) => (current !== null ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName : ''))
         .join(''),
       ...dutyRow.wardShiftList.reduce((acc, current, index) => {
-        acc[index + 1] =
-          current != null
-            ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName
-            : '';
+        acc[index + 1] = current != null ? shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)!.shortName : '';
         return acc;
       }, {} as { [key: string]: string }),
       ...shift.wardShiftTypes.reduce((acc, shiftType) => {
-        acc[shiftType.shortName] = dutyRow.wardShiftList.filter(
-          (current) => current === shiftType.wardShiftTypeId
-        ).length;
+        acc[shiftType.shortName] = dutyRow.wardShiftList.filter((current) => current === shiftType.wardShiftTypeId).length;
         return acc;
       }, {} as { [key: string]: number }),
       WO: dutyRow.wardShiftList.filter(
         (current, i) =>
-          shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)?.name === '오프' &&
-          shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
+          shift.wardShiftTypes.find((x) => x.wardShiftTypeId === current)?.name === '오프' && shift.days.find((x) => x.day === i + 1)?.dayType != 'workday'
       ).length,
     })
   );
@@ -101,9 +86,7 @@ export const shiftToExcel = async (month: number, shift: Shift) => {
     worksheet.addRow({
       lastShift: shiftType.name,
       ...shift.days.reduce((acc, _, i) => {
-        acc[i + 1] = flatRows.filter(
-          (item) => item.wardShiftList[i] === shiftType.wardShiftTypeId
-        ).length;
+        acc[i + 1] = flatRows.filter((item) => item.wardShiftList[i] === shiftType.wardShiftTypeId).length;
         return acc;
       }, {} as { [key: string]: number }),
     });

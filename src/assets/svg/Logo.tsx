@@ -1,14 +1,6 @@
 import type { SVGProps } from 'react';
 const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    width={48}
-    height={50}
-    viewBox="0 0 48 50"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={48} height={50} viewBox="0 0 48 50" fill="none" {...props}>
     <path fill="url(#logo_svg__a)" d="M0 0h47.5v50H0z" />
     <defs>
       <pattern id="logo_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">

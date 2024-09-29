@@ -1,13 +1,17 @@
-import NavigationBar from '@components/NavigationBar';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router';
+import NavigationBar from '@components/NavigationBar';
 
 function MainLayout() {
   const [isFold, setIsFold] = useState(false);
 
+  const toggleFold = useCallback(() => {
+    setIsFold((prev) => !prev);
+  }, [isFold]);
+
   return (
-    <div className={`h-full w-full bg-[#FDFCFE] ${!isFold ? 'pl-[10.125rem]' : 'pl-[2.625rem]'}`}>
-      <NavigationBar isFold={isFold} setIsFold={setIsFold} />
+    <div className={`size-full bg-main-bg ${!isFold ? 'pl-[10.125rem]' : 'pl-[2.625rem]'}`}>
+      <NavigationBar isFold={isFold} toggleFold={toggleFold} />
       <Outlet />
     </div>
   );

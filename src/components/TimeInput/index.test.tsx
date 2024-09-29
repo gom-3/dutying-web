@@ -1,5 +1,5 @@
-import { render, screen, userEvent } from '@libs/util/test-utils';
 import { describe, expect, it, vi } from 'vitest';
+import { render, screen, userEvent } from '@libs/util/test-utils';
 import TimeInput from '.';
 
 describe('TimeInput 컴포넌트', () => {

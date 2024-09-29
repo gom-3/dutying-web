@@ -1,7 +1,7 @@
 import ReactGA from 'react-ga4';
+import airbridge from 'airbridge-web-sdk-loader';
 import { createBrowserHistory } from 'history';
 import { enableMapSet } from 'immer';
-import airbridge from 'airbridge-web-sdk-loader';
 
 export default function initializeApp() {
   enableMapSet();

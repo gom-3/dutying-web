@@ -1,18 +1,7 @@
-import { shallow } from 'zustand/shallow';
 import { useTutorialStore } from './store';
 
 const useTutorial = () => {
-  const [showMakeTutorial, showMemberTutorial, showRequestTutorial, setState, initState] =
-    useTutorialStore(
-      (state) => [
-        state.showMakeTutorial,
-        state.showMemberTutorial,
-        state.showRequestTutorial,
-        state.setState,
-        state.initState,
-      ],
-      shallow
-    );
+  const { showMakeTutorial, showMemberTutorial, showRequestTutorial, setState, initState } = useTutorialStore();
 
   return {
     state: {
@@ -22,12 +11,9 @@ const useTutorial = () => {
     },
     actions: {
       initTutorial: initState,
-      setMakeTutorial: (showMakeTutorial: boolean) =>
-        setState('showMakeTutorial', showMakeTutorial),
-      setMemberTutorial: (showMemberTutorial: boolean) =>
-        setState('showMemberTutorial', showMemberTutorial),
-      setRequestTutorial: (showRequestTutorial: boolean) =>
-        setState('showRequestTutorial', showRequestTutorial),
+      setMakeTutorial: (showMakeTutorial: boolean) => setState('showMakeTutorial', showMakeTutorial),
+      setMemberTutorial: (showMemberTutorial: boolean) => setState('showMemberTutorial', showMemberTutorial),
+      setRequestTutorial: (showRequestTutorial: boolean) => setState('showRequestTutorial', showRequestTutorial),
     },
   };
 };

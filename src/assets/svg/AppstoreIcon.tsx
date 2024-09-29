@@ -1,20 +1,9 @@
 import type { SVGProps } from 'react';
 const SvgAppstoreIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    fill="none"
-    viewBox="0 0 21 25"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none" viewBox="0 0 21 25" {...props}>
     <path fill="url(#appstore_icon_svg__a)" d="M0 0h20.123v24.666H0z" />
     <defs>
-      <pattern
-        id="appstore_icon_svg__a"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
+      <pattern id="appstore_icon_svg__a" width={1} height={1} patternContentUnits="objectBoundingBox">
         <use xlinkHref="#appstore_icon_svg__b" transform="matrix(.00245 0 0 .002 -.203 0)" />
       </pattern>
       <image

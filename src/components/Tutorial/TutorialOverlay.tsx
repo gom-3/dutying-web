@@ -128,10 +128,7 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
    * @param position Calculated position of first element in the step array.
    * @param alignment Selected alignment of the box.
    */
-  function calculateInfoBoxPosition(
-    position: ElementStyle,
-    alignment?: 'center' | 'left' | 'right'
-  ) {
+  function calculateInfoBoxPosition(position: ElementStyle, alignment?: 'center' | 'left' | 'right') {
     const boxHeight = config.infoBoxHeight ?? 200;
     const margin = config.infoBoxMargin ?? 30;
 
@@ -233,29 +230,20 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
 
   return (
     <>
-      <div
-        id="TutorialOverlay"
-        className="fixed left-0 top-0 z-[998] h-screen w-screen bg-[#00000020]"
-        ref={overlayElement}
-      ></div>
+      <div id="TutorialOverlay" className="fixed left-0 top-0 z-[998] h-screen w-screen bg-[#00000020]" ref={overlayElement}></div>
       <div
         id="InfoBox"
-        className="width-[20rem] absolute top-[6.25rem] z-[999] flex min-h-[7.5rem] flex-col rounded-[.625rem] bg-white p-[1rem] font-apple shadow-[5px_5px_15px_0px_rgba(149,81,146,0.3)]"
+        className="width-[20rem] absolute top-[6.25rem] z-[999] flex min-h-[7.5rem] flex-col rounded-[.625rem] bg-white p-4 font-apple shadow-[5px_5px_15px_0px_rgba(149,81,146,0.3)]"
         ref={infoBoxElement}
       >
         <div className="flex flex-1 flex-col">
           <div id="InfoTitle" className="flex items-center">
-            <p className="truncate text-[1.25rem] font-semibold text-main-1">
-              {config.steps.get(step)?.title}
-            </p>
-            <button
-              className="ml-auto text-[.75rem] font-medium text-main-2 underline underline-offset-[.1rem]"
-              onClick={skip}
-            >
+            <p className="truncate text-[1.25rem] font-semibold text-main-1">{config.steps.get(step)?.title}</p>
+            <button className="ml-auto text-[.75rem] font-medium text-main-2 underline underline-offset-[.1rem]" onClick={skip}>
               건너뛰기
             </button>
           </div>
-          <div id="InfoContent" className="mt-[1rem] flex-1 overflow-y-scroll scrollbar-hide">
+          <div id="InfoContent" className="mt-4 flex-1 overflow-y-scroll scrollbar-hide">
             {config.steps
               .get(step)
               ?.info?.split('\n')
@@ -273,7 +261,7 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
           <div id="ButtonWrapper" className="flex gap-[.625rem]">
             {config.steps.get(step)?.ctaUrl && config.steps.get(step)?.ctaText && (
               <a
-                className="bg-main-1text-white flex h-[1.5rem] items-center justify-center rounded-[.3125rem] border-[.0625rem] border-main-1 bg-main-1 px-[.375rem] text-[.875rem] font-medium text-white transition-all"
+                className="bg-main-1text-white flex h-6 items-center justify-center rounded-[.3125rem] border-[.0625rem] border-main-1 bg-main-1 px-[.375rem] text-[.875rem] font-medium text-white transition-all"
                 href={config.steps.get(step)?.ctaUrl}
                 target="_blank"
               >
@@ -281,7 +269,7 @@ export const TutorialOverlay = ({ config, closeCallback }: TutorialOverlayProps)
               </a>
             )}
             <button
-              className="flex h-[1.5rem] items-center justify-center rounded-[.3125rem] border-[.0625rem] border-main-1 px-[.375rem] text-[.875rem] font-medium text-main-1 transition-all hover:enabled:bg-main-1 hover:enabled:text-white disabled:border-sub-3 disabled:text-sub-3"
+              className="flex h-6 items-center justify-center rounded-[.3125rem] border-[.0625rem] border-main-1 px-[.375rem] text-[.875rem] font-medium text-main-1 transition-all hover:enabled:bg-main-1 hover:enabled:text-white disabled:border-sub-3 disabled:text-sub-3"
               onClick={previousStep}
               disabled={step === 1}
             >

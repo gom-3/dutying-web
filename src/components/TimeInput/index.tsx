@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface Props
-  extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+interface Props extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   initTime?: string;
   onTimeChange?: (value: string) => void;
 }
@@ -23,8 +22,7 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
     const minutes = Number(minutesStr);
 
     const isValidHour = (hour: number) => Number.isInteger(hour) && hour >= 0 && hour < 24;
-    const isValidMinutes = (minutes: number) =>
-      (Number.isInteger(minutes) && hours >= 0 && hours < 24) || Number.isNaN(minutes);
+    const isValidMinutes = (minutes: number) => (Number.isInteger(minutes) && hours >= 0 && hours < 24) || Number.isNaN(minutes);
 
     if (!isValidHour(hours) || !isValidMinutes(minutes)) {
       return false;
@@ -36,19 +34,11 @@ function TimeInput({ initTime, onTimeChange, className, ...props }: Props) {
 
     const valArr = value.indexOf(':') !== -1 ? value.split(':') : [value];
 
-    if (
-      valArr[0] &&
-      valArr[0].length &&
-      (parseInt(valArr[0], 10) < 0 || parseInt(valArr[0], 10) > 23)
-    ) {
+    if (valArr[0] && valArr[0].length && (parseInt(valArr[0], 10) < 0 || parseInt(valArr[0], 10) > 23)) {
       return false;
     }
 
-    if (
-      valArr[1] &&
-      valArr[1].length &&
-      (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59)
-    ) {
+    if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59)) {
       return false;
     }
 

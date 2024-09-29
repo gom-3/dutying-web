@@ -1,9 +1,9 @@
+import { useLocation } from 'react-router';
 import { match } from 'ts-pattern';
+import ROUTE from '@libs/constant/path';
 import MakeTutorial from './MakeTutorial';
 import MemberTutorial from './MemberTutorial';
 import RequestTutorial from './RequestTutorial';
-import ROUTE from '@libs/constant/path';
-import { useLocation } from 'react-router';
 
 const Tutorial = () => {
   const { pathname } = useLocation();

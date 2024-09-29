@@ -1,5 +1,5 @@
-import { events, sendEvent } from 'analytics';
 import { useLocation, useNavigate } from 'react-router';
+import { events, sendEvent } from 'analytics';
 
 interface Props {
   path: string;
@@ -21,15 +21,9 @@ const NavigationBarItem = ({ path, SelectedIcon, Icon, text }: Props) => {
         sendEvent(events.navigationBar.navigate, pathname);
       }}
     >
-      {isSelected ? (
-        <SelectedIcon className="h-[2.8125rem] w-[2.8125rem]" />
-      ) : (
-        <Icon className="h-[2.8125rem] w-[2.8125rem]" />
-      )}
+      {isSelected ? <SelectedIcon className="size-[2.8125rem]" /> : <Icon className="size-[2.8125rem]" />}
       {<div className={`${isSelected && 'text-main-1'}`}>{text}</div>}
-      {isSelected && (
-        <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />
-      )}
+      {isSelected && <div className="absolute right-0 h-[4.5rem] w-[.4375rem] rounded-3xl bg-main-1" />}
     </div>
   );
 };
