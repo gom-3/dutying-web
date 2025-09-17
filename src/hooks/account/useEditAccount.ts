@@ -1,15 +1,16 @@
-import useAuth from '@hooks/auth/useAuth';
-import useLoading from '@hooks/ui/useLoading';
-import useEditWard from '@hooks/ward/useEditWard';
+import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import useAuth from '@/hooks/auth/useAuth';
+import useLoading from '@/hooks/ui/useLoading';
+import useEditWard from '@/hooks/ward/useEditWard';
 import {
   editAccount,
   eidtAccountStatus,
   deleteAccount as deleteAccountApi,
-} from '@libs/api/account';
-import { updateNurse } from '@libs/api/nurse';
-import { quitWard as quitWardApi } from '@libs/api/ward';
-import { useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+} from '@/libs/api/account';
+import { updateNurse } from '@/libs/api/nurse';
+import { quitWard as quitWardApi } from '@/libs/api/ward';
+import { type Nurse } from '@/types/nurse';
 
 const useEditAccount = () => {
   const {
@@ -21,9 +22,9 @@ const useEditAccount = () => {
   } = useEditWard();
   const { setLoading } = useLoading();
   const queryClient = useQueryClient();
-
   const handleEditProfile = async (nurse: Nurse, profileImage: string) => {
     if (!accountMe) return;
+
     try {
       setLoading(true);
       updateNurse(nurse.nurseId, nurse);
@@ -31,7 +32,7 @@ const useEditAccount = () => {
         name: nurse.name,
         profileImgBase64: profileImage,
       });
-      await queryClient.invalidateQueries(getWardQueryKey);
+      await queryClient.invalidateQueries({ queryKey: getWardQueryKey });
       await handleGetAccountMe();
     } catch (e) {
       console.error(e);
@@ -40,10 +41,11 @@ const useEditAccount = () => {
       setLoading(false);
     }
   };
-
   const quitWard = async () => {
-    if (!accountMe || !accountMe.wardId) return;
+    if (!accountMe?.wardId) return;
+
     if (!confirm('정말 병동을 나가시겠습니까?')) return;
+
     try {
       setLoading(true);
       await quitWardApi(accountMe.wardId);
@@ -56,10 +58,11 @@ const useEditAccount = () => {
       setLoading(false);
     }
   };
-
   const deleteAccount = async () => {
     if (!accountMe) return;
+
     if (!confirm('정말 탈퇴하시겠습니까?')) return;
+
     try {
       setLoading(true);
       deleteAccountApi(accountMe.accountId);

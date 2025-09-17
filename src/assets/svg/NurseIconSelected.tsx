@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgNurseIconSelected = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 46 46" {...props}>
     <g
@@ -21,4 +22,5 @@ const SvgNurseIconSelected = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgNurseIconSelected;

@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgEnterWardIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" {...props}>
     <g
@@ -17,4 +18,5 @@ const SvgEnterWardIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgEnterWardIcon;

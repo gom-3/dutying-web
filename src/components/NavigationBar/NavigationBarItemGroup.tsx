@@ -1,5 +1,3 @@
-import NavigationBarItem from './NavigationBarItem';
-import ROUTE from '@libs/constant/path';
 import {
   DutyIcon,
   DutyIconSelected,
@@ -7,7 +5,9 @@ import {
   NurseIconSelected,
   RequestIcon,
   RequestIconSelected,
-} from '@assets/svg';
+} from '@/assets/svg';
+import ROUTE from '@/libs/constant/path';
+import NavigationBarItem from './NavigationBarItem';
 
 const items = [
   {
@@ -29,10 +29,9 @@ const items = [
     text: '간호사 관리',
   },
 ];
-
 const NavigationBarItemGroups = () => {
   return (
-    <div className="mt-[3.125rem]">
+    <div className="mt-12.5">
       {items.map((item) => (
         <NavigationBarItem
           key={item.path}

@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgPlusIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 28 28" {...props}>
     <path
@@ -9,4 +10,5 @@ const SvgPlusIcon = (props: SVGProps<SVGSVGElement>) => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.429} d="M9 14h10M14 9v10" />
   </svg>
 );
+
 export default SvgPlusIcon;

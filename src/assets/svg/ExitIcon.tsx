@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgExitIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" {...props}>
     <path
@@ -10,4 +11,5 @@ const SvgExitIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgExitIcon;

@@ -1,16 +1,10 @@
-import { shallow } from 'zustand/shallow';
 import { useUIConfigStore } from './store';
 
 const useUIConfig = () => {
-  const [separateWeekendColor, shiftTypeColorStyle, setState] = useUIConfigStore(
-    (state) => [state.separateWeekendColor, state.shiftTypeColorStyle, state.setState],
-    shallow
-  );
-
+  const { separateWeekendColor, shiftTypeColorStyle, setState } = useUIConfigStore();
   const handleChangeSeparateWeekendColor = (value: boolean) => {
     setState('separateWeekendColor', value);
   };
-
   const handleShiftTypeColorStyle = (value: typeof shiftTypeColorStyle) => {
     setState('shiftTypeColorStyle', value);
   };

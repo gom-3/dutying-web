@@ -1,7 +1,7 @@
-import { ChangeEvent } from 'react';
-import ShiftSelect from './ShiftSelect';
+import { type ChangeEvent } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import useEditShiftTeam from '@/hooks/ward/useEditShiftTeam';
+import ShiftSelect from './ShiftSelect';
 
 type Props = {
   isFixed?: boolean;
@@ -13,15 +13,14 @@ const EditNurseTab = ({ isFixed, close }: Props) => {
     state: { selectedNurse },
     actions: { updateNurse },
   } = useEditShiftTeam();
-
   const tabRef = useOnclickOutside(() => {
     if (isFixed && close) {
       close();
     }
   });
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!selectedNurse) return;
+
     updateNurse(selectedNurse.nurseId, { ...selectedNurse, name: e.target.value });
   };
 
@@ -29,40 +28,38 @@ const EditNurseTab = ({ isFixed, close }: Props) => {
     selectedNurse && (
       <div
         ref={tabRef}
-        className={`ml-[1.875rem] mt-[1.875rem] ${
-          isFixed && 'fixed right-[3rem] top-[50%] z-30 translate-y-[-50%]'
-        }`}
+        className={`mt-7.5 ml-7.5 ${isFixed && 'fixed top-[50%] right-12 z-30 translate-y-[-50%]'}`}
       >
-        {!isFixed && <div className="mb-[.9375rem] font-apple text-sub-3">간호사별 관리</div>}
+        {!isFixed && <div className="font-apple text-sub-3 mb-[.9375rem]">간호사별 관리</div>}
         <div
           style={{ height: 'calc(100vh - 19.5rem' }}
-          className="flex w-[28rem] flex-col items-center rounded-[1.25rem] bg-white shadow-banner"
+          className="shadow-banner flex w-md flex-col items-center rounded-[1.25rem] bg-white"
         >
-          <div className="m-[1.875rem] flex justify-start">
+          <div className="m-7.5 flex justify-start">
             <input
-              className="w-1/2 text-[2rem] font-semibold text-text-1"
+              className="text-text-1 w-1/2 text-[2rem] font-semibold"
               type="text"
               onChange={handleInputChange}
               value={selectedNurse.name}
               placeholder="이름"
             />
           </div>
-          <div className="h-[.3125rem] w-full bg-sub-5" />
-          <div className="relative flex h-[7.875rem] w-full items-center justify-center">
-            <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
+          <div className="bg-sub-5 h-[.3125rem] w-full" />
+          <div className="relative flex h-31.5 w-full items-center justify-center">
+            <div className="font-apple text-sub-2.5 absolute top-[.6875rem] left-10 text-[1rem] font-medium">
               가능 근무
             </div>
-            <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
+            <div className="font-apple text-sub-3 absolute top-[.6857rem] right-7 text-[0.625rem] font-light">
               가능 근무를 모두 선택해주세요
             </div>
             <ShiftSelect mode="isPossible" />
           </div>
-          <div className="h-[.3125rem] w-full bg-sub-5" />
-          <div className="relative flex h-[7.875rem] w-full items-center justify-center">
-            <div className="absolute left-[2.5rem] top-[.6875rem] font-apple text-[1rem] font-medium text-sub-2.5">
+          <div className="bg-sub-5 h-[.3125rem] w-full" />
+          <div className="relative flex h-31.5 w-full items-center justify-center">
+            <div className="font-apple text-sub-2.5 absolute top-[.6875rem] left-10 text-[1rem] font-medium">
               선호 근무
             </div>
-            <div className="absolute right-[1.75rem] top-[.6857rem] font-apple text-[0.625rem] font-light text-sub-3">
+            <div className="font-apple text-sub-3 absolute top-[.6857rem] right-7 text-[0.625rem] font-light">
               선호도에 따라 듀티표에 추천될 예정입니다
             </div>
             <ShiftSelect mode="isPreferred" />

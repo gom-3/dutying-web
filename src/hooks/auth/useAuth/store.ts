@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { produce } from 'immer';
-import { setAccessToken } from '@libs/api/client';
+import { setAccessToken } from '@/libs/api/client';
+import { type Account } from '@/types/account';
+import { type TValues } from '@/types/util';
 
-interface State {
+interface IState {
   accountMe: Account | null;
   isAuth: boolean;
   accessToken: string | null;
@@ -15,12 +15,12 @@ interface State {
   _loaded: boolean;
 }
 
-interface Store extends State {
-  setState: (key: keyof State, value: any) => void;
+interface Store extends IState {
+  setState: (key: keyof IState, value: TValues<IState>) => void;
   initState: () => void;
 }
 
-const initialState: State = {
+const initialState: IState = {
   accountMe: null,
   isAuth: false,
   accessToken: null,
@@ -30,24 +30,19 @@ const initialState: State = {
   demoStartDate: null,
   _loaded: false,
 };
-
 const useAuthStore = create<Store>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         ...initialState,
-        setState: (key, value) =>
-          set(
-            produce(get(), (draft: any) => {
-              draft[key] = value;
-            })
-          ),
+        setState: (state, value) => set((prev) => ({ ...prev, [state]: value })),
         initState: () => set({ ...initialState, _loaded: true }),
       }),
       {
         name: 'useAuthStore',
         partialize: ({ isAuth, accessToken, accountId, nurseId, wardId, demoStartDate }: Store) => {
           if (accessToken) setAccessToken(accessToken);
+
           return {
             isAuth,
             accessToken,
@@ -58,9 +53,9 @@ const useAuthStore = create<Store>()(
             _loaded: true,
           };
         },
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default useAuthStore;

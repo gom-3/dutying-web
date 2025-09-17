@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgSettingIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 44 44" {...props}>
     <g
@@ -18,4 +19,5 @@ const SvgSettingIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgSettingIcon;

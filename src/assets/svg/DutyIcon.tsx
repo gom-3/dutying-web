@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgDutyIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 46 45" {...props}>
     <g
@@ -17,4 +18,5 @@ const SvgDutyIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgDutyIcon;

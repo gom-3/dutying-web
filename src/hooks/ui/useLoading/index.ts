@@ -1,8 +1,7 @@
-import { shallow } from 'zustand/shallow';
 import { useLoadingStore } from './store';
 
 const useLoading = () => {
-  const [loading, setState] = useLoadingStore((state) => [state.loading, state.setState], shallow);
+  const { loading, setState } = useLoadingStore();
 
   return {
     loading,

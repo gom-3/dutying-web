@@ -1,4 +1,4 @@
-import useRegister from '@hooks/auth/useRegister';
+import useRegister from '@/hooks/auth/useRegister';
 
 function PendingEnter() {
   const {
@@ -8,20 +8,19 @@ function PendingEnter() {
 
   return (
     <div className="my-auto flex w-full flex-col items-center justify-center">
-      <h1 className="font-apple text-[3rem] font-semibold text-main-1">
+      <h1 className="font-apple text-main-1 text-[3rem] font-semibold">
         {accountWaitingWard?.hospitalName} {accountWaitingWard?.name}
       </h1>
-      <p className="mt-[3.75rem] font-apple text-[1.5rem] font-medium text-main-2">
+      <p className="font-apple text-main-2 mt-15 text-[1.5rem] font-medium">
         병동 입장 승인 대기중입니다.
       </p>
       <button
         onClick={() =>
-          accountMe &&
-          accountMe.nurseId &&
+          accountMe?.nurseId &&
           accountWaitingWard &&
           cancelWaiting(accountWaitingWard.wardId, accountMe.nurseId)
         }
-        className="mt-[8rem] rounded-[.625rem] border-[.0625rem] border-red px-[2.25rem] py-[.425rem] font-apple text-[1.5rem] text-red"
+        className="border-red font-apple text-red mt-32 rounded-[.625rem] border-[.0625rem] px-9 py-[.425rem] text-[1.5rem]"
       >
         입장 취소
       </button>

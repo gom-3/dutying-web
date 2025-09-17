@@ -1,3 +1,5 @@
+import { type DutyRequest } from '@/types/request';
+
 export const mockDutyRequestList: DutyRequest[] = [
   {
     wardReqShiftId: 1,

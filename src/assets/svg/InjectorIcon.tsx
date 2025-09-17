@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgInjectorIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 45 45" {...props}>
     <path
@@ -10,4 +11,5 @@ const SvgInjectorIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgInjectorIcon;

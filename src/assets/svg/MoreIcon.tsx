@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgMoreIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" {...props}>
     <g fill="#fff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
@@ -6,4 +7,5 @@ const SvgMoreIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
+
 export default SvgMoreIcon;

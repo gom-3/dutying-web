@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type Ward = {
+import { type Nurse } from './nurse';
+
+export type Ward = {
   /** 병동 id */
   wardId: number;
   /** 병동 이름 */
@@ -14,7 +15,7 @@ type Ward = {
   shiftTeams: ShiftTeam[];
 };
 
-type WardConstraint = {
+export type WardConstraint = {
   maxContinuousWork: boolean;
   maxContinuousWorkVal: number;
   minNightInterval: boolean;
@@ -30,7 +31,7 @@ type WardConstraint = {
 };
 
 /** 근무 형태 타입 */
-type WardShiftType = {
+export type WardShiftType = {
   /** 근무 타입 id */
   wardShiftTypeId: number;
   /** 근무 형태의 이름이다. @example 데이 */
@@ -52,7 +53,7 @@ type WardShiftType = {
   classification: 'DAY' | 'EVENING' | 'NIGHT' | 'OTHER_WORK' | 'OFF' | 'OTHER_LEAVE';
 };
 
-type ShiftNurse = {
+export type ShiftNurse = {
   shiftNurseId: number;
   name: string;
   carried: number;
@@ -64,7 +65,7 @@ type ShiftNurse = {
   nurseId: number;
 };
 
-type ShiftTeam = {
+export type ShiftTeam = {
   shiftTeamId: number;
   name: string;
   nurseCnt: number;

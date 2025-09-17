@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type DayShift = {
+import { type Day } from './shift';
+
+export type DayShift = {
   /** 날짜 */
   day: Day;
   /** 근무 형태종류 */
   shiftId: number;
 };
 
-type Nurse = {
+export type Nurse = {
   /** 간호사 id */
   nurseId: number;
   /** 계정 id */
@@ -47,7 +48,7 @@ type Nurse = {
   priority: number;
 };
 
-type WaitingNurse = {
+export type WaitingNurse = {
   waitingNurseId: number;
   nurseId: number;
   name: string;

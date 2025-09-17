@@ -1,6 +1,6 @@
-import ReactGA from 'react-ga4';
-import ReactPixel from 'react-facebook-pixel';
 import airbridge from 'airbridge-web-sdk-loader';
+import ReactPixel from 'react-facebook-pixel';
+import ReactGA from 'react-ga4';
 
 interface Event {
   category: string;

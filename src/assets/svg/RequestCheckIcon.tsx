@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgRequestCheckIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 5 5" {...props}>
     <g clipPath="url(#request_check_icon_svg__a)">
@@ -11,4 +12,5 @@ const SvgRequestCheckIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgRequestCheckIcon;

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import useTutorial from '@hooks/ui/useTutorial';
-import { createPortal } from 'react-dom';
-import { StepConfig, StepsConfig, TutorialOverlay } from './TutorialOverlay';
-import useEditShiftStore from '@hooks/shift/useEditShift/store';
 import { useEffect } from 'react';
-import useEditShift from '@hooks/shift/useEditShift';
+import { createPortal } from 'react-dom';
+import useEditShift from '@/hooks/shift/useEditShift';
+import useEditShiftStore from '@/hooks/shift/useEditShift/store';
+import useTutorial from '@/hooks/ui/useTutorial';
+import { type StepConfig, type StepsConfig, TutorialOverlay } from './TutorialOverlay';
 
 const MakeTutorial = () => {
   const {
@@ -15,7 +14,6 @@ const MakeTutorial = () => {
     actions: { toggleEditMode },
   } = useEditShift();
   const { setState } = useEditShiftStore();
-
   const config: StepsConfig = {
     steps: new Map<number, StepConfig>(),
     infoBoxHeight: 150,
@@ -79,7 +77,7 @@ const MakeTutorial = () => {
     showMakeTutorial &&
     createPortal(
       <TutorialOverlay config={config} closeCallback={() => setMakeTutorial(false)} />,
-      document.getElementById('tutorial')!
+      document.getElementById('tutorial')!,
     )
   );
 };

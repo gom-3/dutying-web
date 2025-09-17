@@ -1,6 +1,6 @@
-import { render, screen, userEvent } from '@libs/util/test-utils';
-import Select from '.';
 import { expect, vi, describe, it } from 'vitest';
+import { render, screen, userEvent } from '@/libs/util/test-utils';
+import Select from '.';
 
 describe('Select 컴포넌트', () => {
   it('정상적으로 렌더링되어야 함', () => {
@@ -10,6 +10,7 @@ describe('Select 컴포넌트', () => {
 
   it('placeholder가 정상적으로 렌더링 되어야 함', () => {
     const placeholderText = '선택해주세요';
+
     render(<Select placeholder={placeholderText} />);
     expect(screen.getByText(placeholderText)).toBeInTheDocument();
   });
@@ -19,6 +20,7 @@ describe('Select 컴포넌트', () => {
       { value: '1', label: '옵션 1' },
       { value: '2', label: '옵션 2' },
     ];
+
     render(<Select options={options} />);
     options.forEach((option) => {
       expect(screen.getByText(option.label)).toBeInTheDocument();
@@ -31,6 +33,7 @@ describe('Select 컴포넌트', () => {
       { value: '1', label: '옵션 1' },
       { value: '2', label: '옵션 2' },
     ];
+
     render(<Select options={options} onChange={handleChange} />);
 
     await userEvent.selectOptions(screen.getByRole('combobox'), ['1']);
@@ -39,7 +42,8 @@ describe('Select 컴포넌트', () => {
 
   it('selectClassName이 select의 className에 포함되어야 함', () => {
     const selectedClassName = 'bg-red';
+
     render(<Select selectClassName={selectedClassName} />);
     expect(screen.getByRole('combobox')).toHaveClass(selectedClassName);
-  })
+  });
 });

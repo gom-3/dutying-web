@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgChatIcon = ({ fill, ...props }: SVGProps<SVGSVGElement> & { fill: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 21" {...props}>
     <path
@@ -9,4 +10,5 @@ const SvgChatIcon = ({ fill, ...props }: SVGProps<SVGSVGElement> & { fill: strin
     />
   </svg>
 );
+
 export default SvgChatIcon;

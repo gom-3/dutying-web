@@ -1,6 +1,14 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { produce } from 'immer';
+import { type TValues } from '@/types/util';
+import { type WardShiftType } from '@/types/ward';
+import {
+  type CheckFaultOptions,
+  type DayInfo,
+  type EditHistory,
+  type Faults,
+  type Focus,
+} from './types';
 
 export interface State {
   year: number;
@@ -23,8 +31,7 @@ export interface State {
 }
 
 interface Store extends State {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setState: (key: keyof State, value: any) => void;
+  setState: (key: keyof State, value: TValues<State>) => void;
   initState: () => void;
 }
 
@@ -47,18 +54,12 @@ const initialState: State = {
     slash: true,
   },
 };
-
 const useEditShiftStore = create<Store>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         ...initialState,
-        setState: (key, value) =>
-          set(
-            produce(get(), (draft) => {
-              draft[key] = value as never;
-            })
-          ),
+        setState: (key, value) => set((prev) => ({ ...prev, [key]: value })),
         initState: () => set(initialState),
       }),
       {
@@ -66,8 +67,11 @@ const useEditShiftStore = create<Store>()(
         storage: {
           getItem: (name) => {
             const str = localStorage.getItem(name);
+
             if (!str) return null;
+
             const { state } = JSON.parse(str);
+
             return {
               state: {
                 ...state,
@@ -84,6 +88,7 @@ const useEditShiftStore = create<Store>()(
                 editHistory: Array.from(newValue.state.editHistory.entries()),
               },
             });
+
             localStorage.setItem(name, str);
           },
           removeItem: (name) => localStorage.removeItem(name),
@@ -105,9 +110,9 @@ const useEditShiftStore = create<Store>()(
           currentShiftTeamId,
           oldCurrentShiftTeamId,
         }),
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default useEditShiftStore;

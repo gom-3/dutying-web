@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { type RefObject, useCallback, useEffect, useRef } from 'react';
+import { DragDropContext, type DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import { DragIcon, FoldDutyIcon, MinusIcon, PlusIcon2 } from '@assets/svg';
-import ShiftBadge from '@components/ShiftBadge';
-import { RefObject, useCallback, useEffect, useRef } from 'react';
+import { DragIcon, FoldDutyIcon, MinusIcon, PlusIcon2 } from '@/assets/svg';
+import ShiftBadge from '@/components/ShiftBadge';
+import useEditShift from '@/hooks/shift/useEditShift';
+import useUIConfig from '@/hooks/ui/useUIConfig';
+import useEditShiftTeam from '@/hooks/ward/useEditShiftTeam';
+import { events, sendEvent } from 'analytics';
 import FaultLayer from './FaultLayer';
 import RequestLayer from './RequestLayer';
-import { events, sendEvent } from 'analytics';
-import useEditShift from '@hooks/shift/useEditShift';
-import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
-import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
-import useUIConfig from '@hooks/ui/useUIConfig';
 
 export default function ShiftCalendar() {
   const {
@@ -34,25 +33,23 @@ export default function ShiftCalendar() {
   const {
     state: { separateWeekendColor, shiftTypeColorStyle },
   } = useUIConfig();
-
   const focusedCellRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const clickAwayRef = useOnclickOutside(() => {
     changeFocus(null);
     selectNurse(null);
   });
-
   const onDragEnd = useCallback(
     ({ source, destination, draggableId }: DropResult) => {
       if (!destination || !shiftTeams || !shift || !currentShiftTeam) return null;
+
       if (source.droppableId === destination.droppableId && destination.index === source.index)
         return;
 
       const sourceDivision = parseInt(source.droppableId);
       const destinationDivision = parseInt(destination.droppableId);
-
       const dragedNurse = shift.divisionShiftNurses[sourceDivision].find(
-        (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId)
+        (x) => x.shiftNurse.shiftNurseId === parseInt(draggableId),
       )!.shiftNurse;
       const destinationNurses = shift.divisionShiftNurses[destinationDivision];
 
@@ -70,7 +67,7 @@ export default function ShiftCalendar() {
           destination.index === destinationNurses.length - 1
             ? destinationNurses[destination.index].shiftNurse.priority + 2024
             : destinationNurses[destination.index + 1].shiftNurse.priority,
-          year.toString() + '-' + month.toString().padStart(2, '0')
+          year.toString() + '-' + month.toString().padStart(2, '0'),
         );
       } else {
         moveNurseOrder(
@@ -84,32 +81,37 @@ export default function ShiftCalendar() {
           destination.index === destinationNurses.length
             ? destinationNurses[destination.index - 1].shiftNurse.priority + 2024
             : destinationNurses[destination.index].shiftNurse.priority,
-          year.toString() + '-' + month.toString().padStart(2, '0')
+          year.toString() + '-' + month.toString().padStart(2, '0'),
         );
       }
 
       sendEvent(events.makePage.calendar.moveNurse);
     },
-    [shiftTeams, shift, currentShiftTeam]
+    [shiftTeams, shift, currentShiftTeam],
   );
 
   useEffect(() => {
     if (focus) {
       const focusRect = focusedCellRef.current?.getBoundingClientRect();
       const container = containerRef.current;
+
       if (!focusRect || !container) return;
+
       // 셀이 화면 오른쪽에 있을 때 오른쪽으로 충분히 화면을 이동한다.
       if (focusRect.x + focusRect.width > window.innerWidth)
         window.scroll({
           left: focusRect.left + container.scrollLeft,
         });
+
       // 셀이 화면 왼쪽에 있을 때 왼쪽 끝으로 화면을 이동한다.
       if (focusRect.x - container.offsetLeft < 0) window.scroll({ left: 0 });
+
       // 셀이 화면 아래에 있을 때 아래로 충분히 화면을 이동한다.
       if (focusRect.y + focusRect.height - container.offsetTop > container.clientHeight)
         window.scroll({
           top: focusRect.top + container.scrollTop,
         });
+
       // 셀이 화면 위에 있을 때 한칸씩 위로 화면을 이동한다.
       if (focusRect.y - container.offsetTop < 0)
         window.scroll({ top: focusRect.top + window.scrollY - 132 });
@@ -118,58 +120,56 @@ export default function ShiftCalendar() {
 
   return shift && foldedLevels && wardShiftTypeMap && currentShiftTeam ? (
     <div id="calendar" ref={clickAwayRef} className="flex w-full flex-col overflow-hidden">
-      <div className="z-20 flex items-center gap-[1.25rem] bg-[#FDFCFE] py-[.75rem] pr-[1rem]">
-        <div className="flex h-[1.875rem] gap-[1.25rem]">
-          <div className="w-[3.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+      <div className="z-20 flex items-center gap-5 bg-[#FDFCFE] py-[.75rem] pr-4">
+        <div className="flex h-7.5 gap-5">
+          <div className="font-apple text-sub-3 w-13.5 text-center text-[1rem] font-medium">
             {/* 구분 */}
           </div>
-          <div className="w-[4.375rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="font-apple text-sub-3 w-17.5 text-center text-[1rem] font-medium">
             이름
           </div>
-          <div className="w-[1.875rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="font-apple text-sub-3 w-7.5 text-center text-[1rem] font-medium">
             이월
           </div>
-          <div className="w-[5.625rem] text-center font-apple text-[1rem] font-medium text-sub-3">
+          <div className="font-apple text-sub-3 w-22.5 text-center text-[1rem] font-medium">
             전달 근무
           </div>
-          <div className="flex rounded-[2.5rem] border-[.0625rem] border-sub-4 px-[1rem] py-[.1875rem]">
+          <div className="border-sub-4 flex rounded-[2.5rem] border-[.0625rem] px-4 py-[.1875rem]">
             {shift.days.map((item, j) => (
               <p
                 key={j}
-                className={`w-[2.25rem] flex-1 rounded-full text-center font-poppins text-[1rem]
-                  ${
-                    item.dayType === 'saturday'
-                      ? j === focus?.day
-                        ? separateWeekendColor
-                          ? 'bg-blue text-white'
-                          : 'bg-red text-white'
-                        : separateWeekendColor
+                className={`font-poppins w-9 flex-1 rounded-full text-center text-[1rem] ${
+                  item.dayType === 'saturday'
+                    ? j === focus?.day
+                      ? separateWeekendColor
+                        ? 'bg-blue text-white'
+                        : 'bg-red text-white'
+                      : separateWeekendColor
                         ? 'text-blue'
                         : 'text-red'
-                      : item.dayType === 'sunday' || item.dayType === 'holiday'
+                    : item.dayType === 'sunday' || item.dayType === 'holiday'
                       ? j === focus?.day
                         ? 'bg-red text-white'
                         : 'text-red'
                       : item.dayType === 'workday'
-                      ? j === focus?.day
-                        ? 'bg-main-1 text-white'
-                        : 'text-sub-2.5'
-                      : ''
-                  }
-                `}
+                        ? j === focus?.day
+                          ? 'bg-main-1 text-white'
+                          : 'text-sub-2.5'
+                        : ''
+                } `}
               >
                 {item.day}
               </p>
             ))}
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2 px-[1.5625rem] text-center">
+        <div className="flex shrink-0 items-center gap-2 px-6.25 text-center">
           {shift.wardShiftTypes
             .filter((x) => x.isCounted)
             .map((shiftType, index) => (
               <div
                 key={index}
-                className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] p-2 font-poppins text-[1.25rem]"
+                className="font-poppins flex h-6 w-6 items-center justify-center rounded-[.375rem] p-2 text-[1.25rem]"
                 style={
                   shiftTypeColorStyle === 'background'
                     ? { backgroundColor: shiftType.color, color: 'white' }
@@ -180,7 +180,7 @@ export default function ShiftCalendar() {
               </div>
             ))}
           <div
-            className="flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-[.375rem] bg-red p-2 font-poppins text-[0.8rem] text-white"
+            className="bg-red font-poppins flex h-6 w-6 items-center justify-center rounded-[.375rem] p-2 text-[0.8rem] text-white"
             style={
               shiftTypeColorStyle === 'background'
                 ? {
@@ -199,7 +199,7 @@ export default function ShiftCalendar() {
       </div>
       <DragDropContext onDragEnd={(d) => !readonly && onDragEnd(d)}>
         <div
-          className="mt-[-1.25rem] flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pb-8 pr-[1rem] pt-[1.25rem] scrollbar-hide"
+          className="scrollbar-hide -mt-5 flex flex-col gap-[.3125rem] overflow-x-hidden overflow-y-scroll pt-5 pr-4 pb-8"
           ref={containerRef}
         >
           {shift.divisionShiftNurses
@@ -209,13 +209,13 @@ export default function ShiftCalendar() {
                 shift && foldedLevels[level] ? (
                   <div
                     key={level}
-                    className="ml-[1.25rem] flex h-[1.875rem] w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] bg-sub-4.5 px-[.625rem]"
+                    className="bg-sub-4.5 ml-5 flex h-7.5 w-[calc(100%-1.25rem)] cursor-pointer items-center gap-[.125rem] rounded-[.625rem] px-[.625rem]"
                     onClick={() => {
                       sendEvent(events.makePage.calendar.foldDivision);
                       foldLevel(level);
                     }}
                   >
-                    <FoldDutyIcon className="h-[1.375rem] w-[1.375rem] rotate-180" />
+                    <FoldDutyIcon className="h-5.5 w-5.5 rotate-180" />
                   </div>
                 ) : (
                   <Droppable droppableId={level.toString()} key={level.toString()}>
@@ -223,14 +223,14 @@ export default function ShiftCalendar() {
                       <div
                         ref={provided.innerRef}
                         key={level}
-                        className="flex gap-[1.25rem]"
+                        className="flex gap-5"
                         {...provided.droppableProps}
                       >
-                        <div className="relative ml-[1.25rem] rounded-[1.25rem] shadow-banner">
+                        <div className="shadow-banner relative ml-5 rounded-[1.25rem]">
                           {!readonly && (
-                            <div className="absolute left-[-.9375rem] flex h-full w-[1.875rem] items-center justify-center font-poppins font-light text-sub-2.5">
+                            <div className="font-poppins text-sub-2.5 absolute left-[-.9375rem] flex h-full w-7.5 items-center justify-center font-light">
                               <FoldDutyIcon
-                                className="absolute left-0 top-[50%] z-10 h-[1.375rem] w-[1.375rem] translate-x-[50%] translate-y-[-50%] cursor-pointer"
+                                className="absolute top-[50%] left-0 z-10 h-5.5 w-5.5 translate-x-[50%] translate-y-[-50%] cursor-pointer"
                                 onClick={() => {
                                   sendEvent(events.makePage.calendar.spreadDivision);
                                   foldLevel(level);
@@ -247,61 +247,62 @@ export default function ShiftCalendar() {
                             >
                               {(provided) => (
                                 <div
-                                  className={`relative flex h-[2.5rem] items-center gap-[1.25rem]
-                                ${
-                                  rowIndex === 0
-                                    ? rowIndex === rows.length - 1
-                                      ? 'rounded-[1.25rem]'
-                                      : 'rounded-t-[1.25rem]'
-                                    : rowIndex === rows.length - 1
-                                    ? 'rounded-b-[1.25rem]'
-                                    : ''
-                                }
-                                ${
-                                  focus?.shiftNurseId === row.shiftNurse.shiftNurseId
-                                    ? 'bg-main-4'
-                                    : 'bg-white'
-                                }`}
+                                  className={`relative flex h-10 items-center gap-5 ${
+                                    rowIndex === 0
+                                      ? rowIndex === rows.length - 1
+                                        ? 'rounded-[1.25rem]'
+                                        : 'rounded-t-[1.25rem]'
+                                      : rowIndex === rows.length - 1
+                                        ? 'rounded-b-[1.25rem]'
+                                        : ''
+                                  } ${
+                                    focus?.shiftNurseId === row.shiftNurse.shiftNurseId
+                                      ? 'bg-main-4'
+                                      : 'bg-white'
+                                  }`}
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <div className="relative w-[2.125rem] shrink-0">
+                                  <div className="relative w-8.5 shrink-0">
                                     {!readonly && (
-                                      <DragIcon className="absolute right-[-0.625rem] top-[50%] h-[1.5rem] w-[1.5rem] translate-y-[-50%]" />
+                                      <DragIcon className="absolute top-[50%] -right-2.5 h-6 w-6 translate-y-[-50%]" />
                                     )}
                                   </div>
                                   <div
-                                    className="w-[4.375rem] shrink-0 cursor-pointer truncate text-center font-apple text-[1.25rem] text-sub-1 hover:underline"
+                                    className="font-apple text-sub-1 w-17.5 shrink-0 cursor-pointer truncate text-center text-[1.25rem] hover:underline"
                                     onClick={() => {
                                       selectNurse(row.shiftNurse.nurseId);
                                     }}
                                   >
                                     {row.shiftNurse.name}
                                   </div>
-                                  <div className="w-[1.875rem] shrink-0 text-center font-apple text-[1.25rem] text-sub-1">
+                                  <div className="font-apple text-sub-1 w-7.5 shrink-0 text-center text-[1.25rem]">
                                     {readonly ? (
-                                      <div className="h-[1.875rem] w-[1.875rem] cursor-default rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4">
+                                      <div className="bg-main-bg font-poppins text-sub-2 focus:bg-main-4 h-7.5 w-7.5 cursor-default rounded-[.3125rem] border-[.0313rem] text-[1.25rem] outline-none">
                                         {row.shiftNurse.carried}
                                       </div>
                                     ) : (
                                       <button
-                                        className="h-[1.875rem] w-[1.875rem] rounded-[.3125rem] border-[.0313rem] bg-main-bg font-poppins text-[1.25rem] text-sub-2 outline-none focus:bg-main-4"
+                                        className="bg-main-bg font-poppins text-sub-2 focus:bg-main-4 h-7.5 w-7.5 rounded-[.3125rem] border-[.0313rem] text-[1.25rem] outline-none"
                                         onClick={() => {
                                           sendEvent(events.makePage.calendar.focusCarried);
                                         }}
                                         onKeyDown={(e) => {
                                           e.preventDefault();
+
                                           if (e.key === 'ArrowUp')
                                             updateCarry(
                                               row.shiftNurse.shiftNurseId,
-                                              row.shiftNurse.carried + 1
+                                              row.shiftNurse.carried + 1,
                                             );
+
                                           if (e.key === 'ArrowDown')
                                             updateCarry(
                                               row.shiftNurse.shiftNurseId,
-                                              row.shiftNurse.carried - 1
+                                              row.shiftNurse.carried - 1,
                                             );
+
                                           sendEvent(events.makePage.calendar.changeCarried);
                                         }}
                                       >
@@ -309,18 +310,18 @@ export default function ShiftCalendar() {
                                       </button>
                                     )}
                                   </div>
-                                  <div className="flex w-[5.625rem] gap-[.125rem]">
+                                  <div className="flex w-22.5 gap-[.125rem]">
                                     {row.lastWardShiftList.map((current, j) => (
                                       <ShiftBadge
                                         key={j}
                                         shiftType={
                                           current != null ? wardShiftTypeMap.get(current) : null
                                         }
-                                        className="h-[1.3125rem] w-[1.3125rem] text-[.9375rem]"
+                                        className="h-5.25 w-5.25 text-[.9375rem]"
                                       />
                                     ))}
                                   </div>
-                                  <div className="flex h-full px-[1.0625rem]">
+                                  <div className="flex h-full px-4.25">
                                     {row.wardShiftList.map((current, j) => {
                                       const request = row.wardReqShiftList[j];
                                       const isSaturday = shift.days[j].dayType === 'saturday';
@@ -331,22 +332,21 @@ export default function ShiftCalendar() {
                                         focus?.shiftNurseId === row.shiftNurse.shiftNurseId &&
                                         focus.day === j;
                                       const fault = faults.get(
-                                        `${row.shiftNurse.shiftNurseId},${j}`
+                                        `${row.shiftNurse.shiftNurseId},${j}`,
                                       );
+
                                       return (
                                         <div
                                           key={j}
-                                          className={`group relative flex h-full w-[2.25rem] flex-1 items-center justify-center px-[.25rem] 
-                              ${
-                                isSunday
-                                  ? 'bg-[#FFE1E680]'
-                                  : isSaturday
-                                  ? separateWeekendColor
-                                    ? 'bg-[#E1E5FF80]'
-                                    : 'bg-[#FFE1E680]'
-                                  : ''
-                              } 
-                              ${j === focus?.day && 'bg-main-4'}`}
+                                          className={`group relative flex h-full w-9 flex-1 items-center justify-center px-[.25rem] ${
+                                            isSunday
+                                              ? 'bg-[#FFE1E680]'
+                                              : isSaturday
+                                                ? separateWeekendColor
+                                                  ? 'bg-[#E1E5FF80]'
+                                                  : 'bg-[#FFE1E680]'
+                                                : ''
+                                          } ${j === focus?.day && 'bg-main-4'}`}
                                         >
                                           {!readonly && showLayer.fault && fault && (
                                             <FaultLayer fault={fault} />
@@ -366,6 +366,7 @@ export default function ShiftCalendar() {
                                             key={j}
                                             onClick={() => {
                                               if (readonly) return;
+
                                               changeFocus?.({
                                                 shiftNurseName: row.shiftNurse.name,
                                                 shiftNurseId: row.shiftNurse.shiftNurseId,
@@ -385,7 +386,7 @@ export default function ShiftCalendar() {
                                               readonly ? 'cursor-default' : 'cursor-pointer'
                                             } ${
                                               isFocused &&
-                                              'outline outline-[.125rem] outline-main-1'
+                                              'outline-main-1 outline outline-[.125rem]'
                                             }`}
                                             forwardRef={
                                               isFocused
@@ -399,7 +400,7 @@ export default function ShiftCalendar() {
                                   </div>
                                   <div
                                     id="count_by_nurse"
-                                    className="relative flex shrink-0 items-center gap-2 px-[1.5625rem] text-center"
+                                    className="relative flex shrink-0 items-center gap-2 px-6.25 text-center"
                                     key={rowIndex}
                                   >
                                     {shift?.wardShiftTypes
@@ -407,23 +408,24 @@ export default function ShiftCalendar() {
                                       .map((wardShiftType, index) => (
                                         <div
                                           key={index}
-                                          className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2"
+                                          className="font-poppins text-sub-2 w-6 text-center text-[1.25rem]"
                                         >
                                           {
                                             row.wardShiftList.filter(
-                                              (current) => current === wardShiftType.wardShiftTypeId
+                                              (current) =>
+                                                current === wardShiftType.wardShiftTypeId,
                                             ).length
                                           }
                                         </div>
                                       ))}
-                                    <div className="w-[1.5rem] text-center font-poppins text-[1.25rem] text-sub-2">
+                                    <div className="font-poppins text-sub-2 w-6 text-center text-[1.25rem]">
                                       {
                                         row.wardShiftList.filter(
                                           (current, i) =>
                                             current &&
                                             wardShiftTypeMap.get(current)?.isOff &&
                                             shift.days.find((x) => x.day === i + 1)?.dayType !=
-                                              'workday'
+                                              'workday',
                                         ).length
                                       }
                                     </div>
@@ -432,7 +434,7 @@ export default function ShiftCalendar() {
                                     ? !readonly && (
                                         <>
                                           <div
-                                            className="justify-cente group peer absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-80%] translate-y-[50%] items-center"
+                                            className="justify-cente group peer absolute bottom-0 z-10 flex h-6 w-6 translate-x-[-80%] translate-y-[50%] items-center"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               editDivision(
@@ -441,20 +443,20 @@ export default function ShiftCalendar() {
                                                 1,
                                                 year.toString() +
                                                   '-' +
-                                                  month.toString().padStart(2, '0')
+                                                  month.toString().padStart(2, '0'),
                                               );
                                               sendEvent(events.makePage.calendar.createDivision);
                                             }}
                                           >
-                                            <PlusIcon2 className="invisible h-[1.25rem] w-[1.25rem] group-hover:visible" />
+                                            <PlusIcon2 className="invisible h-5 w-5 group-hover:visible" />
                                           </div>
-                                          <div className="invisible absolute bottom-0 h-[.0938rem] w-full bg-sub-2.5 peer-hover:visible" />
+                                          <div className="bg-sub-2.5 invisible absolute bottom-0 h-[.0938rem] w-full peer-hover:visible" />
                                         </>
                                       )
                                     : level !== shift.divisionShiftNurses.length - 1 &&
                                       !readonly && (
                                         <div
-                                          className="absolute bottom-0 z-10 flex h-[1.5rem] w-[1.5rem] translate-x-[-65%] translate-y-[calc(50%+.1563rem)] items-center"
+                                          className="absolute bottom-0 z-10 flex h-6 w-6 translate-x-[-65%] translate-y-[calc(50%+.1563rem)] items-center"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             editDivision(
@@ -463,12 +465,12 @@ export default function ShiftCalendar() {
                                               -1,
                                               year.toString() +
                                                 '-' +
-                                                month.toString().padStart(2, '0')
+                                                month.toString().padStart(2, '0'),
                                             );
                                             sendEvent(events.makePage.calendar.deleteDivision);
                                           }}
                                         >
-                                          <MinusIcon className="h-[1.25rem] w-[1.25rem] opacity-0 hover:opacity-100" />
+                                          <MinusIcon className="h-5 w-5 opacity-0 hover:opacity-100" />
                                         </div>
                                       )}
                                 </div>

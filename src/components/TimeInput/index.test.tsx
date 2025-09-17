@@ -1,5 +1,5 @@
-import { render, screen, userEvent } from '@libs/util/test-utils';
 import { describe, expect, it, vi } from 'vitest';
+import { render, screen, userEvent } from '@/libs/util/test-utils';
 import TimeInput from '.';
 
 describe('TimeInput 컴포넌트', () => {
@@ -15,22 +15,29 @@ describe('TimeInput 컴포넌트', () => {
 
   it('유효한 시간 입력 시 TimeInput의 value가 업데이트되어야 함', async () => {
     render(<TimeInput />);
+
     const input = screen.getByRole('textbox');
+
     await userEvent.type(input, '12:34');
     expect(input).toHaveValue('12:34');
   });
 
   it('유효하지 않은 시간 입력 시 TimeInput의 value는 그대로여야 함', async () => {
     render(<TimeInput initTime="12:34" />);
+
     const input = screen.getByRole('textbox');
+
     await userEvent.type(input, '99:99');
     expect(input).toHaveValue('12:34');
   });
 
   it('사용자 입력마다 onTimeChange가 호출되어야 함', async () => {
     const mockOnTimeChange = vi.fn();
+
     render(<TimeInput onTimeChange={mockOnTimeChange} />);
+
     const input = screen.getByRole('textbox');
+
     await userEvent.type(input, '12:34');
     expect(mockOnTimeChange).toHaveBeenCalledWith('12:34');
   });
