@@ -1,11 +1,14 @@
-import { koToEn } from '@libs/util/koToEn';
+import { koToEn } from '@/libs/util/koToEn';
+import { type RequestShift, type Shift } from '@/types/shift';
+import { type WardConstraint, type ShiftNurse, type WardShiftType } from '@/types/ward';
+import { type Focus, type CheckFaultOptions, type Fault, type FaultType } from './types';
 
 export const moveFocus = (
   direction: 'left' | 'right' | 'up' | 'down',
   moveEnd: boolean,
   shift: Shift | RequestShift,
   focus: Focus,
-  setFocus: (focus: Focus) => void
+  setFocus: (focus: Focus) => void,
 ) => {
   const flatNurses = shift.divisionShiftNurses
     .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
@@ -13,6 +16,7 @@ export const moveFocus = (
   const { day, shiftNurseId } = focus;
   const dayCnt = shift.days.length;
   const nurseIndex = flatNurses.findIndex((x) => x.shiftNurseId === shiftNurseId);
+
   let newNurseId = shiftNurseId;
   let newDay = day;
 
@@ -29,6 +33,7 @@ export const moveFocus = (
       } else {
         newDay = moveEnd ? 0 : Math.max(0, day - 1);
       }
+
       break;
     }
     case 'right': {
@@ -43,6 +48,7 @@ export const moveFocus = (
       } else {
         newDay = moveEnd ? dayCnt - 1 : Math.min(dayCnt - 1, day + 1);
       }
+
       break;
     }
     case 'up': {
@@ -53,6 +59,7 @@ export const moveFocus = (
         newNurseId = moveEnd ? flatNurses[0].shiftNurseId : flatNurses[nurseIndex - 1].shiftNurseId;
         newDay = day;
       }
+
       break;
     }
     case 'down': {
@@ -65,13 +72,15 @@ export const moveFocus = (
           : flatNurses[nurseIndex + 1].shiftNurseId;
         newDay = day;
       }
+
       break;
     }
   }
+
   if (newDay != day || newNurseId != shiftNurseId) {
     setFocus({
       day: newDay,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       shiftNurseName: findNurse(shift, shiftNurseId)!.name,
       shiftNurseId: newNurseId,
     });
@@ -153,31 +162,38 @@ export const updateCheckFaultOption = (wardConstraint: WardConstraint): CheckFau
 export const checkShift = (
   shift: Shift,
   checkFaultOptions: CheckFaultOptions,
-  wardShiftTypeMap: Map<number, WardShiftType>
+  wardShiftTypeMap: Map<number, WardShiftType>,
 ) => {
   const faults: Map<string, Fault> = new Map();
 
   for (let i = 0; i < shift.divisionShiftNurses.length; i++) {
     const division = shift.divisionShiftNurses[i];
+
     for (let j = 0; j < division.length; j++) {
       const row = division[j];
+
       let str = row.wardShiftList
         .map((x, index) =>
           x === null
             ? '-'
             : x === row.wardReqShiftList[index]
-            ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
-            : wardShiftTypeMap.get(x)?.shortName.toLowerCase()
+              ? wardShiftTypeMap.get(x)?.shortName.toUpperCase()
+              : wardShiftTypeMap.get(x)?.shortName.toLowerCase(),
         )
         .join('');
+
       str = '-' + str + '-'; // 단일 나이트 검사를 위한 처리
+
       for (const key of Object.keys(checkFaultOptions) as FaultType[]) {
         const option = checkFaultOptions[key];
+
         if (option.isActive === false) continue;
-        // eslint-disable-next-line no-constant-condition
+
         while (true) {
           const match = option.regExp.exec(str);
+
           if (match === null) break;
+
           const focus: Focus = {
             shiftNurseId: row.shiftNurse.shiftNurseId,
             shiftNurseName: row.shiftNurse.name,
@@ -194,7 +210,7 @@ export const checkShift = (
               message: option.message,
               matchString: match[0],
               length: match[0].length,
-            }
+            },
           );
         }
       }
@@ -208,6 +224,6 @@ export const findNurse = (shift: Shift | RequestShift, shiftNurseId: number) => 
   return (
     shift.divisionShiftNurses
       .flatMap<{ shiftNurse: ShiftNurse }>((x) => x)
-      .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse || null
+      .find((x) => x.shiftNurse.shiftNurseId === shiftNurseId)?.shiftNurse ?? null
   );
 };

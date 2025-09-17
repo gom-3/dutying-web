@@ -1,7 +1,8 @@
 import type { SVGProps } from 'react';
+
 const SvgCheckedIcon = ({ fill, ...props }: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}>
-    <rect width={24} height={24} fill={fill || '#844AFF'} rx={5} />
+    <rect width={24} height={24} fill={fill ?? '#844AFF'} rx={5} />
     <path
       stroke="#FDFCFE"
       strokeLinecap="round"
@@ -11,4 +12,5 @@ const SvgCheckedIcon = ({ fill, ...props }: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgCheckedIcon;

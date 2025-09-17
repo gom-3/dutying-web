@@ -1,3 +1,4 @@
+import { type WardShiftType } from '@/types/ward';
 import axiosInstance from './client';
 
 const getShiftTypes = async (wardId: number) =>
@@ -15,22 +16,21 @@ export type CreateShiftTypeDTO = Pick<
   | 'isCounted'
   | 'classification'
 >;
+
 const createShiftType = async (wardId: number, createShiftTypeDTO: CreateShiftTypeDTO) =>
   (await axiosInstance.post<WardShiftType>(`/wards/${wardId}/shift-types`, createShiftTypeDTO))
     .data;
-
 const deleteShiftType = async (wardId: number, shiftTypeId: number) =>
   (await axiosInstance.delete(`/wards/${wardId}/shift-types/${shiftTypeId}`)).data;
-
 const updateShiftType = async (
   wardId: number,
   shiftTypeId: number,
-  createShiftTypeDTO: CreateShiftTypeDTO
+  createShiftTypeDTO: CreateShiftTypeDTO,
 ) =>
   (
     await axiosInstance.put<WardShiftType>(
       `/wards/${wardId}/shift-types/${shiftTypeId}`,
-      createShiftTypeDTO
+      createShiftTypeDTO,
     )
   ).data;
 

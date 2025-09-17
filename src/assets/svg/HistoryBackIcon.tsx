@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgHistoryBackIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 28 28" {...props}>
     <circle cx={14} cy={14} r={13} fill="#FDFCFE" stroke="#B08BFF" strokeWidth={0.5} />
@@ -19,4 +20,5 @@ const SvgHistoryBackIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgHistoryBackIcon;

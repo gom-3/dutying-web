@@ -1,11 +1,11 @@
-import useLoading from '@hooks/ui/useLoading';
-import useEditShift from '../useEditShift';
-import { match } from 'ts-pattern';
-import axiosInstance from '@libs/api/client';
 import { useQueryClient } from '@tanstack/react-query';
-import useAuth from '@hooks/auth/useAuth';
-import { updateShifts } from '@libs/api/shift';
 import toast from 'react-hot-toast';
+import { match } from 'ts-pattern';
+import useAuth from '@/hooks/auth/useAuth';
+import useLoading from '@/hooks/ui/useLoading';
+import axiosInstance from '@/libs/api/client';
+import { updateShifts } from '@/libs/api/shift';
+import useEditShift from '../useEditShift';
 
 function useCreateShift() {
   const { setLoading } = useLoading();
@@ -17,21 +17,23 @@ function useCreateShift() {
   const {
     state: { wardId },
   } = useAuth();
-
   const queryClient = useQueryClient();
-
   const autoCompleteShift = async () => {
     if (!shift || !wardShiftTypeMap || !wardId) return;
+
     if (shift?.divisionShiftNurses.flatMap((x) => x).length < 10) {
       toast.error('자동완성 기능을 사용하시려면 최소 10명의 간호사가 필요합니다');
+
       return;
     }
+
     if (
       !confirm(
-        '근무표를 자동으로 채우시겠습니까?\n신청 근무를 최대한 반영한 채 채워집니다.\n약 1분~2분이 소요됩니다!'
+        '근무표를 자동으로 채우시겠습니까?\n신청 근무를 최대한 반영한 채 채워집니다.\n약 1분~2분이 소요됩니다!',
       )
     )
       return;
+
     setLoading(true);
 
     try {
@@ -53,7 +55,7 @@ function useCreateShift() {
                           .with('O', () => '4')
                           .otherwise(() => '0')
                       : '0';
-                  })
+                  }),
                 ),
                 request: row.wardShiftList.map((shiftId) => {
                   return shiftId
@@ -69,15 +71,18 @@ function useCreateShift() {
           },
           {
             withCredentials: false,
-          }
+          },
         )
       ).data;
 
       if (!duty || !shift || !wardShiftTypeMap) return;
+
       const flatNurses = shift.divisionShiftNurses.flatMap((x) => x);
       const updateShiftPromises: Promise<void>[] = [];
+
       for (let i = 0; i < duty.length; i++) {
         const wardShiftsDTO = [];
+
         for (let j = 0; j < duty[i].length; j++) {
           const row = flatNurses[i];
           const wardShiftType =
@@ -91,7 +96,8 @@ function useCreateShift() {
                   .with('-', () => 'O')
                   .otherwise(() => null)
               );
-            }) || null;
+            }) ?? null;
+
           if (!row || j + 1 > shift.days.length) continue;
 
           wardShiftsDTO.push({
@@ -102,10 +108,12 @@ function useCreateShift() {
             wardShiftTypeId: wardShiftType === null ? null : wardShiftType.wardShiftTypeId,
           });
         }
+
         updateShiftPromises.push(updateShifts(wardId, wardShiftsDTO));
       }
+
       await Promise.all(updateShiftPromises);
-      await queryClient.invalidateQueries(shiftQueryKey);
+      await queryClient.invalidateQueries({ queryKey: shiftQueryKey });
       postShift();
     } catch (e) {
       console.error(e);

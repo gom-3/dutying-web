@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import {
   AppstoreGrayIcon,
   AppstoreIcon,
@@ -5,13 +7,11 @@ import {
   LogoWithSymbol,
   PlaystoreGrayIcon,
   PlaystoreIcon,
-} from '@assets/svg';
-import Event from '@components/Event';
-import useAuth from '@hooks/auth/useAuth';
-import ROUTE from '@libs/constant/path';
+} from '@/assets/svg';
+import Event from '@/components/Event';
+import useAuth from '@/hooks/auth/useAuth';
+import ROUTE from '@/libs/constant/path';
 import { events, sendEvent } from 'analytics';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 function LandingPage() {
   const {
@@ -21,11 +21,9 @@ function LandingPage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [focus, setFocus] = useState('top');
-
   const webSection = useRef<HTMLDivElement>(null);
   const mobileSection = useRef<HTMLDivElement>(null);
-
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const webSectionTop = webSection.current?.getBoundingClientRect().top;
     const mobileSectionTop = mobileSection.current?.getBoundingClientRect().top;
 
@@ -38,10 +36,11 @@ function LandingPage() {
         setFocus('top');
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     document.addEventListener('scroll', handleScroll);
+
     return () => document.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
@@ -55,22 +54,23 @@ function LandingPage() {
     <div className="flex w-screen flex-col">
       <Event open={open} onClose={() => setOpen(false)} />
       {/* 헤더 */}
-      <div className="fixed top-0 z-10 h-[60px] w-full bg-white xl:h-[4.5rem]">
+      <div className="fixed top-0 z-10 h-[60px] w-full bg-white xl:h-18">
         <div className="mx-auto flex h-full w-[85%] items-center xl:container">
-          <LogoWithSymbol className="w-[98.5504px] shrink-0 xl:w-[8.4375rem]" />
+          <LogoWithSymbol className="w-[98.5504px] shrink-0 xl:w-33.75" />
           <div className="flex w-full items-center xl:hidden">
             <a
               href="https://abr.ge/bv13wa"
               target="_blank"
-              className="ml-auto rounded-[1.875rem] bg-main-1 px-[10px] py-[5px] font-apple text-[12px] font-semibold text-white"
+              className="bg-main-1 font-apple ml-auto rounded-[1.875rem] px-[10px] py-[5px] text-[12px] font-semibold text-white"
+              rel="noreferrer"
             >
               다운로드
             </a>
           </div>
           <div className="hidden w-full items-center xl:flex">
-            <div className="ml-auto mr-[3.75rem] flex h-[2.5rem] items-center gap-[2.8125rem] border-r-[.0625rem] border-sub-4 pr-[3.75rem]">
+            <div className="border-sub-4 mr-15 ml-auto flex h-10 items-center gap-11.25 border-r-[.0625rem] pr-15">
               <p
-                className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
+                className={`font-apple cursor-pointer text-[1.125rem] font-medium underline ${
                   focus === 'web' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
                 onClick={() => {
@@ -81,7 +81,7 @@ function LandingPage() {
                 웹 주요 기능
               </p>
               <p
-                className={`cursor-pointer font-apple text-[1.125rem] font-medium underline ${
+                className={`font-apple cursor-pointer text-[1.125rem] font-medium underline ${
                   focus === 'mobile' ? 'text-main-1' : 'text-sub-2.5'
                 }`}
                 onClick={() => {
@@ -92,38 +92,40 @@ function LandingPage() {
                 모바일 앱 주요 기능
               </p>
             </div>
-            <div className="flex h-[2.5rem] items-center gap-[2.8125rem]">
+            <div className="flex h-10 items-center gap-11.25">
               <a
                 href="https://abr.ge/bv13wa"
                 target="_blank"
-                className="cursor-pointer font-apple text-[1.125rem] font-medium text-sub-2.5 underline"
+                className="font-apple text-sub-2.5 cursor-pointer text-[1.125rem] font-medium underline"
                 onClick={() => {
                   sendEvent(events.landingPage.header.download);
                 }}
+                rel="noreferrer"
               >
                 다운로드
               </a>
               <a
                 href="http://ye620.channel.io"
                 target="_blank"
-                className="font-apple text-[1.125rem] font-medium text-sub-2.5"
+                className="font-apple text-sub-2.5 text-[1.125rem] font-medium"
                 onClick={() => {
                   sendEvent(events.landingPage.header.ask);
                 }}
+                rel="noreferrer"
               >
                 문의하기
               </a>
               {isAuth ? (
                 <button
                   onClick={() => handleLogout()}
-                  className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-sub-2.5"
+                  className="border-sub-2.5 font-apple text-sub-2.5 cursor-pointer rounded-[1.875rem] border-[.0625rem] px-4 py-[.25rem] text-[1.125rem] font-medium"
                 >
                   {accountMe?.status === 'DEMO' ? '데모 종료하기' : '로그아웃'}
                 </button>
               ) : (
                 <button
                   onClick={() => navigate(ROUTE.LOGIN)}
-                  className="cursor-pointer rounded-[1.875rem] border-[.0625rem] border-sub-2.5 bg-main-1 px-[1rem] py-[.25rem] font-apple text-[1.125rem] font-medium text-white"
+                  className="border-sub-2.5 bg-main-1 font-apple cursor-pointer rounded-[1.875rem] border-[.0625rem] px-4 py-[.25rem] text-[1.125rem] font-medium text-white"
                 >
                   로그인
                 </button>
@@ -134,15 +136,15 @@ function LandingPage() {
       </div>
 
       {/*메인*/}
-      <div className='h-real-screen min-h-[660px] w-screen bg-[url("/img/landing_mobile_1.webp")] bg-cover bg-center bg-no-repeat pb-[6.25rem] pt-[60px] xl:relative xl:bg-[url("/img/landing_1.webp")] xl:py-0'>
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:container xl:relative xl:top-[50%] xl:h-fit xl:translate-y-[-50%] xl:pt-0">
-          <h1 className="font-line text-[32px] font-bold leading-[42px] text-main-1 xl:text-[4rem] xl:leading-[5.4375rem] xl:text-white">
+      <div className='h-real-screen min-h-[660px] w-screen bg-[url("/img/landing_mobile_1.webp")] bg-cover bg-center bg-no-repeat pt-[60px] pb-25 xl:relative xl:bg-[url("/img/landing_1.webp")] xl:py-0'>
+        <div className="mx-auto flex h-full w-[85%] flex-col pt-[42px] xl:relative xl:top-[50%] xl:container xl:h-fit xl:translate-y-[-50%] xl:pt-0">
+          <h1 className="font-line text-main-1 text-[32px] leading-[42px] font-bold xl:text-[4rem] xl:leading-21.75 xl:text-white">
             근무표,
             <br />
             이제 더 간편하게!
           </h1>
-          <div className="mt-[2.1875rem] hidden items-center gap-[8px] xl:flex">
-            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
+          <div className="mt-8.75 hidden items-center gap-[8px] xl:flex">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[24px] items-center rounded-[5px] px-[8px] text-[16px] xl:h-7.5 xl:w-15.5 xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
             <p className="font-apple text-[14px] font-medium text-white">
@@ -150,51 +152,53 @@ function LandingPage() {
             </p>
           </div>
           <div className="mt-[.5625rem] hidden items-center gap-[8px] xl:flex">
-            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[24px] items-center rounded-[5px] px-[8px] text-[16px] xl:h-7.5 xl:w-15.5 xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
             <p className="font-apple text-[14px] font-medium text-white">
               근무표를 더 쉽고 빠르게 작성할 수 있도록 도와드립니다.
             </p>
           </div>
-          <div className="mt-auto flex items-center gap-[8px] xl:mt-[5.1875rem]">
-            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
+          <div className="mt-auto flex items-center gap-[8px] xl:mt-20.75">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[24px] items-center rounded-[5px] px-[8px] text-[16px] xl:h-7.5 xl:w-15.5 xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
-            <p className="font-apple text-[14px] font-medium text-white xl:text-sub-2">
+            <p className="font-apple xl:text-sub-2 text-[14px] font-medium text-white">
               근무 일정 관리 (일반 간호사 용)
             </p>
           </div>
-          <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-[3.125rem]">
+          <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-[.75rem] xl:gap-12.5">
             <a
               href="https://abr.ge/bv13wa"
               target="_blank"
-              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+              className="font-apple xl:shadow-shadow-3 flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white text-[16px] font-semibold xl:h-15 xl:w-61.25 xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem]"
+              rel="noreferrer"
             >
-              <PlaystoreIcon className="w-[17px] xl:w-[1.75rem]" />
+              <PlaystoreIcon className="w-[17px] xl:w-7" />
               Google Play
             </a>
             <a
               href="https://abr.ge/bv13wa"
               target="_blank"
-              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+              className="font-apple xl:shadow-shadow-3 flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white text-[16px] font-semibold xl:h-15 xl:w-61.25 xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem]"
+              rel="noreferrer"
             >
-              <AppstoreIcon className="w-[17px] xl:w-[1.9375rem]" />
+              <AppstoreIcon className="w-[17px] xl:w-7.75" />
               App Store
             </a>
           </div>
-          <div className="mt-[43px] flex items-center gap-[8px] xl:mt-[2.8125rem]">
-            <div className="flex h-[24px] items-center rounded-[5px] bg-main-4 px-[8px] font-poppins text-[16px] text-main-1 xl:h-[1.875rem] xl:w-[3.875rem] xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
+          <div className="mt-[43px] flex items-center gap-[8px] xl:mt-11.25">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[24px] items-center rounded-[5px] px-[8px] text-[16px] xl:h-7.5 xl:w-15.5 xl:justify-center xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
-            <p className="font-apple text-[14px] font-medium text-white xl:text-sub-2">
+            <p className="font-apple xl:text-sub-2 text-[14px] font-medium text-white">
               근무표 작성 (수간호사 용)
             </p>
           </div>
-          <div className="mt-[15px] flex h-[38px] shrink-0 gap-[10px] xl:mb-[5rem] xl:mt-[.75rem] xl:gap-[3.125rem]">
+          <div className="mt-[15px] flex h-[38px] shrink-0 gap-[10px] xl:mt-[.75rem] xl:mb-20 xl:gap-12.5">
             {accountMe?.status === 'DEMO' ? (
               <div
-                className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                className="font-apple xl:shadow-shadow-3 flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white text-[16px] font-semibold xl:h-15 xl:w-61.25 xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem]"
                 onClick={() => navigate(ROUTE.MAKE)}
               >
                 데모 테스트 마저 하기
@@ -203,7 +207,7 @@ function LandingPage() {
               <>
                 {!accountMe && (
                   <div
-                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                    className="font-apple xl:shadow-shadow-3 flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-white text-[16px] font-semibold xl:h-15 xl:w-61.25 xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem]"
                     onClick={() => {
                       demoTry();
                       sendEvent(events.landingPage.demoStart);
@@ -213,13 +217,13 @@ function LandingPage() {
                   </div>
                 )}
                 <div
-                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold xl:h-[3.75rem] xl:w-[15.3125rem] xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem] xl:shadow-shadow-3"
+                  className="font-apple xl:shadow-shadow-3 flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white text-[16px] font-semibold xl:h-15 xl:w-61.25 xl:flex-none xl:rounded-[.9375rem] xl:text-[1.5rem]"
                   onClick={() => {
                     navigate(ROUTE.MAKE);
                     sendEvent(events.landingPage.makeDuty);
                   }}
                 >
-                  <Logo className="w-[17px] xl:w-[1.6875rem]" />
+                  <Logo className="w-[17px] xl:w-6.75" />
                   근무표 만들기
                 </div>
               </>
@@ -232,23 +236,23 @@ function LandingPage() {
       <div
         id="mobile"
         ref={mobileSection}
-        className='h-real-screen w-screen bg-[url("/img/landing_mobile_4.webp")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_4.webp")]'
+        className='h-real-screen w-screen bg-[url("/img/landing_mobile_4.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_4.webp")]'
       >
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-2 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-35.5 xl:items-start">
+          <div className="flex items-center gap-[8px] xl:w-112.5">
+            <div className="font-poppins text-main-2 flex h-[22px] items-center rounded-[5px] bg-white px-[6px] text-[14px] xl:h-7.5 xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">홈</p>
+            <p className="font-apple text-main-1 text-[14px] font-medium xl:text-[1.5rem]">홈</p>
           </div>
 
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-white xl:mt-[.75rem] xl:w-[28.125rem]  xl:text-[3.25rem] xl:leading-[142%]">
+          <h1 className="font-line mt-[34px] text-[24px] leading-[38px] font-bold tracking-[0.36px] text-white xl:mt-[.75rem] xl:w-112.5 xl:text-[3.25rem] xl:leading-[142%]">
             근무관리부터
             <br />
             개인 일정까지 한번에
           </h1>
 
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-[#FDFCFEB2] xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+          <p className="font-apple mt-[16px] text-[16px] leading-[24px] font-medium text-[#FDFCFEB2] xl:mt-10.5 xl:w-112.5 xl:text-[1.75rem] xl:leading-normal">
             매월 근무 등록하고
             <br />
             개인 일정을 유형별로 관리해보세요.
@@ -258,23 +262,23 @@ function LandingPage() {
 
       {/*메인 5*/}
       <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_5.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_5.webp")]'>
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+        <div className="mx-auto flex h-full w-[85%] flex-col pt-[124px] xl:container xl:mx-auto xl:mt-35.5 xl:items-end">
+          <div className="flex items-center gap-[8px] xl:w-112.5">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[22px] items-center rounded-[5px] px-[6px] text-[14px] xl:h-7.5 xl:px-[.5rem] xl:text-[1.25rem]">
               App
             </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
+            <p className="font-apple text-main-1 text-[14px] font-medium xl:text-[1.5rem]">
               소셜 (친구 · 모임)
             </p>
           </div>
 
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
+          <h1 className="font-line text-text-1 mt-[34px] text-[24px] leading-[38px] font-bold tracking-[0.36px] xl:mt-[.75rem] xl:w-112.5 xl:text-[3.25rem] xl:leading-[142%]">
             동료의 근무 일정을
             <br />
             한눈에
           </h1>
 
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+          <p className="font-apple text-sub-2 mt-[16px] text-[16px] leading-[24px] font-medium xl:mt-10.5 xl:w-112.5 xl:text-[1.75rem] xl:leading-normal">
             동료와 친구를 맺어
             <br />
             일정을 편하게 조율해보세요.
@@ -288,21 +292,21 @@ function LandingPage() {
         ref={webSection}
         className='h-real-screen w-screen bg-[url("/img/landing_mobile_2.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_2.webp")]'
       >
-        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-end">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-main-4 px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+        <div className="mx-auto mt-[124px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-35.5 xl:items-end">
+          <div className="flex items-center gap-[8px] xl:w-112.5">
+            <div className="bg-main-4 font-poppins text-main-1 flex h-[22px] items-center rounded-[5px] px-[6px] text-[14px] xl:h-7.5 xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
+            <p className="font-apple text-main-1 text-[14px] font-medium xl:text-[1.5rem]">
               근무표 만들기
             </p>
           </div>
 
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
+          <h1 className="font-line text-text-1 mt-[34px] text-[24px] leading-[38px] font-bold tracking-[0.36px] xl:mt-[.75rem] xl:w-112.5 xl:text-[3.25rem] xl:leading-[142%]">
             복잡한 근무표 작성을 <br /> 간편하게 자동으로!
           </h1>
 
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+          <p className="font-apple text-sub-2 mt-[16px] text-[16px] leading-[24px] font-medium xl:mt-10.5 xl:w-112.5 xl:text-[1.75rem] xl:leading-normal">
             직접 편집한 제약 조건들에 딱 맞는
             <br />
             근무표를 작성해드릴게요.
@@ -311,24 +315,24 @@ function LandingPage() {
       </div>
 
       {/*메인 3*/}
-      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.webp")] bg-cover bg-center bg-no-repeat  xl:bg-[url("/img/landing_3.webp")]'>
-        <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-[8.875rem] xl:items-start">
-          <div className="flex items-center gap-[8px] xl:w-[28.125rem]">
-            <div className="flex h-[22px] items-center rounded-[5px] bg-white px-[6px] font-poppins text-[14px] text-main-1 xl:h-[1.875rem] xl:px-[.5rem] xl:text-[1.25rem]">
+      <div className='h-real-screen w-screen bg-[url("/img/landing_mobile_3.webp")] bg-cover bg-center bg-no-repeat xl:bg-[url("/img/landing_3.webp")]'>
+        <div className="mx-auto flex h-full w-[85%] flex-col pt-[64px] xl:container xl:mx-auto xl:mt-35.5 xl:items-start">
+          <div className="flex items-center gap-[8px] xl:w-112.5">
+            <div className="font-poppins text-main-1 flex h-[22px] items-center rounded-[5px] bg-white px-[6px] text-[14px] xl:h-7.5 xl:px-[.5rem] xl:text-[1.25rem]">
               Web
             </div>
-            <p className="font-apple text-[14px] font-medium text-main-1 xl:text-[1.5rem]">
+            <p className="font-apple text-main-1 text-[14px] font-medium xl:text-[1.5rem]">
               근무표 만들기
             </p>
           </div>
 
-          <h1 className="mt-[34px] font-line text-[24px] font-bold leading-[38px] tracking-[0.36px] text-text-1 xl:mt-[.75rem] xl:w-[28.125rem] xl:text-[3.25rem] xl:leading-[142%]">
+          <h1 className="font-line text-text-1 mt-[34px] text-[24px] leading-[38px] font-bold tracking-[0.36px] xl:mt-[.75rem] xl:w-112.5 xl:text-[3.25rem] xl:leading-[142%]">
             더 꼼꼼하게,
             <br />
             하지만 더 편리하게
           </h1>
 
-          <p className="mt-[16px] font-apple text-[16px] font-medium leading-[24px] text-sub-2 xl:mt-[2.625rem] xl:w-[28.125rem] xl:text-[1.75rem] xl:leading-normal">
+          <p className="font-apple text-sub-2 mt-[16px] text-[16px] leading-[24px] font-medium xl:mt-10.5 xl:w-112.5 xl:text-[1.75rem] xl:leading-normal">
             근무표 작성을 돕기 위한
             <br />
             여러 보조 기능들이 마련되어 있습니다.
@@ -337,21 +341,22 @@ function LandingPage() {
       </div>
 
       {/* 푸터 */}
-      <div className="h-[770px] w-screen xl:h-[31.25rem]">
-        <div className="mx-auto mt-[62px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-[6.875rem] xl:flex-row-reverse xl:items-stretch xl:px-[11.25rem]">
+      <div className="h-[770px] w-screen xl:h-125">
+        <div className="mx-auto mt-[62px] flex w-[85%] flex-col xl:container xl:mx-auto xl:mt-27.5 xl:flex-row-reverse xl:items-stretch xl:px-45">
           <div className="xl:flex-1">
-            <h1 className="font-apple text-[16px] font-semibold text-sub-2 xl:mt-0 xl:text-[1.25rem]">
+            <h1 className="font-apple text-sub-2 text-[16px] font-semibold xl:mt-0 xl:text-[1.25rem]">
               듀팅 다운로드
             </h1>
-            <div className="xl:mt-[1.5rem] xl:flex xl:w-full xl:items-center xl:gap-[1rem]">
-              <div className="mt-[24px] font-apple text-[14px] font-medium text-sub-2.5 xl:mt-0 xl:w-[6rem]">
+            <div className="xl:mt-6 xl:flex xl:w-full xl:items-center xl:gap-4">
+              <div className="font-apple text-sub-2.5 mt-[24px] text-[14px] font-medium xl:mt-0 xl:w-24">
                 모바일 앱
               </div>
               <div className="mt-[15px] flex h-[38px] gap-[10px] xl:mt-0">
                 <a
                   href="https://abr.ge/bv13wa"
                   target="_blank"
-                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                  className="bg-sub-5 font-apple flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] text-[16px] font-semibold xl:w-42.5 xl:text-base"
+                  rel="noreferrer"
                 >
                   <PlaystoreGrayIcon className="w-[17px]" />
                   Google Play
@@ -359,7 +364,8 @@ function LandingPage() {
                 <a
                   href="https://abr.ge/bv13wa"
                   target="_blank"
-                  className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                  className="bg-sub-5 font-apple flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] text-[16px] font-semibold xl:w-42.5 xl:text-base"
+                  rel="noreferrer"
                 >
                   <AppstoreGrayIcon className="w-[19px]" />
                   App Store
@@ -367,14 +373,14 @@ function LandingPage() {
               </div>
             </div>
 
-            <div className="xl:mt-[1.5rem] xl:flex xl:w-full xl:items-center xl:gap-[1rem]">
-              <div className="mt-[32px] font-apple text-[14px] font-medium text-sub-2.5 xl:mt-0 xl:w-[6rem]">
+            <div className="xl:mt-6 xl:flex xl:w-full xl:items-center xl:gap-4">
+              <div className="font-apple text-sub-2.5 mt-[32px] text-[14px] font-medium xl:mt-0 xl:w-24">
                 웹
               </div>
               <div className="mt-[12px] flex h-[38px] gap-[10px] xl:mt-0">
                 {accountMe?.status === 'DEMO' ? (
                   <div
-                    className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                    className="bg-sub-5 font-apple flex flex-1 cursor-pointer items-center justify-center rounded-[8px] text-[16px] font-semibold xl:w-42.5 xl:text-base"
                     onClick={() => navigate(ROUTE.MAKE)}
                   >
                     데모 테스트 마저 하기
@@ -383,7 +389,7 @@ function LandingPage() {
                   <>
                     {!accountMe && (
                       <div
-                        className="flex flex-1 cursor-pointer items-center justify-center rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                        className="bg-sub-5 font-apple flex flex-1 cursor-pointer items-center justify-center rounded-[8px] text-[16px] font-semibold xl:w-42.5 xl:text-base"
                         onClick={() => {
                           demoTry();
                           sendEvent(events.landingPage.demoStart);
@@ -393,13 +399,13 @@ function LandingPage() {
                       </div>
                     )}
                     <div
-                      className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold xl:w-[10.625rem] xl:text-base"
+                      className="bg-sub-5 font-apple flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] text-[16px] font-semibold xl:w-42.5 xl:text-base"
                       onClick={() => {
                         navigate(ROUTE.MAKE);
                         sendEvent(events.landingPage.makeDuty);
                       }}
                     >
-                      <Logo className="w-[17px] xl:w-[1.6875rem]" />
+                      <Logo className="w-[17px] xl:w-6.75" />
                       근무표 만들기
                     </div>
                   </>
@@ -411,7 +417,7 @@ function LandingPage() {
           <div className="xl:flex-1">
             <a
               href="http://ye620.channel.io"
-              className="mt-[62px] block font-apple text-[16px] font-medium text-sub-2 xl:mt-0 xl:text-[1.25rem]"
+              className="font-apple text-sub-2 mt-[62px] block text-[16px] font-medium xl:mt-0 xl:text-[1.25rem]"
               onClick={() => {
                 sendEvent(events.landingPage.footer.partnership);
               }}
@@ -420,25 +426,27 @@ function LandingPage() {
             </a>
           </div>
         </div>
-        <div className="h-[1px] w-full bg-sub-4.5 xl:container xl:mx-auto xl:mt-[2.75rem]" />
-        <div className="mx-auto flex w-[85%] gap-[24px] pt-[24px] xl:container xl:mx-auto xl:px-[11.25rem]">
+        <div className="bg-sub-4.5 h-px w-full xl:container xl:mx-auto xl:mt-11" />
+        <div className="mx-auto flex w-[85%] gap-[24px] pt-[24px] xl:container xl:mx-auto xl:px-45">
           <a
-            className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
+            className="font-apple text-sub-2.5 block text-[14px] font-bold xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
             onClick={() => {
               sendEvent(events.landingPage.footer.terms);
             }}
+            rel="noreferrer"
           >
             이용 약관
           </a>
           <a
-            className="block font-apple text-[14px] font-bold text-sub-2.5 xl:text-base"
+            className="font-apple text-sub-2.5 block text-[14px] font-bold xl:text-base"
             href="https://gom3.notion.site/5ed51c04dd5d475c868367ed05a7d903?pvs=4"
             target="_blank"
             onClick={() => {
               sendEvent(events.landingPage.footer.terms);
             }}
+            rel="noreferrer"
           >
             개인 정보 처리 방침
           </a>

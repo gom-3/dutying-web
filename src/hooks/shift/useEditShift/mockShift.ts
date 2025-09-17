@@ -1,3 +1,5 @@
+import { type Shift } from '@/types/shift';
+
 export const demo1 = {
   lastDays: [
     {

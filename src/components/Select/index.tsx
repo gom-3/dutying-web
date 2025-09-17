@@ -1,7 +1,7 @@
-import { ArrowDownIcon } from '@assets/svg';
-import { forwardRef } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import React, { forwardRef } from 'react';
+import { type UseFormRegisterReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { ArrowDownIcon } from '@/assets/svg';
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -17,18 +17,18 @@ interface Props
 const Select = forwardRef(
   (
     { placeholder, value, onChange, options, className, selectClassName, ...props }: Props,
-    ref: React.LegacyRef<HTMLSelectElement>
+    ref: React.LegacyRef<HTMLSelectElement>,
   ) => {
     return (
-      <div className={twMerge('relative h-[2.1875rem] w-[11.4375rem]', className)}>
-        <ArrowDownIcon className="absolute right-[.625rem] top-[50%] h-[1.5625rem] w-[1.5625rem] translate-y-[-50%]" />
+      <div className={twMerge('relative h-8.75 w-45.75', className)}>
+        <ArrowDownIcon className="absolute top-[50%] right-[.625rem] h-6.25 w-6.25 translate-y-[-50%]" />
         <select
           ref={ref}
           value={value}
           onChange={onChange}
           className={twMerge(
-            'relative z-10 h-full w-full appearance-none rounded-[.625rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-2',
-            selectClassName
+            'font-apple outline-main-2 relative z-10 h-full w-full appearance-none rounded-[.625rem] bg-transparent px-3.75 text-left outline outline-[.0625rem]',
+            selectClassName,
           )}
           {...props}
         >
@@ -45,7 +45,7 @@ const Select = forwardRef(
         </select>
       </div>
     );
-  }
+  },
 );
 
 export default Select;

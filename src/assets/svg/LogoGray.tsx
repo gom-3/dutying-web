@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const LogoGray = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 17" {...props}>
     <g clipPath="url(#logo_with_symbol_gray_svg__a)">
@@ -20,4 +21,5 @@ const LogoGray = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default LogoGray;

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type Account = {
+export type Account = {
   accountId: number;
   /** 연동된 간호사 ID */
   nurseId: number | null;

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { produce } from 'immer';
+import { type TValues } from '@/types/util';
 
 interface State {
   showMakeTutorial: boolean;
@@ -9,8 +9,7 @@ interface State {
 }
 
 interface Store extends State {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setState: (key: keyof State, value: any) => void;
+  setState: (key: keyof State, value: TValues<State>) => void;
   initState: () => void;
 }
 
@@ -23,14 +22,9 @@ const initialState: State = {
 export const useTutorialStore = create<Store>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         ...initialState,
-        setState: (state, value) =>
-          set(
-            produce(get(), (draft) => {
-              draft[state] = value as never;
-            })
-          ),
+        setState: (state, value) => set((prev) => ({ ...prev, [state]: value })),
         initState: () => set(initialState),
       }),
       {
@@ -40,7 +34,7 @@ export const useTutorialStore = create<Store>()(
           showRequestTutorial,
           showMemberTutorial,
         }),
-      }
-    )
-  )
+      },
+    ),
+  ),
 );

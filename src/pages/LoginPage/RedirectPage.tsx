@@ -1,7 +1,7 @@
+import qs from 'qs';
 import { useEffect } from 'react';
 import { TailSpin } from 'react-loader-spinner';
-import qs from 'qs';
-import useAuth from '@hooks/auth/useAuth';
+import useAuth from '@/hooks/auth/useAuth';
 
 const RedirectPage = () => {
   const {
@@ -12,6 +12,7 @@ const RedirectPage = () => {
     const query = qs.parse(location.search, { ignoreQueryPrefix: true });
     const accessToken = query?.['accessToken'] as string;
     const nextPageUrl = query?.['nextPageUrl'] as string;
+
     if (accessToken) {
       handleLogin(accessToken, nextPageUrl);
     }

@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgCopyIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}>
     <g
@@ -18,4 +19,5 @@ const SvgCopyIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgCopyIcon;

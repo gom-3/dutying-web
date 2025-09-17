@@ -1,24 +1,18 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { produce } from 'immer';
+import { type TValues } from '@/types/util';
 
 interface State {
   loading: boolean;
 }
 
 interface Store extends State {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setState: (key: keyof State, value: any) => void;
+  setState: (key: keyof State, value: TValues<State>) => void;
 }
 
 export const useLoadingStore = create<Store>()(
-  devtools((set, get) => ({
+  devtools((set) => ({
     loading: false,
-    setState: (state, value) =>
-      set(
-        produce(get(), (draft) => {
-          draft[state] = value as never;
-        })
-      ),
-  }))
+    setState: (state, value) => set((prev) => ({ ...prev, [state]: value })),
+  })),
 );

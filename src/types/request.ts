@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type DutyRequest = {
+export type DutyRequest = {
   wardReqShiftId: number;
   nurseId: number;
   nurseName: string;

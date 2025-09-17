@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgPersonIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" {...props}>
     <g fill="#fff" clipPath="url(#person_icon_svg__a)">
@@ -11,4 +12,5 @@ const SvgPersonIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgPersonIcon;

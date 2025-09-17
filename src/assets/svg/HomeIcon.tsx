@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgHomeIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 45 44" {...props}>
     <path
@@ -17,4 +18,5 @@ const SvgHomeIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgHomeIcon;

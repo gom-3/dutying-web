@@ -1,19 +1,18 @@
-import useEditWard from '@hooks/ward/useEditWard';
-import { PenIcon, PlusIcon } from '@assets/svg';
 import { useState } from 'react';
-import CreateShiftModal from './CreateShiftModal';
+import { PenIcon, PlusIcon } from '@/assets/svg';
+import useEditWard from '@/hooks/ward/useEditWard';
+import { type CreateShiftTypeDTO } from '@/libs/api/shiftType';
+import { type WardShiftType } from '@/types/ward';
 import { events, sendEvent } from 'analytics';
-import { CreateShiftTypeDTO } from '@libs/api/shiftType';
+import CreateShiftModal from './CreateShiftModal';
 
 function SetShiftType() {
   const {
     state: { ward },
     actions: { editShiftType, removeShiftType, addShiftType },
   } = useEditWard();
-
   const [openModal, setOpenModal] = useState(false);
   const [tempShiftType, setTempShiftType] = useState<WardShiftType | null>(null);
-
   const handleWriteShift = (shiftType: CreateShiftTypeDTO, shiftTypeId?: number) => {
     if (shiftTypeId) {
       editShiftType(shiftTypeId, shiftType);
@@ -23,15 +22,16 @@ function SetShiftType() {
       addShiftType(shiftType);
       sendEvent(events.makePage.editWardModal.createShiftType);
     }
+
     setTempShiftType(null);
   };
 
   return (
-    <div className="relative h-fit w-[44.8125rem] rounded-[1.25rem]">
-      <div className="mt-[1.25rem] flex items-center text-center font-apple text-[.875rem] text-sub-2.5">
-        <p className="flex-[2]">근무 명</p>
+    <div className="relative h-fit w-179.25 rounded-[1.25rem]">
+      <div className="font-apple text-sub-2.5 mt-5 flex items-center text-center text-[.875rem]">
+        <p className="flex-2">근무 명</p>
         <p className="flex-1">약자</p>
-        <p className="flex-[3]">근무 시간</p>
+        <p className="flex-3">근무 시간</p>
         <p className="flex-1">색상</p>
         <p className="flex-1">유형</p>
         <p className="flex-1">카운트</p>
@@ -40,43 +40,43 @@ function SetShiftType() {
       {ward?.wardShiftTypes.map((shiftType, index) => (
         <div
           key={index}
-          className={`flex h-[4.625rem] items-center  border-b-[.0313rem] border-sub-4.5 ${
+          className={`border-sub-4.5 flex h-18.5 items-center border-b-[.0313rem] ${
             index === ward.wardShiftTypes.length - 1 && 'border-none'
           }`}
         >
-          <div className="flex flex-[2] items-center justify-center font-apple text-[1.25rem]">
+          <div className="font-apple flex flex-2 items-center justify-center text-[1.25rem]">
             {shiftType.name}
           </div>
           <div className="flex flex-1 items-center justify-center text-[1.25rem]">
-            <p className="h-[2rem] w-[2rem] rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+            <p className="border-sub-4.5 bg-main-bg text-sub-1 h-8 w-8 rounded-[.3125rem] border-[.0313rem] p-0 text-center text-[1.25rem]">
               {shiftType.shortName}
             </p>
           </div>
-          <div className="flex flex-[3] items-center justify-center gap-[1.125rem]">
+          <div className="flex flex-3 items-center justify-center gap-4.5">
             {shiftType.isOff ? (
               <p className="font-poppins text-[1.25rem]">-</p>
             ) : (
               <>
-                <p className="h-[2rem] w-full rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+                <p className="border-sub-4.5 bg-main-bg text-sub-1 h-8 w-full rounded-[.3125rem] border-[.0313rem] p-0 text-center text-[1.25rem]">
                   {shiftType.startTime}
                 </p>
                 <p className="font-poppins text-[1.25rem]">~</p>
-                <p className="h-[2rem] w-full rounded-[.3125rem] border-[.0313rem] border-sub-4.5 bg-main-bg p-0 text-center text-[1.25rem] text-sub-1">
+                <p className="border-sub-4.5 bg-main-bg text-sub-1 h-8 w-full rounded-[.3125rem] border-[.0313rem] p-0 text-center text-[1.25rem]">
                   {shiftType.endTime}
                 </p>
               </>
             )}
           </div>
-          <div className="relative flex flex-1 items-center justify-center font-apple text-[2.25rem] font-semibold text-sub-2.5">
+          <div className="font-apple text-sub-2.5 relative flex flex-1 items-center justify-center text-[2.25rem] font-semibold">
             <label
               htmlFor={`color_picker_${index}`}
-              className={`h-[2rem] w-[2rem] rounded-[.4375rem] border-[.0625rem] border-sub-4`}
+              className={`border-sub-4 h-8 w-8 rounded-[.4375rem] border-[.0625rem]`}
               style={{ backgroundColor: shiftType.color }}
             />
           </div>
           <div className="flex flex-1 justify-center">
             <div
-              className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
+              className="border-main-2 font-apple text-main-2 cursor-pointer rounded-[1.25rem] border-[.0313rem] px-[.75rem] py-[.3125rem] text-[.875rem]"
               onClick={() => {
                 editShiftType(shiftType.wardShiftTypeId, { ...shiftType, isOff: !shiftType.isOff });
                 sendEvent(events.makePage.editWardModal.changeShiftTypeOffType);
@@ -87,7 +87,7 @@ function SetShiftType() {
           </div>
           <div className="flex flex-1 justify-center">
             <div
-              className="cursor-pointer rounded-[1.25rem] border-[.0313rem] border-main-2 px-[.75rem] py-[.3125rem] font-apple text-[.875rem] text-main-2"
+              className="border-main-2 font-apple text-main-2 cursor-pointer rounded-[1.25rem] border-[.0313rem] px-[.75rem] py-[.3125rem] text-[.875rem]"
               onClick={() => {
                 editShiftType(shiftType.wardShiftTypeId, {
                   ...shiftType,
@@ -100,7 +100,7 @@ function SetShiftType() {
           </div>
           <div className="flex flex-1 justify-center">
             <PenIcon
-              className="h-[2.25rem] w-[2.25rem] cursor-pointer"
+              className="h-9 w-9 cursor-pointer"
               onClick={() => {
                 setTempShiftType(shiftType);
                 setOpenModal(true);
@@ -110,7 +110,7 @@ function SetShiftType() {
           </div>
         </div>
       ))}
-      <div className="mb-[1.625rem] mt-[.25rem] flex items-center justify-end  pr-[2.5rem]">
+      <div className="mt-[.25rem] mb-6.5 flex items-center justify-end pr-10">
         <div
           className="flex cursor-pointer gap-[.4375rem]"
           onClick={() => {
@@ -118,8 +118,8 @@ function SetShiftType() {
             sendEvent(events.makePage.editWardModal.openEditModal);
           }}
         >
-          <PlusIcon className="h-[1.25rem] w-[1.25rem] stroke-main-2" />
-          <p className="font-apple text-[.875rem] text-main-2">새로운 근무/휴가 추가하기</p>
+          <PlusIcon className="stroke-main-2 h-5 w-5" />
+          <p className="font-apple text-main-2 text-[.875rem]">새로운 근무/휴가 추가하기</p>
         </div>
       </div>
       <CreateShiftModal

@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgSavingIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" {...props}>
     <g
@@ -17,4 +18,5 @@ const SvgSavingIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgSavingIcon;

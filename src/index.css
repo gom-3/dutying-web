@@ -1,61 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config "../tailwind.config.ts";
 
-body {
-  background-color: #fdfcfe;
-  font-family: 'Public Sans';
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  font-display: swap;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-#root {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-@media screen and (max-width: 1800px) {
-  html {
-    font-size: 14px !important;
+@layer utilities {
+  body {
+    background-color: #fdfcfe;
+    font-family: 'Public Sans';
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    font-display: swap;
   }
-}
 
-@media screen and (max-width: 1680px) {
-  html {
-    font-size: 12px !important;
+  body::-webkit-scrollbar {
+    display: none;
   }
-}
 
-@media screen and (max-width: 1440px) {
-  html {
-    font-size: 10px !important;
+  #root {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
-}
 
-.simplebar-track.simplebar-vertical {
-  background-color: #d6d6de;
-  border-radius: 20px;
-  transition: opacity 0s linear, left 0.2s ease-in-out;
-  /* width: 8px !important; 스크롤바의 색상을 변경합니다. */
-}
+  @media screen and (max-width: 1800px) {
+    html {
+      font-size: 14px !important;
+    }
+  }
 
-.simplebar-scrollbar::before {
-  background-color: rgb(255, 255, 255) !important;
-  opacity: 1 !important;
-  box-shadow: 0px 1px 4px 0px #ababb4;
-}
+  @media screen and (max-width: 1680px) {
+    html {
+      font-size: 12px !important;
+    }
+  }
 
-.simplebar-track .simplebar-scrollbar::before {
-  border-radius: 5px; /* 스크롤바의 모서리를 둥글게 만듭니다. */
+  @media screen and (max-width: 1440px) {
+    html {
+      font-size: 10px !important;
+    }
+  }
+
+  .simplebar-track.simplebar-vertical {
+    background-color: #d6d6de;
+    border-radius: 20px;
+    transition:
+      opacity 0s linear,
+      left 0.2s ease-in-out;
+    /* width: 8px !important; 스크롤바의 색상을 변경합니다. */
+  }
+
+  .simplebar-scrollbar::before {
+    background-color: rgb(255, 255, 255) !important;
+    opacity: 1 !important;
+    box-shadow: 0px 1px 4px 0px #ababb4;
+  }
+
+  .simplebar-track .simplebar-scrollbar::before {
+    border-radius: 5px; /* 스크롤바의 모서리를 둥글게 만듭니다. */
+  }
 }
 
 @layer components {

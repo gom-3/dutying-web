@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgUncheckedIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 31 31" {...props}>
     <rect width={30} height={30} x={0.5} y={0.5} fill="#fff" stroke="#D6D6DE" rx={6.5} />
@@ -18,4 +19,5 @@ const SvgUncheckedIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgUncheckedIcon;

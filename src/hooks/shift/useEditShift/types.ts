@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type Focus = {
+import { type Nurse } from '@/types/nurse';
+import { type WardShiftType } from '@/types/ward';
+
+export type Focus = {
   shiftNurseName: string;
   shiftNurseId: number;
   day: number;
 };
 
-type DayInfo = {
+export type DayInfo = {
   countByShiftList: { count: number; shiftType: WardShiftType }[];
   month: number;
   day: number;
@@ -13,21 +15,21 @@ type DayInfo = {
   message: string;
 };
 
-type EditHistory = Map<
+export type EditHistory = Map<
   string,
   {
     current: number;
     history: {
       nurseName: string;
       focus: Focus;
-      prevShiftType: WardShiftType | null;
-      nextShiftType: WardShiftType | null;
+      prevShiftType?: WardShiftType;
+      nextShiftType?: WardShiftType;
       dateString: string;
     }[];
   }
 >;
 
-type FaultType =
+export type FaultType =
   | 'maxContinuousWork'
   | 'minNightInterval'
   | 'maxContinuousNight'
@@ -36,7 +38,7 @@ type FaultType =
   | 'excludeCertainWorkTypes'
   | 'excludeNightBeforeReqOff';
 
-type CheckFaultOptions = {
+export type CheckFaultOptions = {
   [key in FaultType]: {
     type: 'wrong' | 'bad';
     label: string;
@@ -47,7 +49,7 @@ type CheckFaultOptions = {
   };
 };
 
-type Fault = {
+export type Fault = {
   type: 'wrong' | 'bad';
   faultType: FaultType;
   message: string;
@@ -57,4 +59,4 @@ type Fault = {
   length: number;
 };
 
-type Faults = Map<string, Fault>;
+export type Faults = Map<string, Fault>;

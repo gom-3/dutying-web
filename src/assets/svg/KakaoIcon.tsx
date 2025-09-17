@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgKakaoIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -21,4 +22,5 @@ const SvgKakaoIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgKakaoIcon;

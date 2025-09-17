@@ -25,20 +25,7 @@
 
     "baseUrl": "src",
     "paths": {
-      "@assets/*": ["assets/*"],
-      "@assets": ["assets"],
-      "@components/*": ["components/*"],
-      "@components": ["components"],
-      "@constants/*": ["constants/*"],
-      "@constants": ["constants"],
-      "@libs/*": ["libs/*"],
-      "@libs": ["libs"],
-      "@hooks/*": ["hooks/*"],
-      "@hooks": ["hooks"],
-      "@types/*": ["types/*"],
-      "@types": ["types"],
-      "@pages/*": ["pages/*"],
-      "@pages": ["pages"]
+      "@/*": ["*"]
     }
   },
   "include": ["src"]

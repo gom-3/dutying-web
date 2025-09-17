@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgLogoWithSymbol = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 135 40" {...props}>
     <g clipPath="url(#logo_with_symbol_svg__a)">
@@ -39,4 +40,5 @@ const SvgLogoWithSymbol = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgLogoWithSymbol;

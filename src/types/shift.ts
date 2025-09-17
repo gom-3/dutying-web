@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { type ShiftNurse, type WardShiftType } from './ward';
 
 /** 근무표 타입 */
-type Shift = {
+export type Shift = {
   /** 지난달 근무표의 날짜들 */
   lastDays: Array<Day>;
   /** 이번달 근무표의 날짜들 */
@@ -13,10 +13,10 @@ type Shift = {
 };
 
 /** 근무표 날짜의 타입 | 평일, 주말, 공휴일 구분이 필요하다 */
-type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holiday' | 'workday' };
+export type Day = { day: number; dayType: 'saturday' | 'sunday' | 'holiday' | 'workday' };
 
 /** 근무표 한줄에 해당하는 데이터 */
-type Row = {
+export type Row = {
   shiftNurse: ShiftNurse;
   lastWardShiftList: (number | null)[];
   lastWardReqShiftList: (number | null)[];
@@ -25,7 +25,7 @@ type Row = {
 };
 
 /** 신청 근무표 타입 */
-type RequestShift = {
+export type RequestShift = {
   /** 이번달 근무표의 날짜들 */
   days: Array<Day>;
   /** 해당 근무표의 근무유형 리스트 */

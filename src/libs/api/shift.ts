@@ -1,22 +1,22 @@
-import axiosInstance from './client';
 import qs from 'qs';
+import { type DutyRequest } from '@/types/request';
+import { type RequestShift, type Shift } from '@/types/shift';
+import axiosInstance from './client';
 
 /** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty` */
 const getReqShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
     await axiosInstance.get<RequestShift>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty?${qs.stringify({ year, month })}`
+      `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty?${qs.stringify({ year, month })}`,
     )
   ).data;
-
 /** GET    `/wards/${wardId}/shift-teams/${shiftTeamId}/duty` */
 const getShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
     await axiosInstance.get<Shift>(
-      `/wards/${wardId}/shift-teams/${shiftTeamId}/duty?${qs.stringify({ year, month })}`
+      `/wards/${wardId}/shift-teams/${shiftTeamId}/duty?${qs.stringify({ year, month })}`,
     )
   ).data;
-
 /** GET    `wards/%{wardId}/shift-teams/${shiftTeamId}/req-duty/req-list?year&month` */
 const getRequestList = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
@@ -24,10 +24,9 @@ const getRequestList = async (wardId: number, shiftTeamId: number, year: number,
       `/wards/${wardId}/shift-teams/${shiftTeamId}/req-duty/req-list?${qs.stringify({
         year,
         month,
-      })}`
+      })}`,
     )
   ).data;
-
 /**
  * PATCH  `/wards/${wardId}/shifts/list`
  * 근무 변경
@@ -38,7 +37,7 @@ const updateShift = async (
   month: number,
   day: number,
   shiftNurseId: number,
-  wardShiftTypeId: number | null
+  wardShiftTypeId: number | null,
 ) =>
   (
     await axiosInstance.patch<null>(`/wards/${wardId}/shifts`, {
@@ -57,13 +56,13 @@ export type WardShiftsDTO = {
   date: string;
   wardShiftTypeId: number | null;
 }[];
+
 const updateShifts = async (wardId: number, wardShifts: WardShiftsDTO) =>
   (
     await axiosInstance.patch(`/wards/${wardId}/shifts/list`, {
       wardShifts,
     })
   ).data;
-
 /**
  * PATCH  `/wards/${wardId}/shifts/list`
  * 신청 근무 변경
@@ -74,7 +73,7 @@ const updateReqShift = async (
   month: number,
   day: number,
   shiftNurseId: number,
-  wardShiftTypeId: number | null
+  wardShiftTypeId: number | null,
 ) =>
   (
     await axiosInstance.patch(`/wards/${wardId}/req-shifts`, {
@@ -83,20 +82,18 @@ const updateReqShift = async (
       wardShiftTypeId,
     })
   ).data;
-
 const acceptRequestShift = async (wardId: number, reqShiftId: number, isAccepted: boolean | null) =>
   (
     await axiosInstance.patch(`/wards/${wardId}/req-shifts/${reqShiftId}/accept`, {
       isAccepted,
     })
   ).data;
-
 const postShift = async (wardId: number, shiftTeamId: number, year: number, month: number) =>
   (
     await axiosInstance.post(
       `/wards/${wardId}/shift-teams/${shiftTeamId}/post?year=${year}&month=${month
         .toString()
-        .padStart(2, '0')}`
+        .padStart(2, '0')}`,
     )
   ).data;
 

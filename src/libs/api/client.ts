@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { match } from 'ts-pattern';
 import { toast } from 'react-hot-toast';
-import ROUTE from '@libs/constant/path';
+import { match } from 'ts-pattern';
+import ROUTE from '@/libs/constant/path';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -24,11 +24,11 @@ axiosInstance.interceptors.response.use(
         }
       })
       .with(400, 404, () => {
-        toast.error(error.response.data.message || '에러가 발생했습니다. 다시 시도해주세요.');
+        toast.error(error.response.data.message ?? '에러가 발생했습니다. 다시 시도해주세요.');
       });
 
     return Promise.reject({ code: error.response.status, message: error.response.data.message });
-  }
+  },
 );
 
 export const setAccessToken = (token: string) => {

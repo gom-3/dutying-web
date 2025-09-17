@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgPlaystoreGrayIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 19" {...props}>
     <path
@@ -58,4 +59,5 @@ const SvgPlaystoreGrayIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
+
 export default SvgPlaystoreGrayIcon;

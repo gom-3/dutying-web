@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgSuccessCircleIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 60" {...props}>
     <circle cx={30} cy={30} r={30} fill="#EDE4FF" />
@@ -12,4 +13,5 @@ const SvgSuccessCircleIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgSuccessCircleIcon;

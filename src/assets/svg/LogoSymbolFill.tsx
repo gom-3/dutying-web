@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgLogoSymbolFill = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -26,4 +27,5 @@ const SvgLogoSymbolFill = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgLogoSymbolFill;

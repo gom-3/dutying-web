@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import useTutorial from '@hooks/ui/useTutorial';
-import { createPortal } from 'react-dom';
-import { StepConfig, StepsConfig, TutorialOverlay } from './TutorialOverlay';
 import { useEffect } from 'react';
-import useEditShiftTeam from '@hooks/ward/useEditShiftTeam';
+import { createPortal } from 'react-dom';
+import useTutorial from '@/hooks/ui/useTutorial';
+import useEditShiftTeam from '@/hooks/ward/useEditShiftTeam';
+import { type StepConfig, type StepsConfig, TutorialOverlay } from './TutorialOverlay';
 
 const MemberTutorial = () => {
   const {
@@ -14,7 +13,6 @@ const MemberTutorial = () => {
     state: { shiftTeams },
     actions: { selectNurse },
   } = useEditShiftTeam();
-
   const config: StepsConfig = {
     steps: new Map<number, StepConfig>(),
     infoBoxHeight: 150,
@@ -35,7 +33,9 @@ const MemberTutorial = () => {
     info: '이곳에서 근무팀에 속한 간호사의 정보를 확인할 수 있어요.',
     infoBoxAlignment: 'left',
     onNextStep: () => {
-      shiftTeams && selectNurse(shiftTeams[0].nurses[0].nurseId);
+      if (shiftTeams) {
+        selectNurse(shiftTeams[0].nurses[0].nurseId);
+      }
     },
   });
 
@@ -72,7 +72,7 @@ const MemberTutorial = () => {
     showMemberTutorial &&
     createPortal(
       <TutorialOverlay config={config} closeCallback={() => setMemberTutorial(false)} />,
-      document.getElementById('tutorial')!
+      document.getElementById('tutorial')!,
     )
   );
 };

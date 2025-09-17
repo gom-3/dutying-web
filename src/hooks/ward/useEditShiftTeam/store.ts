@@ -1,30 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { produce } from 'immer';
+import { type TValues } from '@/types/util';
 
 interface State {
   selectedNurseId: number | null;
 }
 
 interface Store extends State {
-  setState: (key: keyof State, value: any) => void;
+  setState: (key: keyof State, value: TValues<State>) => void;
 }
 
 const initialState: State = {
   selectedNurseId: null,
 };
-
 const useEditNurseStore = create<Store>()(
-  devtools((set, get) => ({
+  devtools((set) => ({
     ...initialState,
-    setState: (key, value) =>
-      set(
-        produce(get(), (draft: any) => {
-          draft[key] = value;
-        })
-      ),
-  }))
+    setState: (state, value) => set((prev) => ({ ...prev, [state]: value })),
+  })),
 );
 
 export default useEditNurseStore;

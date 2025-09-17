@@ -1,9 +1,9 @@
 ---
 name: Refactoring
-about: 리팩토링 
-title: "Refactor: "
+about: 리팩토링
+title: 'Refactor: '
 labels: ⚒️ 리팩토링
-assignees: ""
+assignees: ''
 ---
 
 ## Description

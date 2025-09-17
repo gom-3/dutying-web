@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ArrowDownIcon } from '@assets/svg';
-import Toggle from '@components/Toggle';
-import useEditShift from '@hooks/shift/useEditShift';
-import { events, sendEvent } from 'analytics';
-
+import React from 'react';
 import { match } from 'ts-pattern';
+import { ArrowDownIcon } from '@/assets/svg';
+import Toggle from '@/components/Toggle';
+import useEditShift from '@/hooks/shift/useEditShift';
+import { events, sendEvent } from 'analytics';
 
 const Select = ({
   value,
@@ -13,12 +12,12 @@ const Select = ({
 }: React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> & {
   options: number[];
 }) => (
-  <div className="relative mx-[.3125rem] h-[2.75rem] w-[4.1875rem]">
-    <ArrowDownIcon className="absolute right-[.625rem] top-[50%] h-[1.5625rem] w-[1.5625rem] translate-y-[-50%]" />
+  <div className="relative mx-[.3125rem] h-11 w-16.75">
+    <ArrowDownIcon className="absolute top-[50%] right-[.625rem] h-6.25 w-6.25 translate-y-[-50%]" />
     <select
       value={value}
       onChange={onChange}
-      className="relative z-10 h-full w-full appearance-none rounded-[.3125rem] bg-transparent px-[0.9375rem] text-left font-apple outline outline-[.0625rem] outline-main-4"
+      className="font-apple outline-main-4 relative z-10 h-full w-full appearance-none rounded-[.3125rem] bg-transparent px-3.75 text-left outline outline-[.0625rem]"
     >
       {options?.map((option, _) => (
         <option key={_} value={option}>
@@ -28,7 +27,6 @@ const Select = ({
     </select>
   </div>
 );
-
 const SetConstraint = () => {
   const {
     state: { wardConstraint, checkFaultOptions },
@@ -38,16 +36,16 @@ const SetConstraint = () => {
   return (
     checkFaultOptions &&
     wardConstraint && (
-      <div className="flex w-[36.25rem] flex-col font-apple">
+      <div className="font-apple flex w-145 flex-col">
         {Object.entries(checkFaultOptions).map(([key, { label, value, isActive }]) => (
           <div
             key={key}
-            className="flex h-[4.625rem] items-center border-b-[.0313rem] border-sub-4.5 px-[2.5rem] last:border-none"
+            className="border-sub-4.5 flex h-18.5 items-center border-b-[.0313rem] px-10 last:border-none"
           >
-            <p className="text-[1.25rem] text-sub-1">{label}</p>
+            <p className="text-sub-1 text-[1.25rem]">{label}</p>
             {match(key)
               .with('maxContinuousWork', () => (
-                <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
+                <div className="text-main-1 ml-2 flex items-center text-[1.25rem]">
                   최대
                   <Select
                     value={value!}
@@ -59,17 +57,17 @@ const SetConstraint = () => {
                       });
                       sendEvent(
                         events.makePage.editWardModal.changeConstraintValue,
-                        'maxContinuousWorkVal'
+                        'maxContinuousWorkVal',
                       );
                     }}
-                    className="w-[4.125rem]"
+                    className="w-16.5"
                   />
                   일&nbsp;
                   <span className="underline">이하</span>
                 </div>
               ))
               .with('maxContinuousNight', () => (
-                <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
+                <div className="text-main-1 ml-2 flex items-center text-[1.25rem]">
                   최대
                   <Select
                     value={value!}
@@ -81,17 +79,17 @@ const SetConstraint = () => {
                       });
                       sendEvent(
                         events.makePage.editWardModal.changeConstraintValue,
-                        'maxContinuousNightVal'
+                        'maxContinuousNightVal',
                       );
                     }}
-                    className="w-[4.125rem]"
+                    className="w-16.5"
                   />
                   일&nbsp;
                   <span className="underline">이하</span>
                 </div>
               ))
               .with('minContinuousNight', () => (
-                <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
+                <div className="text-main-1 ml-2 flex items-center text-[1.25rem]">
                   최소
                   <Select
                     value={value!}
@@ -103,17 +101,17 @@ const SetConstraint = () => {
                       });
                       sendEvent(
                         events.makePage.editWardModal.changeConstraintValue,
-                        'minContinuousNightVal'
+                        'minContinuousNightVal',
                       );
                     }}
-                    className="w-[4.125rem]"
+                    className="w-16.5"
                   />
                   일&nbsp;
                   <span className="underline">이상</span>
                 </div>
               ))
               .with('minNightInterval', () => (
-                <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
+                <div className="text-main-1 ml-2 flex items-center text-[1.25rem]">
                   최소
                   <Select
                     value={value!}
@@ -125,17 +123,17 @@ const SetConstraint = () => {
                       });
                       sendEvent(
                         events.makePage.editWardModal.changeConstraintValue,
-                        'minNightIntervalVal'
+                        'minNightIntervalVal',
                       );
                     }}
-                    className="w-[4.125rem]"
+                    className="w-16.5"
                   />
                   일&nbsp;
                   <span className="underline">이상</span>
                 </div>
               ))
               .with('minOffAssignAfterNight', () => (
-                <div className="ml-2 flex items-center text-[1.25rem] text-main-1">
+                <div className="text-main-1 ml-2 flex items-center text-[1.25rem]">
                   <Select
                     value={value!}
                     options={[2, 3]}
@@ -146,16 +144,16 @@ const SetConstraint = () => {
                       });
                       sendEvent(
                         events.makePage.editWardModal.changeConstraintValue,
-                        'minOffAssignAfterNightVal'
+                        'minOffAssignAfterNightVal',
                       );
                     }}
-                    className="w-[4.125rem]"
+                    className="w-16.5"
                   />
                   일&nbsp;
                 </div>
               ))
               .otherwise(() => null)}
-            <div className="ml-auto flex w-[7.5625rem] cursor-pointer items-center justify-between">
+            <div className="ml-auto flex w-30.25 cursor-pointer items-center justify-between">
               <Toggle
                 isOn={isActive}
                 setIsOn={() => {
@@ -167,9 +165,9 @@ const SetConstraint = () => {
                 }}
               />
               {isActive ? (
-                <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 적용</p>
+                <p className="text-sub-3 flex-1 text-center text-[.75rem]">근무표 적용</p>
               ) : (
-                <p className="flex-1 text-center text-[.75rem] text-sub-3">근무표 미적용</p>
+                <p className="text-sub-3 flex-1 text-center text-[.75rem]">근무표 미적용</p>
               )}
             </div>
           </div>

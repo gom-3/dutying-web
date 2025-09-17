@@ -1,10 +1,11 @@
-import { render, screen } from '@libs/util/test-utils';
-import { describe, vi, expect, beforeEach } from 'vitest';
+import { describe, vi, expect, beforeEach, it } from 'vitest';
+import { render, screen } from '@/libs/util/test-utils';
+import { type WardShiftType } from '@/types/ward';
 import ShiftBadge from '.';
 
 let mockShiftTypeColorStyle = 'background';
 
-vi.mock('@hooks/ui/useUIConfig', () => ({
+vi.mock('@/hooks/ui/useUIConfig', () => ({
   default: vi.fn(() => ({
     state: {
       shiftTypeColorStyle: mockShiftTypeColorStyle,
@@ -45,7 +46,7 @@ describe('ShiftBadge 컴포넌트', () => {
 
   it('isOnlyRequest일 때는 불투명하게 렌더링 되어야 함', () => {
     render(<ShiftBadge shiftType={mockShiftType} isOnlyRequest />);
-    expect(screen.getByText(mockShiftType.shortName)).toHaveClass('opacity-[60%]');
+    expect(screen.getByText(mockShiftType.shortName)).toHaveClass('opacity-60');
   });
 
   it('배경색 모드일 때는 배경 색상이 shiftType의 color이고 글자색은 하얀색이어야 함', () => {

@@ -1,9 +1,9 @@
 ---
 name: Feature
 about: 기능 구현사항을 작성해주세요.
-title: "Feat: "
+title: 'Feat: '
 labels: ✨ 기능
-assignees: ""
+assignees: ''
 ---
 
 ## Description

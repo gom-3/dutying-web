@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgNextIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 41 40" {...props}>
     <circle cx={20.799} cy={19.933} r={19.433} stroke="#CEB6FF" />
@@ -18,4 +19,5 @@ const SvgNextIcon = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
+
 export default SvgNextIcon;
