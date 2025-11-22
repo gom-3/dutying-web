@@ -16,8 +16,7 @@ function RefreshPage() {
     try {
       axiosInstance.defaults.headers.common['Authorization'] = undefined;
       const accessToken = (await axiosInstance.post('/token/refresh')).data.accessToken;
-      handleLogin(accessToken);
-      window.history.back();
+      handleLogin(accessToken, 'back');
     } catch (error) {
       toast.error('로그인이 만료되었습니다. 다시 로그인해주세요.');
       handleLogout();
