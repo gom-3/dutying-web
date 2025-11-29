@@ -1,12 +1,12 @@
-import { useLoadingStore } from './store';
+import {useLoadingStore} from './store';
 
 const useLoading = () => {
-  const { loading, setState } = useLoadingStore();
+    const {loading, setState} = useLoadingStore();
 
-  return {
-    loading,
-    setLoading: (loading: boolean) => setState('loading', loading),
-  };
+    return {
+        loading,
+        setLoading: (loading: boolean) => setState('loading', loading),
+    };
 };
 
 export default useLoading;

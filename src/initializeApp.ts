@@ -1,8 +1,8 @@
+import * as Sentry from '@sentry/react';
 import {createBrowserHistory} from 'history';
 import {enableMapSet} from 'immer';
 import ReactPixel from 'react-facebook-pixel';
 import ReactGA from 'react-ga4';
-import * as Sentry from '@sentry/react';
 
 export default function initializeApp() {
     enableMapSet();

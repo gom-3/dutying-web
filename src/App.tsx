@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import useAuth from '@/hooks/auth/useAuth';
-import { Router } from '@/pages/Router';
+import {Router} from '@/pages/Router';
 
 function App() {
-  useAuth(true);
+    useAuth(true);
 
-  const setScreenHeight = () => {
-    const vh = window.innerHeight * 0.01;
+    const setScreenHeight = () => {
+        const vh = window.innerHeight * 0.01;
 
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
 
-  useEffect(() => {
-    setScreenHeight();
-    window.addEventListener('resize', setScreenHeight);
+    useEffect(() => {
+        setScreenHeight();
+        window.addEventListener('resize', setScreenHeight);
 
-    return () => window.removeEventListener('resize', setScreenHeight);
-  }, []);
+        return () => window.removeEventListener('resize', setScreenHeight);
+    }, []);
 
-  return <Router />;
+    return <Router />;
 }
 
 export default App;

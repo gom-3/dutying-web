@@ -1,118 +1,104 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { type TValues } from '@/types/util';
-import { type WardShiftType } from '@/types/ward';
-import {
-  type CheckFaultOptions,
-  type DayInfo,
-  type EditHistory,
-  type Faults,
-  type Focus,
-} from './types';
+import {create} from 'zustand';
+import {devtools, persist} from 'zustand/middleware';
+import {type TValues} from '@/types/util';
+import {type WardShiftType} from '@/types/ward';
+import {type CheckFaultOptions, type DayInfo, type EditHistory, type Faults, type Focus} from './types';
 
 export interface State {
-  year: number;
-  month: number;
-  currentShiftTeamId: number | null;
-  oldCurrentShiftTeamId: number | null;
-  focus: Focus | null;
-  focusedDayInfo: DayInfo | null;
-  foldedLevels: boolean[] | null;
-  editHistory: EditHistory;
-  faults: Faults;
-  checkFaultOptions: CheckFaultOptions | null;
-  wardShiftTypeMap: Map<number, WardShiftType> | null;
-  readonly: boolean;
-  showLayer: {
-    fault: boolean;
-    check: boolean;
-    slash: boolean;
-  };
+    year: number;
+    month: number;
+    currentShiftTeamId: number | null;
+    oldCurrentShiftTeamId: number | null;
+    focus: Focus | null;
+    focusedDayInfo: DayInfo | null;
+    foldedLevels: boolean[] | null;
+    editHistory: EditHistory;
+    faults: Faults;
+    checkFaultOptions: CheckFaultOptions | null;
+    wardShiftTypeMap: Map<number, WardShiftType> | null;
+    readonly: boolean;
+    showLayer: {
+        fault: boolean;
+        check: boolean;
+        slash: boolean;
+    };
 }
 
 interface Store extends State {
-  setState: (key: keyof State, value: TValues<State>) => void;
-  initState: () => void;
+    setState: (key: keyof State, value: TValues<State>) => void;
+    initState: () => void;
 }
 
 const initialState: State = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth() + 1,
-  focus: null,
-  currentShiftTeamId: null,
-  oldCurrentShiftTeamId: null,
-  focusedDayInfo: null,
-  foldedLevels: null,
-  editHistory: new Map(),
-  faults: new Map(),
-  checkFaultOptions: null,
-  wardShiftTypeMap: null,
-  readonly: true,
-  showLayer: {
-    check: true,
-    fault: true,
-    slash: true,
-  },
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    focus: null,
+    currentShiftTeamId: null,
+    oldCurrentShiftTeamId: null,
+    focusedDayInfo: null,
+    foldedLevels: null,
+    editHistory: new Map(),
+    faults: new Map(),
+    checkFaultOptions: null,
+    wardShiftTypeMap: null,
+    readonly: true,
+    showLayer: {
+        check: true,
+        fault: true,
+        slash: true,
+    },
 };
 const useEditShiftStore = create<Store>()(
-  devtools(
-    persist(
-      (set) => ({
-        ...initialState,
-        setState: (key, value) => set((prev) => ({ ...prev, [key]: value })),
-        initState: () => set(initialState),
-      }),
-      {
-        name: 'useEditShiftStore',
-        storage: {
-          getItem: (name) => {
-            const str = localStorage.getItem(name);
+    devtools(
+        persist(
+            (set) => ({
+                ...initialState,
+                setState: (key, value) => set((prev) => ({...prev, [key]: value})),
+                initState: () => set(initialState),
+            }),
+            {
+                name: 'useEditShiftStore',
+                storage: {
+                    getItem: (name) => {
+                        const str = localStorage.getItem(name);
 
-            if (!str) return null;
+                        if (!str) return null;
 
-            const { state } = JSON.parse(str);
+                        const {state} = JSON.parse(str);
 
-            return {
-              state: {
-                ...state,
-                editHistory: new Map(state.editHistory),
-              },
-            };
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setItem: (name, newValue: any) => {
-            // functions cannot be JSON encoded
-            const str = JSON.stringify({
-              state: {
-                ...newValue.state,
-                editHistory: Array.from(newValue.state.editHistory.entries()),
-              },
-            });
+                        return {
+                            state: {
+                                ...state,
+                                editHistory: new Map(state.editHistory),
+                            },
+                        };
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    setItem: (name, newValue: any) => {
+                        // functions cannot be JSON encoded
+                        const str = JSON.stringify({
+                            state: {
+                                ...newValue.state,
+                                editHistory: Array.from(newValue.state.editHistory.entries()),
+                            },
+                        });
 
-            localStorage.setItem(name, str);
-          },
-          removeItem: (name) => localStorage.removeItem(name),
-        },
-        partialize: ({
-          year,
-          month,
-          editHistory,
-          readonly,
-          showLayer,
-          currentShiftTeamId,
-          oldCurrentShiftTeamId,
-        }: Store) => ({
-          year,
-          month,
-          editHistory,
-          readonly,
-          showLayer,
-          currentShiftTeamId,
-          oldCurrentShiftTeamId,
-        }),
-      },
+                        localStorage.setItem(name, str);
+                    },
+                    removeItem: (name) => localStorage.removeItem(name),
+                },
+                partialize: ({year, month, editHistory, readonly, showLayer, currentShiftTeamId, oldCurrentShiftTeamId}: Store) => ({
+                    year,
+                    month,
+                    editHistory,
+                    readonly,
+                    showLayer,
+                    currentShiftTeamId,
+                    oldCurrentShiftTeamId,
+                }),
+            },
+        ),
     ),
-  ),
 );
 
 export default useEditShiftStore;

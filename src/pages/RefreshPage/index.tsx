@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import toast from 'react-hot-toast';
 import {TailSpin} from 'react-loader-spinner';
 import {useNavigate} from 'react-router';
@@ -11,22 +11,23 @@ function RefreshPage() {
         actions: {handleLogout, handleLogin},
     } = useAuth();
     const navigate = useNavigate();
-    const refresh = async () => {
+    const refresh = useCallback(async () => {
         try {
             axiosInstance.defaults.headers.common['Authorization'] = undefined;
 
             const accessToken = (await axiosInstance.post('/token/refresh')).data.accessToken;
+
             handleLogin(accessToken, 'back');
-        } catch (error) {
+        } catch {
             toast.error('로그인이 만료되었습니다. 다시 로그인해주세요.');
             handleLogout();
             navigate(ROUTE.ROOT);
         }
-    };
+    }, [handleLogin, handleLogout, navigate]);
 
     useEffect(() => {
         refresh();
-    }, []);
+    }, [refresh]);
 
     return (
         <div className="flex h-screen w-screen flex-col items-center justify-center">

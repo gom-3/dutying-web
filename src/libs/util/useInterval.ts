@@ -1,25 +1,25 @@
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef} from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useInterval(callback: any, delay: number | null) {
-  const savedCallback = useRef(callback);
+    const savedCallback = useRef(callback);
 
-  // Remember the latest callback if it changes.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+    // Remember the latest callback if it changes.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
 
-  // Set up the interval.
-  useEffect(() => {
-    // Don't schedule if no delay is specified.
-    if (delay === null) {
-      return;
-    }
+    // Set up the interval.
+    useEffect(() => {
+        // Don't schedule if no delay is specified.
+        if (delay === null) {
+            return;
+        }
 
-    const id = setInterval(() => savedCallback.current(), delay);
+        const id = setInterval(() => savedCallback.current(), delay);
 
-    return () => clearInterval(id);
-  }, [delay]);
+        return () => clearInterval(id);
+    }, [delay]);
 }
 
 export default useInterval;
