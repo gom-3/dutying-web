@@ -30,7 +30,7 @@ General nurses can directly check the synchronized work schedules through the mo
 - Package Manager : PNPM
 - Test : Vitest, Jest, Cypress
 - CI/CD : GitHub Actions, Vercel
-- Analytics : Google Ananytics, Airbridge
+- Analytics : Google Ananytics
 
 ### Vite
 

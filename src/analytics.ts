@@ -1,4 +1,3 @@
-import airbridge from 'airbridge-web-sdk-loader';
 import ReactPixel from 'react-facebook-pixel';
 import ReactGA from 'react-ga4';
 
@@ -418,8 +417,5 @@ export const sendEvent = (event: Event, label?: string) => {
       label,
     });
     ReactPixel.trackCustom(event.action, { label });
-    airbridge.events.send(event.category, {
-      action: event.action,
-    });
   }
 };
