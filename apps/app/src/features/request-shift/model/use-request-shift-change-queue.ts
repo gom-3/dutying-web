@@ -17,7 +17,9 @@ type TUseRequestShiftChangeQueueParams = {
     requestShiftQueryKey: readonly unknown[];
     wardShiftTypeMap: Map<number, TWardShiftType> | null;
     queryClient: QueryClient;
-    setChangeStatus: (status: TChangeStatus) => void;
+    startRequestChange: () => void;
+    completeRequestChange: (status: Exclude<TChangeStatus, 'idle' | 'loading'>) => void;
+    resetRequestChangeStatus: () => void;
 };
 
 const CHANGE_STATUS_RESET_DELAY = 2400;
@@ -29,7 +31,9 @@ export const useRequestShiftChangeQueue = ({
     requestShiftQueryKey,
     wardShiftTypeMap,
     queryClient,
-    setChangeStatus,
+    startRequestChange,
+    completeRequestChange,
+    resetRequestChangeStatus,
 }: TUseRequestShiftChangeQueueParams) => {
     const changeStatusResetTimerRef = useRef<number | null>(null);
     const requestShiftChangeQueueRef = useRef<Array<{focus: TFocus; shiftTypeId: number | null}>>([]);
@@ -43,16 +47,23 @@ export const useRequestShiftChangeQueue = ({
     const setChangeStatusWithAutoReset = useCallback(
         (status: TChangeStatus) => {
             clearChangeStatusResetTimer();
-            setChangeStatus(status);
+
+            if (status === 'loading') {
+                startRequestChange();
+            } else if (status === 'idle') {
+                resetRequestChangeStatus();
+            } else {
+                completeRequestChange(status);
+            }
 
             if (status === 'loading' || status === 'idle') return;
 
             changeStatusResetTimerRef.current = window.setTimeout(() => {
-                setChangeStatus('idle');
+                resetRequestChangeStatus();
                 changeStatusResetTimerRef.current = null;
             }, CHANGE_STATUS_RESET_DELAY);
         },
-        [clearChangeStatusResetTimer, setChangeStatus],
+        [clearChangeStatusResetTimer, completeRequestChange, resetRequestChangeStatus, startRequestChange],
     );
     const applyRequestShiftChangeToCache = useCallback(
         (focus: TFocus, shiftTypeId: number | null) => {

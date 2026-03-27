@@ -7,15 +7,11 @@ import useAuth from '@/features/auth';
 import {WardAPI} from '@/shared/api';
 import {showActionErrorFeedback, showValidationFeedback} from '@/shared/util/feedback';
 import {
-    createInitialFoldedLevels,
-    createWardShiftTypeMap,
     findDutyRequestByFocus,
     getAdjacentRequestShiftDate,
     getRequestShiftBootstrapStatus,
     getRequestShiftMonthChangeDecision,
     getRequestShiftTypeIdAtFocus,
-    shouldResetFoldedLevelsOnRequestLoad,
-    shouldSyncFoldedLevelsLength,
 } from './model/request-shift';
 import {useRequestShiftStore} from './model/store';
 import {type TFocus} from './model/types';
@@ -30,12 +26,23 @@ const useRequestShift = (activeEffect = false) => {
         focus,
         foldedLevels,
         currentShiftTeamId,
-        oldCurrentShiftTeamId,
         wardShiftTypeMap,
         readonly,
         changeStatus,
         updatingRequestId,
-        setState,
+        syncShiftTeams,
+        loadRequestShift,
+        setCalendarDate,
+        selectFocus,
+        toggleFoldedLevel,
+        enterEditMode,
+        enterReadonlyMode,
+        selectShiftTeam,
+        startRequestChange,
+        completeRequestChange,
+        resetRequestChangeStatus,
+        startRequestDecision,
+        finishRequestDecision,
     } = useRequestShiftStore();
     const {
         state: {wardId, isAuth, _loaded, accountMeStatus},
@@ -61,19 +68,7 @@ const useRequestShift = (activeEffect = false) => {
         queryFn: async () => {
             const res = await WardAPI.getShiftTeams(wardId!);
 
-            if (res.length === 0) {
-                setState('currentShiftTeamId', null);
-
-                return res;
-            }
-
-            if (currentShiftTeamId) {
-                if (res.every((shiftTeam) => shiftTeam.shiftTeamId !== currentShiftTeamId)) {
-                    setState('currentShiftTeamId', res[0].shiftTeamId);
-                }
-            } else {
-                setState('currentShiftTeamId', res[0].shiftTeamId);
-            }
+            syncShiftTeams(res);
 
             return res;
         },
@@ -98,16 +93,7 @@ const useRequestShift = (activeEffect = false) => {
 
             if (res === null) return null as unknown as TRequestShift;
 
-            if (
-                shouldResetFoldedLevelsOnRequestLoad({
-                    foldedLevels,
-                    previousShiftTeamId: oldCurrentShiftTeamId,
-                    currentShiftTeamId,
-                })
-            ) {
-                setState('foldedLevels', createInitialFoldedLevels(res));
-                setState('oldCurrentShiftTeamId', currentShiftTeamId);
-            }
+            loadRequestShift(res);
 
             return res;
         },
@@ -120,7 +106,9 @@ const useRequestShift = (activeEffect = false) => {
         requestShiftQueryKey,
         wardShiftTypeMap,
         queryClient,
-        setChangeStatus: (status) => setState('changeStatus', status),
+        startRequestChange,
+        completeRequestChange,
+        resetRequestChangeStatus,
     });
     const acceptRequests = useCallback(
         async (reqShiftIds: number[], isAccepted: boolean | null) => {
@@ -128,7 +116,7 @@ const useRequestShift = (activeEffect = false) => {
 
             if (reqShiftIds.length === 0 || useRequestShiftStore.getState().updatingRequestId !== null) return false;
 
-            setState('updatingRequestId', reqShiftIds.length === 1 ? reqShiftIds[0] : -1);
+            startRequestDecision(reqShiftIds.length === 1 ? reqShiftIds[0] : -1);
 
             try {
                 const results = await Promise.allSettled(
@@ -147,10 +135,10 @@ const useRequestShift = (activeEffect = false) => {
 
                 return rejectedResults.length === 0;
             } finally {
-                setState('updatingRequestId', null);
+                finishRequestDecision();
             }
         },
-        [dutyRequestQueryKey, queryClient, requestShiftQueryKey, setState, wardId],
+        [dutyRequestQueryKey, finishRequestDecision, queryClient, requestShiftQueryKey, startRequestDecision, wardId],
     );
     const acceptRequest = useCallback(
         async (reqShiftId: number, isAccepted: boolean | null) => {
@@ -173,13 +161,12 @@ const useRequestShift = (activeEffect = false) => {
         }
 
         if (decision.shouldEnableReadonly) {
-            setState('readonly', true);
+            enterReadonlyMode();
         }
 
         if (decision.shouldBlock) return false;
 
-        setState('year', decision.year);
-        setState('month', decision.month);
+        setCalendarDate(decision.year, decision.month);
 
         return true;
     };
@@ -207,10 +194,7 @@ const useRequestShift = (activeEffect = false) => {
     const foldLevel = (level: number) => {
         if (!requestShift || !foldedLevels) return;
 
-        setState(
-            'foldedLevels',
-            foldedLevels.map((isFolded, index) => (index === level ? !isFolded : isFolded)),
-        );
+        toggleFoldedLevel(level);
     };
 
     useRequestShiftKeyboard({
@@ -218,7 +202,7 @@ const useRequestShift = (activeEffect = false) => {
         focus,
         requestShift,
         changeFocusedShift,
-        setFocus: (nextFocus) => setState('focus', nextFocus),
+        setFocus: selectFocus,
     });
 
     const handleToggleEditMode = (targetDate?: {year: number; month: number}) => {
@@ -231,17 +215,12 @@ const useRequestShift = (activeEffect = false) => {
                 return false;
             }
 
-            setState('readonly', false);
+            enterEditMode();
 
             return true;
         }
 
-        setState('readonly', true);
-        setState('focus', null);
-
-        if (requestShift) {
-            setState('foldedLevels', createInitialFoldedLevels(requestShift));
-        }
+        enterReadonlyMode(requestShift);
 
         return true;
     };
@@ -258,12 +237,7 @@ const useRequestShift = (activeEffect = false) => {
                       month: nextMonth,
                   };
 
-        if (nextMonth > 12) {
-            setState('year', year + 1);
-            setState('month', 1);
-        } else {
-            setState('month', nextMonth);
-        }
+        setCalendarDate(nextDate.year, nextDate.month);
 
         handleToggleEditMode(nextDate);
     };
@@ -287,18 +261,7 @@ const useRequestShift = (activeEffect = false) => {
         if (!activeEffect || !requestShift) return;
 
         window.dispatchEvent(new Event('resize'));
-
-        if (
-            shouldSyncFoldedLevelsLength({
-                foldedLevels,
-                requestShift,
-            })
-        ) {
-            setState('foldedLevels', createInitialFoldedLevels(requestShift));
-        }
-
-        setState('wardShiftTypeMap', createWardShiftTypeMap(requestShift));
-    }, [activeEffect, foldedLevels, requestShift, setState]);
+    }, [activeEffect, requestShift]);
 
     return {
         queryKey: {
@@ -334,11 +297,11 @@ const useRequestShift = (activeEffect = false) => {
             foldLevel,
             changeMonth,
             retry,
-            changeFocus: (nextFocus: TFocus | null) => setState('focus', nextFocus),
+            changeFocus: selectFocus,
             changeShiftTeam: (shiftTeam: TShiftTeam) => {
                 if (shiftTeam.shiftTeamId === currentShiftTeamId) return false;
 
-                setState('currentShiftTeamId', shiftTeam.shiftTeamId);
+                selectShiftTeam(shiftTeam.shiftTeamId);
 
                 return true;
             },

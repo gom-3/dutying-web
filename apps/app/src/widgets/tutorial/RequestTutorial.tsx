@@ -13,7 +13,7 @@ const RequestTutorial = () => {
     const {
         actions: {toggleEditMode},
     } = useRequestShift();
-    const {setState} = useRequestShiftStore();
+    const enterReadonlyMode = useRequestShiftStore((state) => state.enterReadonlyMode);
     const config = useMemo<ITutorialConfig>(
         () => ({
             steps: [
@@ -61,9 +61,9 @@ const RequestTutorial = () => {
 
     useEffect(() => {
         if (showRequestTutorial) {
-            setState('readonly', true);
+            enterReadonlyMode();
         }
-    }, [showRequestTutorial]);
+    }, [enterReadonlyMode, showRequestTutorial]);
 
     return <TutorialPortal open={showRequestTutorial} config={config} closeCallback={() => setRequestTutorial(false)} />;
 };

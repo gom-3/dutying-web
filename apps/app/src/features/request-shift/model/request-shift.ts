@@ -1,5 +1,5 @@
 import {type TDutyRequest, type TRequestShift} from '@/entities/shift';
-import {type TWardShiftType} from '@/entities/ward';
+import {type TShiftTeam, type TWardShiftType} from '@/entities/ward';
 import {type TFocus, type TRequestShiftEditAvailability} from './types';
 
 type TBootstrapStatus = 'pending' | 'error' | 'success';
@@ -71,6 +71,22 @@ export const createWardShiftTypeMap = (requestShift: TRequestShift) => {
     return new Map<number, TWardShiftType>(
         requestShift.wardShiftTypes.map((wardShiftType) => [wardShiftType.wardShiftTypeId, wardShiftType]),
     );
+};
+
+export const resolveCurrentRequestShiftTeamId = ({
+    shiftTeams,
+    currentShiftTeamId,
+}: {
+    shiftTeams: TShiftTeam[];
+    currentShiftTeamId: number | null;
+}) => {
+    if (shiftTeams.length === 0) return null;
+
+    if (currentShiftTeamId !== null && shiftTeams.some((shiftTeam) => shiftTeam.shiftTeamId === currentShiftTeamId)) {
+        return currentShiftTeamId;
+    }
+
+    return shiftTeams[0].shiftTeamId;
 };
 
 export const getAdjacentRequestShiftDate = (year: number, month: number, type: TMonthChangeType) => {

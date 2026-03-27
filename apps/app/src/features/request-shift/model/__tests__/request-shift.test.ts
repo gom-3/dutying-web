@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import type {TDutyRequest, TRequestShift} from '@/entities/shift';
+import type {TShiftTeam} from '@/entities/ward';
 import {
     createInitialFoldedLevels,
     createWardShiftTypeMap,
@@ -9,6 +10,7 @@ import {
     getRequestShiftChangeEventMessage,
     getRequestShiftMonthChangeDecision,
     getRequestShiftTypeIdAtFocus,
+    resolveCurrentRequestShiftTeamId,
     shouldResetFoldedLevelsOnRequestLoad,
     shouldSyncFoldedLevelsLength,
 } from '../request-shift';
@@ -89,6 +91,7 @@ const dutyRequestFixture: TDutyRequest[] = [
         isAccepted: null,
     },
 ];
+const shiftTeamsFixture: TShiftTeam[] = [{shiftTeamId: 1, name: 'A팀'} as TShiftTeam, {shiftTeamId: 2, name: 'B팀'} as TShiftTeam];
 
 describe('useRequestShift model', () => {
     const now = new Date('2026-03-21T09:00:00+09:00');
@@ -124,6 +127,18 @@ describe('useRequestShift model', () => {
 
     it('folded level 초기화와 동기화 조건을 계산한다', () => {
         expect(createInitialFoldedLevels(requestShiftFixture)).toEqual([false, false]);
+        expect(
+            resolveCurrentRequestShiftTeamId({
+                shiftTeams: shiftTeamsFixture,
+                currentShiftTeamId: 2,
+            }),
+        ).toBe(2);
+        expect(
+            resolveCurrentRequestShiftTeamId({
+                shiftTeams: shiftTeamsFixture,
+                currentShiftTeamId: 9,
+            }),
+        ).toBe(1);
         expect(
             shouldResetFoldedLevelsOnRequestLoad({
                 foldedLevels: [false],

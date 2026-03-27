@@ -40,9 +40,9 @@ vi.mock('@/analytics', () => ({
 }));
 
 vi.mock('@/features/request-shift/model/store', () => ({
-    useRequestShiftStore: (selector: (state: {resetState: () => void}) => unknown) =>
+    useRequestShiftStore: (selector: (state: {reset: () => void}) => unknown) =>
         selector({
-            resetState: mockResetRequestShiftState,
+            reset: mockResetRequestShiftState,
         }),
 }));
 
