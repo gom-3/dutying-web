@@ -4,8 +4,10 @@ import {PersonIcon} from '@/shared/assets/svg';
 import {RUNTIME_CONFIG} from '@/shared/config/runtime';
 import {getProfileImageFallbackText, getProfileImageSources, type TProfileImageValue} from './model';
 
-interface IProfileImageProps
-    extends Omit<React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, 'src' | 'type'> {
+interface IProfileImageProps extends Omit<
+    React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
+    'src' | 'type'
+> {
     profileImg?: TProfileImageValue;
     name?: string;
 }
