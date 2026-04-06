@@ -11,6 +11,8 @@ import {
     getRequestShiftMonthChangeDecision,
     getRequestShiftTypeIdAtFocus,
     resolveCurrentRequestShiftTeamId,
+    shouldApplyRequestShiftResponseToStore,
+    shouldApplyShiftTeamsResponseToStore,
     shouldResetFoldedLevelsOnRequestLoad,
     shouldSyncFoldedLevelsLength,
 } from '../request-shift';
@@ -152,6 +154,46 @@ describe('useRequestShift model', () => {
                 requestShift: requestShiftFixture,
             }),
         ).toBe(true);
+    });
+
+    it('stale query response가 최신 selection을 덮어쓰지 않도록 guard를 계산한다', () => {
+        expect(
+            shouldApplyShiftTeamsResponseToStore({
+                requestedWardId: 10,
+                currentWardId: 10,
+            }),
+        ).toBe(true);
+        expect(
+            shouldApplyShiftTeamsResponseToStore({
+                requestedWardId: 10,
+                currentWardId: 11,
+            }),
+        ).toBe(false);
+
+        expect(
+            shouldApplyRequestShiftResponseToStore({
+                requestedWardId: 10,
+                requestedShiftTeamId: 2,
+                requestedYear: 2026,
+                requestedMonth: 4,
+                currentWardId: 10,
+                currentShiftTeamId: 2,
+                currentYear: 2026,
+                currentMonth: 4,
+            }),
+        ).toBe(true);
+        expect(
+            shouldApplyRequestShiftResponseToStore({
+                requestedWardId: 10,
+                requestedShiftTeamId: 2,
+                requestedYear: 2026,
+                requestedMonth: 4,
+                currentWardId: 10,
+                currentShiftTeamId: 3,
+                currentYear: 2026,
+                currentMonth: 4,
+            }),
+        ).toBe(false);
     });
 
     it('월 이동 정책을 순수 계산으로 분리한다', () => {

@@ -4,6 +4,7 @@ import {type TRequestShift} from '@/entities/shift';
 import {type TShiftTeam} from '@/entities/ward';
 import {wardQueryOptions} from '@/entities/ward/model/queries';
 import useAuth from '@/features/auth';
+import useAuthStore from '@/features/auth/model/store';
 import {WardAPI} from '@/shared/api';
 import {showActionErrorFeedback, showValidationFeedback} from '@/shared/util/feedback';
 import {
@@ -12,6 +13,8 @@ import {
     getRequestShiftBootstrapStatus,
     getRequestShiftMonthChangeDecision,
     getRequestShiftTypeIdAtFocus,
+    shouldApplyRequestShiftResponseToStore,
+    shouldApplyShiftTeamsResponseToStore,
 } from './model/request-shift';
 import {useRequestShiftStore} from './model/store';
 import {type TFocus} from './model/types';
@@ -66,9 +69,17 @@ const useRequestShift = (activeEffect = false) => {
     } = useQuery({
         ...shiftTeamsQueryOptions,
         queryFn: async () => {
-            const res = await WardAPI.getShiftTeams(wardId!);
+            const requestedWardId = wardId!;
+            const res = await WardAPI.getShiftTeams(requestedWardId);
 
-            syncShiftTeams(res);
+            if (
+                shouldApplyShiftTeamsResponseToStore({
+                    requestedWardId,
+                    currentWardId: useAuthStore.getState().wardId,
+                })
+            ) {
+                syncShiftTeams(res);
+            }
 
             return res;
         },
@@ -89,11 +100,30 @@ const useRequestShift = (activeEffect = false) => {
     } = useQuery({
         ...requestShiftQueryOptions,
         queryFn: async (): Promise<TRequestShift> => {
-            const res = await WardAPI.getReqShift(wardId!, currentShiftTeamId!, year, month);
+            const requestedWardId = wardId!;
+            const requestedShiftTeamId = currentShiftTeamId!;
+            const requestedYear = year;
+            const requestedMonth = month;
+            const res = await WardAPI.getReqShift(requestedWardId, requestedShiftTeamId, requestedYear, requestedMonth);
 
             if (res === null) return null as unknown as TRequestShift;
 
-            loadRequestShift(res);
+            const currentRequestShiftState = useRequestShiftStore.getState();
+
+            if (
+                shouldApplyRequestShiftResponseToStore({
+                    requestedWardId,
+                    requestedShiftTeamId,
+                    requestedYear,
+                    requestedMonth,
+                    currentWardId: useAuthStore.getState().wardId,
+                    currentShiftTeamId: currentRequestShiftState.currentShiftTeamId,
+                    currentYear: currentRequestShiftState.year,
+                    currentMonth: currentRequestShiftState.month,
+                })
+            ) {
+                loadRequestShift(res);
+            }
 
             return res;
         },

@@ -28,6 +28,20 @@ type TMonthChangeDecision = {
     shouldEnableReadonly: boolean;
     feedbackMessage: string | null;
 };
+type TShiftTeamsResponseGuardParams = {
+    requestedWardId: number;
+    currentWardId: number | null;
+};
+type TRequestShiftResponseGuardParams = {
+    requestedWardId: number;
+    requestedShiftTeamId: number;
+    requestedYear: number;
+    requestedMonth: number;
+    currentWardId: number | null;
+    currentShiftTeamId: number | null;
+    currentYear: number;
+    currentMonth: number;
+};
 
 const flattenRequestShiftRows = (requestShift: TRequestShift) => requestShift.divisionShiftNurses.flatMap((division) => division);
 
@@ -87,6 +101,28 @@ export const resolveCurrentRequestShiftTeamId = ({
     }
 
     return shiftTeams[0].shiftTeamId;
+};
+
+export const shouldApplyShiftTeamsResponseToStore = ({requestedWardId, currentWardId}: TShiftTeamsResponseGuardParams) => {
+    return requestedWardId === currentWardId;
+};
+
+export const shouldApplyRequestShiftResponseToStore = ({
+    requestedWardId,
+    requestedShiftTeamId,
+    requestedYear,
+    requestedMonth,
+    currentWardId,
+    currentShiftTeamId,
+    currentYear,
+    currentMonth,
+}: TRequestShiftResponseGuardParams) => {
+    return (
+        requestedWardId === currentWardId &&
+        requestedShiftTeamId === currentShiftTeamId &&
+        requestedYear === currentYear &&
+        requestedMonth === currentMonth
+    );
 };
 
 export const getAdjacentRequestShiftDate = (year: number, month: number, type: TMonthChangeType) => {
