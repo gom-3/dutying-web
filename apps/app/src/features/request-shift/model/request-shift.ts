@@ -1,5 +1,5 @@
 import {type TDutyRequest, type TRequestShift} from '@/entities/shift';
-import {type TWardShiftType} from '@/entities/ward';
+import {type TShiftTeam, type TWardShiftType} from '@/entities/ward';
 import {type TFocus, type TRequestShiftEditAvailability} from './types';
 
 type TBootstrapStatus = 'pending' | 'error' | 'success';
@@ -27,6 +27,20 @@ type TMonthChangeDecision = {
     shouldBlock: boolean;
     shouldEnableReadonly: boolean;
     feedbackMessage: string | null;
+};
+type TShiftTeamsResponseGuardParams = {
+    requestedWardId: number;
+    currentWardId: number | null;
+};
+type TRequestShiftResponseGuardParams = {
+    requestedWardId: number;
+    requestedShiftTeamId: number;
+    requestedYear: number;
+    requestedMonth: number;
+    currentWardId: number | null;
+    currentShiftTeamId: number | null;
+    currentYear: number;
+    currentMonth: number;
 };
 
 const flattenRequestShiftRows = (requestShift: TRequestShift) => requestShift.divisionShiftNurses.flatMap((division) => division);
@@ -70,6 +84,44 @@ export const shouldSyncFoldedLevelsLength = ({
 export const createWardShiftTypeMap = (requestShift: TRequestShift) => {
     return new Map<number, TWardShiftType>(
         requestShift.wardShiftTypes.map((wardShiftType) => [wardShiftType.wardShiftTypeId, wardShiftType]),
+    );
+};
+
+export const resolveCurrentRequestShiftTeamId = ({
+    shiftTeams,
+    currentShiftTeamId,
+}: {
+    shiftTeams: TShiftTeam[];
+    currentShiftTeamId: number | null;
+}) => {
+    if (shiftTeams.length === 0) return null;
+
+    if (currentShiftTeamId !== null && shiftTeams.some((shiftTeam) => shiftTeam.shiftTeamId === currentShiftTeamId)) {
+        return currentShiftTeamId;
+    }
+
+    return shiftTeams[0].shiftTeamId;
+};
+
+export const shouldApplyShiftTeamsResponseToStore = ({requestedWardId, currentWardId}: TShiftTeamsResponseGuardParams) => {
+    return requestedWardId === currentWardId;
+};
+
+export const shouldApplyRequestShiftResponseToStore = ({
+    requestedWardId,
+    requestedShiftTeamId,
+    requestedYear,
+    requestedMonth,
+    currentWardId,
+    currentShiftTeamId,
+    currentYear,
+    currentMonth,
+}: TRequestShiftResponseGuardParams) => {
+    return (
+        requestedWardId === currentWardId &&
+        requestedShiftTeamId === currentShiftTeamId &&
+        requestedYear === currentYear &&
+        requestedMonth === currentMonth
     );
 };
 

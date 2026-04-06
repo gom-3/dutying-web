@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import type {TDutyRequest, TRequestShift} from '@/entities/shift';
+import type {TShiftTeam} from '@/entities/ward';
 import {
     createInitialFoldedLevels,
     createWardShiftTypeMap,
@@ -9,6 +10,9 @@ import {
     getRequestShiftChangeEventMessage,
     getRequestShiftMonthChangeDecision,
     getRequestShiftTypeIdAtFocus,
+    resolveCurrentRequestShiftTeamId,
+    shouldApplyRequestShiftResponseToStore,
+    shouldApplyShiftTeamsResponseToStore,
     shouldResetFoldedLevelsOnRequestLoad,
     shouldSyncFoldedLevelsLength,
 } from '../request-shift';
@@ -89,6 +93,7 @@ const dutyRequestFixture: TDutyRequest[] = [
         isAccepted: null,
     },
 ];
+const shiftTeamsFixture: TShiftTeam[] = [{shiftTeamId: 1, name: 'A팀'} as TShiftTeam, {shiftTeamId: 2, name: 'B팀'} as TShiftTeam];
 
 describe('useRequestShift model', () => {
     const now = new Date('2026-03-21T09:00:00+09:00');
@@ -125,6 +130,18 @@ describe('useRequestShift model', () => {
     it('folded level 초기화와 동기화 조건을 계산한다', () => {
         expect(createInitialFoldedLevels(requestShiftFixture)).toEqual([false, false]);
         expect(
+            resolveCurrentRequestShiftTeamId({
+                shiftTeams: shiftTeamsFixture,
+                currentShiftTeamId: 2,
+            }),
+        ).toBe(2);
+        expect(
+            resolveCurrentRequestShiftTeamId({
+                shiftTeams: shiftTeamsFixture,
+                currentShiftTeamId: 9,
+            }),
+        ).toBe(1);
+        expect(
             shouldResetFoldedLevelsOnRequestLoad({
                 foldedLevels: [false],
                 previousShiftTeamId: 1,
@@ -137,6 +154,46 @@ describe('useRequestShift model', () => {
                 requestShift: requestShiftFixture,
             }),
         ).toBe(true);
+    });
+
+    it('stale query response가 최신 selection을 덮어쓰지 않도록 guard를 계산한다', () => {
+        expect(
+            shouldApplyShiftTeamsResponseToStore({
+                requestedWardId: 10,
+                currentWardId: 10,
+            }),
+        ).toBe(true);
+        expect(
+            shouldApplyShiftTeamsResponseToStore({
+                requestedWardId: 10,
+                currentWardId: 11,
+            }),
+        ).toBe(false);
+
+        expect(
+            shouldApplyRequestShiftResponseToStore({
+                requestedWardId: 10,
+                requestedShiftTeamId: 2,
+                requestedYear: 2026,
+                requestedMonth: 4,
+                currentWardId: 10,
+                currentShiftTeamId: 2,
+                currentYear: 2026,
+                currentMonth: 4,
+            }),
+        ).toBe(true);
+        expect(
+            shouldApplyRequestShiftResponseToStore({
+                requestedWardId: 10,
+                requestedShiftTeamId: 2,
+                requestedYear: 2026,
+                requestedMonth: 4,
+                currentWardId: 10,
+                currentShiftTeamId: 3,
+                currentYear: 2026,
+                currentMonth: 4,
+            }),
+        ).toBe(false);
     });
 
     it('월 이동 정책을 순수 계산으로 분리한다', () => {

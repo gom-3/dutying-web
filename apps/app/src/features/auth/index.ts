@@ -27,22 +27,22 @@ const useAuth = (activeEffect = false) => {
         wardId,
         demoStartDate,
         _loaded,
-        beginLogin,
+        startLogin,
         applyDemoSession,
-        setAccountMeLoading,
-        setAccountMeSuccess,
-        setAccountMeError,
+        beginAccountBootstrap,
+        completeAccountBootstrap,
+        failAccountBootstrap,
         setDemoExpired: setAuthDemoExpired,
-        resetState,
+        resetSession,
     } = useAuthStore();
-    const resetRequestShiftState = useRequestShiftStore((state) => state.resetState);
+    const resetRequestShiftState = useRequestShiftStore((state) => state.reset);
     const {pathname} = useLocation();
     const {setLoading} = useLoadingUseCase();
     const {initTutorial} = useTutorialUseCase();
     const navigate = useNavigate();
     const resetSessionState = () => {
         resetRequestShiftState();
-        resetState();
+        resetSession();
         setAccessToken('');
     };
     const handleLogout = async (fallBackPath?: string) => {
@@ -52,7 +52,7 @@ const useAuth = (activeEffect = false) => {
         if (fallBackPath && pathname !== fallBackPath) navigate(fallBackPath);
     };
     const handleLogin = (accessToken: string, nextPageUrl?: string | null, options?: THandleLoginOptions) => {
-        beginLogin(accessToken, {preserveDemoStartDate: options?.preserveDemoStartDate});
+        startLogin(accessToken, {preserveDemoStartDate: options?.preserveDemoStartDate});
         setAccessToken(accessToken);
 
         const redirectDecision = getLoginRedirectDecision(nextPageUrl);
@@ -72,6 +72,7 @@ const useAuth = (activeEffect = false) => {
 
         try {
             initTutorial();
+
             const data = await AuthAPI.demoStart();
 
             applyDemoSession({
@@ -88,14 +89,14 @@ const useAuth = (activeEffect = false) => {
         }
     };
     const handleGetAccountMe = async () => {
-        setAccountMeLoading();
+        beginAccountBootstrap();
 
         try {
             const account = await AccountAPI.getAccountMe();
 
-            setAccountMeSuccess(account);
+            completeAccountBootstrap(account);
         } catch (error) {
-            setAccountMeError();
+            failAccountBootstrap();
             throw error;
         }
     };
