@@ -1,16 +1,13 @@
 import {fileURLToPath} from 'node:url';
+import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import {defineConfig, loadEnv} from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-interface IChunks {
-    [key: string]: string[];
-}
-
 const renderChunks = (deps: Record<string, string>) => {
-    const chunks: IChunks = {};
+    const chunks: Record<string, string[]> = {};
 
     Object.keys(deps).forEach((key) => {
         if (['react', 'react-router-dom', 'react-dom'].includes(key)) {
@@ -22,6 +19,7 @@ const renderChunks = (deps: Record<string, string>) => {
 
     return chunks;
 };
+
 const dependencies = {
     '@hookform/resolvers': '@hookform/resolvers',
     '@tanstack/react-query': '@tanstack/react-query',
@@ -47,9 +45,32 @@ const dependencies = {
     yup: 'yup',
     zustand: 'zustand',
 };
+
+const vendorPackages = ['react', 'react-router', 'react-router-dom', 'react-dom'];
 const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
 const defaultAppSiteUrl = 'https://app.dutying.net';
 const stripTrailingSlash = (value: string) => value.replace(/\/+$/, '');
+const dependencyChunks = renderChunks(dependencies);
+
+const getManualChunk = (moduleId: string) => {
+    const normalizedId = moduleId.replace(/\\/g, '/');
+
+    if (!normalizedId.includes('/node_modules/')) {
+        return undefined;
+    }
+
+    if (vendorPackages.some((packageName) => normalizedId.includes(`/node_modules/${packageName}/`))) {
+        return 'vendor';
+    }
+
+    for (const [chunkName, packages] of Object.entries(dependencyChunks)) {
+        if (packages.some((packageName) => normalizedId.includes(`/node_modules/${packageName}/`))) {
+            return chunkName;
+        }
+    }
+
+    return undefined;
+};
 
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, workspaceRoot, '');
@@ -61,26 +82,22 @@ export default defineConfig(({mode}) => {
             sourcemap: true,
             rollupOptions: {
                 output: {
-                    manualChunks: {
-                        vendor: ['react', 'react-router-dom', 'react-dom', 'react-router', 'react-router-dom'],
-                        ...renderChunks(dependencies),
-                    },
+                    manualChunks: getManualChunk,
                 },
             },
         },
         plugins: [
-            react({
-                babel: {
-                    plugins: [
-                        ['babel-plugin-react-compiler'],
-                        [
-                            '@locator/babel-jsx/dist',
-                            {
-                                env: 'development',
-                            },
-                        ],
+            react(),
+            babel({
+                plugins: [
+                    ['babel-plugin-react-compiler'],
+                    [
+                        '@locator/babel-jsx/dist',
+                        {
+                            env: 'development',
+                        },
                     ],
-                },
+                ],
             }),
             tsconfigPaths({projects: ['./tsconfig.app.json']}),
             tailwindcss(),
