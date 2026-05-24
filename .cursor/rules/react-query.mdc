@@ -1,0 +1,52 @@
+---
+globs: src/entities/**/*
+alwaysApply: false
+---
+
+현재 프로젝트는 react-query를 사용하며 FSD 아키텍처에 따라 entities 하위에 쿼리를 정의하고 재사용한다.
+다음과 같이 key와 key에 해당하는 options를 정의한다.
+
+```ts
+import {queryOptions, useQuery} from '@tanstack/react-query';
+import {http} from '@/shared/api/client';
+
+export const accountQueryKeys = {
+  all: () => ['account'],
+  me: () => [...accountQueryKeys.all(), 'me'],
+  waiting: () => [...accountQueryKeys.all(), 'waiting'],
+  searched: (code: string) => [...accountQueryKeys.all(), 'searched', code],
+  defaultProfileImages: () => [...accountQueryKeys.all(), 'default-profile-images'],
+};
+
+export const accountQueryOptions = {
+  me: () =>
+    queryOptions({
+      queryKey: accountQueryKeys.me(),
+      queryFn: () => http.GET('/accounts/v2/me'),
+    }),
+  waiting: () =>
+    queryOptions({
+      queryKey: accountQueryKeys.waiting(),
+      queryFn: () => http.GET('/accounts/waiting'),
+    }),
+  searched: (code: string) =>
+    queryOptions({
+      queryKey: accountQueryKeys.searched(code),
+      queryFn: () => http.GET('/accounts/v2/search', {params: {query: {code}}}),
+    }),
+  defaultProfileImages: () =>
+    queryOptions({
+      queryKey: accountQueryKeys.defaultProfileImages(),
+      queryFn: () => http.GET('/accounts/default-images'),
+      staleTime: 'static',
+    }),
+};
+```
+
+다음과 같이 쿼리 무효화를 한다.
+
+```ts
+queryClient.invalidateQueries({
+  queryKey: accountQueryKeys.me(),
+});
+```

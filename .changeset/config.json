@@ -1,0 +1,15 @@
+{
+    "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
+    "changelog": "@changesets/cli/changelog",
+    "commit": false,
+    "fixed": [["@dutying/*"]],
+    "linked": [],
+    "access": "restricted",
+    "baseBranch": "develop",
+    "privatePackages": {
+        "version": true,
+        "tag": false
+    },
+    "updateInternalDependencies": "patch",
+    "ignore": []
+}

@@ -1,0 +1,28 @@
+{
+    "name": "@dutying/domain",
+    "version": "1.0.2",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "import": "./src/index.ts"
+        },
+        "./account": {
+            "types": "./src/account.ts",
+            "import": "./src/account.ts"
+        },
+        "./nurse": {
+            "types": "./src/nurse.ts",
+            "import": "./src/nurse.ts"
+        },
+        "./shift": {
+            "types": "./src/shift.ts",
+            "import": "./src/shift.ts"
+        },
+        "./ward": {
+            "types": "./src/ward.ts",
+            "import": "./src/ward.ts"
+        }
+    }
+}

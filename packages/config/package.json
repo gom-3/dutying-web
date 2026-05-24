@@ -1,0 +1,27 @@
+{
+    "name": "@dutying/config",
+    "private": true,
+    "version": "1.0.2",
+    "type": "module",
+    "exports": {
+        "./eslint/react-app": "./eslint/react-app.mjs",
+        "./typescript/base.json": "./typescript/base.json",
+        "./typescript/react-app.json": "./typescript/react-app.json",
+        "./typescript/node.json": "./typescript/node.json"
+    },
+    "peerDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@stylistic/eslint-plugin": "^5.6.1",
+        "@typescript-eslint/eslint-plugin": "^8.48.0",
+        "@typescript-eslint/parser": "^8.48.0",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^6.1.1",
+        "eslint-plugin-react-refresh": "^0.4.24",
+        "globals": "^16.5.0",
+        "typescript": "^5.9.3"
+    }
+}

@@ -1,0 +1,15 @@
+:root {
+    --vp-c-brand-1: #0f766e;
+    --vp-c-brand-2: #115e59;
+    --vp-c-brand-3: #134e4a;
+    --vp-c-brand-soft: rgba(15, 118, 110, 0.14);
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: linear-gradient(120deg, #0f766e 10%, #2563eb 90%);
+    --vp-home-hero-image-background-image: radial-gradient(circle at top, rgba(37, 99, 235, 0.22), transparent 50%),
+        radial-gradient(circle at bottom, rgba(15, 118, 110, 0.28), transparent 45%);
+    --vp-home-hero-image-filter: blur(72px);
+}
+
+.VPFeature {
+    border: 1px solid var(--vp-c-brand-soft);
+}

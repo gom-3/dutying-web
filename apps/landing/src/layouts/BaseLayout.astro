@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+import {siteConfig} from '../config/site';
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = '듀팅 | 간호사 근무표를 위한 운영 플랫폼',
+    description = '간호사 근무표 작성과 일정 관리를 더 편리하게. 듀팅과 함께 효율적인 근무 관리를 시작하세요.',
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, `${siteConfig.marketingOrigin}/`).toString();
+const ogImageUrl = new URL('/og-image.png', `${siteConfig.marketingOrigin}/`).toString();
+---
+
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <meta name="description" content={description} />
+        <meta name="title" content={title} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:alt" content="듀팅 서비스 소개 이미지" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageUrl} />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

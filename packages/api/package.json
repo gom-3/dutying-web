@@ -1,0 +1,31 @@
+{
+    "name": "@dutying/api",
+    "version": "1.0.2",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "import": "./src/index.ts"
+        },
+        "./client": {
+            "types": "./src/client.ts",
+            "import": "./src/client.ts"
+        },
+        "./account": {
+            "types": "./src/account/index.ts",
+            "import": "./src/account/index.ts"
+        },
+        "./nurse": {
+            "types": "./src/nurse/index.ts",
+            "import": "./src/nurse/index.ts"
+        },
+        "./ward": {
+            "types": "./src/ward/index.ts",
+            "import": "./src/ward/index.ts"
+        }
+    },
+    "dependencies": {
+        "@dutying/domain": "workspace:*"
+    }
+}

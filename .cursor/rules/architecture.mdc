@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+# 아키텍처
+
+FSD 구조
+
+## 폴더 구조
+
+- store에서 데이터 관리
+- hook에서 store를 상태를 사용 비즈니스 로직 수행 후 setter로 데이터 변경
+- view에서 store의 데이터로 ui 그리고 hook 호출해서 비즈니스 로직 수행
+
+## 네이밍 규칙
+
+- model 세그먼트 하위에 xxxStore.ts, xxxHook.ts 작성

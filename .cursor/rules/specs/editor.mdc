@@ -1,0 +1,763 @@
+아래 문서는 **제공해주신 v1.1 스펙을 최대한 보존하되**,
+❌ **DI / Class / 상속 / Core 분리 / UseCase 계층을 전부 제거**하고
+✅ **Zustand store + React hook 기반으로 그대로 구현 가능하도록** 재작성한 **최종 구현 안내 문서**입니다.
+
+> 목표:
+> **“개념은 유지, 구현 복잡성은 제거”**
+> → *Transactional / Operation / History / Clipboard / Validation*은 유지
+> → _Core / DI / abstract class / container / MobX_ 전부 제거
+
+---
+
+# 근무표 에디터 구현 안내 문서 (Zustand 기반, v1.1-adapted)
+
+## 0. 이 문서의 전제
+
+- **단일 에디터 = 단일 Zustand store**
+- store가 곧 editor core
+- 모든 변경은 **store command 함수**를 통해서만 발생
+- Undo/Redo는 **Transaction 단위**
+- Operation 기반 (snapshot ❌)
+- React는 **입력/렌더링 어댑터**
+
+---
+
+## 1. 핵심 설계 원칙 (재정의)
+
+### 1.1 도메인 중립 Core → ❌ 제거
+
+- Core / Duty Editor 분리 ❌
+- row / col 추상화 ❌
+
+👉 **대신**
+
+- store 내부 데이터는 여전히 `row / col / cell` 기반
+- 하지만 _물리적 분리 없이_ Duty Editor 문맥에서 바로 사용
+
+---
+
+### 1.2 Editor = Store
+
+```txt
+Zustand Store
+ ├─ doc (DutyDoc)
+ ├─ selection
+ ├─ violations
+ ├─ history
+ ├─ commands (편집 API)
+```
+
+- store 외부에 editor core 없음
+- class 없음
+- 상속 없음
+
+---
+
+## 2. 데이터 모델 (동일)
+
+### 2.1 CellValue
+
+```ts
+export type CellValue = string | null;
+```
+
+- ShiftCode는 자유 문자열
+- 의도적 빈 값은 `null`
+
+---
+
+### 2.2 DutyDoc
+
+```ts
+export type DateKey = string; // YYYY-MM-DD
+
+export type DutyRow = {
+  workerId: string;
+  cells: CellValue[];
+};
+
+export type DutyDoc = {
+  columns: DateKey[];
+  rows: DutyRow[];
+  workerMeta: Record<string, { name: string }>;
+};
+```
+
+---
+
+## 3. Selection 정책 (store 상태)
+
+### 3.1 Selection 타입
+
+```ts
+export type CellPos = { row: number; col: number };
+
+export type Selection =
+  | { type: "single"; anchor: CellPos }
+  | { type: "range"; from: CellPos; to: CellPos };
+```
+
+---
+
+### 3.2 Selection 규칙
+
+- 방향키 이동
+- Shift + 방향키 → range 확장
+- 경계 처리 규칙 동일
+
+👉 **중요**
+
+- selection 변경은 **history에 기록하지 않는다**
+- selection은 “과정 상태”
+
+---
+
+## 4. Operation / Transaction (유지)
+
+### 4.1 Transaction
+
+```ts
+export type Transaction<Op> = {
+  ops: Op[];
+  source: "user" | "ai" | "system";
+  timestamp: number;
+};
+```
+
+- Undo 단위
+- AI 자동 채우기 = 항상 Tx 1개
+
+---
+
+### 4.2 Operation 정의
+
+#### 4.2.1 SetCellsOp
+
+```ts
+export type SetCellsOp = {
+  kind: "setCells";
+  cells: Array<{
+    row: number;
+    col: number;
+    prev: CellValue;
+    next: CellValue;
+  }>;
+};
+```
+
+- 단일/다중 동일 구조
+- paste / autofill / autofix 전부 동일
+
+---
+
+#### 4.2.2 ReorderRowsOp
+
+```ts
+export type ReorderRowsOp = {
+  kind: "reorderRows";
+  prevOrder: number[];
+  nextOrder: number[];
+};
+```
+
+---
+
+## 5. History 정책 (Zustand 내부)
+
+### 5.1 History 모델
+
+```ts
+type HistoryEntry = {
+  tx: Transaction<Operation>;
+  inverseOps: Operation[];
+};
+
+type HistoryState = {
+  past: HistoryEntry[];
+  future: HistoryEntry[];
+  maxDepth: number;
+};
+```
+
+---
+
+### 5.2 기본 정책
+
+- 병합 없음
+- Transaction 단위 undo/redo
+- redo 스택 유지
+- depth 초과 시 FIFO 제거
+- AI 변경도 동일 취급
+
+---
+
+## 6. Clipboard (store 유틸)
+
+### 6.1 Copy
+
+```ts
+export type ClipboardPayload = {
+  width: number;
+  height: number;
+  cells: CellValue[][];
+};
+```
+
+- selection → **정규화된 직사각형**
+- store 함수로 계산
+
+---
+
+### 6.2 Paste
+
+- 기준점: selection 좌상단
+- 범위 초과: 자동 자르기
+- 결과는 **SetCellsOp 1개**
+- 실패 없음
+
+---
+
+## 7. Validation (hook 구조 제거, 함수 기반)
+
+### 7.1 Violation
+
+```ts
+export type Violation = {
+  ruleId: string;
+  cells: CellPos[];
+  level: "warning" | "error";
+};
+```
+
+---
+
+### 7.2 정책
+
+- 입력을 막지 않음
+- 위반 정보만 계산
+- store 내부에서:
+
+    - tx 적용 후
+    - undo/redo 후
+    - 자동 재계산
+
+```ts
+function validate(doc: DutyDoc): Violation[] {}
+```
+
+---
+
+## 8. Row 정렬 (store command)
+
+### 8.1 정렬 기준
+
+- 이름순
+
+```ts
+rows.sort((a, b) =>
+  workerMeta[a.workerId].name.localeCompare(
+    workerMeta[b.workerId].name
+  )
+);
+```
+
+---
+
+### 8.2 Selection 처리
+
+- 정렬 수행 시 **selection 초기화**
+- 기존 selection 보정 ❌
+
+```ts
+selection = null;
+// 또는 { type: "single", anchor: { row: 0, col: 0 } }
+```
+
+---
+
+## 9. AI 자동 채우기 / 수정
+
+- AI 결과 → `SetCellsOp 1개`
+- Transaction 1개
+- source = `"ai"`
+- undo/redo 동일
+
+---
+
+## 10. Persistence (LocalStorage)
+
+### 10.1 Persisted 구조
+
+```ts
+type Persisted = {
+  doc: DutyDoc;
+  history: string;
+  savedAt: number;
+};
+```
+
+---
+
+### 10.2 동작
+
+- store 변경 시 debounce 저장
+- 초기화 시:
+
+    - persisted 존재 → UI에 선택지 제공
+    - hydrate / discard 결정은 UI 책임
+
+---
+
+## 11. 최종 Zustand Store 설계
+
+```ts
+type ShiftEditorStore = {
+  // state
+  doc: DutyDoc;
+  selection: Selection | null;
+  violations: Violation[];
+  history: HistoryState;
+
+  // selection (history ❌)
+  select(cell: CellPos): void;
+  moveSelection(dir: Direction, extend: boolean): void;
+
+  // edit commands (history ✅)
+  setCells(cells: CellPos[], value: CellValue, source?: TxSource): void;
+  clearCells(cells: CellPos[]): void;
+  reorderRows(): void;
+
+  // clipboard
+  copy(): ClipboardPayload | null;
+  paste(payload: ClipboardPayload): void;
+
+  // history
+  undo(): void;
+  redo(): void;
+
+  // persistence
+  hydrate(persisted: Persisted): void;
+};
+```
+
+---
+
+## 12. Command 구현 규칙 (매우 중요)
+
+### 12.1 Operation 생성 조건
+
+```ts
+if (prev === next) {
+  // ❌ Operation 생성 금지
+}
+```
+
+- 실제 doc 변경이 없으면 history 기록 ❌
+
+---
+
+### 12.2 Selection-only 변경 금지 규칙
+
+- selection 이동
+- drag 중 selection update
+
+👉 **history에 기록하지 않는다**
+
+---
+
+## 13. Hook 역할 (React 어댑터)
+
+### useEditorInteraction
+
+- 키보드 / 마우스 입력
+- store command 호출만 수행
+- 상태 보관 ❌
+
+```ts
+onKeyDown(e) {
+  if (e.key === "ArrowRight") moveSelection(...)
+  if (e.key === "D") setCells(...)
+}
+```
+
+---
+
+### useEditorHistory
+
+- undo / redo 키 바인딩
+
+---
+
+## 14. UI 컴포넌트 책임
+
+- store 상태 읽기
+- 이벤트 → hook 호출
+- 비즈니스 로직 ❌
+- history 직접 접근 ❌
+
+---
+
+## 15. 삭제된 개념 정리 (의도적으로 제거됨)
+
+| 항목           | 상태    |
+| -------------- | ------- |
+| Editor Core    | ❌ 제거 |
+| abstract class | ❌ 제거 |
+| DI / Container | ❌ 제거 |
+| MobX           | ❌ 제거 |
+| UseCase 계층   | ❌ 제거 |
+| dispose 계약   | ❌ 제거 |
+
+👉 **Zustand store lifecycle = 에디터 lifecycle**
+
+---
+
+## 16. 구현 순서 (추천)
+
+1. DutyDoc + types
+2. Zustand store 골격
+3. SetCellsOp + invert
+4. Transaction / History
+5. undo / redo
+6. selection 이동
+7. clipboard
+8. validation
+9. persistence
+10. UI + hook
+
+---
+
+## 17. 최종 요약 (중요)
+
+> 이 에디터는
+> **Command / Transaction / Operation 개념은 유지하면서** > **구현 복잡도만 제거한 구조**입니다.
+>
+> Editor Core를 만들지 않고도
+> Zustand store 하나로
+> 충분히 “에디터다운” 동작을 구현할 수 있습니다.
+
+---
+
+아래 내용은 **구현 안내 문서 하단에 그대로 “참고용(Appendix)”으로 첨부 가능한 코드 예시**입니다.
+모두 **Zustand store + 함수 기반** 전제를 따르며, **class / DI / 상속 없음**입니다.
+
+---
+
+# Appendix A. 참고 구현 예시
+
+## A-1. `invert(SetCellsOp)` 정확한 구현
+
+### Operation 타입
+
+```ts
+export type CellValue = string | null;
+
+export type SetCellsOp = {
+  kind: "setCells";
+  cells: Array<{
+    row: number;
+    col: number;
+    prev: CellValue;
+    next: CellValue;
+  }>;
+};
+```
+
+---
+
+### invert 구현
+
+```ts
+export function invertSetCellsOp(op: SetCellsOp): SetCellsOp {
+  return {
+    kind: "setCells",
+    cells: op.cells.map(cell => ({
+      row: cell.row,
+      col: cell.col,
+      prev: cell.next,
+      next: cell.prev,
+    })),
+  };
+}
+```
+
+---
+
+### 적용 함수 (공통)
+
+```ts
+export function applySetCellsOp(
+  doc: DutyDoc,
+  op: SetCellsOp,
+): DutyDoc {
+  for (const { row, col, next } of op.cells) {
+    doc.rows[row].cells[col] = next;
+  }
+  return doc;
+}
+```
+
+> ✔ undo: `invertSetCellsOp(op)`
+> ✔ redo: `op` 그대로 재적용
+> ✔ snapshot 불필요
+
+---
+
+## A-2. Selection 이동 알고리즘
+
+### 타입
+
+```ts
+export type CellPos = { row: number; col: number };
+
+export type Selection =
+  | { type: "single"; anchor: CellPos }
+  | { type: "range"; from: CellPos; to: CellPos };
+
+export type Direction = "up" | "down" | "left" | "right";
+```
+
+---
+
+### 단일 셀 이동 계산
+
+```ts
+function moveCell(
+  pos: CellPos,
+  dir: Direction,
+  rowCount: number,
+  colCount: number,
+): CellPos {
+  let { row, col } = pos;
+
+  switch (dir) {
+    case "right":
+      col++;
+      if (col >= colCount) {
+        row++;
+        col = 0;
+      }
+      break;
+
+    case "left":
+      col--;
+      if (col < 0) {
+        row--;
+        col = colCount - 1;
+      }
+      break;
+
+    case "down":
+      row++;
+      break;
+
+    case "up":
+      row--;
+      break;
+  }
+
+  if (row < 0 || row >= rowCount) return pos;
+  if (col < 0 || col >= colCount) return pos;
+
+  return { row, col };
+}
+```
+
+---
+
+### Selection 이동 (extend 포함)
+
+```ts
+export function moveSelection(
+  selection: Selection | null,
+  dir: Direction,
+  extend: boolean,
+  rowCount: number,
+  colCount: number,
+): Selection | null {
+  if (!selection) return null;
+
+  if (selection.type === "single") {
+    const next = moveCell(
+      selection.anchor,
+      dir,
+      rowCount,
+      colCount,
+    );
+
+    if (extend) {
+      return {
+        type: "range",
+        from: selection.anchor,
+        to: next,
+      };
+    }
+
+    return {
+      type: "single",
+      anchor: next,
+    };
+  }
+
+  // range selection
+  const nextTo = moveCell(
+    selection.to,
+    dir,
+    rowCount,
+    colCount,
+  );
+
+  return {
+    type: "range",
+    from: selection.from,
+    to: nextTo,
+  };
+}
+```
+
+> ✔ selection 이동은 history ❌
+> ✔ range 확장은 Shift 키로만 발생
+> ✔ bounds 초과 시 이동 무시
+
+---
+
+## A-3. Clipboard Normalize 로직
+
+### ClipboardPayload
+
+```ts
+export type ClipboardPayload = {
+  width: number;
+  height: number;
+  cells: CellValue[][];
+};
+```
+
+---
+
+### Selection → 정규화된 직사각형
+
+```ts
+function normalizeRange(sel: Selection): {
+  top: number;
+  left: number;
+  bottom: number;
+  right: number;
+} {
+  if (sel.type === "single") {
+    const { row, col } = sel.anchor;
+    return { top: row, bottom: row, left: col, right: col };
+  }
+
+  return {
+    top: Math.min(sel.from.row, sel.to.row),
+    bottom: Math.max(sel.from.row, sel.to.row),
+    left: Math.min(sel.from.col, sel.to.col),
+    right: Math.max(sel.from.col, sel.to.col),
+  };
+}
+```
+
+---
+
+### Copy 구현
+
+```ts
+export function copySelection(
+  doc: DutyDoc,
+  selection: Selection | null,
+): ClipboardPayload | null {
+  if (!selection) return null;
+
+  const { top, left, bottom, right } =
+    normalizeRange(selection);
+
+  const height = bottom - top + 1;
+  const width = right - left + 1;
+
+  const cells: CellValue[][] = [];
+
+  for (let r = 0; r < height; r++) {
+    const row: CellValue[] = [];
+    for (let c = 0; c < width; c++) {
+      row.push(
+        doc.rows[top + r]?.cells[left + c] ?? null,
+      );
+    }
+    cells.push(row);
+  }
+
+  return { width, height, cells };
+}
+```
+
+---
+
+### Paste → SetCellsOp 생성
+
+```ts
+export function pastePayload(
+  payload: ClipboardPayload,
+  selection: Selection,
+  doc: DutyDoc,
+): SetCellsOp {
+  const anchor =
+    selection.type === "single"
+      ? selection.anchor
+      : normalizeRange(selection);
+
+  const startRow =
+    "row" in anchor ? anchor.row : anchor.top;
+  const startCol =
+    "col" in anchor ? anchor.col : anchor.left;
+
+  const cells: SetCellsOp["cells"] = [];
+
+  for (let r = 0; r < payload.height; r++) {
+    for (let c = 0; c < payload.width; c++) {
+      const row = startRow + r;
+      const col = startCol + c;
+
+      if (
+        row >= doc.rows.length ||
+        col >= doc.columns.length
+      ) {
+        continue; // 자동 자르기
+      }
+
+      const prev = doc.rows[row].cells[col];
+      const next = payload.cells[r][c];
+
+      if (prev !== next) {
+        cells.push({ row, col, prev, next });
+      }
+    }
+  }
+
+  return {
+    kind: "setCells",
+    cells,
+  };
+}
+```
+
+> ✔ paste 결과는 항상 **SetCellsOp 1개**
+> ✔ 실패 없음
+> ✔ 범위 초과 자동 절단
+> ✔ prev === next 인 셀은 제외 (history 최적화)
+
+---
+
+## Appendix 요약
+
+- **invert(SetCellsOp)**
+  → `prev ↔ next` swap만으로 완전한 역연산
+
+- **Selection 이동**
+  → 계산 전용, history 영향 없음
+
+- **Clipboard**
+  → normalize → 2D payload → 단일 SetCellsOp
+
+이 Appendix를 그대로 문서 하단에 붙이면
+**다른 에이전트가 “의도 오해 없이” 바로 구현 가능한 수준**입니다.

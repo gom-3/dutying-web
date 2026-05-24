@@ -1,0 +1,7 @@
+{
+    "extends": "./base.json",
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "noEmit": true
+    }
+}

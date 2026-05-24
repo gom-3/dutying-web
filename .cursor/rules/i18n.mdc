@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+
+# 국제화 문구 적용 전략
+
+- ts 파일로 관리하여 타입 관리 (ko, en ...)
+- 1계층은 FSD의 각 레이어, 2계층부터는 UI의 계층적 구조의 키(key)
+    - 예를들어 page.landing.title
+- react UI에서는 useTypedTranslation 훅을 사용하여 t 함수를 얻고 이를 사용해야 함. 타입 안정성 확보한 유틸 함수
+- 줄바꿈이 필요한 경우 \n 삽입, UI 렌더링 할때는 renderMultilineText유틸 사용해야 함
+- 변수 사용이 필요한 경우 {} 사용

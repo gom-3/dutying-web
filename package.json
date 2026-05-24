@@ -1,0 +1,62 @@
+{
+    "name": "dutying-web",
+    "private": true,
+    "version": "1.0.2",
+    "type": "module",
+    "scripts": {
+        "dev": "pnpm run dev:app",
+        "dev:app": "pnpm --dir ./apps/app dev",
+        "dev:docs": "pnpm --dir ./apps/docs dev",
+        "dev:landing": "pnpm --dir ./apps/landing dev",
+        "build": "pnpm run build:app",
+        "build:app": "pnpm --dir ./apps/app build",
+        "build:docs": "pnpm --dir ./apps/docs build",
+        "build:landing": "pnpm --dir ./apps/landing build",
+        "preview": "pnpm run preview:app",
+        "preview:app": "pnpm --dir ./apps/app preview",
+        "preview:docs": "pnpm --dir ./apps/docs preview",
+        "preview:landing": "pnpm --dir ./apps/landing preview",
+        "lint": "pnpm run lint:app",
+        "lint:app": "pnpm --dir ./apps/app lint",
+        "format": "prettier --write .",
+        "svgr": "pnpm --dir ./apps/app svgr",
+        "test": "pnpm run test:app",
+        "test:app": "pnpm --dir ./apps/app test",
+        "test:run": "pnpm run test:run:app",
+        "test:run:app": "pnpm --dir ./apps/app test:run",
+        "test:ui": "pnpm run test:ui:app",
+        "test:ui:app": "pnpm --dir ./apps/app test:ui",
+        "coverage": "pnpm run coverage:app",
+        "coverage:app": "pnpm --dir ./apps/app coverage",
+        "cypress:open": "pnpm --dir ./apps/app cypress:open",
+        "e2e": "pnpm --dir ./apps/app e2e",
+        "changeset:add": "pnpm exec changeset",
+        "changeset:status": "CI=1 pnpm exec changeset status --verbose",
+        "changeset:version": "node ./scripts/release/version-with-changelog.mjs",
+        "changeset:version:workspaces": "CI=1 pnpm exec changeset version",
+        "changeset:sync-root-version": "node ./scripts/release/sync-root-version.mjs",
+        "release:test": "node --test scripts/release/changelog.test.mjs",
+        "release:verify": "pnpm run release:test && pnpm run release:status && pnpm run release:changelog:preview",
+        "release:changelog:preview": "node ./scripts/release/preview-root-changelog.mjs",
+        "release:status": "pnpm run changeset:status",
+        "release:version": "pnpm run changeset:version",
+        "type-check": "pnpm run type-check:app",
+        "type-check:app": "pnpm --dir ./apps/app type-check",
+        "type-check:docs": "pnpm --dir ./apps/docs type-check",
+        "type-check:landing": "pnpm --dir ./apps/landing type-check",
+        "workspace:list": "pnpm ls -r --depth -1"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "cypress",
+            "puppeteer"
+        ]
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.29.8",
+        "lint-staged": "^16.2.7",
+        "prettier": "3.5.3",
+        "prettier-plugin-tailwindcss": "^0.7.1",
+        "vitest": "^4.0.14"
+    }
+}

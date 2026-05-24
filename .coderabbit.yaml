@@ -1,0 +1,28 @@
+language: 'ko-KR'
+tone_instructions: >
+  실제 결함, 회귀 가능성, 보안 문제, 성능 문제, 명확한 유지보수 리스크만 코멘트하세요.
+  스타일 제안, 취향 차이, 이미 린터/포매터가 잡는 내용, 중요하지 않은 리네이밍 제안은 하지 마세요.
+early_access: false
+reviews:
+  profile: 'chill'
+  request_changes_workflow: true
+  high_level_summary: false
+  review_status: false
+  review_details: false
+  collapse_walkthrough: true
+  changed_files_summary: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  assess_linked_issues: false
+  related_issues: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
+  in_progress_fortune: false
+  poem: false
+  enable_prompt_for_ai_agents: false
+  auto_review:
+    enabled: true
+    drafts: false
+chat:
+  auto_reply: false

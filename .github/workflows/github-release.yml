@@ -1,0 +1,97 @@
+name: GitHub Release
+
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: github-release-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    github-release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Resolve release metadata
+              id: metadata
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const {readFileSync} = require("node:fs");
+
+                      const packageJson = JSON.parse(readFileSync(`${process.env.GITHUB_WORKSPACE}/package.json`, "utf8"));
+                      const version = packageJson.version;
+                      const tag = `v${version}`;
+
+                      core.setOutput("version", version);
+                      core.setOutput("tag", tag);
+
+                      try {
+                        await github.rest.repos.getReleaseByTag({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          tag,
+                        });
+
+                        core.setOutput("release_exists", "true");
+                      } catch (error) {
+                        if (error.status === 404) {
+                          core.setOutput("release_exists", "false");
+                          return;
+                        }
+
+                        throw error;
+                      }
+
+            - name: Extract release notes from root changelog
+              if: steps.metadata.outputs.release_exists != 'true'
+              env:
+                  RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
+              run: |
+                  node --input-type=module <<'EOF'
+                  import {readFileSync, writeFileSync} from 'node:fs';
+
+                  const version = process.env.RELEASE_VERSION;
+                  const changelog = readFileSync('CHANGELOG.md', 'utf8');
+                  const versionHeading = `## ${version} - `;
+                  const sectionStart = changelog.indexOf(versionHeading);
+
+                  if (sectionStart === -1) {
+                      throw new Error(`Missing CHANGELOG.md entry for ${version}.`);
+                  }
+
+                  const nextSectionStart = changelog.indexOf('\n## ', sectionStart + versionHeading.length);
+                  const releaseNotes = changelog.slice(
+                      sectionStart,
+                      nextSectionStart === -1 ? changelog.length : nextSectionStart,
+                  ).trim();
+
+                  writeFileSync('release-notes.md', `${releaseNotes}\n`);
+                  EOF
+
+            - name: Create GitHub release
+              if: steps.metadata.outputs.release_exists != 'true'
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const {readFileSync} = require("node:fs");
+
+                      await github.rest.repos.createRelease({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        tag_name: process.env.RELEASE_TAG,
+                        name: process.env.RELEASE_TAG,
+                        body: readFileSync(`${process.env.GITHUB_WORKSPACE}/release-notes.md`, "utf8"),
+                        target_commitish: context.sha,
+                      });
+              env:
+                  RELEASE_TAG: ${{ steps.metadata.outputs.tag }}

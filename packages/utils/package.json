@@ -1,0 +1,36 @@
+{
+    "name": "@dutying/utils",
+    "version": "1.0.2",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "import": "./src/index.ts"
+        },
+        "./date": {
+            "types": "./src/date.ts",
+            "import": "./src/date.ts"
+        },
+        "./ko-to-en": {
+            "types": "./src/ko-to-en.ts",
+            "import": "./src/ko-to-en.ts"
+        },
+        "./style": {
+            "types": "./src/style.ts",
+            "import": "./src/style.ts"
+        },
+        "./types": {
+            "types": "./src/types.ts",
+            "import": "./src/types.ts"
+        }
+    },
+    "dependencies": {
+        "clsx": "^2.1.1",
+        "luxon": "^3.7.2",
+        "tailwind-merge": "^3.4.0"
+    },
+    "devDependencies": {
+        "@types/luxon": "^3.7.1"
+    }
+}
