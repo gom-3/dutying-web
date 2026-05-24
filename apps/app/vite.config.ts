@@ -42,7 +42,6 @@ const dependencies = {
     'react-helmet': 'react-helmet',
     'react-hook-form': 'react-hook-form',
     'react-hot-toast': 'react-hot-toast',
-    'react-loader-spinner': 'react-loader-spinner',
     'ts-pattern': 'ts-pattern',
     yup: 'yup',
     zustand: 'zustand',
