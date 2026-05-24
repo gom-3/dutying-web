@@ -76,7 +76,7 @@ export const AuthLayout = () => {
                 <Helmet
                     title={
                         isDemoExpired
-                            ? '체험이 종료되었어요 | Dutying'
+                            ? '체험이 끝났어요 | Dutying'
                             : demoSessionInfo?.isActive
                               ? t('feature.auth.demoSession.documentTitle', {countdown: demoSessionInfo.countdownLabel})
                               : '듀팅 | Dutying'

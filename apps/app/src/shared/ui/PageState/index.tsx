@@ -1,8 +1,8 @@
 import {cn} from '@dutying/utils/style';
 import {Inbox, RotateCcw, TriangleAlert} from 'lucide-react';
 import type {ButtonHTMLAttributes, ReactNode} from 'react';
+import {BouncingDots} from '@/components/loading-ui/bouncing-dots';
 import Button from '@/shared/ui/form-controls/Button';
-import LoadingSpinner from '@/shared/ui/LoadingSpinner';
 
 type TPageStateTone = 'loading' | 'error' | 'empty';
 type TPageStateLayout = 'screen' | 'panel' | 'inline';
@@ -29,8 +29,8 @@ const containerClassName: Record<TPageStateLayout, string> = {
 };
 const cardClassName: Record<TPageStateTone, string> = {
     loading: 'bg-white',
-    error: 'bg-[#FFF7F8]',
-    empty: 'bg-gray-7',
+    error: '',
+    empty: '',
 };
 const iconWrapperClassName: Record<TPageStateTone, string> = {
     loading: 'bg-main-light text-main-1',
@@ -39,10 +39,6 @@ const iconWrapperClassName: Record<TPageStateTone, string> = {
 };
 
 function PageStateIcon({tone}: {tone: TPageStateTone}) {
-    if (tone === 'loading') {
-        return <LoadingSpinner size={32} />;
-    }
-
     if (tone === 'error') {
         return <TriangleAlert className="size-6" strokeWidth={1.9} aria-hidden="true" />;
     }
@@ -52,6 +48,16 @@ function PageStateIcon({tone}: {tone: TPageStateTone}) {
 
 function PageState({tone, title, description, action, layout = 'panel', className, children}: TPageStateProps) {
     const isLoading = tone === 'loading';
+
+    if (isLoading) {
+        return (
+            <div className={cn(containerClassName[layout], className)}>
+                <div aria-live="polite" className="flex items-center justify-center">
+                    <BouncingDots className="w-[36.3px] text-[#8b5cf6]" />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={cn(containerClassName[layout], className)}>
@@ -72,8 +78,13 @@ function PageState({tone, title, description, action, layout = 'panel', classNam
                         <Button
                             onClick={action.onClick}
                             type="button"
+                            variant={tone === 'error' ? 'link' : 'default'}
                             size="md"
-                            className="h-11 rounded-[14px] px-5 font-semibold"
+                            className={cn(
+                                tone === 'error'
+                                    ? 'h-auto rounded-none px-0 font-semibold text-main-1 no-underline hover:bg-transparent hover:text-main-2 hover:no-underline'
+                                    : 'h-11 rounded-[14px] px-5 font-semibold',
+                            )}
                             disabled={isLoading}
                         >
                             <RotateCcw className="size-[18px]" strokeWidth={2.2} aria-hidden="true" />

@@ -32,7 +32,7 @@ function UploadStep({draft, onUpload, isUploading, uploadError, uploadWarnings}:
                     }
                 }}
             >
-                <p className="font-apple text-[20px] font-medium text-gray-3">근무표 파일을 여기에 드롭하세요</p>
+                <p className="font-apple text-[20px] font-medium text-gray-3">근무표 파일을 여기에 놓아 주세요</p>
                 <input
                     ref={inputRef}
                     data-testid="upload-input"

@@ -128,10 +128,10 @@ const useEditShiftTeam = () => {
 
                 completeAddingNurse(nurse.nurseId);
 
-                toast.success('간호사가 추가되었어요. 이름과 연락처를 확인한 뒤 저장해 주세요.', {position: 'bottom-center'});
+                toast.success('간호사를 추가했어요. 이름과 연락처를 확인한 뒤 저장해 주세요.', {position: 'bottom-center'});
                 await invalidateWard();
             } catch (error) {
-                showActionErrorFeedback(error, '媛꾪샇??異붽????ㅽ뙣?덉뒿?덈떎.');
+                showActionErrorFeedback(error, '간호사를 추가하지 못했어요.');
             } finally {
                 finishAddingNurse();
             }
@@ -150,7 +150,7 @@ const useEditShiftTeam = () => {
                 toast.success('간호사를 삭제했어요.');
                 await invalidateWard();
             } catch (error) {
-                showActionErrorFeedback(error, '媛꾪샇????젣???ㅽ뙣?덉뒿?덈떎.');
+                showActionErrorFeedback(error, '간호사를 삭제하지 못했어요.');
             } finally {
                 finishDeletingNurse();
             }
@@ -197,7 +197,7 @@ const useEditShiftTeam = () => {
                 if (oldReqShift) queryClient.setQueryData(requestShiftQueryKey, oldReqShift);
 
                 failSavingNurse();
-                showActionErrorFeedback(error, '연동 해제에 실패했습니다.');
+                showActionErrorFeedback(error, '연동을 끊지 못했어요.');
                 return false;
             }
         },
@@ -266,7 +266,7 @@ const useEditShiftTeam = () => {
 
                 failSavingNurse();
 
-                showActionErrorFeedback(error, '간호사 정보 수정에 실패했습니다.');
+                showActionErrorFeedback(error, '간호사 정보를 수정하지 못했어요.');
 
                 return false;
             }
@@ -327,7 +327,7 @@ const useEditShiftTeam = () => {
                 if (oldShift) queryClient.setQueryData(shiftQueryKey, oldShift);
                 if (oldReqShift) queryClient.setQueryData(requestShiftQueryKey, oldReqShift);
 
-                showActionErrorFeedback(error, '媛??洹쇰Т ?좏삎 ??μ뿉 ?ㅽ뙣?덉뒿?덈떎.');
+                showActionErrorFeedback(error, '가능한 근무 유형을 저장하지 못했어요.');
             }
         },
         [invalidateWardShiftAndRequest, queryClient, requestShiftQueryKey, shiftQueryKey, wardQueryKey],

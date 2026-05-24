@@ -23,7 +23,7 @@ describe('useRequestShift utils', () => {
         expect(getRequestShiftEditAvailability(2026, 1, now)).toMatchObject({
             canEdit: false,
             status: 'lockedPast',
-            validationMessage: '두 달 전 신청 근무는 수정할 수 없습니다.',
+            validationMessage: '두 달 전 신청 근무는 조회만 가능해요.',
         });
     });
 
@@ -31,7 +31,7 @@ describe('useRequestShift utils', () => {
         expect(getRequestShiftEditAvailability(2026, 5, now)).toMatchObject({
             canEdit: false,
             status: 'lockedFuture',
-            validationMessage: '두 달 뒤 신청 근무는 아직 수정할 수 없습니다.',
+            validationMessage: '두 달 뒤 신청 근무는 아직 작성 전이에요.',
         });
     });
 });

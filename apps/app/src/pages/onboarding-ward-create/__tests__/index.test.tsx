@@ -19,8 +19,8 @@ const typedTranslations = {
     'page.onboardingWardCreate.skillLevelModal.levelLabel': '숙련도',
     'page.onboardingWardCreate.skillLevelModal.categoryLabel': '구분',
     'page.onboardingWardCreate.skillLevelModal.autoAssign': '자동 배정',
-    'page.onboardingWardCreate.skillLevelModal.autoAssignTooltip': '등록된 간호사 목록을 단계별로 분배해서 자동으로 1차 배정합니다.',
-    'page.onboardingWardCreate.skillLevelModal.cancel': '취소',
+    'page.onboardingWardCreate.skillLevelModal.autoAssignTooltip': '등록된 간호사 목록을 단계별로 분배해서 자동으로 1차 배정해요.',
+    'page.onboardingWardCreate.skillLevelModal.cancel': '닫기',
     'page.onboardingWardCreate.skillLevelModal.complete': '완료',
 } as const;
 

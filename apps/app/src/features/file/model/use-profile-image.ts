@@ -28,7 +28,7 @@ const useProfileImage = (initialImg?: {profileImgUrl?: string; defaultProfileImg
                 tags: {feature: 'profile-image', action: 'upload'},
                 extra: {extension},
             });
-            toast.error('프로필 이미지 업로드에 실패했습니다.');
+            toast.error('프로필 이미지를 업로드하지 못했어요.');
         } finally {
             setIsLoading(false);
         }

@@ -100,7 +100,7 @@ describe('make-tutorial', () => {
         expect(lastCall.config.steps[0]?.highlightIds).toEqual(['make_stepper']);
         expect(lastCall.config.steps[3]?.highlightIds).toEqual(['make_requests_step', 'make_requests_decision_panel']);
         expect(lastCall.config.steps[4]?.highlightIds).toEqual(['make_fixed_shifts_step', 'count_by_day']);
-        expect(lastCall.config.steps[5]?.highlightIds).toEqual(['make_ai_autofill_actions', 'make_ai_autofill_status']);
+        expect(lastCall.config.steps[5]?.highlightIds).toEqual(['make_ai_autofill_actions']);
     });
 
     it('aligns tutorial start step with restored make step', () => {

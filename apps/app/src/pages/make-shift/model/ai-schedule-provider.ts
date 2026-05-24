@@ -15,7 +15,7 @@ function getAiScheduleProvider(): TAiScheduleProvider {
 function toErrorMessage(error: unknown): string {
     if (error instanceof Error && error.message) return error.message;
 
-    return 'AI 자동 채우기에 실패했습니다.';
+    return 'AI 자동 채우기를 완료하지 못했어요.';
 }
 
 export async function requestAiSchedule(request: TAiScheduleRequest): Promise<TAiScheduleResult> {

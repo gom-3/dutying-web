@@ -187,7 +187,7 @@ const useRequestShift = (activeEffect = false) => {
                 }
 
                 if (rejectedResults.length > 0) {
-                    showActionErrorFeedback(rejectedResults[0].reason, '신청 처리에 실패했습니다.');
+                    showActionErrorFeedback(rejectedResults[0].reason, '신청을 처리하지 못했어요.');
                 }
 
                 return rejectedResults.length === 0;
@@ -236,7 +236,7 @@ const useRequestShift = (activeEffect = false) => {
 
             const requestDutyRequest = findDutyRequestByFocus(linkedDutyRequestList, requestShift, focus);
 
-            if (requestDutyRequest && requestDutyRequest.wardShiftTypeId !== shiftTypeId && !confirm('신청을 거절하시겠습니까?')) return;
+            if (requestDutyRequest && requestDutyRequest.wardShiftTypeId !== shiftTypeId && !confirm('신청을 거절할까요?')) return;
 
             if (requestDutyRequest) {
                 void acceptRequest(

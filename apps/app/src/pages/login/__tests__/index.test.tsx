@@ -19,14 +19,14 @@ vi.mock('@/shared/hook/use-typed-translation', () => ({
                 'page.login.appleCta': 'Apple 계정으로 시작하기',
                 'page.login.termsPrefix': '버튼을 누르면',
                 'page.login.termsOfService': '서비스 약관,',
-                'page.login.privacyPolicy': '개인정보 취급 방침',
-                'page.login.termsSuffix': '에 동의하신 것으로 간주합니다.',
+                'page.login.privacyPolicy': '개인정보 처리방침',
+                'page.login.termsSuffix': '에 동의한 것으로 간주해요.',
                 'page.login.demoExpired.title': '회원가입하고 이어서 사용하기',
                 'page.login.demoExpired.description':
-                    '체험 시간은 종료되었지만, 지금 가입하면 정식 계정 등록 절차를 바로 시작할 수 있어요.',
+                    '체험 시간은 끝났지만, 지금 가입하면 정식 계정 등록 절차를 바로 시작할 수 있어요.',
                 'page.login.demoExpired.bannerTitle': '체험 종료 후 전환 안내',
                 'page.login.demoExpired.bannerDescription':
-                    '정식 전환 API는 준비 중이라, 이번 단계에서는 로그인 후 회원가입 절차로 연결해 드려요.',
+                    '정식 전환 API는 준비 중이라, 이번 단계에서는 로그인 후 회원가입 절차로 연결해요.',
             };
 
             return translations[key] ?? key;

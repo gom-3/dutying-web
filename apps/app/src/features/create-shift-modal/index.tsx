@@ -33,19 +33,19 @@ function CreateShiftModal({open, shiftType, close, onSubmit, onDelete}: ICreateS
     const modalRoot = document.querySelector('#modal-root');
     const handleSubmit = () => {
         if (writeShift.name === '') {
-            setValidationMessage('근무 이름을 입력해주세요.');
+            setValidationMessage('근무 이름을 입력해 주세요.');
 
             return;
         }
 
         if (!writeShift.isOff && (writeShift.startTime === '' || writeShift.endTime === '')) {
-            setValidationMessage('근무 시간을 입력해주세요.');
+            setValidationMessage('근무 시간을 입력해 주세요.');
 
             return;
         }
 
         if (writeShift.shortName === '') {
-            setValidationMessage('근무 약자를 입력해주세요.');
+            setValidationMessage('근무 약자를 입력해 주세요.');
 
             return;
         }
@@ -115,7 +115,7 @@ function CreateShiftModal({open, shiftType, close, onSubmit, onDelete}: ICreateS
                           <p className="mt-8.75 mb-[.625rem] font-apple text-base text-sub-3">근무명</p>
                           <TextField
                               className="h-13.5 font-apple text-[1.5rem] font-medium text-sub-1"
-                              placeholder={writeShift.isOff ? '휴가 명을 작성하세요.' : '근무 명을 작성하세요.'}
+                              placeholder={writeShift.isOff ? '휴가 명을 작성해 주세요.' : '근무 명을 작성해 주세요.'}
                               value={writeShift.name}
                               onChange={(e) => {
                                   setWriteShift({...writeShift, name: e.target.value});
@@ -127,7 +127,7 @@ function CreateShiftModal({open, shiftType, close, onSubmit, onDelete}: ICreateS
                           <div className="flex items-center gap-4">
                               <p className="mt-7.5 mb-[.625rem] font-apple text-base text-sub-3">약자</p>
                               <p className="mt-7.5 mb-[.625rem] font-apple text-[.75rem] text-main-2">
-                                  * 기본 근무 유형인 D, E, N, O의 약자는 수정하실 수 없습니다
+                                  * 기본 근무 유형인 D, E, N, O의 약자는 그대로 유지해 주세요
                               </p>
                           </div>
                           <TextField

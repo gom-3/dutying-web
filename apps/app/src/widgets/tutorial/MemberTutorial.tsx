@@ -25,13 +25,13 @@ const MemberTutorial = () => {
                 {
                     highlightIds: ['ward_info'],
                     title: '간호사 관리하기',
-                    info: '이곳에서 병동의 정보를 확인할 수 있어요',
+                    info: '여기에서 병동 정보를 확인할 수 있어요',
                     infoBoxAlignment: 'left',
                 },
                 {
                     highlightIds: ['shift_team_list'],
                     title: '간호사 관리하기',
-                    info: '이곳에서 근무팀에 속한 간호사의 정보를 확인할 수 있어요.',
+                    info: '여기에서 근무팀에 속한 간호사 정보를 확인할 수 있어요.',
                     infoBoxAlignment: 'left',
                     onNextStep: () => {
                         const firstNurseId = shiftTeams?.[0]?.nurses?.[0]?.nurseId;
@@ -44,7 +44,7 @@ const MemberTutorial = () => {
                 {
                     highlightIds: ['nurse_sample'],
                     title: '간호사 관리하기',
-                    info: '간호사 이름을 눌러 편집해보세요!',
+                    info: '간호사 이름을 눌러 편집해 보세요.',
                     infoBoxAlignment: 'center',
                     onPrevStep: () => {
                         selectNurse(null);
@@ -53,8 +53,8 @@ const MemberTutorial = () => {
                 {
                     highlightIds: ['nurse_edit_drawer'],
                     title: '간호사 관리하기',
-                    info: '편집을 완료하고 하단에 저장을 눌러주세요! \n더 자세한 가이드는 메뉴얼 문서를 참고해주세요!',
-                    ctaText: '메뉴얼 보러가기',
+                    info: '편집을 마치면 하단의 저장을 눌러 주세요.\n더 자세한 가이드는 매뉴얼 문서를 참고해 주세요.',
+                    ctaText: '매뉴얼 보러가기',
                     ctaUrl: RUNTIME_CONFIG.docs.memberTutorial,
                     infoBoxAlignment: 'right',
                     onNextStep: () => {

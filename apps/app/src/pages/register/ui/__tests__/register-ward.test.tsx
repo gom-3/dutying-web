@@ -47,7 +47,7 @@ describe('RegisterWard', () => {
     it('renders an inline validation message and blocks submission when shift validation fails', async () => {
         const user = userEvent.setup();
 
-        mockGetWardShiftValidationMessage.mockReturnValue('근무 이름을 입력해주세요.');
+        mockGetWardShiftValidationMessage.mockReturnValue('근무 이름을 입력해 주세요.');
 
         render(<RegisterWard />);
 
@@ -56,6 +56,6 @@ describe('RegisterWard', () => {
         await user.click(screen.getByRole('button', {name: '저장'}));
 
         expect(mockCreateWard).not.toHaveBeenCalled();
-        expect(screen.getByRole('alert')).toHaveTextContent('근무 이름을 입력해주세요.');
+        expect(screen.getByRole('alert')).toHaveTextContent('근무 이름을 입력해 주세요.');
     });
 });

@@ -110,7 +110,7 @@ describe('getNurseDrawerFeedback', () => {
                 saveStatus: 'success',
                 isDirty: false,
             }).title,
-        ).toBe('저장이 완료되었어요');
+        ).toBe('저장을 마쳤어요');
     });
 
     it('warns about losing edits when the drawer is closed with unsaved changes', () => {

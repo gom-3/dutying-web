@@ -39,7 +39,7 @@ const MakeTutorial = () => {
                 {
                     highlightIds: ['make_constraints_step'],
                     title: '근무표 만들기',
-                    info: '다음은 제약 조건을 점검하는 단계입니다. 중요한 규칙 순서를 조정하고 필요한 값도 함께 바꿀 수 있어요.',
+                    info: '다음은 제약 조건을 점검하는 단계예요. 중요한 규칙 순서를 조정하고 필요한 값도 함께 바꿀 수 있어요.',
                     infoBoxAlignment: 'right',
                     onPrevStep: useCase.prev,
                     onNextStep: useCase.next,
@@ -55,13 +55,13 @@ const MakeTutorial = () => {
                 {
                     highlightIds: ['make_fixed_shifts_step', 'count_by_day'],
                     title: '근무표 만들기',
-                    info: '고정 근무를 직접 배치하는 단계입니다. 달력에서 셀을 선택해 근무를 입력하고 하단 집계로 채움 상태를 확인할 수 있어요.',
+                    info: '고정 근무를 직접 배치하는 단계예요. 달력에서 셀을 선택해 근무를 입력하고 하단 집계로 채움 상태를 확인할 수 있어요.',
                     infoBoxAlignment: 'right',
                     onPrevStep: useCase.prev,
                     onNextStep: useCase.next,
                 },
                 {
-                    highlightIds: ['make_ai_autofill_actions', 'make_ai_autofill_status'],
+                    highlightIds: ['make_ai_autofill_actions'],
                     title: '근무표 만들기',
                     info: '마지막으로 자동 채우기 결과와 오류 표시를 확인한 뒤 근무표를 확정해요.',
                     infoBoxAlignment: 'right',

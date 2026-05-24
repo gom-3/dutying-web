@@ -77,7 +77,7 @@ function OnboardingWardCreatePage() {
         }
 
         if (isSuccess) {
-            return '이미 병동 생성이 완료됐어요.';
+            return '이미 병동 생성을 마쳤어요.';
         }
 
         if (isUploadStep && !hasUploadedFile) {
@@ -100,7 +100,7 @@ function OnboardingWardCreatePage() {
         }
 
         if (codes.has('empty-team')) {
-            return '팀이 없어요. 팀을 추가해 주세요.';
+            return '팀을 추가하면 병동을 만들 수 있어요.';
         }
 
         if (codes.has('missing-nurse-name') || codes.has('invalid-nurse-name')) {
@@ -278,7 +278,7 @@ function OnboardingWardCreatePage() {
                                       className="rounded-[8px] px-4 py-2 font-apple text-[14px] font-medium text-gray-3 transition-colors hover:bg-gray-7"
                                       onClick={() => setShowDeleteTeamModal(false)}
                                   >
-                                      취소
+                                      닫기
                                   </button>
                                   <button
                                       type="button"

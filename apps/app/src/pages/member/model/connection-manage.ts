@@ -69,16 +69,16 @@ function getObjectParticle(word: string) {
 
 function getLinkFailureDescription(targetLabel?: string | null) {
     if (!targetLabel) {
-        return '선택한 간호사 계정에 연결을 실패했어요. 다시 시도해 주세요.';
+        return '선택한 간호사 계정에 연결하지 못했어요. 다시 시도해 주세요.';
     }
 
     const [targetNurseName, targetTeamName] = targetLabel.split('·').map((text) => text.trim());
 
     if (targetNurseName && targetTeamName) {
-        return `${targetTeamName}의 ${targetNurseName} 계정에 연결을 실패했어요. 다시 시도해 주세요.`;
+        return `${targetTeamName}의 ${targetNurseName} 계정에 연결하지 못했어요. 다시 시도해 주세요.`;
     }
 
-    return `${targetLabel} 계정에 연결을 실패했어요. 다시 시도해 주세요.`;
+    return `${targetLabel} 계정에 연결하지 못했어요. 다시 시도해 주세요.`;
 }
 
 export function getConnectionManageResultCopy({
@@ -95,8 +95,8 @@ export function getConnectionManageResultCopy({
             title: connectMode === 'link' ? '기존 계정에 연결하고 있어요' : '선택한 팀으로 추가하고 있어요',
             description:
                 connectMode === 'link'
-                    ? `${safeWaitingNurseName} 신청 정보를 ${safeTargetLabel} 계정에 연결하고 있습니다. 잠시만 기다려 주세요.`
-                    : `${safeWaitingNurseName}님을 ${safeTargetLabel} 팀으로 추가하고 있습니다. 잠시만 기다려 주세요.`,
+                    ? `${safeWaitingNurseName} 신청 정보를 ${safeTargetLabel} 계정에 연결하고 있어요. 잠시만 기다려 주세요.`
+                    : `${safeWaitingNurseName}님을 ${safeTargetLabel} 팀으로 추가하고 있어요. 잠시만 기다려 주세요.`,
         };
     }
 
@@ -105,13 +105,13 @@ export function getConnectionManageResultCopy({
             title: connectMode === 'link' ? '기존 계정과 연결했어요' : '팀 추가를 완료했어요',
             description:
                 connectMode === 'link'
-                    ? `${safeWaitingNurseName} 신청을 ${safeTargetLabel} 계정에 연결했습니다.`
-                    : `${safeWaitingNurseName}님을 ${safeTargetLabel} 팀에 추가했습니다.`,
+                    ? `${safeWaitingNurseName} 신청을 ${safeTargetLabel} 계정에 연결했어요.`
+                    : `${safeWaitingNurseName}님을 ${safeTargetLabel} 팀에 추가했어요.`,
         };
     }
 
     return {
-        title: connectMode === 'link' ? '기존 계정 연결에 실패했어요' : '팀 추가에 실패했어요',
+        title: connectMode === 'link' ? '기존 계정에 연결하지 못했어요' : '팀에 추가하지 못했어요',
         description:
             connectMode === 'link'
                 ? getLinkFailureDescription(targetLabel)

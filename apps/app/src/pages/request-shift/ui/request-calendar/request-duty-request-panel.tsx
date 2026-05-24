@@ -162,6 +162,7 @@ export default function RequestDutyRequestPanel({
         () => sortedRequestList.filter((request) => request.isAccepted === null).sort(sortByRequestDate),
         [sortedRequestList],
     );
+    const panelDisplayTitle = canEdit ? `${panelTitle} (${pendingRequestList.length})` : panelTitle;
     const requestDateGroups = useMemo(() => {
         const groupMap = new Map<number, TDutyRequest[]>();
 
@@ -335,14 +336,14 @@ export default function RequestDutyRequestPanel({
     };
 
     return (
-        <aside id="nurse_request_list" className="h-fit w-full rounded-[18px] bg-white" aria-label={panelTitle}>
+        <aside id="nurse_request_list" className="h-fit w-full rounded-[18px] bg-white" aria-label={panelDisplayTitle}>
             <div className="px-2.5 pt-2.5">
                 <div className="min-w-0">
-                    <p className="font-apple text-[17px] font-semibold text-sub-1">{panelTitle}</p>
+                    <p className="font-apple text-[17px] font-semibold text-sub-1">{panelDisplayTitle}</p>
                 </div>
                 {canEdit && hasAnyRequest ? (
                     <div
-                        className="mt-2 grid w-full grid-cols-4 rounded-[12px] bg-[#F2F4F6] p-0.5"
+                        className="mt-3 grid w-full grid-cols-4 rounded-[12px] bg-[#F2F4F6] p-0.5"
                         aria-label={t('page.request.panel.viewModeLabel')}
                     >
                         {reviewModeOptions.map((option) => (
@@ -371,7 +372,7 @@ export default function RequestDutyRequestPanel({
                 ) : null}
             </div>
 
-            <div className="px-2 pt-2 pb-2">
+            <div className="px-2 pt-3 pb-2">
                 {dutyRequestStatus === 'pending' ? (
                     <PageState
                         tone="loading"

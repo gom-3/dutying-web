@@ -29,13 +29,13 @@ axiosInstance.interceptors.response.use(
                 }
             })
             .with(400, 404, () => {
-                toast.error(message ?? '에러가 발생했습니다. 다시 시도해주세요.');
+                toast.error(message ?? '문제가 생겼어요. 다시 시도해 주세요.');
             })
             .otherwise(() => {
                 // no-op
             });
 
-        const apiError = new Error(message ?? '알 수 없는 오류가 발생했습니다.') as Error & {
+        const apiError = new Error(message ?? '알 수 없는 오류가 발생했어요.') as Error & {
             code: number;
             originalError: unknown;
         };

@@ -106,6 +106,6 @@ describe('useEditWard', () => {
         expect(mockConnectWaitingNurses).toHaveBeenCalledWith(1, 7, 99);
         expect(mockInvalidateQueries).not.toHaveBeenCalled();
         expect(mockToastSuccess).not.toHaveBeenCalled();
-        expect(mockToastError).toHaveBeenCalledWith('기존 간호사 계정 연결에 실패했습니다.');
+        expect(mockToastError).toHaveBeenCalledWith('기존 간호사 계정에 연결하지 못했어요.');
     });
 });

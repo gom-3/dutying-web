@@ -7,6 +7,7 @@ import {AuthLayout, MainLayout, NotAuthLayout} from '@/widgets/layouts';
 
 const LandingPage = lazy(() => import('@/pages/landing'));
 const RefreshPage = lazy(() => import('@/pages/refresh'));
+const UiPreviewPage = lazy(() => import('@/pages/ui-preview'));
 const RedirectPage = lazy(() => import('@/pages/login/redirect-page.tsx'));
 const LoginPage = lazy(() => import('@/pages/login'));
 const RegisterPage = lazy(() => import('@/pages/register'));
@@ -16,6 +17,7 @@ const OnboardingWardCreatePage = lazy(() => import('@/pages/onboarding-ward-crea
 const MakeShiftPage = lazy(() => import('@/pages/make-shift'));
 const DutyPage = lazy(() => import('@/pages/duty'));
 const RequestShiftPage = lazy(() => import('@/pages/request-shift'));
+const BoardPage = lazy(() => import('@/pages/board'));
 const MemberPage = lazy(() => import('@/pages/member'));
 const WardSettingsPage = lazy(() => import('@/pages/ward-settings'));
 const ProfilePage = lazy(() => import('@/pages/profile'));
@@ -37,6 +39,7 @@ export const Router = () => {
             <Routes>
                 <Route path={ROUTE.ROOT} element={<LandingPage />} />
                 <Route path={ROUTE.REFRESH} element={<RefreshPage />} />
+                {import.meta.env.DEV ? <Route path={ROUTE.UI_PREVIEW} element={<UiPreviewPage />} /> : null}
                 {/* 인증된 사용자가 접근할 수 없는 페이지 */}
                 <Route element={<NotAuthLayout />}>
                     <Route path={ROUTE.REDIRECT} element={<RedirectPage />} />
@@ -52,6 +55,7 @@ export const Router = () => {
                         <Route path={ROUTE.MAKE} element={<MakeShiftPage />} />
                         <Route path={ROUTE.DUTY} element={<DutyPage />} />
                         <Route path={ROUTE.REQUEST} element={<RequestShiftPage />} />
+                        <Route path={ROUTE.BOARD} element={<BoardPage />} />
                         <Route path={ROUTE.MEMBER} element={<MemberPage />} />
                         <Route path={ROUTE.WARD_SETTINGS} element={<WardSettingsPage />} />
                         <Route path={ROUTE.PROFILE} element={<ProfilePage />} />

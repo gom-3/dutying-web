@@ -54,7 +54,7 @@ const useEditWard = () => {
                 await WardAPI.editWard(wardId, editWardDTO);
                 await queryClient.invalidateQueries({queryKey: wardQueryKey});
             } catch (error) {
-                showActionErrorFeedback(error, '근무 설정 수정에 실패했습니다.');
+                showActionErrorFeedback(error, '근무 설정을 수정하지 못했어요.');
             }
         },
         [queryClient, wardId, wardQueryKey],
@@ -100,7 +100,7 @@ const useEditWard = () => {
 
                 return true;
             } catch (error) {
-                showActionErrorFeedback(error, '팀 추가에 실패했습니다.');
+                showActionErrorFeedback(error, '팀을 추가하지 못했어요.');
 
                 return false;
             }
@@ -120,7 +120,7 @@ const useEditWard = () => {
 
                 return true;
             } catch (error) {
-                showActionErrorFeedback(error, '기존 간호사 계정 연결에 실패했습니다.');
+                showActionErrorFeedback(error, '기존 간호사 계정에 연결하지 못했어요.');
 
                 return false;
             }

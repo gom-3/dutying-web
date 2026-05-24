@@ -92,7 +92,7 @@ function RegisterNurse() {
 
             setPhotoImage(compressedFile);
         } catch (_error) {
-            toast.error('프로필 이미지 처리에 실패했습니다.');
+            toast.error('프로필 이미지를 처리하지 못했어요.');
         }
     };
 
@@ -213,7 +213,7 @@ function RegisterNurse() {
                         placeholder="YYYY-MM-DD"
                         className="h-15 py-4.25 font-apple text-[1.5rem] font-medium text-sub-1 placeholder:text-center"
                         error={match(errors.employmentDate?.type)
-                            .with('matches', () => 'YYYY-MM-DD 형식으로 입력해주세요.')
+                            .with('matches', () => 'YYYY-MM-DD 형식으로 입력해 주세요.')
                             .otherwise(() => undefined)}
                         {...register('employmentDate')}
                     />

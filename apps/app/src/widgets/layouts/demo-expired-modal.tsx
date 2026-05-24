@@ -22,7 +22,7 @@ export function DemoExpiredModal({open, onPrimaryAction, onSecondaryAction}: IDe
                     체험 종료
                 </div>
                 <h2 id="demo-expired-modal-title" className="mt-5 font-apple text-[2rem] font-semibold tracking-[-0.02em] text-sub-1">
-                    체험 시간이 종료되었어요
+                    체험 시간이 끝났어요
                 </h2>
                 <p id="demo-expired-modal-description" className="mt-3 font-apple text-base leading-7 text-gray-3">
                     지금 회원가입을 진행하면 정식 계정 등록 절차를 바로 이어갈 수 있어요. 체험 계정 전환 API는 준비 중이라, 이번 단계에서는
@@ -31,7 +31,7 @@ export function DemoExpiredModal({open, onPrimaryAction, onSecondaryAction}: IDe
                 <div className="mt-6 rounded-[20px] border border-gray-6 bg-[#F8F9FC] px-5 py-4">
                     <p className="font-apple text-sm font-semibold text-sub-2.5">지금 가능한 다음 단계</p>
                     <p className="mt-2 font-apple text-sm leading-6 text-gray-3">
-                        회원가입 또는 로그인 후 병동 연결 절차를 진행할 수 있어요. 체험 데이터 승계는 DUT-948 연동 이후 이어질 예정입니다.
+                        회원가입 또는 로그인 후 병동 연결 절차를 진행할 수 있어요. 체험 데이터 승계는 DUT-948 연동 이후 이어질 예정이에요.
                     </p>
                 </div>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">

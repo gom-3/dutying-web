@@ -115,7 +115,7 @@ describe('useEditShiftTeam', () => {
         expect(result.current.state.nurseSaveStatus).toBe('error');
         expect(result.current.state.isNurseDraftDirty).toBe(true);
         expect(result.current.state.selectedNurseDrawerMode).toBe('create');
-        expect(mockToastError).toHaveBeenCalledWith('간호사 정보 수정에 실패했습니다.');
+        expect(mockToastError).toHaveBeenCalledWith('간호사 정보를 수정하지 못했어요.');
         expect(mockInvalidateQueries).not.toHaveBeenCalled();
     });
 
@@ -130,7 +130,7 @@ describe('useEditShiftTeam', () => {
 
         expect(result.current.state.isAddingNurse).toBe(false);
         expect(result.current.state.selectedNurse).toBeUndefined();
-        expect(mockToastError).toHaveBeenCalledWith('간호사 추가에 실패했습니다.');
+        expect(mockToastError).toHaveBeenCalledWith('간호사를 추가하지 못했어요.');
         expect(mockToastSuccess).not.toHaveBeenCalled();
     });
 
@@ -166,7 +166,7 @@ describe('useEditShiftTeam', () => {
         });
 
         expect(result.current.state.isAddingNurse).toBe(false);
-        expect(mockToastSuccess).toHaveBeenCalledWith('새 간호사를 추가했어요. 이름과 연락처를 확인한 뒤 저장해 주세요.', {
+        expect(mockToastSuccess).toHaveBeenCalledWith('간호사를 추가했어요. 이름과 연락처를 확인한 뒤 저장해 주세요.', {
             position: 'bottom-center',
         });
     });
@@ -183,7 +183,7 @@ describe('useEditShiftTeam', () => {
 
         expect(result.current.state.isDeletingNurse).toBe(false);
         expect(result.current.state.selectedNurse?.nurseId).toBe(11);
-        expect(mockToastError).toHaveBeenCalledWith('간호사 삭제에 실패했습니다.');
+        expect(mockToastError).toHaveBeenCalledWith('간호사를 삭제하지 못했어요.');
         expect(mockToastSuccess).not.toHaveBeenCalled();
     });
 

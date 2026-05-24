@@ -52,7 +52,7 @@ function NurseEditToggleRow({title, checked, onToggle, borderClassName}: TNurseE
                 </div>
             ) : (
                 <div className="ml-auto flex items-center gap-[.625rem]">
-                    <p className="font-apple text-[.75rem] text-sub-3">해당 안됨</p>
+                    <p className="font-apple text-[.75rem] text-sub-3">해당 안 됨</p>
                     <UncheckedIcon2 className="h-5 w-5 cursor-pointer" onClick={onToggle} />
                 </div>
             )}
@@ -93,7 +93,7 @@ export function NurseEditForm({selectedNurse, writeNurse, nameRef, onClose, onCh
                 </div>
             </div>
             <div className="h-[.3125rem] w-full bg-sub-5" />
-            <NurseEditFieldSection title="입사 년도" description="* 해당 병원에 입사한 년도를 작성해주세요.">
+            <NurseEditFieldSection title="입사 년도" description="* 해당 병원에 입사한 년도를 작성해 주세요.">
                 <TextField
                     type="date"
                     className="h-10 font-poppins text-[1.25rem] text-sub-3"
@@ -116,7 +116,7 @@ export function NurseEditForm({selectedNurse, writeNurse, nameRef, onClose, onCh
                     value={writeNurse?.phoneNum ?? ''}
                 />
             </NurseEditFieldSection>
-            <NurseEditFieldSection title="가능 근무" description="* 가능 근무를 모두 선택해주세요.">
+            <NurseEditFieldSection title="가능 근무" description="* 가능 근무를 모두 선택해 주세요.">
                 <div className="flex gap-5.5">
                     {writeNurse?.nurseShiftTypes.slice(0, 3).map(({nurseShiftTypeId, isPossible, name}) => (
                         <div

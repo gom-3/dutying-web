@@ -420,14 +420,14 @@ function MemberSkillLevelModal({open, config, onClose, onSave, onDisable}: IMemb
                         onClick={(event) => event.stopPropagation()}
                     >
                         <p className="font-apple text-[22px] font-semibold text-sub-1">숙련도 기능을 끌까요?</p>
-                        <p className="mt-2 font-apple text-[16px] text-gray-3">끄면 숙련도 표시/선택/정렬이 모두 빠집니다</p>
+                        <p className="mt-2 font-apple text-[16px] text-gray-3">끄면 숙련도 표시, 선택, 정렬을 잠시 멈춰요.</p>
                         <div className="mt-6 flex items-center gap-3">
                             <button
                                 type="button"
                                 className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                                 onClick={() => setShowDisableConfirmModal(false)}
                             >
-                                취소
+                                닫기
                             </button>
                             <button
                                 type="button"

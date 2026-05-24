@@ -374,7 +374,7 @@ function NurseDetailPanel({
                             <p className="font-apple text-[20px] font-semibold text-sub-1">연동을 끊을까요?</p>
                             <p className="mt-2 font-apple text-[15px] text-gray-3">
                                 <span className="font-semibold text-sub-1">{writeNurse.name || '선택한 간호사'}</span>
-                                {' 의 앱 연동이 해제됩니다.'}
+                                {' 의 앱 연동을 끊어요.'}
                             </p>
                             <div className="mt-6 flex items-center gap-3">
                                 <button
@@ -382,7 +382,7 @@ function NurseDetailPanel({
                                     className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                                     onClick={() => setDisconnectConfirmModalOpen(false)}
                                 >
-                                    취소
+                                    닫기
                                 </button>
                                 <button
                                     type="button"
@@ -419,7 +419,7 @@ function NurseDetailPanel({
                                     className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                                     onClick={() => setDeleteConfirmModalOpen(false)}
                                 >
-                                    취소
+                                    닫기
                                 </button>
                                 <button
                                     type="button"

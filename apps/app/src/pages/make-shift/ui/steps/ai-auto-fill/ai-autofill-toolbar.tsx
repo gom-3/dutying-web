@@ -1,7 +1,9 @@
 import {cn} from '@dutying/utils/style';
-import {HistoryBackIcon, HistoryNextIcon} from '@/shared/assets/svg';
+import {AlertTriangle, Check, Eye, EyeOff, Redo2, Undo2, type LucideIcon} from 'lucide-react';
+import type {ReactNode} from 'react';
+import aiAutofillSparkleIcon from '@/shared/assets/images/ai-autofill-sparkle.png';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
-import {getAiAutofillActionLabel, type TAiAutofillStatus} from '../../../model/ai-autofill-state';
+import {type TAiAutofillStatus} from '../../../model/ai-autofill-state';
 
 type TAiAutofillToolbarProps = {
     autoFillEnabled: boolean;
@@ -20,9 +22,6 @@ type TAiAutofillToolbarProps = {
     canConfirm: boolean;
 };
 
-/**
- * 상단 툴바: 신청 근무 확정 탭과 같이 제목 + 보조 문구(좌), 컨트롤(우).
- */
 export function AiAutofillToolbar({
     autoFillEnabled,
     onToggleAutoFill,
@@ -34,16 +33,13 @@ export function AiAutofillToolbar({
     onRedo,
     onAiFill,
     isAiGenerating,
-    aiStatus,
-    hasCompletedAiFill,
     onConfirm,
     canConfirm,
 }: TAiAutofillToolbarProps) {
     const {t} = useTypedTranslation();
-    const aiActionKey = getAiAutofillActionLabel(aiStatus, hasCompletedAiFill);
 
     return (
-        <div className="ai-autofill-toolbar flex w-full min-w-0 flex-wrap items-start justify-between gap-3">
+        <div className="ai-autofill-toolbar flex w-full min-w-0 flex-wrap items-center justify-between gap-3">
             <div className="ai-autofill-toolbar__titles min-w-0">
                 <h1 className="ai-autofill-toolbar__title shrink-0 font-apple text-[28px] leading-tight font-bold whitespace-nowrap text-sub-1">
                     {t('page.makeShift.aiRefill.toolbarTitle')}
@@ -53,59 +49,53 @@ export function AiAutofillToolbar({
                 </p>
             </div>
 
-            <div id="make_ai_autofill_actions" className="ai-autofill-toolbar__actions flex shrink-0 items-center gap-2">
-                <ToggleChip
-                    className="ai-autofill-toolbar__toggle ai-autofill-toolbar__toggle--auto-fill"
-                    active={autoFillEnabled}
-                    onClick={onToggleAutoFill}
-                >
-                    {t(autoFillEnabled ? 'page.makeShift.aiRefill.viewAll' : 'page.makeShift.aiRefill.fixedOnly')}
-                </ToggleChip>
+            <div
+                id="make_ai_autofill_actions"
+                className="ai-autofill-toolbar__actions ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2"
+            >
+                <div className="ai-autofill-toolbar__view-actions flex min-h-[43px] shrink-0 items-center gap-1 rounded-[13px] bg-gray-7 px-1">
+                    <ToggleIconButton
+                        className="ai-autofill-toolbar__toggle ai-autofill-toolbar__toggle--auto-fill"
+                        active={autoFillEnabled}
+                        onClick={onToggleAutoFill}
+                        ariaLabel={t(autoFillEnabled ? 'page.makeShift.aiRefill.viewAll' : 'page.makeShift.aiRefill.fixedOnly')}
+                        icon={autoFillEnabled ? Eye : EyeOff}
+                    />
 
-                <ToggleChip
-                    className="ai-autofill-toolbar__toggle ai-autofill-toolbar__toggle--faults"
-                    active={showFaults}
-                    onClick={onToggleFaults}
-                >
-                    <span
-                        className={cn(
-                            'ai-autofill-toolbar__fault-swatches flex shrink-0 items-center gap-[1px] transition-opacity',
-                            showFaults ? 'opacity-100' : 'opacity-0',
-                        )}
-                        aria-hidden
-                    >
-                        <span className="ai-autofill-toolbar__fault-swatch--error size-[clamp(8px,0.65vw,12px)] rounded-[2px] bg-[#FF000080]" />
-                        <span className="ai-autofill-toolbar__fault-swatch--medium size-[clamp(8px,0.65vw,12px)] rounded-[2px] bg-[#FF88004D]" />
-                        <span className="ai-autofill-toolbar__fault-swatch--warning size-[clamp(8px,0.65vw,12px)] rounded-[2px] bg-[#EEFF004D]" />
-                    </span>
-                    {t(showFaults ? 'page.makeShift.aiRefill.showingFaults' : 'page.makeShift.aiRefill.hidingFaults')}
-                </ToggleChip>
+                    <ToggleIconButton
+                        className="ai-autofill-toolbar__toggle ai-autofill-toolbar__toggle--faults"
+                        active={showFaults}
+                        onClick={onToggleFaults}
+                        ariaLabel={t(showFaults ? 'page.makeShift.aiRefill.showingFaults' : 'page.makeShift.aiRefill.hidingFaults')}
+                        icon={AlertTriangle}
+                    />
+                </div>
 
-                <span className="ai-autofill-toolbar__divider mx-1 inline-flex h-5 w-px shrink-0 bg-gray-6" aria-hidden />
-
-                <span className="ai-autofill-toolbar__history flex items-center gap-[2px]">
-                    <IconButton className="ai-autofill-toolbar__history-undo" onClick={onUndo} disabled={!canUndo} ariaLabel="undo">
-                        <HistoryBackIcon className="size-full" />
+                <span className="ai-autofill-toolbar__history flex min-h-[43px] items-center gap-1 rounded-[13px] bg-gray-7 px-1">
+                    <IconButton className="ai-autofill-toolbar__history-undo" onClick={onUndo} disabled={!canUndo} ariaLabel="Undo">
+                        <Undo2 className="size-3.5" aria-hidden />
                     </IconButton>
-                    <IconButton className="ai-autofill-toolbar__history-redo" onClick={onRedo} disabled={!canRedo} ariaLabel="redo">
-                        <HistoryNextIcon className="size-full" />
+                    <IconButton className="ai-autofill-toolbar__history-redo" onClick={onRedo} disabled={!canRedo} ariaLabel="Redo">
+                        <Redo2 className="size-3.5" aria-hidden />
                     </IconButton>
                 </span>
-
-                <span className="ai-autofill-toolbar__divider mx-1 inline-flex h-5 w-px shrink-0 bg-gray-6" aria-hidden />
 
                 <button
                     type="button"
                     onClick={onAiFill}
                     disabled={isAiGenerating}
+                    aria-busy={isAiGenerating}
                     className={cn(
                         'ai-autofill-toolbar__cta ai-autofill-toolbar__cta--ai-fill',
-                        'box-border inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-[12px] bg-gray-7 px-4 py-0',
-                        'font-apple text-sm leading-none font-semibold whitespace-nowrap text-sub-1',
-                        'hover:bg-gray-6/60 disabled:cursor-not-allowed disabled:opacity-60',
+                        'inline-flex min-h-[43px] min-w-[142px] cursor-pointer items-center justify-center gap-2 rounded-[13px] px-4 py-0',
+                        'bg-[linear-gradient(90deg,#C241F4_0%,#6B45F4_100%)] font-apple text-[13px] leading-none font-bold whitespace-nowrap text-white',
+                        'transition-[filter,transform] duration-150',
+                        'hover:brightness-105 focus-visible:ring-2 focus-visible:ring-[#A978FF] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99] active:brightness-95',
+                        'disabled:cursor-not-allowed disabled:opacity-60 disabled:grayscale',
                     )}
                 >
-                    {t(`page.makeShift.aiRefill.${aiActionKey}`)}
+                    <img src={aiAutofillSparkleIcon} alt="" aria-hidden className="size-4 shrink-0 object-contain" />
+                    <span className="truncate">AI 자동 채우기</span>
                 </button>
 
                 <button
@@ -114,11 +104,13 @@ export function AiAutofillToolbar({
                     disabled={!canConfirm}
                     className={cn(
                         'ai-autofill-toolbar__cta ai-autofill-toolbar__cta--confirm',
-                        'box-border inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-[12px] bg-[#0A0F15] px-4 py-0',
-                        'font-apple text-sm leading-none font-semibold whitespace-nowrap text-white',
-                        'disabled:cursor-not-allowed disabled:opacity-50',
+                        'inline-flex min-h-[43px] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[13px] bg-[#34383F] px-4 py-0',
+                        'font-apple text-[13px] leading-none font-bold whitespace-nowrap text-white transition-colors duration-150',
+                        'hover:bg-[#2B3036] focus-visible:ring-2 focus-visible:ring-main-2 focus-visible:ring-offset-2 focus-visible:outline-none active:bg-[#24282E]',
+                        'disabled:cursor-not-allowed disabled:bg-gray-5 disabled:text-white/70',
                     )}
                 >
+                    <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
                     {t('page.makeShift.aiRefill.confirm')}
                 </button>
             </div>
@@ -126,29 +118,33 @@ export function AiAutofillToolbar({
     );
 }
 
-function ToggleChip({
+function ToggleIconButton({
     active,
     onClick,
+    ariaLabel,
     className,
-    children,
+    icon: Icon,
 }: {
     active: boolean;
     onClick: () => void;
+    ariaLabel: string;
     className?: string;
-    children: React.ReactNode;
+    icon: LucideIcon;
 }) {
     return (
         <button
             type="button"
             onClick={onClick}
+            aria-label={ariaLabel}
+            aria-pressed={active}
             className={cn(
-                'box-border inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] whitespace-nowrap',
-                'px-3 py-0 font-apple text-[12px] leading-none font-semibold',
-                active ? 'bg-sub-1 text-white' : 'bg-gray-7 text-gray-4 opacity-90',
+                'grid size-9 shrink-0 cursor-pointer place-items-center rounded-[10px] transition-colors duration-150',
+                'hover:bg-white hover:text-sub-1 focus-visible:ring-2 focus-visible:ring-main-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                active ? 'bg-white text-sub-1' : 'text-gray-3',
                 className,
             )}
         >
-            {children}
+            <Icon className="size-3.5" aria-hidden />
         </button>
     );
 }
@@ -164,7 +160,7 @@ function IconButton({
     disabled?: boolean;
     ariaLabel: string;
     className?: string;
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     return (
         <button
@@ -173,7 +169,9 @@ function IconButton({
             disabled={disabled}
             aria-label={ariaLabel}
             className={cn(
-                'grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] text-sub-2.5 hover:bg-gray-7 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent',
+                'grid size-9 shrink-0 cursor-pointer place-items-center rounded-[10px] text-gray-3 transition-colors duration-150',
+                'hover:bg-white hover:text-sub-1 focus-visible:ring-2 focus-visible:ring-main-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-3',
                 className,
             )}
         >

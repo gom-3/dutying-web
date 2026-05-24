@@ -130,7 +130,7 @@ function ConnectionManageTargetStep({
                 <h1 className="font-apple text-[22px] font-semibold text-sub-1">
                     {connectMode === 'link'
                         ? '연결할 기존 간호사를 선택해 주세요'
-                        : `${currentWaitingNurse?.name ?? '간호사'}님이 소속될 팀을 선택해주세요`}
+                        : `${currentWaitingNurse?.name ?? '간호사'}님이 소속될 팀을 선택해 주세요`}
                 </h1>
             </div>
 
@@ -178,7 +178,7 @@ function ConnectionManageTargetStep({
                     <div className="mt-3 space-y-2">
                         {filteredRows.length === 0 ? (
                             <div className="rounded-[10px] bg-[#F7F9FC] px-3 py-6 text-center font-apple text-[14px] text-gray-3">
-                                {searchKeyword ? '검색 결과가 없어요.' : '선택 가능한 간호사가 없어요.'}
+                                {searchKeyword ? '검색어를 바꾸면 간호사를 찾을 수 있어요.' : '팀에 간호사를 추가하면 선택할 수 있어요.'}
                             </div>
                         ) : (
                             filteredRows.map((row) => (

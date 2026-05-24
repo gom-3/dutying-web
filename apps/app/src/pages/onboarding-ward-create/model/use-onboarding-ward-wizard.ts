@@ -379,7 +379,7 @@ function useOnboardingWardWizard() {
     const saveSkillConfig = (config: TSkillLevelConfig) => {
         setDraft((prev) => saveSkillLevelConfig(prev, config));
         setIsSkillLevelEnabled(true);
-        toast.success('숙련도 설정이 간호사 목록에 반영됐어요.');
+        toast.success('숙련도 설정을 간호사 목록에 반영했어요.');
     };
     const disableSkillConfig = () => {
         setIsSkillLevelEnabled(false);
@@ -388,7 +388,7 @@ function useOnboardingWardWizard() {
             setSortModeState('manual');
         }
 
-        toast.success('숙련도 설정을 사용하지 않아요.');
+        toast.success('숙련도 설정 사용을 껐어요.');
     };
     const complete = async () => {
         if (submissionStatus === 'submitting') {
@@ -422,9 +422,7 @@ function useOnboardingWardWizard() {
                 extra: {step: draft.currentStep},
             });
             setSubmissionStatus('error');
-            const message = error instanceof Error ? error.message : '蹂묐룞 ?앹꽦???ㅽ뙣?덉뒿?덈떎. ?ㅼ떆 ?쒕룄?댁＜?몄슂.';
-
-            toast.error(message);
+            toast.error('병동을 만들지 못했어요. 다시 시도해 주세요.');
         }
     };
     const skipOrComplete = () => {

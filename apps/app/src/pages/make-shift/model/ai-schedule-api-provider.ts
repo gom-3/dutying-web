@@ -55,11 +55,11 @@ export const apiAiScheduleProvider: TAiScheduleProvider = {
         const {data} = await llmAxiosInstance.post<TAiScheduleResponse | TLlmFailureEnvelope>('/schedule/generate', payload);
 
         if (isLlmFailure(data)) {
-            throw new Error(data.error ?? data.error_type ?? 'AI 자동 채우기에 실패했습니다.');
+            throw new Error(data.error ?? data.error_type ?? 'AI 자동 채우기를 완료하지 못했어요.');
         }
 
         if (!isAiScheduleSuccess(data)) {
-            throw new Error('AI 자동 채우기 응답 형식이 올바르지 않습니다.');
+            throw new Error('AI 자동 채우기 응답 형식을 확인해 주세요.');
         }
 
         return {...data, schedule: remapScheduleByWorkerId(data.schedule, doc)};

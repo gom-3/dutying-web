@@ -41,7 +41,7 @@ export const DutyPageView = ({duty}: TDutyPageViewProps) => {
                         className="w-full max-w-[520px] rounded-[20px] bg-white px-8 py-7"
                     >
                         <h2 id="onboarding-ward-created-modal-title" className="font-apple text-[28px] font-semibold text-sub-1">
-                            병동 생성이 완료됐어요
+                            병동 생성을 마쳤어요
                         </h2>
                         <p
                             id="onboarding-ward-created-modal-description"

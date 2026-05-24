@@ -48,7 +48,7 @@ export const getDutyRequestStatusDescription = ({
     }
 
     if (requestFocus === null) {
-        return '현재 팀에 연결된 간호사 정보가 없어 달력 위치로는 바로 이동할 수 없어요.';
+        return '현재 팀에 연결된 간호사 정보를 확인하면 달력 위치로 바로 이동할 수 있어요.';
     }
 
     if (readonly) {

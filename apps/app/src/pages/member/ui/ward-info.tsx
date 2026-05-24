@@ -66,9 +66,9 @@ function WardInfo() {
                         onClick={() => {
                             if (ward) {
                                 toast.promise(navigator.clipboard.writeText(ward.code), {
-                                    loading: '복사 중입니다...',
+                                    loading: '복사하고 있어요...',
                                     success: '복사 완료!',
-                                    error: '복사를 실패했습니다.',
+                                    error: '복사하지 못했어요.',
                                 });
                             }
                         }}

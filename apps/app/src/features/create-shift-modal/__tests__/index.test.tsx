@@ -23,7 +23,7 @@ describe('CreateShiftModal', () => {
         await user.click(screen.getByRole('button', {name: '저장'}));
 
         expect(onSubmit).not.toHaveBeenCalled();
-        expect(screen.getByRole('alert')).toHaveTextContent('근무 이름을 입력해주세요.');
+        expect(screen.getByRole('alert')).toHaveTextContent('근무 이름을 입력해 주세요.');
     });
 
     it('clears work-time validation when switching to leave mode', async () => {
@@ -31,7 +31,7 @@ describe('CreateShiftModal', () => {
 
         render(<CreateShiftModal open shiftType={null} close={vi.fn()} onSubmit={vi.fn()} onDelete={vi.fn()} />);
 
-        const nameInput = screen.getByPlaceholderText('근무 명을 작성하세요.');
+        const nameInput = screen.getByPlaceholderText('근무 명을 작성해 주세요.');
         const shortNameInput = screen.getAllByRole('textbox')[1];
         const [startTimeInput, endTimeInput] = screen.getAllByDisplayValue('00:00');
 
@@ -41,7 +41,7 @@ describe('CreateShiftModal', () => {
         await user.clear(endTimeInput);
         await user.click(screen.getByRole('button', {name: '저장'}));
 
-        expect(screen.getByRole('alert')).toHaveTextContent('근무 시간을 입력해주세요.');
+        expect(screen.getByRole('alert')).toHaveTextContent('근무 시간을 입력해 주세요.');
 
         await user.click(screen.getByText('휴가'));
 

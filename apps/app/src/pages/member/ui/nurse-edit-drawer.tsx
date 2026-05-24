@@ -106,7 +106,7 @@ function NurseEditDrawer() {
                 <div className="flex items-center justify-between">
                     <p className="shrink-0 font-apple text-base font-medium text-sub-2">입사 년도</p>
                     <p className="ml-8 truncate font-apple text-[.625rem] font-light text-sub-3">
-                        * 해당 병원에 입사한 년도를 작성해주세요.
+                        * 해당 병원에 입사한 년도를 작성해 주세요.
                     </p>
                 </div>
                 <TextField
@@ -140,7 +140,7 @@ function NurseEditDrawer() {
             <div className="flex h-29 w-full flex-col items-stretch justify-between border-b-[.0313rem] border-sub-4 px-10 pt-[.625rem] pb-7.5">
                 <div className="flex items-center justify-between">
                     <p className="shrink-0 font-apple text-base font-medium text-sub-2">가능 근무</p>
-                    <p className="ml-8 truncate font-apple text-[.625rem] font-light text-sub-3">* 가능 근무를 모두 선택해주세요.</p>
+                    <p className="ml-8 truncate font-apple text-[.625rem] font-light text-sub-3">* 가능 근무를 모두 선택해 주세요.</p>
                 </div>
                 <div className="flex gap-5.5">
                     {writeNurse?.nurseShiftTypes.slice(0, 3).map(({nurseShiftTypeId, isPossible, name}) => (
@@ -182,7 +182,7 @@ function NurseEditDrawer() {
                     </div>
                 ) : (
                     <div className="ml-auto flex items-center gap-[.625rem]">
-                        <p className="font-apple text-[.75rem] text-sub-3">해당 안됨</p>
+                        <p className="font-apple text-[.75rem] text-sub-3">해당 안 됨</p>
                         <UncheckedIcon2
                             className={`h-5 w-5 ${isBusy ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                             onClick={() => {
@@ -199,7 +199,7 @@ function NurseEditDrawer() {
                 <p className="font-apple text-base font-medium text-sub-2">근무표 작성 가능자</p>
                 {writeNurse?.isDutyManager ? (
                     <div className="ml-auto flex items-center gap-[.625rem]">
-                        <p className="font-apple text-[.75rem] text-sub-3">해당 됨</p>
+                        <p className="font-apple text-[.75rem] text-sub-3">해당됨</p>
                         <CheckedIcon
                             className={`h-5 w-5 ${isBusy ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                             fill="#B08BFF"
@@ -213,7 +213,7 @@ function NurseEditDrawer() {
                     </div>
                 ) : (
                     <div className="ml-auto flex items-center gap-[.625rem]">
-                        <p className="font-apple text-[.75rem] text-sub-3">해당 안됨</p>
+                        <p className="font-apple text-[.75rem] text-sub-3">해당 안 됨</p>
                         <UncheckedIcon2
                             className={`h-5 w-5 ${isBusy ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                             onClick={() => {
@@ -244,7 +244,7 @@ function NurseEditDrawer() {
                     disabled={isBusy}
                     onClick={() => {
                         if (!selectedNurse || !shiftTeams) return;
-                        const shouldDelete = window.confirm(`${selectedNurse.name} 간호사를 삭제할까요? 이 작업은 되돌릴 수 없습니다.`);
+                        const shouldDelete = window.confirm(`${selectedNurse.name} 간호사를 삭제할까요? 삭제 후에는 되돌릴 수 없어요.`);
 
                         if (!shouldDelete) return;
 
@@ -264,7 +264,7 @@ function NurseEditDrawer() {
                     disabled={nurseSaveStatus === 'saving'}
                     onClick={closeDrawer}
                 >
-                    {isDirty ? '취소' : '닫기'}
+                    닫기
                 </Button>
                 <Button
                     id="nurse_edit_drawer"

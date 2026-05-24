@@ -29,7 +29,7 @@ function ConnectionManageWaitingStep({waitingNurses, onClose, onAccept, onReject
 
             {waitingNurses?.length === 0 ? (
                 <div className="mt-4 flex h-[140px] items-center justify-center rounded-[10px] bg-[#F8FAFC] font-apple text-[15px] text-gray-3">
-                    대기 중인 연동 요청이 없어요.
+                    연동 요청이 들어오면 여기에 보여요.
                 </div>
             ) : (
                 <div className="mt-4 max-h-[440px] space-y-2 overflow-y-auto">

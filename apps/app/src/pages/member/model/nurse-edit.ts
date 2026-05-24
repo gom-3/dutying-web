@@ -42,8 +42,8 @@ export function getNurseDrawerFeedback(params: {mode: TNurseDrawerMode; saveStat
 
     if (saveStatus === 'success' && !isDirty) {
         return {
-            title: '저장이 완료되었어요',
-            description: '간호사 정보가 반영되었습니다. 더 수정할 내용이 없다면 닫아도 괜찮아요.',
+            title: '저장을 마쳤어요',
+            description: '간호사 정보를 반영했어요. 더 수정할 내용이 없다면 닫아도 괜찮아요.',
             toneClassName: 'border-main-2/20 bg-main-4 text-main-1',
         };
     }
@@ -59,14 +59,14 @@ export function getNurseDrawerFeedback(params: {mode: TNurseDrawerMode; saveStat
     if (isDirty) {
         return {
             title: '변경 사항이 있어요',
-            description: '저장하지 않고 닫으면 수정한 내용이 사라집니다.',
+        description: '저장하지 않고 닫으면 수정한 내용이 사라져요.',
             toneClassName: 'border-sub-4 bg-main-bg text-sub-1',
         };
     }
 
     return {
         title: '수정할 항목을 확인해 주세요',
-        description: '변경된 내용이 생기면 저장 버튼이 활성화됩니다.',
+        description: '변경된 내용이 생기면 저장 버튼이 활성화돼요.',
         toneClassName: 'border-sub-4 bg-main-bg text-sub-2',
     };
 }

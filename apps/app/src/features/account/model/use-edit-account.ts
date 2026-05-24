@@ -39,7 +39,7 @@ const useEditAccount = () => {
                 extra: {nurseId: nurse.nurseId, accountId: accountMe.accountId},
             });
 
-            toast.error('프로필 업데이트에 실패했습니다.');
+            toast.error('프로필을 업데이트하지 못했어요.');
 
             return false;
         } finally {
@@ -64,7 +64,7 @@ const useEditAccount = () => {
                 tags: {feature: 'account', action: 'edit-account-basic'},
                 extra: {accountId: accountMe.accountId},
             });
-            toast.error('계정 정보 업데이트에 실패했습니다.');
+            toast.error('계정 정보를 업데이트하지 못했어요.');
 
             return false;
         } finally {
@@ -74,7 +74,7 @@ const useEditAccount = () => {
     const quitWard = async () => {
         if (!accountMe?.wardId) return;
 
-        if (!confirm('정말 병동을 나가시겠습니까?')) return;
+        if (!confirm('병동을 나갈까요?')) return;
 
         try {
             setLoading(true);
@@ -86,7 +86,7 @@ const useEditAccount = () => {
                 tags: {feature: 'account', action: 'quit-ward'},
                 extra: {wardId: accountMe.wardId, accountId: accountMe.accountId},
             });
-            toast.error('병동 나가기에 실패했습니다..');
+            toast.error('병동을 나가지 못했어요.');
         } finally {
             setLoading(false);
         }
@@ -94,7 +94,7 @@ const useEditAccount = () => {
     const deleteAccount = async () => {
         if (!accountMe) return;
 
-        if (!confirm('정말 탈퇴하시겠습니까?')) return;
+        if (!confirm('계정을 탈퇴할까요?')) return;
 
         try {
             setLoading(true);
@@ -105,7 +105,7 @@ const useEditAccount = () => {
                 tags: {feature: 'account', action: 'delete-account'},
                 extra: {accountId: accountMe.accountId},
             });
-            toast.error('계정 삭제에 실패했습니다..');
+            toast.error('계정을 삭제하지 못했어요.');
         } finally {
             setLoading(false);
         }

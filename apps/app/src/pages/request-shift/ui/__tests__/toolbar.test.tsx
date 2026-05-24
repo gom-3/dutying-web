@@ -14,11 +14,11 @@ const translations: Record<string, string> = {
     'page.request.toolbar.saveAction': '저장하기',
     'page.request.toolbar.savingAction': '저장 중...',
     'page.request.toolbar.readonlyDescription': '필요하면 수정하기로 신청 근무를 다시 조정할 수 있어요.',
-    'page.request.toolbar.editingDescription': '신청을 누르면 근무표 위치로 이동해요. 바꾼 내용은 자동 저장됩니다.',
+    'page.request.toolbar.editingDescription': '신청을 누르면 근무표 위치로 이동해요. 바꾼 내용은 자동 저장돼요.',
     'page.request.toolbar.savingDescription': '최근 변경 사항을 저장하고 있어요.',
-    'page.request.toolbar.savedDescription': '최근 변경 사항이 저장되었어요.',
-    'page.request.toolbar.noTeamsLabel': '등록된 팀이 없어요',
-    'page.request.toolbar.saveError': '최근 변경 저장에 실패했어요. 다시 저장해 주세요.',
+    'page.request.toolbar.savedDescription': '최근 변경 사항을 저장했어요.',
+    'page.request.toolbar.noTeamsLabel': '팀을 등록하면 신청 근무를 쓸 수 있어요',
+    'page.request.toolbar.saveError': '최근 변경 사항을 저장하지 못했어요. 다시 저장해 주세요.',
 };
 
 vi.mock('@/features/request-shift', () => ({
@@ -156,6 +156,42 @@ describe('RequestShiftPage Toolbar', () => {
         expect(screen.queryByRole('button', {name: '저장하기'})).not.toBeInTheDocument();
     });
 
+    it('팀이 하나뿐이면 팀 전환 토글을 숨긴다', () => {
+        mockUseRequestShift.mockReturnValue(
+            createUseRequestShiftValue({
+                state: {
+                    currentShiftTeam: {shiftTeamId: 1, name: 'Solo'},
+                    shiftTeams: [{shiftTeamId: 1, name: 'Solo'}],
+                    teamPendingRequestCountByTeamId: {},
+                },
+            }),
+        );
+
+        render(<Toolbar />);
+
+        expect(screen.queryByRole('button', {name: 'Solo'})).not.toBeInTheDocument();
+    });
+
+    it('팀이 두 개 이상이면 팀 전환 토글을 보여준다', () => {
+        mockUseRequestShift.mockReturnValue(
+            createUseRequestShiftValue({
+                state: {
+                    currentShiftTeam: {shiftTeamId: 1, name: 'Alpha'},
+                    shiftTeams: [
+                        {shiftTeamId: 1, name: 'Alpha'},
+                        {shiftTeamId: 2, name: 'Beta'},
+                    ],
+                    teamPendingRequestCountByTeamId: {},
+                },
+            }),
+        );
+
+        render(<Toolbar />);
+
+        expect(screen.getByRole('button', {name: 'Alpha'})).toBeInTheDocument();
+        expect(screen.getByRole('button', {name: 'Beta'})).toBeInTheDocument();
+    });
+
     it('수정할 수 없는 달은 상태 안내만 보여준다', () => {
         mockUseRequestShift.mockReturnValue(
             createUseRequestShiftValue({
@@ -190,7 +226,7 @@ describe('RequestShiftPage Toolbar', () => {
         const {rerender} = render(<Toolbar />);
 
         rerender(<Toolbar />);
-        expect(screen.getByText('최근 변경 사항이 저장되었어요.')).toBeInTheDocument();
+        expect(screen.getByText('최근 변경 사항을 저장했어요.')).toBeInTheDocument();
 
         mockUseRequestShift.mockReturnValue(
             createUseRequestShiftValue({
@@ -201,7 +237,7 @@ describe('RequestShiftPage Toolbar', () => {
         );
 
         rerender(<Toolbar />);
-        expect(screen.getByText('최근 변경 저장에 실패했어요. 다시 저장해 주세요.')).toBeInTheDocument();
+        expect(screen.getByText('최근 변경 사항을 저장하지 못했어요. 다시 저장해 주세요.')).toBeInTheDocument();
     });
 
     it('액션이 실제로 수행된 경우에만 툴바 이벤트를 전송한다', async () => {

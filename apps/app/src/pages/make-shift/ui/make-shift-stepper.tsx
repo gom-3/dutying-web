@@ -167,8 +167,10 @@ export function MakeShiftStepper({
                                         </span>
                                         <span
                                             className={cn(
-                                                'max-w-full min-w-0 truncate font-apple text-[11px] leading-none font-medium text-gray-4 transition-colors duration-200',
-                                                state === 'current' && (isFinalConfirmedStep ? 'text-[#167A52]/70' : 'text-main-1/70'),
+                                                'max-w-full min-w-0 translate-y-1 truncate font-apple text-[11px] leading-none font-medium text-gray-4 opacity-0 transition-[color,opacity,transform] duration-200',
+                                                'group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
+                                                state === 'current' &&
+                                                    `translate-y-0 opacity-100 ${isFinalConfirmedStep ? 'text-[#167A52]/70' : 'text-main-1/70'}`,
                                                 state === 'locked' && 'text-gray-4',
                                             )}
                                         >

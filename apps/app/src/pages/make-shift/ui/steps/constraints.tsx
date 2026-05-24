@@ -4,7 +4,7 @@ import {ChevronDown, Loader2, Plus, RotateCcw, X} from 'lucide-react';
 import {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import toast from 'react-hot-toast';
 import {wardQueryOptions} from '@/entities/ward/model/queries';
-import useAuth from '@/features/auth';
+import useAuthStore from '@/features/auth/model/store';
 import {DEFAULT_SKILL_LEVEL_CONFIG, getWardSkillSettings} from '@/features/ward-skill/model/skill-level';
 import {SixDotsIcon} from '@/shared/assets/svg';
 import {useMakeShiftStore} from '../../model/make-shift-store';
@@ -123,7 +123,8 @@ const IMPORTANT_DEFAULT_RULE_IDS = new Set([
 ]);
 
 function hasFinalConsonant(value: string) {
-    const lastChar = value.trim().at(-1);
+    const trimmed = value.trim();
+    const lastChar = trimmed.charAt(trimmed.length - 1);
     if (!lastChar) return false;
 
     const code = lastChar.charCodeAt(0);
@@ -145,9 +146,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
         sentence: [
             {type: 'text', text: '연속 근무는 '},
             {type: 'control', key: 'days'},
-            {type: 'text', text: '일 이상 할 수 없어요'},
+            {type: 'text', text: '일까지 할 수 있어요'},
         ],
-        buildText: (p) => `연속 근무는 ${p.days}일 이상 할 수 없어요`,
+        buildText: (p) => `연속 근무는 ${p.days}일까지 할 수 있어요`,
     },
     {
         id: 'IMPORTANT_MAX_SAME_DUTY_STREAK',
@@ -157,9 +158,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
         sentence: [
             {type: 'text', text: '같은 근무를 연속으로 '},
             {type: 'control', key: 'days'},
-            {type: 'text', text: '일 이상 할 수 없어요'},
+            {type: 'text', text: '일까지 할 수 있어요'},
         ],
-        buildText: (p) => `같은 근무를 연속으로 ${p.days}일 이상 할 수 없어요`,
+        buildText: (p) => `같은 근무는 연속으로 ${p.days}일까지 할 수 있어요`,
     },
     {
         id: 'IMPORTANT_MIN_NIGHT_INTERVAL',
@@ -183,9 +184,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'N'},
             {type: 'text', text: ' 근무를 '},
             {type: 'control', key: 'days'},
-            {type: 'text', text: '일 이상 연속으로 하면 안 돼요'},
+            {type: 'text', text: '일까지 연속으로 할 수 있어요'},
         ],
-        buildText: (p) => `N 근무를 ${p.days}일 이상 연속으로 하면 안 돼요`,
+        buildText: (p) => `N 근무는 ${p.days}일까지 연속으로 할 수 있어요`,
     },
     {
         id: 'IMPORTANT_OFF_AFTER_NIGHT',
@@ -212,9 +213,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'OFF'},
             {type: 'text', text: ' 전날에는 '},
             {type: 'duty', code: 'N'},
-            {type: 'text', text: ' 근무를 할 수 없어요'},
+            {type: 'text', text: ' 근무를 피해요'},
         ],
-        buildText: () => '신청 오프 전날에는 나이트 근무를 할 수 없어요',
+        buildText: () => '신청 오프 전날에는 나이트 근무를 피해요',
     },
     {
         id: 'IMPORTANT_FORBIDDEN_DUTY_PATTERNS',
@@ -229,9 +230,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'dutyPattern', codes: ['N', 'E']},
             {type: 'text', text: ' / '},
             {type: 'dutyPattern', codes: ['N', 'OFF', 'D']},
-            {type: 'text', text: ' 근무 패턴은 하지 않아요'},
+            {type: 'text', text: ' 근무 패턴은 피해요'},
         ],
-        buildText: () => 'ND / ED / NE / NOD 근무 패턴은 하지 않아요',
+        buildText: () => 'ND / ED / NE / NOD 근무 패턴은 피해요',
     },
     {
         id: 'SOFT_MIN_STAFF_BY_DUTY',
@@ -313,9 +314,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'N'},
             {type: 'text', text: ' 다음날 '},
             {type: 'duty', code: 'D'},
-            {type: 'text', text: ' 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.target, '은', '는')} N 다음날 D 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.target, '은', '는')} N 다음날 D 근무를 피해요`,
     },
     {
         id: 'SOFT_NO_N_TO_E',
@@ -329,9 +330,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'N'},
             {type: 'text', text: ' 다음날 '},
             {type: 'duty', code: 'E'},
-            {type: 'text', text: ' 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.target, '은', '는')} N 다음날 E 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.target, '은', '는')} N 다음날 E 근무를 피해요`,
     },
     {
         id: 'SOFT_NO_E_TO_D',
@@ -345,9 +346,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'E'},
             {type: 'text', text: ' 다음날 '},
             {type: 'duty', code: 'D'},
-            {type: 'text', text: ' 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.target, '은', '는')} E 다음날 D 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.target, '은', '는')} E 다음날 D 근무를 피해요`,
     },
     {
         id: 'SOFT_MAX_CONSECUTIVE_N',
@@ -364,9 +365,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'duty', code: 'N'},
             {type: 'text', text: '을 '},
             {type: 'control', key: 'count'},
-            {type: 'text', text: '번 이상 하면 안 돼요'},
+            {type: 'text', text: '번까지 할 수 있어요'},
         ],
-        buildText: (p) => `${withParticle(p.target, '은', '는')} 연속으로 N을 ${p.count}번 이상 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.target, '은', '는')} 연속 N은 ${p.count}번까지 할 수 있어요`,
     },
     {
         id: 'SOFT_MAX_CONSECUTIVE_WORK',
@@ -381,9 +382,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'particle', key: 'target', withBatchim: '은', withoutBatchim: '는'},
             {type: 'text', text: ' 한 달에 '},
             {type: 'control', key: 'days'},
-            {type: 'text', text: '일 이상 연속으로 근무하면 안 돼요'},
+            {type: 'text', text: '일까지 연속으로 근무할 수 있어요'},
         ],
-        buildText: (p) => `${withParticle(p.target, '은', '는')} 한 달에 ${p.days}일 이상 연속으로 근무하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.target, '은', '는')} 한 달에 ${p.days}일까지 연속으로 근무할 수 있어요`,
     },
     {
         id: 'SOFT_NEED_OFF_AFTER_CONSECUTIVE',
@@ -452,9 +453,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
         sentence: [
             {type: 'control', key: 'nurse'},
             {type: 'particle', key: 'nurse', withBatchim: '은', withoutBatchim: '는'},
-            {type: 'text', text: ' 주말 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 주말 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.nurse, '은', '는')} 주말 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.nurse, '은', '는')} 주말 근무를 피해요`,
     },
     {
         id: 'SOFT_NEWBIE_NO_SOLO_N',
@@ -466,9 +467,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'particle', key: 'nurse', withBatchim: '은', withoutBatchim: '는'},
             {type: 'text', text: ' (신규) 혼자 '},
             {type: 'duty', code: 'N'},
-            {type: 'text', text: ' 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.nurse, '은', '는')} (신규) 혼자 N 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.nurse, '은', '는')} (신규) 혼자 N 근무를 피해요`,
     },
     {
         id: 'SOFT_MIN_SKILL_IN_DUTY',
@@ -503,9 +504,9 @@ const SOFT_RULE_TEMPLATES: TSoftRuleTemplate[] = [
             {type: 'text', text: ' '},
             {type: 'control', key: 'nurseB'},
             {type: 'particle', key: 'nurseB', withBatchim: '은', withoutBatchim: '는'},
-            {type: 'text', text: ' 같은 근무를 하면 안 돼요'},
+            {type: 'text', text: ' 같은 근무를 피해요'},
         ],
-        buildText: (p) => `${withParticle(p.nurseA, '과', '와')} ${withParticle(p.nurseB, '은', '는')} 같은 근무를 하면 안 돼요`,
+        buildText: (p) => `${withParticle(p.nurseA, '과', '와')} ${withParticle(p.nurseB, '은', '는')} 같은 근무를 피해요`,
     },
     {
         id: 'SOFT_PREFER_SAME_DUTY_PAIR',
@@ -1046,6 +1047,14 @@ function Section({action, children}: TSectionProps) {
     );
 }
 
+type TConstraintsProps = {
+    wardId?: number | null;
+    shiftTeamId?: number | null;
+    year?: number;
+    month?: number;
+    variant?: 'flow' | 'settings';
+};
+
 type TSoftModalProps = {
     open: boolean;
     optionMap: Record<string, TSelectOption[]>;
@@ -1192,7 +1201,7 @@ function DeleteImportantRuleModal({rule, onClose, onConfirm}: TDeleteImportantRu
                         onClick={onClose}
                         className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                     >
-                        취소
+                        닫기
                     </button>
                     <button
                         type="button"
@@ -1207,14 +1216,18 @@ function DeleteImportantRuleModal({rule, onClose, onConfirm}: TDeleteImportantRu
     );
 }
 
-export function Constraints() {
-    const {
-        state: {wardId},
-    } = useAuth();
-    const currentShiftTeamId = useMakeShiftStore((s) => s.currentShiftTeamId);
-    const year = useMakeShiftStore((s) => s.year);
-    const month = useMakeShiftStore((s) => s.month);
-    const enabled = wardId !== null && currentShiftTeamId !== null;
+export function Constraints({wardId: wardIdProp, shiftTeamId, year: yearProp, month: monthProp, variant = 'flow'}: TConstraintsProps = {}) {
+    const authWardId = useAuthStore((s) => s.wardId);
+    const storeShiftTeamId = useMakeShiftStore((s) => s.currentShiftTeamId);
+    const storeYear = useMakeShiftStore((s) => s.year);
+    const storeMonth = useMakeShiftStore((s) => s.month);
+    const wardId = wardIdProp ?? authWardId;
+    const currentShiftTeamId = shiftTeamId ?? storeShiftTeamId;
+    const year = yearProp ?? storeYear;
+    const month = monthProp ?? storeMonth;
+    const enabled = wardId !== null && wardId !== undefined && currentShiftTeamId !== null && currentShiftTeamId !== undefined;
+    const frameClassName = variant === 'settings' ? 'flex min-w-0 flex-col' : 'flex min-w-0 flex-col items-end';
+    const surfaceWidthClassName = variant === 'settings' ? 'w-full' : 'w-[90%]';
 
     const [rules, setRules] = useState<TShiftConstraintRuleDraft[]>([]);
     const [softModalOpen, setSoftModalOpen] = useState(false);
@@ -1239,7 +1252,7 @@ export function Constraints() {
     });
     const shiftTypeQuery = useQuery({
         ...wardQueryOptions.shiftTypes(wardId ?? -1),
-        enabled: wardId !== null,
+        enabled: wardId !== null && wardId !== undefined,
     });
 
     useEffect(() => {
@@ -1343,7 +1356,7 @@ export function Constraints() {
         });
         setHighlightedRuleId(nextRule.clientId);
         setSoftModalOpen(false);
-        toast.success('약 제약조건이 추가되었어요.');
+        toast.success('약 제약조건을 추가했어요.');
 
         window.setTimeout(() => {
             setHighlightedRuleId((current) => (current === nextRule.clientId ? null : current));
@@ -1407,16 +1420,18 @@ export function Constraints() {
 
     if (!enabled) {
         return (
-            <div className="flex min-w-0 flex-col items-end">
-                <div className="w-[90%] rounded-[18px] bg-white px-5 py-5 font-apple text-[14px] text-gray-4">근무팀을 먼저 선택해 주세요.</div>
+            <div className={frameClassName}>
+                <div className={`${surfaceWidthClassName} rounded-[18px] bg-white px-5 py-5 font-apple text-[14px] text-gray-4`}>
+                    근무팀을 먼저 선택해 주세요.
+                </div>
             </div>
         );
     }
 
     if (isLoading) {
         return (
-            <div className="flex min-w-0 flex-col items-end">
-                <div className="flex min-h-[180px] w-[90%] items-center justify-center rounded-[18px] bg-white">
+            <div className={frameClassName}>
+                <div className={`flex min-h-[180px] ${surfaceWidthClassName} items-center justify-center rounded-[18px] bg-white`}>
                     <div className="flex items-center gap-2 font-apple text-[13px] text-gray-4">
                         <Loader2 className="size-4 animate-spin" />
                         제약조건 불러오는 중
@@ -1428,8 +1443,10 @@ export function Constraints() {
 
     return (
         <>
-            <div className="flex min-w-0 flex-col items-end">
-                <div className="w-[90%] min-w-0 rounded-[18px] bg-white px-[clamp(14px,1.5vw,22px)] py-[clamp(10px,1.1vw,16px)]">
+            <div className={frameClassName}>
+                <div
+                    className={`${surfaceWidthClassName} min-w-0 rounded-[18px] bg-white px-[clamp(14px,1.5vw,22px)] py-[clamp(10px,1.1vw,16px)]`}
+                >
                     <Section
                         action={
                             <>

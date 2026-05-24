@@ -1,7 +1,7 @@
 ﻿import {type TCreateShiftTypeDTO} from '@dutying/api/ward';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
-import {type TShiftTeam, type TWardConstraint, type TWardShiftType} from '@/entities/ward';
+import {type TShiftTeam, type TWardShiftType} from '@/entities/ward';
 import {wardQueryKeys, wardQueryOptions} from '@/entities/ward/model/queries';
 import useAuth from '@/features/auth';
 import {WardAPI} from '@/shared/api';
@@ -40,13 +40,6 @@ export function useWardSettings() {
         enabled: wardId !== null,
         staleTime: 1000 * 60 * 5,
     });
-    const constraintQuery = useQuery({
-        ...wardQueryOptions.constraint(wardId ?? -1, currentShiftTeamId ?? -1),
-        enabled: wardId !== null && currentShiftTeamId !== null,
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 5,
-    });
-
     useEffect(() => {
         if (!shiftTeamsQuery.data) {
             setCurrentShiftTeamId(null);
@@ -79,7 +72,7 @@ export function useWardSettings() {
             await WardAPI.createShiftType(wardId, payload);
             await invalidateShiftTypeQueries();
         } catch (error) {
-            showActionErrorFeedback(error, '근무 유형 추가에 실패했습니다.');
+            showActionErrorFeedback(error, '근무 유형을 추가하지 못했어요.');
         }
     };
     const updateShiftType = async (shiftTypeId: number, payload: TCreateShiftTypeDTO) => {
@@ -89,7 +82,7 @@ export function useWardSettings() {
             await WardAPI.updateShiftType(wardId, shiftTypeId, payload);
             await invalidateShiftTypeQueries();
         } catch (error) {
-            showActionErrorFeedback(error, '근무 유형 수정에 실패했습니다.');
+            showActionErrorFeedback(error, '근무 유형을 수정하지 못했어요.');
         }
     };
     const deleteShiftType = async (shiftTypeId: number) => {
@@ -101,7 +94,7 @@ export function useWardSettings() {
             const exists = latestShiftTypes.some((shiftType) => shiftType.wardShiftTypeId === shiftTypeId);
 
             if (!exists) {
-                showActionErrorFeedback(new Error('shift type not found'), '이미 삭제되었거나 최신 목록에 없는 근무 유형입니다.');
+                showActionErrorFeedback(new Error('shift type not found'), '이미 삭제했거나 최신 목록에서 찾을 수 없는 근무 유형이에요.');
                 return;
             }
 
@@ -109,26 +102,7 @@ export function useWardSettings() {
             await invalidateShiftTypeQueries();
         } catch (error) {
             await shiftTypesQuery.refetch();
-            showActionErrorFeedback(error, '근무 유형 삭제에 실패했습니다.');
-        }
-    };
-    const updateConstraint = async (constraint: TWardConstraint) => {
-        if (!wardId || currentShiftTeamId === null) return;
-
-        const queryKey = wardQueryKeys.constraint(wardId, currentShiftTeamId);
-        const previousConstraint = queryClient.getQueryData<TWardConstraint>(queryKey);
-
-        queryClient.setQueryData(queryKey, constraint);
-
-        try {
-            await WardAPI.updateWardConstraint(wardId, currentShiftTeamId, constraint);
-            await queryClient.invalidateQueries({queryKey});
-        } catch (error) {
-            if (previousConstraint) {
-                queryClient.setQueryData(queryKey, previousConstraint);
-            }
-
-            showActionErrorFeedback(error, '제약 조건 수정에 실패했습니다.');
+            showActionErrorFeedback(error, '근무 유형을 삭제하지 못했어요.');
         }
     };
     const retryShiftTypes = async () => {
@@ -136,9 +110,6 @@ export function useWardSettings() {
     };
     const retryShiftTeams = async () => {
         await shiftTeamsQuery.refetch();
-    };
-    const retryConstraint = async () => {
-        await constraintQuery.refetch();
     };
     const selectTab = (tab: TWardSettingsTab) => {
         setCurrentTab(tab);
@@ -148,19 +119,16 @@ export function useWardSettings() {
     };
     const shiftTypesStatus: TQueryStatus = shiftTypesQuery.isPending ? 'pending' : shiftTypesQuery.isError ? 'error' : 'success';
     const shiftTeamsStatus: TQueryStatus = shiftTeamsQuery.isPending ? 'pending' : shiftTeamsQuery.isError ? 'error' : 'success';
-    const constraintStatus: TQueryStatus =
-        currentShiftTeamId === null ? 'idle' : constraintQuery.isPending ? 'pending' : constraintQuery.isError ? 'error' : 'success';
 
     return {
         state: {
+            wardId,
             currentTab,
             shiftTypes: normalizeShiftTypes(shiftTypesQuery.data),
             shiftTypesStatus,
             shiftTeams: shiftTeamsQuery.data ?? [],
             shiftTeamsStatus,
             currentShiftTeamId,
-            constraint: constraintQuery.data ?? null,
-            constraintStatus,
         },
         actions: {
             selectTab,
@@ -168,10 +136,8 @@ export function useWardSettings() {
             addShiftType,
             updateShiftType,
             deleteShiftType,
-            updateConstraint,
             retryShiftTypes,
             retryShiftTeams,
-            retryConstraint,
         },
     };
 }

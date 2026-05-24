@@ -82,6 +82,7 @@ export function DutyManagementMonthTeamHeader({
     teamTone = 'default',
 }: TMonthTeamHeaderProps) {
     const isDarkSegmented = teamTone === 'darkSegmented';
+    const shouldShowTeamSwitcher = shiftTeams.length !== 1;
 
     return (
         <div className={cn('flex flex-wrap items-center', isDarkSegmented ? 'gap-2' : 'gap-4')}>
@@ -124,60 +125,62 @@ export function DutyManagementMonthTeamHeader({
                 </button>
             </div>
 
-            <div
-                className={cn(
-                    'max-w-full',
-                    isDarkSegmented ? 'rounded-[12px] bg-[#3D4658] p-0.5' : 'rounded-[10px] bg-main-light px-[10px] py-[7px]',
-                )}
-            >
+            {shouldShowTeamSwitcher ? (
                 <div
                     className={cn(
-                        'scrollbar-hide flex max-w-full gap-1 overflow-x-auto whitespace-nowrap',
-                        isDarkSegmented && 'overflow-visible',
+                        'max-w-full',
+                        isDarkSegmented ? 'rounded-[12px] bg-[#3D4658] p-0.5' : 'rounded-[10px] bg-main-light px-[10px] py-[7px]',
                     )}
                 >
-                    {shiftTeams.map((team) => {
-                        const selected = team.shiftTeamId === currentShiftTeamId;
+                    <div
+                        className={cn(
+                            'scrollbar-hide flex max-w-full gap-1 overflow-x-auto whitespace-nowrap',
+                            isDarkSegmented && 'overflow-visible',
+                        )}
+                    >
+                        {shiftTeams.map((team) => {
+                            const selected = team.shiftTeamId === currentShiftTeamId;
 
-                        return (
-                            <button
-                                key={team.shiftTeamId}
-                                type="button"
-                                onClick={() => onSelectShiftTeam(team.shiftTeamId)}
-                                disabled={disabled}
+                            return (
+                                <button
+                                    key={team.shiftTeamId}
+                                    type="button"
+                                    onClick={() => onSelectShiftTeam(team.shiftTeamId)}
+                                    disabled={disabled}
+                                    className={cn(
+                                        isDarkSegmented
+                                            ? cn(
+                                                  'box-border grid h-8 max-h-8 min-h-8 min-w-[92px] place-items-center rounded-[9px] px-3 py-0 font-apple text-[12px] leading-none font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40',
+                                                  selected
+                                                      ? 'bg-white text-sub-1'
+                                                      : 'text-[#B8C0CF] hover:text-white disabled:hover:bg-transparent',
+                                              )
+                                            : cn(
+                                                  'rounded-[8px] px-4 py-1.5 font-apple text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
+                                                  selected
+                                                      ? 'bg-main-1 text-white'
+                                                      : 'text-gray-3 hover:bg-white/70 disabled:hover:bg-transparent',
+                                              ),
+                                    )}
+                                >
+                                    <span className="block leading-none">{team.name}</span>
+                                </button>
+                            );
+                        })}
+
+                        {shiftTeams.length === 0 && (
+                            <div
                                 className={cn(
-                                    isDarkSegmented
-                                        ? cn(
-                                              'box-border grid h-8 max-h-8 min-h-8 min-w-[92px] place-items-center rounded-[9px] px-3 py-0 font-apple text-[12px] leading-none font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40',
-                                              selected
-                                                  ? 'bg-white text-sub-1'
-                                                  : 'text-[#B8C0CF] hover:text-white disabled:hover:bg-transparent',
-                                          )
-                                        : cn(
-                                              'rounded-[8px] px-4 py-1.5 font-apple text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
-                                              selected
-                                                  ? 'bg-main-1 text-white'
-                                                  : 'text-gray-3 hover:bg-white/70 disabled:hover:bg-transparent',
-                                          ),
+                                    'px-4 py-1.5 font-apple text-[14px] font-medium',
+                                    isDarkSegmented ? 'text-[#AEB7C7]' : 'text-gray-3',
                                 )}
                             >
-                                <span className="block leading-none">{team.name}</span>
-                            </button>
-                        );
-                    })}
-
-                    {shiftTeams.length === 0 && (
-                        <div
-                            className={cn(
-                                'px-4 py-1.5 font-apple text-[14px] font-medium',
-                                isDarkSegmented ? 'text-[#AEB7C7]' : 'text-gray-3',
-                            )}
-                        >
-                            {emptyLabel}
-                        </div>
-                    )}
+                                {emptyLabel}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            ) : null}
         </div>
     );
 }

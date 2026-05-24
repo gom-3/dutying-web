@@ -1,5 +1,7 @@
 export {default as LogoV2} from './LogoV2';
 export {default as LogoV2Black} from './LogoV2Black';
+export {default as LogoSymbolPurple} from './LogoSymbolPurple';
+export {default as LogoWordmarkPurple} from './LogoWordmarkPurple';
 export {default as AppstoreGrayIcon} from './AppstoreGrayIcon';
 export {default as AppstoreIcon} from './AppstoreIcon';
 export {default as AccountIcon} from './AccountIcon';
@@ -53,6 +55,7 @@ export {default as RequestCheckIcon} from './RequestCheckIcon';
 export {default as RequestIcon} from './RequestIcon';
 export {default as RequestIconSelected} from './RequestIconSelected';
 export {default as RequestSlashIcon} from './RequestSlashIcon';
+export {default as RequestShiftUmbrellaIcon} from './RequestShiftUmbrellaIcon';
 export {default as RestoreIcon} from './RestoreIcon';
 export {default as RestoreIconDisable} from './RestoreIconDisable';
 export {default as SaveCompleteIcon} from './SaveCompleteIcon';

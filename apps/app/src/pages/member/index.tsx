@@ -680,7 +680,7 @@ function MemberPage() {
                                 className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                                 onClick={() => setShowDeleteTeamModal(false)}
                             >
-                                취소
+                                닫기
                             </button>
                             <button
                                 type="button"
@@ -1529,7 +1529,7 @@ function MemberNurseRow({
                                 className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
                                 onClick={() => setDeleteConfirmModalOpen(false)}
                             >
-                                취소
+                                닫기
                             </button>
                             <button
                                 type="button"

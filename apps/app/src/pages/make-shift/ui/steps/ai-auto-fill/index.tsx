@@ -1,4 +1,3 @@
-import {cn} from '@dutying/utils/style';
 import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import toast from 'react-hot-toast';
@@ -6,9 +5,9 @@ import {wardQueryOptions} from '@/entities/ward/model/queries';
 import useAuth from '@/features/auth';
 import {docToShift, docToWardShiftsDTO, useShiftEditorCommands, useShiftEditorStore} from '@/features/shift-editor';
 import WardAPI from '@/shared/api/ward';
-import {type TI18nKey, useTypedTranslation} from '@/shared/hook/use-typed-translation';
+import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
 import PageState from '@/shared/ui/PageState';
-import {canConfirmAiAutofill, getAiAutofillStatusTone, type TAiAutofillStatus} from '../../../model/ai-autofill-state';
+import {canConfirmAiAutofill, type TAiAutofillStatus} from '../../../model/ai-autofill-state';
 import {requestAiSchedule} from '../../../model/ai-schedule-provider';
 import {useMakeShiftStore} from '../../../model/make-shift-store';
 import {useMakeShiftUseCase} from '../../../model/make-shift-use-case';
@@ -16,25 +15,6 @@ import {MakeShiftCalendar} from '../shared/make-shift-calendar';
 import {maskDutyDocNonFixedCells} from '../shared/mask-duty-doc-non-fixed';
 import {useDutyEditorStep} from '../shared/use-duty-editor-step';
 import {AiAutofillToolbar} from './ai-autofill-toolbar';
-
-const AI_STATUS_TITLE_KEY: Record<TAiAutofillStatus, TI18nKey> = {
-    idle: 'page.makeShift.aiRefill.title.idle',
-    loading: 'page.makeShift.aiRefill.title.loading',
-    success: 'page.makeShift.aiRefill.title.success',
-    error: 'page.makeShift.aiRefill.title.error',
-};
-const AI_STATUS_CARD_CLASS = {
-    neutral: 'bg-gray-7 text-sub-1',
-    progress: 'bg-main-light text-main-1',
-    success: 'bg-[#E8F7F1] text-[#167A52]',
-    danger: 'bg-[#FFF1F2] text-[#C2414B]',
-} as const;
-const AI_STATUS_DOT_CLASS = {
-    neutral: 'bg-gray-4',
-    progress: 'bg-main-1',
-    success: 'bg-[#20A66A]',
-    danger: 'bg-[#F07C84]',
-} as const;
 
 /**
  * AI 자동 채우기 — MakeShiftCalendar + 툴바. 가로 스크롤은 페이지(page-view)가 담당, 캘린더는 cqw 기반(스케일 없음).
@@ -90,7 +70,6 @@ export function AiAutofill() {
         !dutyQuery.isError &&
         Boolean(dutyQuery.data) &&
         canConfirmAiAutofill(aiStatus);
-    const statusTone = getAiAutofillStatusTone(aiStatus);
     const handleConfirm = async () => {
         if (!wardId || !dutyQuery.data || !canConfirm) return;
 
@@ -192,15 +171,6 @@ export function AiAutofill() {
                 onConfirm={handleConfirm}
                 canConfirm={canConfirm}
             />
-
-            <div
-                id="make_ai_autofill_status"
-                className={cn('flex min-w-0 items-center gap-2 rounded-[14px] px-3 py-2', AI_STATUS_CARD_CLASS[statusTone])}
-                aria-live="polite"
-            >
-                <span className={cn('size-2 shrink-0 rounded-full', AI_STATUS_DOT_CLASS[statusTone])} aria-hidden />
-                <p className="min-w-0 truncate font-apple text-[13px] leading-tight font-semibold">{t(AI_STATUS_TITLE_KEY[aiStatus])}</p>
-            </div>
 
             {dutyQuery.isLoading && (
                 <PageState tone="loading" title={t('page.makeShift.aiRefill.loading')} description={t('page.state.loadingDescription')} />

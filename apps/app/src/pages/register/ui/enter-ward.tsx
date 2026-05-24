@@ -98,7 +98,7 @@ function EnterWard() {
                 <h1 className="absolute top-0 left-0 font-apple text-[2rem] font-semibold text-text-1">병동 입장</h1>
                 <BackIcon className="absolute top-0 -left-10 h-12 w-12 -translate-x-full" />
                 <div className="flex flex-col items-center gap-6 bg-white">
-                    <p className="font-apple text-[1.5rem] font-medium text-main-2">해당 병동의 6자리 코드를 입력해주세요.</p>
+                    <p className="font-apple text-[1.5rem] font-medium text-main-2">해당 병동의 6자리 코드를 입력해 주세요.</p>
                     <div ref={clickAwayRef} className="flex h-50 w-140 justify-center gap-[.75rem] rounded-[.9375rem] py-15 shadow-banner">
                         {codeList.map((code, index) => (
                             <div
@@ -115,7 +115,7 @@ function EnterWard() {
                 </div>
                 {error ? (
                     <div className="mt-5 w-140 rounded-[.3125rem] bg-main-4 py-[.625rem] text-center font-apple text-[1.25rem] font-medium text-main-1">
-                        올바른 코드가 아닙니다.
+                        병동 코드를 다시 확인해 주세요.
                     </div>
                 ) : null}
                 {open
@@ -136,7 +136,7 @@ function EnterWard() {
                                       <h3 className="font-apple text-[1.75rem] font-semibold text-main-1 underline">
                                           {ward?.hospitalName} {ward?.name}
                                       </h3>
-                                      <p className="font-apple text-[1.25rem] font-medium text-sub-2">맞으시다면 입장해주세요</p>
+                                      <p className="font-apple text-[1.25rem] font-medium text-sub-2">맞다면 입장해 주세요</p>
                                   </div>
                                   <div className="flex gap-6">
                                       <button

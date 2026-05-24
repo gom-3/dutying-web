@@ -15,6 +15,8 @@ const translations: Record<string, string> = {
     'page.wardSettings.shiftTypes.column.type': '유형',
     'page.wardSettings.shiftTypes.column.workTime': '근무 시간',
     'page.wardSettings.shiftTypes.column.color': '색상',
+    'page.wardSettings.constraints.teamLabel': '근무팀',
+    'page.wardSettings.constraints.teamDescription': '제약 조건은 근무팀별로 관리돼요.',
     'page.wardSettings.constraints.noTeamsTitle': '등록된 근무팀이 없어요',
     'page.wardSettings.constraints.noTeamsDescription': '제약 조건을 관리하려면 먼저 근무팀을 만들어 주세요.',
     'page.wardSettings.constraints.error': '제약 조건을 불러오지 못했어요',
@@ -42,8 +44,17 @@ vi.mock('@/features/create-shift-modal', () => ({
         open ? <div>{shiftType ? `edit-modal:${shiftType.name}` : 'create-modal'}</div> : null,
 }));
 
+vi.mock('@/pages/make-shift/ui/steps/constraints', () => ({
+    Constraints: ({wardId, shiftTeamId, variant}: {wardId?: number | null; shiftTeamId?: number | null; variant?: string}) => (
+        <div data-testid="shift-constraint-rules">
+            {`rules:${wardId ?? 'none'}:${shiftTeamId ?? 'none'}:${variant ?? 'flow'}`}
+        </div>
+    ),
+}));
+
 type TMockValue = {
     state: {
+        wardId: number | null;
         currentTab: 'shiftTypes' | 'constraints';
         shiftTypes: Array<{
             wardShiftTypeId: number;
@@ -61,21 +72,6 @@ type TMockValue = {
         shiftTeams: Array<{shiftTeamId: number; name: string; nurseCnt: number; nurses: []}>;
         shiftTeamsStatus: 'success' | 'pending' | 'error';
         currentShiftTeamId: number | null;
-        constraint: {
-            maxContinuousWork: boolean;
-            maxContinuousWorkVal: number;
-            minNightInterval: boolean;
-            minNightIntervalVal: number;
-            maxContinuousNight: boolean;
-            maxContinuousNightVal: number;
-            minContinuousNight: boolean;
-            minContinuousNightVal: number;
-            minOffAssignAfterNight: boolean;
-            minOffAssignAfterNightVal: number;
-            excludeCertainWorkTypes: boolean;
-            excludeNightBeforeReqOff: boolean;
-        } | null;
-        constraintStatus: 'success' | 'pending' | 'error' | 'idle';
     };
     actions: {
         selectTab: ReturnType<typeof vi.fn>;
@@ -83,16 +79,15 @@ type TMockValue = {
         addShiftType: ReturnType<typeof vi.fn>;
         updateShiftType: ReturnType<typeof vi.fn>;
         deleteShiftType: ReturnType<typeof vi.fn>;
-        updateConstraint: ReturnType<typeof vi.fn>;
         retryShiftTypes: ReturnType<typeof vi.fn>;
         retryShiftTeams: ReturnType<typeof vi.fn>;
-        retryConstraint: ReturnType<typeof vi.fn>;
     };
 };
 
 function baseValue() {
     return {
         state: {
+            wardId: 1,
             currentTab: 'shiftTypes' as const,
             shiftTypes: [
                 {
@@ -112,21 +107,6 @@ function baseValue() {
             shiftTeams: [{shiftTeamId: 1, name: '중환자실 A팀', nurseCnt: 0, nurses: []}],
             shiftTeamsStatus: 'success' as const,
             currentShiftTeamId: 1,
-            constraint: {
-                maxContinuousWork: true,
-                maxContinuousWorkVal: 5,
-                minNightInterval: true,
-                minNightIntervalVal: 4,
-                maxContinuousNight: true,
-                maxContinuousNightVal: 3,
-                minContinuousNight: false,
-                minContinuousNightVal: 2,
-                minOffAssignAfterNight: false,
-                minOffAssignAfterNightVal: 2,
-                excludeCertainWorkTypes: false,
-                excludeNightBeforeReqOff: false,
-            },
-            constraintStatus: 'success' as const,
         },
         actions: {
             selectTab: vi.fn(),
@@ -134,10 +114,8 @@ function baseValue() {
             addShiftType: vi.fn(),
             updateShiftType: vi.fn(),
             deleteShiftType: vi.fn(),
-            updateConstraint: vi.fn(),
             retryShiftTypes: vi.fn(),
             retryShiftTeams: vi.fn(),
-            retryConstraint: vi.fn(),
         },
     };
 }
@@ -171,7 +149,7 @@ describe('WardSettingsPage', () => {
         expect(screen.getByText('근무명')).toBeInTheDocument();
         expect(screen.getByText('약자')).toBeInTheDocument();
         expect(screen.getByText('근무 시간')).toBeInTheDocument();
-        expect(screen.getByText('데이')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('데이')).toBeInTheDocument();
         expect(screen.getByText('8h')).toBeInTheDocument();
     });
 
@@ -194,31 +172,31 @@ describe('WardSettingsPage', () => {
         expect(selectTab).toHaveBeenCalledWith('constraints');
     });
 
-    it('근무 추가하기를 누르면 생성 모달을 연다', async () => {
+    it('근무 유형 추가하기를 누르면 새 근무 유형 행을 추가한다', async () => {
         const user = userEvent.setup();
 
         mockUseWardSettings.mockReturnValue(createValue());
 
         render(<WardSettingsPage />);
 
-        await user.click(screen.getByRole('button', {name: '근무 추가하기'}));
+        await user.click(screen.getByRole('button', {name: '근무 유형 추가하기'}));
 
-        expect(screen.getByText('create-modal')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('새 근무')).toBeInTheDocument();
     });
 
-    it('행을 누르면 수정 모달을 연다', async () => {
+    it('색상 버튼을 누르면 색상 팔레트를 연다', async () => {
         const user = userEvent.setup();
 
         mockUseWardSettings.mockReturnValue(createValue());
 
         render(<WardSettingsPage />);
 
-        await user.click(screen.getByRole('button', {name: '데이 근무 유형 수정'}));
+        await user.click(screen.getByRole('button', {name: '데이 색상 선택'}));
 
-        expect(screen.getByText('edit-modal:데이')).toBeInTheDocument();
+        expect(screen.getByRole('button', {name: '#9AD7CB 선택'})).toBeInTheDocument();
     });
 
-    it('행 내부 스위치에서 Enter를 눌러도 수정 모달이 열리지 않는다', async () => {
+    it('휴무 버튼을 누르면 draft만 휴무 상태로 바꾼다', async () => {
         const user = userEvent.setup();
         const updateShiftType = vi.fn();
 
@@ -240,22 +218,12 @@ describe('WardSettingsPage', () => {
 
         render(<WardSettingsPage />);
 
-        const leaveButton = screen.getByRole('radio', {name: '휴무'});
+        const leaveButton = screen.getByRole('button', {name: '휴무'});
 
-        leaveButton.focus();
-        await user.keyboard('{Enter}');
+        await user.click(leaveButton);
 
-        expect(updateShiftType).toHaveBeenCalledWith(1, {
-            name: '데이',
-            shortName: 'D',
-            startTime: '07:00',
-            endTime: '15:00',
-            color: '#4dc2ad',
-            isDefault: false,
-            isOff: true,
-            isCounted: true,
-            classification: 'OTHER_LEAVE',
-        });
+        expect(updateShiftType).not.toHaveBeenCalled();
+        expect(screen.getAllByDisplayValue('-')).toHaveLength(2);
         expect(screen.queryByText('edit-modal:데이')).not.toBeInTheDocument();
     });
 
@@ -266,7 +234,6 @@ describe('WardSettingsPage', () => {
                     currentTab: 'constraints',
                     shiftTeams: [],
                     currentShiftTeamId: null,
-                    constraintStatus: 'idle',
                 },
             }),
         );
@@ -277,24 +244,22 @@ describe('WardSettingsPage', () => {
         expect(screen.getByText('제약 조건을 관리하려면 먼저 근무팀을 만들어 주세요.')).toBeInTheDocument();
     });
 
-    it('제약 조건을 불러오는 동안에는 에러 대신 로딩 상태만 보여준다', () => {
+    it('제약 조건 탭에서 근무표 플로우의 제약조건 UI를 보여준다', () => {
         mockUseWardSettings.mockReturnValue(
             createValue({
                 state: {
                     currentTab: 'constraints',
-                    constraint: null,
-                    constraintStatus: 'pending',
                 },
             }),
         );
 
         render(<WardSettingsPage />);
 
-        expect(screen.getByText('제약 조건을 불러오는 중이에요')).toBeInTheDocument();
-        expect(screen.queryByText('제약 조건을 불러오지 못했어요')).not.toBeInTheDocument();
+        expect(screen.getByText('근무팀')).toBeInTheDocument();
+        expect(screen.getByTestId('shift-constraint-rules')).toHaveTextContent('rules:1:1:settings');
     });
 
-    it('제약 조건 로드 실패 상태에서도 다른 팀으로 전환할 수 있다', async () => {
+    it('제약 조건 탭에서 다른 팀으로 전환할 수 있다', async () => {
         const user = userEvent.setup();
         const selectShiftTeam = vi.fn();
 
@@ -307,8 +272,6 @@ describe('WardSettingsPage', () => {
                         {shiftTeamId: 2, name: '중환자실 B팀', nurseCnt: 0, nurses: []},
                     ],
                     currentShiftTeamId: 1,
-                    constraint: null,
-                    constraintStatus: 'error',
                 },
                 actions: {
                     selectShiftTeam,
@@ -317,8 +280,6 @@ describe('WardSettingsPage', () => {
         );
 
         render(<WardSettingsPage />);
-
-        expect(screen.getByText('제약 조건을 불러오지 못했어요')).toBeInTheDocument();
 
         await user.click(screen.getByRole('button', {name: '중환자실 B팀'}));
 

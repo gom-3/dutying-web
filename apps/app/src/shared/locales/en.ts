@@ -10,20 +10,27 @@ export const en: TLocale = {
             retry: 'Retry',
         },
         navigationBar: {
+            ariaLabel: 'Primary navigation',
             expandAria: 'Expand sidebar',
             foldAria: 'Collapse sidebar',
             home: 'Schedule',
             sections: {
                 schedule: 'Schedule',
+                operations: 'Operations',
                 settings: 'Settings',
             },
             items: {
-                make: 'Create schedule',
-                request: 'Request shift management',
-                member: 'Member management',
-                wardSettings: 'Duty management',
-                account: 'Account management',
+                make: 'Schedule',
+                request: 'Shift requests',
+                board: 'Board',
+                member: 'Members',
+                wardSettings: 'Duty settings',
+                account: 'Account',
             },
+        },
+        board: {
+            title: 'Board',
+            description: 'A shared space for notices and ward communication is being prepared.',
         },
         landing: {
             title: 'Duty Schedule\nNow Easier!',

@@ -15,9 +15,9 @@ function SelectEnterOrCreate() {
                 <h1 className="font-apple text-[2rem] font-semibold text-text-1">
                     {accountMe?.name}님
                     <br />
-                    환영합니다.
+                    환영해요.
                 </h1>
-                <p className="mt-6 font-apple text-[1.25rem] font-medium text-sub-2.5">병동 입장 혹은 생성을 선택해주세요.</p>
+                <p className="mt-6 font-apple text-[1.25rem] font-medium text-sub-2.5">병동 입장 또는 생성을 선택해 주세요.</p>
             </div>
             <div className="flex w-full gap-7.5">
                 <div
@@ -25,7 +25,7 @@ function SelectEnterOrCreate() {
                     onClick={() => naviagte(ROUTE.ONBOARDING_WARD_CREATE)}
                 >
                     <h2 className="font-apple text-[1.75rem] font-bold text-main-1 group-hover:text-white">병동 생성</h2>
-                    <p className="font-apple text-[1rem] text-main-2 group-hover:text-main-4">병동을 새로 생성합니다.</p>
+                    <p className="font-apple text-[1rem] text-main-2 group-hover:text-main-4">병동을 새로 만들어요.</p>
                     <RegisterWardIcon className="ml-auto h-12 w-12" />
                 </div>
                 <div
@@ -33,7 +33,7 @@ function SelectEnterOrCreate() {
                     onClick={() => naviagte(ROUTE.ENTER_WARD)}
                 >
                     <h2 className="font-apple text-[1.75rem] font-bold text-main-1 group-hover:text-white">병동 입장</h2>
-                    <p className="font-apple text-[1rem] text-main-2 group-hover:text-main-4">기존에 생성되어 있는 병동에 입장합니다.</p>
+                    <p className="font-apple text-[1rem] text-main-2 group-hover:text-main-4">이미 만든 병동에 입장해요.</p>
                     <EnterWardIcon className="ml-auto h-12 w-12" />
                 </div>
             </div>

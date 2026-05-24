@@ -8,12 +8,12 @@ vi.mock('react-loading', () => ({
 }));
 
 describe('PageState component', () => {
-    it('renders title and description in loading state', () => {
+    it('renders spinner only in loading state', () => {
         render(<PageState tone="loading" title="Loading" description="Please wait a moment." />);
 
         expect(screen.getByRole('status')).toBeInTheDocument();
         expect(screen.getByText('Loading')).toBeInTheDocument();
-        expect(screen.getByText('Please wait a moment.')).toBeInTheDocument();
+        expect(screen.queryByText('Please wait a moment.')).not.toBeInTheDocument();
     });
 
     it('executes retry action in error state', async () => {
@@ -24,7 +24,7 @@ describe('PageState component', () => {
 
         const button = screen.getByRole('button', {name: 'Retry'});
 
-        expect(button).toHaveClass('h-11', 'rounded-[14px]');
+        expect(button).toHaveClass('px-0', 'text-main-1');
 
         await user.click(button);
 

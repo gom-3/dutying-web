@@ -2,13 +2,10 @@
 import {cn} from '@dutying/utils/style';
 import {Check, CircleAlert, Plus, X} from 'lucide-react';
 import {type ReactNode, useEffect, useMemo, useRef, useState} from 'react';
-import {DUTY_RULE_KEYS, DUTY_RULE_META} from '@/features/shift-editor/model/duty-constraints';
-import {type TDutyRuleMeta} from '@/features/shift-editor/model/duty-constraints';
+import {Constraints as ShiftConstraintRules} from '@/pages/make-shift/ui/steps/constraints';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
-import Select from '@/shared/ui/form-controls/Select';
 import PageState from '@/shared/ui/PageState';
 import {Input} from '@/shared/ui/primitives/input';
-import Toggle from '@/shared/ui/Toggle';
 import {formatShiftDuration} from '../model/utils';
 import {
     type TWardSettingsActions,
@@ -705,10 +702,13 @@ function ConstraintsContent({
     state,
     actions,
 }: {
-    state: Pick<TWardSettingsState, 'shiftTeams' | 'shiftTeamsStatus' | 'currentShiftTeamId' | 'constraint' | 'constraintStatus'>;
-    actions: Pick<TWardSettingsActions, 'selectShiftTeam' | 'updateConstraint' | 'retryShiftTeams' | 'retryConstraint'>;
+    state: Pick<TWardSettingsState, 'wardId' | 'shiftTeams' | 'shiftTeamsStatus' | 'currentShiftTeamId'>;
+    actions: Pick<TWardSettingsActions, 'selectShiftTeam' | 'retryShiftTeams'>;
 }) {
     const {t} = useTypedTranslation();
+    const today = useMemo(() => new Date(), []);
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
 
     if (state.shiftTeamsStatus === 'pending') {
         return (
@@ -745,11 +745,9 @@ function ConstraintsContent({
         );
     }
 
-    const constraint = state.constraintStatus === 'success' ? state.constraint : null;
-
     return (
-        <div className="mx-auto w-full max-w-[760px] rounded-[16px] bg-white">
-            <div className="flex flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto w-full max-w-[960px]">
+            <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <p className="font-apple text-sm font-semibold text-sub-2.5">{t('page.wardSettings.constraints.teamLabel')}</p>
                     <p className="mt-1 font-apple text-sm text-gray-3">{t('page.wardSettings.constraints.teamDescription')}</p>
@@ -778,110 +776,13 @@ function ConstraintsContent({
                 </div>
             </div>
 
-            {state.constraintStatus === 'pending' || state.constraintStatus === 'idle' ? (
-                <PageState tone="loading" title={t('page.wardSettings.constraints.loading')} className="py-0" />
-            ) : null}
-
-            {state.constraintStatus === 'error' ? (
-                <PageState
-                    tone="error"
-                    title={t('page.wardSettings.constraints.error')}
-                    description={t('page.state.errorDescription')}
-                    action={{label: t('page.state.retry'), onClick: () => void actions.retryConstraint()}}
-                    className="py-0"
-                />
-            ) : null}
-
-            {constraint ? (
-                <>
-                    <div className="grid grid-cols-[minmax(220px,1fr)_128px_116px] items-center gap-x-4 px-5 py-4 text-left font-apple text-[13px] font-medium text-gray-3">
-                        <p>{t('page.wardSettings.constraints.column.rule')}</p>
-                        <p>{t('page.wardSettings.constraints.column.value')}</p>
-                        <p>{t('page.wardSettings.constraints.column.status')}</p>
-                    </div>
-
-                    {DUTY_RULE_KEYS.map((key) => {
-                        const meta = DUTY_RULE_META[key];
-                        const isActive = Boolean(constraint[meta.booleanField]);
-                        const value = meta.valueField ? (constraint[meta.valueField] as number) : null;
-
-                        return (
-                            <div
-                                key={key}
-                                className="grid min-h-[64px] grid-cols-[minmax(220px,1fr)_128px_116px] items-center gap-x-4 px-5 py-3"
-                            >
-                                <p className="font-apple text-[15px] font-medium text-sub-1">{t(meta.labelKey)}</p>
-                                <div className="flex">
-                                    <ConstraintValueEditor
-                                        meta={meta}
-                                        value={value}
-                                        onChange={(nextValue) => {
-                                            if (!meta.valueField) return;
-
-                                            void actions.updateConstraint({
-                                                ...constraint,
-                                                [meta.valueField]: nextValue,
-                                            });
-                                        }}
-                                    />
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <Toggle
-                                        isOn={isActive}
-                                        setIsOn={() => {
-                                            void actions.updateConstraint({
-                                                ...constraint,
-                                                [meta.booleanField]: !isActive,
-                                            });
-                                        }}
-                                    />
-                                    <p className="font-apple text-[11px] font-medium text-gray-3">
-                                        {isActive ? t('page.wardSettings.constraints.apply') : t('page.wardSettings.constraints.exclude')}
-                                    </p>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </>
-            ) : null}
-        </div>
-    );
-}
-
-function ConstraintValueEditor({
-    meta,
-    value,
-    onChange,
-}: {
-    meta: TDutyRuleMeta;
-    value: number | null;
-    onChange: (nextValue: number) => void;
-}) {
-    const {t} = useTypedTranslation();
-
-    if (!meta.valueField || !meta.valueOptions) {
-        return <p className="font-poppins text-[15px] font-medium text-sub-1">-</p>;
-    }
-
-    return (
-        <div className="flex items-center gap-3">
-            {meta.kind === 'maxDays' ? (
-                <p className="font-apple text-[14px] font-medium text-sub-1">{t('page.makeShift.constraints.phrase.max')}</p>
-            ) : null}
-            {meta.kind === 'minDays' ? (
-                <p className="font-apple text-[14px] font-medium text-sub-1">{t('page.makeShift.constraints.phrase.min')}</p>
-            ) : null}
-            <Select
-                value={value ?? ''}
-                options={meta.valueOptions.map((option) => ({value: option, label: option}))}
-                className="h-10 w-[72px]"
-                selectClassName="rounded-[10px] border-0 bg-gray-7 px-3 font-poppins text-[15px] font-medium text-sub-1 outline-none focus-visible:ring-2 focus-visible:ring-main-1"
-                onChange={(event) => onChange(parseInt(event.target.value, 10))}
+            <ShiftConstraintRules
+                wardId={state.wardId}
+                shiftTeamId={state.currentShiftTeamId}
+                year={year}
+                month={month}
+                variant="settings"
             />
-            {meta.kind !== 'noValue' ? (
-                <p className="font-apple text-[14px] font-medium text-sub-1">{t('page.makeShift.constraints.phrase.day')}</p>
-            ) : null}
         </div>
     );
 }
@@ -917,17 +818,14 @@ export function WardSettingsPageView({state, actions}: TWardSettingsPageViewProp
                 ) : (
                     <ConstraintsContent
                         state={{
+                            wardId: state.wardId,
                             shiftTeams: state.shiftTeams,
                             shiftTeamsStatus: state.shiftTeamsStatus,
                             currentShiftTeamId: state.currentShiftTeamId,
-                            constraint: state.constraint,
-                            constraintStatus: state.constraintStatus,
                         }}
                         actions={{
                             selectShiftTeam: actions.selectShiftTeam,
-                            updateConstraint: actions.updateConstraint,
                             retryShiftTeams: actions.retryShiftTeams,
-                            retryConstraint: actions.retryConstraint,
                         }}
                     />
                 )}

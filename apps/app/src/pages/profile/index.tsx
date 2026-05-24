@@ -165,7 +165,7 @@ function ProfilePage() {
 
             await setPhotoImage(compressedFile);
         } catch {
-            toast.error('프로필 이미지 처리에 실패했습니다.');
+            toast.error('프로필 이미지를 처리하지 못했어요.');
         } finally {
             e.target.value = '';
         }

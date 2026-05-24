@@ -82,7 +82,7 @@ function RegisterWard() {
                             id="name"
                             className="h-15 py-4.25 font-apple text-[1.5rem] font-medium text-sub-1"
                             error={match(errors.hospitalName?.type)
-                                .with('matches', () => '이름은 1~50자 한/영문에 특수문자를 사용할 수 없습니다.')
+                                .with('matches', () => '이름은 1~50자 한글/영문만 입력할 수 있어요.')
                                 .otherwise(() => undefined)}
                             {...register('hospitalName')}
                         />
@@ -95,7 +95,7 @@ function RegisterWard() {
                             id="name"
                             className="h-15 py-4.25 font-apple text-[1.5rem] font-medium text-sub-1"
                             error={match(errors.name?.type)
-                                .with('matches', () => '이름은 1~50자 한/영문에 특수문자를 사용할 수 없습니다.')
+                                .with('matches', () => '이름은 1~50자 한글/영문만 입력할 수 있어요.')
                                 .otherwise(() => undefined)}
                             {...register('name')}
                         />
