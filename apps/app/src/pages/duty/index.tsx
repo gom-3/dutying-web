@@ -1,10 +1,10 @@
-import {useDutyHook} from './model/duty-hook';
-import {DutyPageView} from './ui';
+import {Navigate, useLocation} from 'react-router';
+import ROUTE from '@/shared/constant/path';
 
 const DutyPage = () => {
-    const duty = useDutyHook();
+    const location = useLocation();
 
-    return <DutyPageView duty={duty} />;
+    return <Navigate to={`${ROUTE.MAKE}${location.search}`} replace />;
 };
 
 export default DutyPage;

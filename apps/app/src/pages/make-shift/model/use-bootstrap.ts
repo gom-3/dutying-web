@@ -38,11 +38,12 @@ export function useMakeShiftBootstrap(wardId: number | null) {
     const isHydrated = useMakeShiftStore((s) => s.isHydrated);
     const setHydrated = useMakeShiftStore((s) => s.setHydrated);
     const startFromStep = useMakeShiftStore((s) => s.startFromStep);
-    const resetToOverview = useMakeShiftStore((s) => s.resetToOverview);
     const setWardId = useMakeShiftStore((s) => s.setWardId);
     const phase = useMakeShiftStore((s) => s.phase);
     const currentStep = useMakeShiftStore((s) => s.currentStep);
+    const shiftExists = useMakeShiftStore((s) => s.shiftExists);
     const shiftFullyAssigned = useMakeShiftStore((s) => s.shiftFullyAssigned);
+    const confirmSchedule = useMakeShiftStore((s) => s.confirmSchedule);
     const autoRestoreAttemptedRef = useRef(false);
 
     useEffect(() => {
@@ -218,12 +219,40 @@ export function useMakeShiftBootstrap(wardId: number | null) {
     }, [currentShiftTeamId, month, reloadToken, setShiftExists, setShiftFullyAssigned, setShiftStatus, wardId, year]);
 
     useEffect(() => {
-        if (shiftStatus !== 'success' || !shiftFullyAssigned || phase !== 'stepping') return;
+        if (shiftStatus !== 'success' || !currentShiftTeamId) return;
 
-        if (currentStep >= 5) return;
+        if (shiftFullyAssigned) {
+            if (phase !== 'stepping' || currentStep !== 6) {
+                confirmSchedule();
+            }
 
-        resetToOverview();
-    }, [currentStep, phase, resetToOverview, shiftFullyAssigned, shiftStatus]);
+            return;
+        }
+
+        if (!shiftExists || phase !== 'overview') return;
+
+        const saved =
+            wardId && currentShiftTeamId
+                ? (loadDraftStep(wardId, currentShiftTeamId, year, month) ?? loadPersistedStep())
+                : loadPersistedStep();
+
+        startFromStep({
+            step: saved ?? 1,
+            openRestoreDraftModal: editorRef.current.getPersisted() !== null,
+        });
+    }, [
+        confirmSchedule,
+        currentShiftTeamId,
+        currentStep,
+        month,
+        phase,
+        shiftExists,
+        shiftFullyAssigned,
+        shiftStatus,
+        startFromStep,
+        wardId,
+        year,
+    ]);
 
     useEffect(() => {
         let cancelled = false;

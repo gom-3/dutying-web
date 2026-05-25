@@ -24,6 +24,91 @@ export type TShiftResponse = TShift;
 export type TRequestShiftResponse = TRequestShift;
 export type TDutyRequestResponse = TDutyRequest;
 
+export type TWardChatMessageResponse = {
+    messageId: number;
+    moimId: number;
+    wardId: number;
+    senderAccountId: number;
+    senderName: string;
+    text: string;
+    sentAt: string;
+    isDeleted: boolean;
+};
+
+export type TWardChatMessagesResponse = {
+    messages: TWardChatMessageResponse[];
+    nextCursorMessageId: number | null;
+    lastReadMessageId: number | null;
+    unreadCount: number;
+};
+
+export type TWardChatUnreadCountResponse = {
+    moimId: number;
+    wardId: number;
+    unreadCount: number;
+};
+
+export type TWardChatMessageListOptions = {
+    cursorMessageId?: number;
+    size?: number;
+};
+
+export type TCreateWardChatMessageDTO = {
+    text: string;
+    clientMessageId: string;
+};
+
+export type TReadWardChatDTO = {
+    lastReadMessageId: number;
+};
+
+export type TShiftConstraintSeverity = 'HARD' | 'SOFT';
+
+export type TShiftConstraintOption = {
+    type: string;
+    label?: string;
+    nurseId?: number;
+    name?: string;
+    wardShiftTypeId?: number;
+    code?: string;
+    day?: number;
+    level?: number;
+    proficiency?: number;
+    isPreceptor?: boolean;
+    isPreceptee?: boolean;
+};
+
+export type TShiftConstraintOptions = Record<string, TShiftConstraintOption[]>;
+
+export type TShiftConstraintSlot = {
+    key: string;
+    label: string;
+    inputType: string;
+    optionGroup?: string;
+    required?: boolean;
+    min?: number | null;
+    max?: number | null;
+};
+
+export type TShiftConstraintTemplate = {
+    templateCode: string;
+    category: string;
+    displayTemplate: string;
+    severity: TShiftConstraintSeverity;
+    allowedSeverities: TShiftConstraintSeverity[];
+    supportedInGenerator: boolean;
+    supportedInValidator: boolean;
+    slots: TShiftConstraintSlot[];
+};
+
+export type TShiftConstraintRuleCandidatesResponse = {
+    schemaVersion: number;
+    wardId: number;
+    shiftTeamId: number;
+    options: TShiftConstraintOptions;
+    templates: TShiftConstraintTemplate[];
+};
+
 export type TAiConstraintViolationPeriod = {
     start_day: number;
     end_day: number;
@@ -80,6 +165,7 @@ export type TAiScheduleResponse = {
 export interface IWardAPI {
     getWard: (wardId: number) => Promise<TWardResponse>;
     getWardConstraint: (wardId: number, shiftTeamId: number) => Promise<TWardConstraintResponse>;
+    getShiftConstraintRuleCandidates: (wardId: number, shiftTeamId: number) => Promise<TShiftConstraintRuleCandidatesResponse>;
     getWardByCode: (code: string) => Promise<TWardResponse>;
     getWaitingNurses: (wardId: number) => Promise<TWaitingNurseResponse[]>;
     createWard: (createWardDTO: TCreateWardDTO) => Promise<TWardResponse>;
@@ -90,6 +176,11 @@ export interface IWardAPI {
     updateWardConstraint: (wardId: number, shiftTeamId: number, constraint: TWardConstraintDTO) => Promise<TWardConstraintResponse>;
     deleteWaitingNurses: (wardId: number, nurseId: number) => Promise<void>;
     quitWard: (wardId: number) => Promise<void>;
+    getWardChatMessages: (wardId: number, options?: TWardChatMessageListOptions) => Promise<TWardChatMessagesResponse>;
+    createWardChatMessage: (wardId: number, message: TCreateWardChatMessageDTO) => Promise<TWardChatMessageResponse>;
+    readWardChat: (wardId: number, read: TReadWardChatDTO) => Promise<void>;
+    getWardChatUnreadCount: (wardId: number) => Promise<TWardChatUnreadCountResponse>;
+    getMyWardChatUnreadCounts: () => Promise<TWardChatUnreadCountResponse[]>;
     getReqShift: (wardId: number, shiftTeamId: number, year: number, month: number) => Promise<TRequestShiftResponse>;
     getShift: (wardId: number, shiftTeamId: number, year: number, month: number) => Promise<TShiftResponse>;
     getRequestList: (wardId: number, shiftTeamId: number, year: number, month: number) => Promise<TDutyRequestResponse[]>;

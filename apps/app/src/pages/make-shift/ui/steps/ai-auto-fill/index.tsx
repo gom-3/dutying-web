@@ -75,6 +75,10 @@ export function AiAutofill() {
 
         setIsWorking(true);
 
+        const progressToastId = 'make-shift-confirm-progress';
+
+        toast.loading(t('page.makeShift.navigation.saving'), {id: progressToastId});
+
         try {
             const dto = docToWardShiftsDTO(editorDoc, dutyQuery.data);
             const nextShift = docToShift(editorDoc, dutyQuery.data);
@@ -87,6 +91,7 @@ export function AiAutofill() {
         } catch {
             toast.error(t('page.makeShift.aiRefill.saveFailed'));
         } finally {
+            toast.dismiss(progressToastId);
             setIsWorking(false);
         }
     };
@@ -169,11 +174,17 @@ export function AiAutofill() {
                 aiStatus={aiStatus}
                 hasCompletedAiFill={hasCompletedAiFill}
                 onConfirm={handleConfirm}
+                isConfirming={isWorking}
                 canConfirm={canConfirm}
             />
 
             {dutyQuery.isLoading && (
-                <PageState tone="loading" title={t('page.makeShift.aiRefill.loading')} description={t('page.state.loadingDescription')} />
+                <PageState
+                    tone="loading"
+                    loadingColor="purple"
+                    title={t('page.makeShift.aiRefill.loading')}
+                    description={t('page.state.loadingDescription')}
+                />
             )}
             {dutyQuery.isError && (
                 <PageState

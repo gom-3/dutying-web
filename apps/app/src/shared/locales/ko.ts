@@ -65,8 +65,8 @@ export const ko = {
                 constraints: {
                     label: '제약조건',
                     caption: '제약 조건을 정의해요',
-                    introTitle: '제약조건을 확인해 주세요',
-                    introDescription: '강제조건은 반드시 지켜요\n약제약조건은 가능하면 반영해요',
+                    introTitle: '제약조건의 우선순위를 확인해 주세요',
+                    introDescription: '위에 있을수록 우선해서 반영돼요\n중요한 제약조건은 위쪽에 두는 게 좋아요',
                 },
                 requests: {
                     label: '신청 근무 확정',
@@ -100,6 +100,7 @@ export const ko = {
                 previous: '이전',
                 next: '다음',
                 saving: '저장 중…',
+                moving: '이동 중…',
                 complete: '완료',
                 sequentialRequired: '앞 단계부터 차례대로 진행해 주세요.',
             },

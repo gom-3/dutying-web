@@ -1,6 +1,7 @@
 import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import toast from 'react-hot-toast';
+import {BouncingDots} from '@/components/loading-ui/bouncing-dots';
 import {wardQueryOptions} from '@/entities/ward/model/queries';
 import useAuth from '@/features/auth';
 import {docToWardShiftsDTO, useShiftEditorStore} from '@/features/shift-editor';
@@ -12,6 +13,7 @@ import PageState from '@/shared/ui/PageState';
 import {canGoNext, canGoPrev, useMakeShiftStore} from '../../model/make-shift-store';
 import {useMakeShiftUseCase} from '../../model/make-shift-use-case';
 import {MAKE_SHIFT_STEP_NAV_BUTTON_CLASS} from '../make-shift-step-nav';
+import {useFlowTransitionFeedback} from '../use-flow-transition-feedback';
 import {MakeShiftCalendar} from './shared/make-shift-calendar';
 import {useDutyEditorStep} from './shared/use-duty-editor-step';
 
@@ -31,6 +33,7 @@ export function FixedShifts() {
     const month = useMakeShiftStore((s) => s.month);
     const currentShiftTeamId = useMakeShiftStore((s) => s.currentShiftTeamId);
     const useCase = useMakeShiftUseCase();
+    const {transitioning, runTransition} = useFlowTransitionFeedback();
     const setEditorMode = useShiftEditorStore((s) => s.setEditorMode);
     const editorMode = useShiftEditorStore((s) => s.editorMode);
     const [isSaving, setIsSaving] = useState(false);
@@ -53,6 +56,10 @@ export function FixedShifts() {
 
         setIsSaving(true);
 
+        const progressToastId = 'make-shift-fixed-shifts-save-progress';
+
+        toast.loading(t('page.makeShift.navigation.saving'), {id: progressToastId});
+
         try {
             const dto = docToWardShiftsDTO(editorDoc, dutyQuery.data);
 
@@ -64,6 +71,7 @@ export function FixedShifts() {
         } catch {
             toast.error(t('page.makeShift.fixedShifts.saveFailed'));
         } finally {
+            toast.dismiss(progressToastId);
             setIsSaving(false);
         }
     }, [wardId, dutyQuery.data, canNext, isSaving, editorDoc, queryClient, currentShiftTeamId, year, month, useCase, t]);
@@ -117,10 +125,11 @@ export function FixedShifts() {
                         size="md"
                         type="button"
                         className={`cursor-pointer border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed ${MAKE_SHIFT_STEP_NAV_BUTTON_CLASS}`}
-                        onClick={() => useCase.prev()}
-                        disabled={!canPrev}
+                        onClick={() => runTransition('prev', useCase.prev)}
+                        disabled={!canPrev || isSaving || transitioning !== null}
                     >
-                        {t('page.makeShift.navigation.previous')}
+                        {transitioning === 'prev' ? <BouncingDots className="w-5 shrink-0 text-main-1" /> : null}
+                        {transitioning === 'prev' ? t('page.makeShift.navigation.moving') : t('page.makeShift.navigation.previous')}
                     </Button>
                     <Button
                         size="md"
@@ -129,6 +138,7 @@ export function FixedShifts() {
                         onClick={() => void handleNext()}
                         disabled={nextDisabled}
                     >
+                        {isSaving ? <BouncingDots className="w-5 shrink-0 text-white" /> : null}
                         {isSaving ? t('page.makeShift.navigation.saving') : t('page.makeShift.navigation.next')}
                     </Button>
                 </div>
@@ -137,6 +147,7 @@ export function FixedShifts() {
             {dutyQuery.isLoading && (
                 <PageState
                     tone="loading"
+                    loadingColor="purple"
                     title={t('page.makeShift.fixedShifts.loading')}
                     description={t('page.state.loadingDescription')}
                 />

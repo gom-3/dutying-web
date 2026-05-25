@@ -1,5 +1,7 @@
 ﻿import {type TDutyRequest, type TRequestShift} from '@/entities/shift';
 
+export const FORCE_MOCK_DUTY_REQUEST_LIST = true;
+
 export const mockDutyRequestList: TDutyRequest[] = [
     {
         wardReqShiftId: 1,

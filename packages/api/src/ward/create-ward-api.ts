@@ -1,15 +1,21 @@
 import type {IApiClient} from '../client';
 import type {
     IWardAPI,
+    TCreateWardChatMessageDTO,
     TCreateShiftTypeDTO,
     TCreateWardDTO,
     TDutyRequestResponse,
     TEditWardDTO,
+    TReadWardChatDTO,
     TRequestShiftResponse,
+    TShiftConstraintRuleCandidatesResponse,
     TShiftResponse,
     TShiftTeamResponse,
     TUpdateShiftTeamDTO,
     TWaitingNurseResponse,
+    TWardChatMessageResponse,
+    TWardChatMessagesResponse,
+    TWardChatUnreadCountResponse,
     TWardConstraintDTO,
     TWardConstraintResponse,
     TWardResponse,
@@ -30,6 +36,16 @@ const toPostShiftQuery = (year: number, month: number) =>
         month: month.toString().padStart(2, '0'),
     }).toString();
 
+const toChatMessagesQuery = (cursorMessageId?: number, size?: number) => {
+    const params = new URLSearchParams();
+
+    if (typeof cursorMessageId === 'number') params.set('cursorMessageId', String(cursorMessageId));
+
+    if (typeof size === 'number') params.set('size', String(size));
+
+    return params.toString();
+};
+
 const toIsoDate = (year: number, month: number, day: number) =>
     `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
@@ -39,6 +55,12 @@ export const createWardApi = (client: IApiClient): IWardAPI => ({
     editWard: async (wardId: number, ward: TEditWardDTO) => (await client.patch<TWardResponse>(`/wards/${wardId}`, ward)).data,
     getWardConstraint: async (wardId: number, shiftTeamId: number) =>
         (await client.get<TWardConstraintResponse>(`/wards/${wardId}/shift-teams/${shiftTeamId}/constraint`)).data,
+    getShiftConstraintRuleCandidates: async (wardId: number, shiftTeamId: number) =>
+        (
+            await client.get<TShiftConstraintRuleCandidatesResponse>(
+                `/wards/${wardId}/shift-teams/${shiftTeamId}/shift-constraint-rules/candidates`,
+            )
+        ).data,
     updateWardConstraint: async (wardId: number, shiftTeamId: number, constraint: TWardConstraintDTO) =>
         (await client.patch<TWardConstraintResponse>(`/wards/${wardId}/shift-teams/${shiftTeamId}/constraint`, constraint)).data,
     getWardByCode: async (code: string) => (await client.get<TWardResponse>(`/wards/search?${new URLSearchParams({code}).toString()}`)).data,
@@ -72,6 +94,16 @@ export const createWardApi = (client: IApiClient): IWardAPI => ({
                 wardShifts,
             })
         ).data,
+    getWardChatMessages: async (wardId: number, options) => {
+        const query = toChatMessagesQuery(options?.cursorMessageId, options?.size);
+
+        return (await client.get<TWardChatMessagesResponse>(`/wards/${wardId}/chat/messages${query ? `?${query}` : ''}`)).data;
+    },
+    createWardChatMessage: async (wardId: number, message: TCreateWardChatMessageDTO) =>
+        (await client.post<TWardChatMessageResponse>(`/wards/${wardId}/chat/messages`, message)).data,
+    readWardChat: async (wardId: number, read: TReadWardChatDTO) => (await client.put<void>(`/wards/${wardId}/chat/read`, read)).data,
+    getWardChatUnreadCount: async (wardId: number) => (await client.get<TWardChatUnreadCountResponse>(`/wards/${wardId}/chat/unread-count`)).data,
+    getMyWardChatUnreadCounts: async () => (await client.get<TWardChatUnreadCountResponse[]>(`/wards/chat/unread-counts`)).data,
     updateReqShift: async (
         wardId: number,
         year: number,

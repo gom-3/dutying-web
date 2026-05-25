@@ -2,6 +2,7 @@ import {cn} from '@dutying/utils/style';
 import {CircleUserRound, MessageSquareText, SlidersHorizontal, UsersRound} from 'lucide-react';
 import {type ComponentType, type SVGProps} from 'react';
 import useEditWard from '@/features/edit-ward';
+import {useTotalPendingRequestCount} from '@/features/request-shift/model/use-total-pending-request-count';
 import ROUTE, {type TRoute} from '@/shared/constant/path';
 import {type TI18nKey, useTypedTranslation} from '@/shared/hook/use-typed-translation';
 import NavigationBarItem from './NavigationBarItem';
@@ -85,9 +86,10 @@ type TNavigationBarItemGroupsProps = {
 const NavigationBarItemGroups = ({collapsed = false}: TNavigationBarItemGroupsProps) => {
     const {t} = useTypedTranslation();
     const {
-        state: {watingNurses},
+        state: {ward, watingNurses},
     } = useEditWard();
     const waitingCount = watingNurses?.length ?? 0;
+    const pendingRequestCount = useTotalPendingRequestCount(ward?.shiftTeams);
 
     return (
         <nav aria-label={t('page.navigationBar.ariaLabel')} className={cn('w-full', collapsed ? 'mt-5' : 'mt-6')}>
@@ -106,7 +108,9 @@ const NavigationBarItemGroups = ({collapsed = false}: TNavigationBarItemGroupsPr
                                 text={t(item.textKey)}
                                 collapsed={collapsed}
                                 disabled={item.disabled}
-                                badgeCount={item.path === ROUTE.MEMBER ? waitingCount : 0}
+                                badgeCount={
+                                    item.path === ROUTE.MEMBER ? waitingCount : item.path === ROUTE.REQUEST ? pendingRequestCount : 0
+                                }
                             />
                         ))}
                     </div>

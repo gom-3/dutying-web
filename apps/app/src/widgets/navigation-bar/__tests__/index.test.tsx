@@ -1,9 +1,15 @@
 import {MemoryRouter, Route, Routes} from 'react-router';
-import {describe, expect, it, vi} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import ROUTE from '@/shared/constant/path';
 import {render, screen, userEvent} from '@/shared/util/test-utils';
 import NavigationBar from '..';
 
+const mockUseTotalPendingRequestCount = vi.fn(() => 0);
+const mockUseEditWard = vi.fn(() => ({
+    state: {
+        watingNurses: [],
+    },
+}));
 const translations = {
     'page.navigationBar.ariaLabel': '주요 메뉴',
     'page.navigationBar.expandAria': '사이드바 펼치기',
@@ -25,7 +31,21 @@ vi.mock('@/shared/hook/use-typed-translation', () => ({
     }),
 }));
 
+vi.mock('@/features/edit-ward', () => ({
+    default: () => mockUseEditWard(),
+}));
+
+vi.mock('@/features/request-shift/model/use-total-pending-request-count', () => ({
+    useTotalPendingRequestCount: () => mockUseTotalPendingRequestCount(),
+}));
+
 describe('NavigationBar', () => {
+    beforeEach(() => {
+        mockUseTotalPendingRequestCount.mockReset();
+        mockUseTotalPendingRequestCount.mockReturnValue(0);
+        mockUseEditWard.mockClear();
+    });
+
     it('상단 근무표 버튼을 제거하고 근무표 메뉴를 하나만 노출한다', () => {
         render(
             <MemoryRouter initialEntries={[ROUTE.MAKE]}>
@@ -127,5 +147,17 @@ describe('NavigationBar', () => {
         await userEvent.click(screen.getByRole('button', {name: '게시판'}));
 
         expect(await screen.findByText('board page')).toBeInTheDocument();
+    });
+
+    it('shows the total pending request badge on the request navigation item', () => {
+        mockUseTotalPendingRequestCount.mockReturnValue(7);
+
+        render(
+            <MemoryRouter initialEntries={[ROUTE.MAKE]}>
+                <NavigationBar />
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByRole('button', {name: translations['page.navigationBar.items.request']})).toHaveTextContent('7');
     });
 });

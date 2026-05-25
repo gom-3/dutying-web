@@ -46,7 +46,7 @@ function ProfilePage() {
         state: {accountMe, accountMeStatus, _loaded},
         actions: {handleGetAccountMe, handleLogout},
     } = useAuth();
-    const {handleEditProfile, handleEditAccountBasic, deleteAccount} = useEditAccount();
+    const {quitWard, handleEditProfile, handleEditAccountBasic, deleteAccount} = useEditAccount();
     const [writeNurse, setWriteNurse] = useState<TNurse | null>(null);
     const [draftName, setDraftName] = useState('');
     const [fieldErrors, setFieldErrors] = useState<TProfileErrors>({});
@@ -217,7 +217,7 @@ function ProfilePage() {
             </div>
 
             <div className="mx-auto mt-6 max-w-[480px] space-y-4">
-                <Card className="rounded-[24px] border-transparent p-6 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                <Card className="rounded-[24px] border-transparent p-6">
                     <p className="font-apple text-sm font-semibold text-sub-2.5">프로필</p>
                     <div className="mt-4 flex items-center gap-4">
                         <div className="h-20 w-20 shrink-0 rounded-full bg-main-4 p-1">
@@ -257,7 +257,7 @@ function ProfilePage() {
                     </div>
                 </Card>
 
-                <Card className="rounded-[24px] border-transparent p-6 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                <Card className="rounded-[24px] border-transparent p-6">
                     <h2 className="font-apple text-[20px] font-semibold text-sub-1">기본 정보</h2>
                     <p className="mt-1 font-apple text-xs text-gray-3">계정에서 사용하는 정보를 관리해요.</p>
                     <div className="mt-4 grid grid-cols-1 gap-3">
@@ -352,27 +352,31 @@ function ProfilePage() {
                         </div>
                     </div>
                 </Card>
-                <Card className="rounded-[24px] border-transparent p-6 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
-                    <h3 className="font-apple text-[18px] font-semibold text-sub-1">계정 작업</h3>
-                    <div className="mt-4 grid grid-cols-1 gap-2">
-                        <Button
+                <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 px-1">
+                    <button
+                        type="button"
+                        className="cursor-pointer bg-transparent p-0 font-apple text-sm font-medium text-gray-3 underline-offset-4 hover:underline"
+                        onClick={() => handleLogout(ROUTE.ROOT)}
+                    >
+                        로그아웃
+                    </button>
+                    {accountMe.wardId ? (
+                        <button
                             type="button"
-                            variant="outline"
-                            className="h-11 justify-start rounded-[12px]"
-                            onClick={() => handleLogout(ROUTE.ROOT)}
+                            className="cursor-pointer bg-transparent p-0 font-apple text-sm font-medium text-gray-3 underline-offset-4 hover:underline"
+                            onClick={quitWard}
                         >
-                            로그아웃
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="h-11 justify-start rounded-[12px] border-red/40 text-red hover:bg-red/5 hover:text-red"
-                            onClick={deleteAccount}
-                        >
-                            회원 탈퇴
-                        </Button>
-                    </div>
-                </Card>
+                            병동 나가기
+                        </button>
+                    ) : null}
+                    <button
+                        type="button"
+                        className="cursor-pointer bg-transparent p-0 font-apple text-sm font-medium text-red underline-offset-4 hover:underline"
+                        onClick={deleteAccount}
+                    >
+                        회원 탈퇴
+                    </button>
+                </div>
             </div>
 
             <div className="sticky bottom-3 mx-auto mt-4 flex max-w-[480px] items-center justify-end py-2">

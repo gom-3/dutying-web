@@ -74,6 +74,7 @@ export function ConfirmedShifts() {
             {!shift && dutyQuery.isLoading && (
                 <PageState
                     tone="loading"
+                    loadingColor="purple"
                     title={t('page.makeShift.confirmedShifts.loading')}
                     description={t('page.state.loadingDescription')}
                 />

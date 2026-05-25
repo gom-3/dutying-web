@@ -13,6 +13,7 @@ import {getGroupedDivisionNurses} from '@/pages/member/model/shift-team-list';
 import {PersonIcon} from '@/shared/assets/svg';
 import ROUTE from '@/shared/constant/path';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
+import PageState from '@/shared/ui/PageState';
 import {DutyManagementStatusCard, ManagementActionButton} from '@/widgets/duty-management/ui';
 import {useMakeShiftStore} from '../../model/make-shift-store';
 import {
@@ -102,14 +103,16 @@ export function Workers() {
         state: {nurseSaveStatus},
         actions: {moveNurseOrder, updateNurse},
     } = useEditShiftTeam();
-    const {data: teamNurses = []} = useQuery({
+    const teamNursesQuery = useQuery({
         ...wardQueryOptions.shiftTeamNurses(wardId ?? -1, currentShiftTeamId ?? -1),
         enabled,
     });
-    const {data: ward} = useQuery({
+    const wardQuery = useQuery({
         ...wardQueryOptions.id(wardId ?? -1),
         enabled: wardId !== null,
     });
+    const teamNurses = teamNursesQuery.data ?? [];
+    const ward = wardQuery.data;
     const sortedFromServer = useMemo(() => sortMakeShiftWorkersInitialOrder(teamNurses), [teamNurses]);
     const [sortMode, setSortMode] = useState<TMakeShiftWorkerSortMode>('priority');
     const [sortMenuOpen, setSortMenuOpen] = useState(false);
@@ -338,11 +341,13 @@ export function Workers() {
     const workerCount = displayWorkers.length;
     const activeWorkerCount = displayWorkers.filter((nurse) => getWorkerState(nurse)).length;
     const currentShiftTeamName =
-        ward?.shiftTeams.find((shiftTeam) => shiftTeam.shiftTeamId === currentShiftTeamId)?.name ?? t('page.makeShift.overview.noTeamsLabel');
+        ward?.shiftTeams.find((shiftTeam) => shiftTeam.shiftTeamId === currentShiftTeamId)?.name ??
+        t('page.makeShift.overview.noTeamsLabel');
     const noNurseTitle = `${currentShiftTeamName}에는 아직 간호사가 없어요`;
     const noNurseDescription = '근무표를 만들려면 먼저 간호사를 추가해 주세요. 근무자 관리에서 바로 시작할 수 있어요';
     const selectedSortOption = availableSortOptions.find((option) => option.value === sortMode) ?? availableSortOptions[0];
     const isWorkerToggleBusy = nurseSaveStatus === 'saving';
+    const isWorkersLoading = enabled && (teamNursesQuery.isPending || wardQuery.isPending);
 
     useEffect(() => {
         if (skillConfig.enabled || sortMode !== 'skill') return;
@@ -425,7 +430,15 @@ export function Workers() {
     return (
         <div id="make_workers_step" className="make-shift-workers-root flex min-w-0 flex-col items-end">
             <div className="make-shift-workers w-[90%] min-w-0 rounded-[18px] bg-[#F8F9FB] px-[clamp(14px,1.5vw,22px)] py-[clamp(14px,1.5vw,22px)]">
-                {workerCount > 0 ? (
+                {isWorkersLoading ? (
+                    <PageState
+                        tone="loading"
+                        layout="inline"
+                        loadingColor="purple"
+                        title={t('page.state.loadingTitle')}
+                        className="min-h-[220px] py-0"
+                    />
+                ) : workerCount > 0 ? (
                     <>
                         <div className="mb-3 flex min-w-0 items-center justify-between gap-3 px-1">
                             <span
@@ -443,7 +456,9 @@ export function Workers() {
                                     aria-label={t('page.makeShift.workers.sortListMenuAria')}
                                     className={cn(
                                         'flex h-8 min-w-[132px] items-center justify-between gap-3 rounded-[5px] bg-gray-6 px-3 font-apple text-[14px] font-medium text-gray-3 transition-colors focus-visible:outline-2 focus-visible:outline-main-1',
-                                        sortMenuOpen ? 'bg-white text-sub-1 shadow-[0px_10px_28px_rgba(95,100,135,0.16)]' : 'hover:bg-gray-7',
+                                        sortMenuOpen
+                                            ? 'bg-white text-sub-1 shadow-[0px_10px_28px_rgba(95,100,135,0.16)]'
+                                            : 'hover:bg-gray-7',
                                     )}
                                     onClick={() => setSortMenuOpen((prev) => !prev)}
                                 >

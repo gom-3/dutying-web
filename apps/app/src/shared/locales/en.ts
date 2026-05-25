@@ -103,6 +103,7 @@ export const en: TLocale = {
                 previous: 'Previous',
                 next: 'Next',
                 saving: 'Saving…',
+                moving: 'Moving…',
                 complete: 'Complete',
                 sequentialRequired: 'Please complete the steps in order.',
             },

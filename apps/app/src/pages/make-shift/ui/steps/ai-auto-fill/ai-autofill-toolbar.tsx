@@ -1,9 +1,10 @@
 import {cn} from '@dutying/utils/style';
 import {AlertTriangle, Check, Eye, EyeOff, Redo2, Undo2, type LucideIcon} from 'lucide-react';
 import type {ReactNode} from 'react';
+import {BouncingDots} from '@/components/loading-ui/bouncing-dots';
 import aiAutofillSparkleIcon from '@/shared/assets/images/ai-autofill-sparkle.png';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
-import {type TAiAutofillStatus} from '../../../model/ai-autofill-state';
+import {getAiAutofillActionLabel, type TAiAutofillStatus} from '../../../model/ai-autofill-state';
 
 type TAiAutofillToolbarProps = {
     autoFillEnabled: boolean;
@@ -19,8 +20,16 @@ type TAiAutofillToolbarProps = {
     aiStatus: TAiAutofillStatus;
     hasCompletedAiFill: boolean;
     onConfirm: () => void;
+    isConfirming: boolean;
     canConfirm: boolean;
 };
+
+const AI_ACTION_LABEL_KEYS = {
+    action: 'page.makeShift.aiRefill.action',
+    firstFill: 'page.makeShift.aiRefill.firstFill',
+    generating: 'page.makeShift.aiRefill.generating',
+    retry: 'page.makeShift.aiRefill.retry',
+} as const;
 
 export function AiAutofillToolbar({
     autoFillEnabled,
@@ -33,10 +42,14 @@ export function AiAutofillToolbar({
     onRedo,
     onAiFill,
     isAiGenerating,
+    aiStatus,
+    hasCompletedAiFill,
     onConfirm,
+    isConfirming,
     canConfirm,
 }: TAiAutofillToolbarProps) {
     const {t} = useTypedTranslation();
+    const actionLabelKey = AI_ACTION_LABEL_KEYS[getAiAutofillActionLabel(aiStatus, hasCompletedAiFill)];
 
     return (
         <div className="ai-autofill-toolbar flex w-full min-w-0 flex-wrap items-center justify-between gap-3">
@@ -91,17 +104,22 @@ export function AiAutofillToolbar({
                         'bg-[linear-gradient(90deg,#C241F4_0%,#6B45F4_100%)] font-apple text-[13px] leading-none font-bold whitespace-nowrap text-white',
                         'transition-[filter,transform] duration-150',
                         'hover:brightness-105 focus-visible:ring-2 focus-visible:ring-[#A978FF] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99] active:brightness-95',
-                        'disabled:cursor-not-allowed disabled:opacity-60 disabled:grayscale',
+                        'disabled:cursor-not-allowed disabled:opacity-70 disabled:grayscale',
                     )}
                 >
-                    <img src={aiAutofillSparkleIcon} alt="" aria-hidden className="size-4 shrink-0 object-contain" />
-                    <span className="truncate">AI 자동 채우기</span>
+                    {isAiGenerating ? (
+                        <BouncingDots className="w-5 shrink-0 text-white" />
+                    ) : (
+                        <img src={aiAutofillSparkleIcon} alt="" aria-hidden className="size-4 shrink-0 object-contain" />
+                    )}
+                    <span className="truncate">{t(actionLabelKey)}</span>
                 </button>
 
                 <button
                     type="button"
                     onClick={onConfirm}
                     disabled={!canConfirm}
+                    aria-busy={isConfirming}
                     className={cn(
                         'ai-autofill-toolbar__cta ai-autofill-toolbar__cta--confirm',
                         'inline-flex min-h-[43px] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[13px] bg-[#34383F] px-4 py-0',
@@ -110,8 +128,12 @@ export function AiAutofillToolbar({
                         'disabled:cursor-not-allowed disabled:bg-gray-5 disabled:text-white/70',
                     )}
                 >
-                    <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
-                    {t('page.makeShift.aiRefill.confirm')}
+                    {isConfirming ? (
+                        <BouncingDots className="w-5 shrink-0 text-white" />
+                    ) : (
+                        <Check className="size-3.5" strokeWidth={2.4} aria-hidden />
+                    )}
+                    {isConfirming ? t('page.makeShift.navigation.saving') : t('page.makeShift.aiRefill.confirm')}
                 </button>
             </div>
         </div>

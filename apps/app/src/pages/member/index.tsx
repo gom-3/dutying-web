@@ -138,7 +138,17 @@ function MemberPage() {
     } = useEditWard();
     const {
         state: {ward, shiftTeams, selectedNurse, selectedNurseDrawerMode, isAddingNurse, nurseSaveStatus, isDeletingNurse},
-        actions: {selectNurse, createShiftTeam, addNurse, deleteNurse, deleteShiftTeam, updateShiftTeam, updateNurse, updateNurseShift},
+        actions: {
+            selectNurse,
+            createShiftTeam,
+            addNurse,
+            deleteNurse,
+            deleteShiftTeam,
+            updateShiftTeam,
+            updateNurse,
+            updateNurseShift,
+            disconnectNurse,
+        },
     } = useEditShiftTeam();
     const [activeShiftTeamId, setActiveShiftTeamId] = useState<number | null>(null);
     const [nurseSortMode, setNurseSortMode] = useState<TMemberNurseSortMode>('manual');
@@ -989,6 +999,7 @@ function MemberPage() {
                                                                 draggableProps={dragProvided.draggableProps}
                                                                 dragHandleProps={dragProvided.dragHandleProps}
                                                                 onDeleteNurse={deleteNurse}
+                                                                onDisconnectNurse={disconnectNurse}
                                                                 onUpdateNurse={(nurseId, nextNurse) => {
                                                                     if (nurseId !== nurse.nurseId) {
                                                                         return updateNurse(nurseId, nextNurse);
@@ -1175,6 +1186,7 @@ function MemberNurseRow({
     onUpdateNurse,
     onUpdateNurseShift,
     onDeleteNurse,
+    onDisconnectNurse,
     onSaveSkillLevel,
     onSelect,
 }: {
@@ -1195,12 +1207,14 @@ function MemberNurseRow({
     onUpdateNurse: (nurseId: number, nurse: TNurse) => Promise<boolean>;
     onUpdateNurseShift: (nurseId: number, nurseShiftTypeId: number, change: {isPossible?: boolean; isPrefer?: boolean}) => Promise<void>;
     onDeleteNurse: (shiftTeamId: number, nurseId: number) => Promise<void>;
+    onDisconnectNurse: (nurseId: number) => Promise<boolean>;
     onSaveSkillLevel: (nextLevel: number | null) => void;
     onSelect: () => void;
 }) {
     const [nameDraft, setNameDraft] = useState(nurse.name);
     const [skillMenuOpen, setSkillMenuOpen] = useState(false);
     const [connectionModalOpen, setConnectionModalOpen] = useState(false);
+    const [disconnectConfirmModalOpen, setDisconnectConfirmModalOpen] = useState(false);
     const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
     const skillMenuRef = useRef<HTMLDivElement | null>(null);
     const modalRoot = document.getElementById('modal-root') ?? document.body;
@@ -1467,6 +1481,13 @@ function MemberNurseRow({
                         onClick={(event) => {
                             event.stopPropagation();
                             onSelect();
+
+                            if (nurse.isConnected) {
+                                setDisconnectConfirmModalOpen(true);
+
+                                return;
+                            }
+
                             setConnectionModalOpen(true);
                         }}
                         aria-label={`${nurse.name} 연동 상태 안내`}
@@ -1549,6 +1570,50 @@ function MemberNurseRow({
                 </div>,
                 modalRoot,
             ) : null}
+            {disconnectConfirmModalOpen
+                ? createPortal(
+                      <div
+                          className="fixed inset-0 z-[1001] flex items-center justify-center bg-black/45 px-4"
+                          onClick={() => setDisconnectConfirmModalOpen(false)}
+                      >
+                          <div
+                              role="dialog"
+                              aria-modal="true"
+                              className="w-full max-w-[440px] rounded-[16px] bg-white px-6 py-5"
+                              onClick={(event) => event.stopPropagation()}
+                          >
+                              <p className="font-apple text-[20px] font-semibold text-sub-1">연동을 끊을까요?</p>
+                              <p className="mt-2 font-apple text-[15px] text-gray-3">
+                                  <span className="font-semibold text-sub-1">{nurse.name || '선택한 간호사'}</span>
+                                  {' 의 앱 연동을 끊어요.'}
+                              </p>
+                              <div className="mt-6 flex items-center gap-3">
+                                  <button
+                                      type="button"
+                                      className="h-11 flex-1 rounded-[10px] bg-[#F3F4F6] px-6 font-apple text-[16px] font-semibold text-gray-3 transition-colors hover:bg-[#EAECEF]"
+                                      onClick={() => setDisconnectConfirmModalOpen(false)}
+                                  >
+                                      닫기
+                                  </button>
+                                  <button
+                                      type="button"
+                                      className="h-11 flex-1 rounded-[10px] bg-[#D14343] px-6 font-apple text-[16px] font-semibold text-white transition-colors hover:bg-[#BD3434]"
+                                      onClick={async () => {
+                                          const ok = await onDisconnectNurse(nurse.nurseId);
+
+                                          if (ok) {
+                                              setDisconnectConfirmModalOpen(false);
+                                          }
+                                      }}
+                                  >
+                                      연동 끊기
+                                  </button>
+                              </div>
+                          </div>
+                      </div>,
+                      modalRoot,
+                  )
+                : null}
             {connectionModalOpen ? (
                 <div
                     className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 px-6"

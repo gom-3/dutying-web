@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {BouncingDots} from '@/components/loading-ui/bouncing-dots';
 import useRequestShift from '@/features/request-shift';
 import {useRequestShiftStore} from '@/features/request-shift/model/store';
 import RequestCalendar from '@/pages/request-shift/ui/request-calendar';
@@ -8,10 +9,12 @@ import PageState from '@/shared/ui/PageState';
 import {canGoNext, canGoPrev, useMakeShiftStore} from '../../model/make-shift-store';
 import {useMakeShiftUseCase} from '../../model/make-shift-use-case';
 import {MAKE_SHIFT_STEP_NAV_BUTTON_CLASS} from '../make-shift-step-nav';
+import {useFlowTransitionFeedback} from '../use-flow-transition-feedback';
 
 export function RequestsShifts() {
     const {t} = useTypedTranslation();
     const useCase = useMakeShiftUseCase();
+    const {transitioning, runTransition} = useFlowTransitionFeedback();
     const canPrev = useMakeShiftStore((s) => canGoPrev(s));
     const canNext = useMakeShiftStore((s) => canGoNext(s));
     const makeYear = useMakeShiftStore((s) => s.year);
@@ -104,26 +107,28 @@ export function RequestsShifts() {
                             variant="secondary"
                             size="md"
                             className={`make-shift-requests__nav-button cursor-pointer border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed ${MAKE_SHIFT_STEP_NAV_BUTTON_CLASS}`}
-                            onClick={useCase.prev}
-                            disabled={!canPrev}
+                            onClick={() => runTransition('prev', useCase.prev)}
+                            disabled={!canPrev || transitioning !== null}
                             type="button"
                         >
-                            {t('page.makeShift.navigation.previous')}
+                            {transitioning === 'prev' ? <BouncingDots className="w-5 shrink-0 text-main-1" /> : null}
+                            {transitioning === 'prev' ? t('page.makeShift.navigation.moving') : t('page.makeShift.navigation.previous')}
                         </Button>
                         <Button
                             size="md"
                             className={`make-shift-requests__nav-button cursor-pointer border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed ${MAKE_SHIFT_STEP_NAV_BUTTON_CLASS}`}
-                            onClick={useCase.next}
-                            disabled={!canNext}
+                            onClick={() => runTransition('next', useCase.next)}
+                            disabled={!canNext || transitioning !== null}
                             type="button"
                         >
-                            {t('page.makeShift.navigation.next')}
+                            {transitioning === 'next' ? <BouncingDots className="w-5 shrink-0 text-white" /> : null}
+                            {transitioning === 'next' ? t('page.makeShift.navigation.moving') : t('page.makeShift.navigation.next')}
                         </Button>
                     </div>
                 </div>
 
                 {pageState ? (
-                    <PageState {...pageState} className="py-0">
+                    <PageState {...pageState} loadingColor={pageState.tone === 'loading' ? 'purple' : undefined} className="py-0">
                         {pageState.tone === 'empty' && !requestShift && shiftTeamCount > 0 ? (
                             <div className="mt-1 flex justify-center">
                                 <Button

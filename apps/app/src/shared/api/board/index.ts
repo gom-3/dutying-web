@@ -1,4 +1,5 @@
 import axiosInstance from '../client';
+import mockBoardAPI, {MOCK_BOARD_WARD_ID} from './mock';
 
 export type TWardBoardPost = {
     id?: number;
@@ -75,7 +76,23 @@ const readPostId = (post: TWardBoardPost) => post.postId ?? post.id ?? 0;
 const normalizePosts = (response: TPostListResponse) => response.posts ?? response.items ?? response.data ?? [];
 const normalizeComments = (response: TCommentListResponse) => response.comments ?? response.items ?? response.data ?? [];
 
-class BoardAPI {
+type TBoardAPIProviderName = 'api' | 'mock';
+
+function getBoardAPIProviderName(): TBoardAPIProviderName {
+    const providerName = import.meta.env.VITE_BOARD_API_PROVIDER?.toLowerCase();
+
+    if (providerName === 'mock') return 'mock';
+
+    if (providerName === 'api') return 'api';
+
+    return import.meta.env.DEV ? 'mock' : 'api';
+}
+
+export function isBoardMockEnabled(): boolean {
+    return getBoardAPIProviderName() === 'mock';
+}
+
+class ApiBoardAPI {
     public async getPosts(wardId: number, options?: {cursorId?: number; size?: number; keyword?: string}) {
         const params = new URLSearchParams();
 
@@ -110,6 +127,10 @@ class BoardAPI {
         post.imageUrls?.forEach((imageUrl) => params.append('imageUrls', imageUrl));
 
         return (await axiosInstance.post<TWardBoardPost>(`/wards/${wardId}/board/posts?${params.toString()}`, post)).data;
+    }
+
+    public async deletePost(wardId: number, postId: number) {
+        return (await axiosInstance.delete<void>(`/wards/${wardId}/board/posts/${postId}`)).data;
     }
 
     public async likePost(wardId: number, postId: number) {
@@ -165,6 +186,10 @@ class BoardAPI {
         return (await axiosInstance.post<TWardBoardComment>(`/wards/${wardId}/board/posts/${postId}/comments`, comment)).data;
     }
 
+    public async deleteComment(wardId: number, commentId: number) {
+        return (await axiosInstance.delete<void>(`/wards/${wardId}/board/comments/${commentId}`)).data;
+    }
+
     public async createReply(wardId: number, commentId: number, comment: TCreateWardBoardCommentDTO) {
         return (await axiosInstance.post<TWardBoardComment>(`/wards/${wardId}/board/comments/${commentId}/replies`, comment)).data;
     }
@@ -180,4 +205,5 @@ class BoardAPI {
     }
 }
 
-export default new BoardAPI();
+export {MOCK_BOARD_WARD_ID};
+export default isBoardMockEnabled() ? mockBoardAPI : new ApiBoardAPI();

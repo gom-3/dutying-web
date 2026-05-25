@@ -16,6 +16,12 @@ describe('PageState component', () => {
         expect(screen.queryByText('Please wait a moment.')).not.toBeInTheDocument();
     });
 
+    it('renders white loading dots when requested', () => {
+        render(<PageState tone="loading" loadingColor="white" title="Loading" />);
+
+        expect(screen.getByRole('status')).toHaveClass('text-white');
+    });
+
     it('executes retry action in error state', async () => {
         const onClick = vi.fn();
         const user = userEvent.setup();

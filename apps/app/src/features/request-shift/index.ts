@@ -1,12 +1,18 @@
 import {useQueries, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useCallback, useEffect, useMemo} from 'react';
-import {type TDutyRequest, type TRequestShift} from '@/entities/shift';
+import {type TRequestShift} from '@/entities/shift';
 import {type TShiftTeam} from '@/entities/ward';
 import {wardQueryKeys, wardQueryOptions} from '@/entities/ward/model/queries';
 import useAuth from '@/features/auth';
 import {WardAPI} from '@/shared/api';
 import {showActionErrorFeedback, showValidationFeedback} from '@/shared/util/feedback';
-import {getMockDutyRequestListByTeamIndex, linkMockDutyRequestListToRequestShift, mockDutyRequestList} from './model/mock';
+import {
+    FORCE_MOCK_DUTY_REQUEST_LIST,
+    getMockDutyRequestListByTeamIndex,
+    linkMockDutyRequestListToRequestShift,
+    mockDutyRequestList,
+} from './model/mock';
+import {countPendingDutyRequests} from './model/pending-request-count';
 import {
     createInitialFoldedLevels,
     createWardShiftTypeMap,
@@ -24,7 +30,6 @@ import {useRequestShiftChangeQueue} from './model/use-request-shift-change-queue
 import {useRequestShiftKeyboard} from './model/use-request-shift-keyboard';
 import {getRequestShiftEditAvailability} from './model/utils';
 
-const FORCE_MOCK_DUTY_REQUEST_LIST = true;
 const useRequestShift = (activeEffect = false) => {
     const {
         year,
@@ -93,7 +98,7 @@ const useRequestShift = (activeEffect = false) => {
                     ? getMockDutyRequestListByTeamIndex(teamIndex)
                     : WardAPI.getRequestList(wardId!, shiftTeam.shiftTeamId, year, month),
             enabled: wardId !== null,
-            select: (requests: TDutyRequest[]) => requests.filter((request) => request.isAccepted === null).length,
+            select: countPendingDutyRequests,
         })),
     });
     const teamPendingRequestCountByTeamId = useMemo(

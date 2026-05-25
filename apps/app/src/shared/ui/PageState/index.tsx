@@ -6,6 +6,7 @@ import Button from '@/shared/ui/form-controls/Button';
 
 type TPageStateTone = 'loading' | 'error' | 'empty';
 type TPageStateLayout = 'screen' | 'panel' | 'inline';
+export type TPageStateLoadingColor = 'purple' | 'white';
 
 type TPageStateAction = {
     label: string;
@@ -18,6 +19,7 @@ type TPageStateProps = {
     description?: string;
     action?: TPageStateAction;
     layout?: TPageStateLayout;
+    loadingColor?: TPageStateLoadingColor;
     className?: string;
     children?: ReactNode;
 };
@@ -46,14 +48,19 @@ function PageStateIcon({tone}: {tone: TPageStateTone}) {
     return <Inbox className="size-6" strokeWidth={1.9} aria-hidden="true" />;
 }
 
-function PageState({tone, title, description, action, layout = 'panel', className, children}: TPageStateProps) {
+const loadingColorClassName: Record<TPageStateLoadingColor, string> = {
+    purple: 'text-[#8b5cf6]',
+    white: 'text-white',
+};
+
+function PageState({tone, title, description, action, layout = 'panel', loadingColor = 'purple', className, children}: TPageStateProps) {
     const isLoading = tone === 'loading';
 
     if (isLoading) {
         return (
             <div className={cn(containerClassName[layout], className)}>
                 <div aria-live="polite" className="flex items-center justify-center">
-                    <BouncingDots className="w-[36.3px] text-[#8b5cf6]" />
+                    <BouncingDots className={cn('w-[36.3px]', loadingColorClassName[loadingColor])} />
                 </div>
             </div>
         );

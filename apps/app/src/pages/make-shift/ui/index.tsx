@@ -1,7 +1,5 @@
-import {useNavigate} from 'react-router';
-import {buildDutyPath} from '@/pages/duty/model/duty-navigation';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
-import {isDutyViewingThisCalendarMonth, isMakeShiftMonthAllowed} from '@/shared/lib/shift-calendar-month-policy';
+import {isMakeShiftMonthAllowed} from '@/shared/lib/shift-calendar-month-policy';
 import PageState from '@/shared/ui/PageState';
 import {DutyManagementStatusCard, ManagementActionButton} from '@/widgets/duty-management/ui';
 import {canGoNext, canGoPrev, useMakeShiftStore} from '../model/make-shift-store';
@@ -11,7 +9,6 @@ import {MakeShiftStepContent} from './make-shift-step-content';
 import {MakeShiftStepper} from './make-shift-stepper';
 
 export const MakeShiftPageView = () => {
-    const navigate = useNavigate();
     const {t} = useTypedTranslation();
     const useCase = useMakeShiftUseCase();
     const phase = useMakeShiftStore((s) => s.phase);
@@ -25,27 +22,15 @@ export const MakeShiftPageView = () => {
     const shiftTeams = useMakeShiftStore((s) => s.shiftTeams);
     const shiftTeamsStatus = useMakeShiftStore((s) => s.shiftTeamsStatus);
     const currentShiftTeamId = useMakeShiftStore((s) => s.currentShiftTeamId);
-    const setYearMonth = useMakeShiftStore((s) => s.setYearMonth);
     const canPrev = useMakeShiftStore((s) => canGoPrev(s));
     const canNext = useMakeShiftStore((s) => canGoNext(s));
     const isOverview = phase === 'overview';
     const makeMonthAllowed = isMakeShiftMonthAllowed(year, month);
-    const canOfferCreateFollowingMonth = isDutyViewingThisCalendarMonth(year, month);
     const showNoTeamsState = shiftTeamsStatus === 'success' && shiftTeams.length === 0;
     const currentShiftTeamName = shiftTeams.find((t) => t.shiftTeamId === currentShiftTeamId)?.name ?? '선택한 팀';
     /** 배정 1칸 이상 (`isDutyShiftWithoutAssignments` 역). 전부 채움은 `shiftFullyAssigned`. */
-    const hasAssignedCells = shiftStatus === 'success' && shiftExists;
-    const isMakeFlowBlocked = shiftStatus === 'success' && shiftFullyAssigned;
-    const nextMonth = month === 12 ? 1 : month + 1;
-    const nextYear = month === 12 ? year + 1 : year;
-    const handleGoDuty = () => {
-        navigate(buildDutyPath({year, month, shiftTeamId: currentShiftTeamId}));
-    };
+    const shouldEnterExistingShiftFlow = shiftStatus === 'success' && (shiftExists || shiftFullyAssigned);
     const handleCreateCurrentMonth = () => {
-        useCase.start();
-    };
-    const handleCreateNextMonth = () => {
-        setYearMonth({year: nextYear, month: nextMonth});
         useCase.start();
     };
 
@@ -76,6 +61,7 @@ export const MakeShiftPageView = () => {
                             ) : shiftStatus === 'pending' || shiftStatus === 'idle' ? (
                                 <PageState
                                     tone="loading"
+                                    loadingColor="purple"
                                     title={
                                         shiftStatus === 'pending'
                                             ? t('page.makeShift.overview.loading')
@@ -92,42 +78,14 @@ export const MakeShiftPageView = () => {
                                     action={{label: t('page.state.retry'), onClick: useCase.retryOverview}}
                                     className="py-0"
                                 />
-                            ) : isMakeFlowBlocked ? (
+                            ) : shouldEnterExistingShiftFlow ? (
                                 <PageState
-                                    tone="empty"
-                                    title={t('page.makeShift.overview.shiftExists', {teamName: currentShiftTeamName, month})}
+                                    tone="loading"
+                                    loadingColor="purple"
+                                    title={t('page.makeShift.overview.loading')}
+                                    description={t('page.state.loadingDescription')}
                                     className="py-0"
-                                >
-                                    <div className="mt-1 flex flex-wrap justify-center gap-4">
-                                        <ManagementActionButton variant="secondary" size="lg" onClick={handleGoDuty}>
-                                            {t('page.makeShift.overview.viewShift', {month})}
-                                        </ManagementActionButton>
-                                        {canOfferCreateFollowingMonth && (
-                                            <ManagementActionButton size="lg" onClick={handleCreateNextMonth}>
-                                                {t('page.makeShift.overview.createShift', {month: nextMonth})}
-                                            </ManagementActionButton>
-                                        )}
-                                    </div>
-                                </PageState>
-                            ) : hasAssignedCells ? (
-                                <PageState
-                                    tone="empty"
-                                    title={t('page.makeShift.overview.shiftPartialFill', {teamName: currentShiftTeamName, month})}
-                                    className="py-0"
-                                >
-                                    <div className="mt-1 flex flex-wrap justify-center gap-4">
-                                        <ManagementActionButton variant="secondary" size="lg" onClick={handleGoDuty}>
-                                            {t('page.makeShift.overview.viewShift', {month})}
-                                        </ManagementActionButton>
-                                        <ManagementActionButton
-                                            size="lg"
-                                            onClick={handleCreateCurrentMonth}
-                                            disabled={currentShiftTeamId === null}
-                                        >
-                                            {t('page.makeShift.overview.createShift', {month})}
-                                        </ManagementActionButton>
-                                    </div>
-                                </PageState>
+                                />
                             ) : (
                                 <PageState
                                     tone="empty"

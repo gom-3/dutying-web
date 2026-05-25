@@ -1,9 +1,11 @@
+import {BouncingDots} from '@/components/loading-ui/bouncing-dots';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
 import Button from '@/shared/ui/form-controls/Button';
 import PageState from '@/shared/ui/PageState';
 import {type TMakeShiftStep} from '../model/make-shift-store';
 import {MAKE_SHIFT_STEP_CONFIG} from './make-shift-step-config';
 import {MAKE_SHIFT_STEP_NAV_BUTTON_CLASS} from './make-shift-step-nav';
+import {useFlowTransitionFeedback} from './use-flow-transition-feedback';
 
 type TMakeShiftStepContentProps = {
     currentStep: TMakeShiftStep;
@@ -15,6 +17,7 @@ type TMakeShiftStepContentProps = {
 
 export function MakeShiftStepContent({currentStep, canPrev, canNext, onPrev, onNext}: TMakeShiftStepContentProps) {
     const {t} = useTypedTranslation();
+    const {transitioning, runTransition} = useFlowTransitionFeedback();
     const stepConfig = MAKE_SHIFT_STEP_CONFIG[currentStep];
 
     if (!stepConfig) {
@@ -67,21 +70,23 @@ export function MakeShiftStepContent({currentStep, canPrev, canNext, onPrev, onN
                             variant="secondary"
                             size="md"
                             type="button"
-                            onClick={onPrev}
-                            disabled={!canPrev}
+                            onClick={() => runTransition('prev', onPrev)}
+                            disabled={!canPrev || transitioning !== null}
                             className={`cursor-pointer border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed ${MAKE_SHIFT_STEP_NAV_BUTTON_CLASS}`}
                         >
-                            {t('page.makeShift.navigation.previous')}
+                            {transitioning === 'prev' ? <BouncingDots className="w-5 shrink-0 text-main-1" /> : null}
+                            {transitioning === 'prev' ? t('page.makeShift.navigation.moving') : t('page.makeShift.navigation.previous')}
                         </Button>
                     )}
                     <Button
                         size="md"
                         type="button"
-                        onClick={onNext}
-                        disabled={!canNext}
+                        onClick={() => runTransition('next', onNext)}
+                        disabled={!canNext || transitioning !== null}
                         className={`cursor-pointer border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed ${MAKE_SHIFT_STEP_NAV_BUTTON_CLASS}`}
                     >
-                        {t('page.makeShift.navigation.next')}
+                        {transitioning === 'next' ? <BouncingDots className="w-5 shrink-0 text-white" /> : null}
+                        {transitioning === 'next' ? t('page.makeShift.navigation.moving') : t('page.makeShift.navigation.next')}
                     </Button>
                 </div>
             </aside>

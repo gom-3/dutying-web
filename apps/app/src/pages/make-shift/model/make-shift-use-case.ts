@@ -29,22 +29,15 @@ export function useMakeShiftUseCase() {
     }, []);
     const start = useCallback(() => {
         const s = useMakeShiftStore.getState();
-
-        if (s.shiftStatus === 'success' && s.shiftFullyAssigned) {
-            showValidationFeedback(t('page.makeShift.overview.fullyAssignedCantStart'));
-
-            return;
-        }
-
         const persisted = editor.getPersisted();
         const saved =
             s.wardId && s.currentShiftTeamId
                 ? (loadDraftStep(s.wardId, s.currentShiftTeamId, s.year, s.month) ?? loadPersistedStep())
                 : loadPersistedStep();
-        const step = saved ?? 1;
+        const step = s.shiftStatus === 'success' && s.shiftFullyAssigned ? 6 : (saved ?? 1);
 
         startFromStep({step, openRestoreDraftModal: persisted !== null});
-    }, [editor, startFromStep, t]);
+    }, [editor, startFromStep]);
     const confirmRestoreDraft = useCallback(() => {
         const persisted = editor.getPersisted();
 
