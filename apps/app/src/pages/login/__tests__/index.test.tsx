@@ -5,11 +5,14 @@ import ROUTE from '@/shared/constant/path';
 import {render, screen, userEvent} from '@/shared/util/test-utils';
 import LoginPage from '../index';
 
-const {mockHandleLogin, mockPasswordSignup, mockSendAdminEmailVerification} = vi.hoisted(() => ({
-    mockHandleLogin: vi.fn(),
-    mockPasswordSignup: vi.fn(),
-    mockSendAdminEmailVerification: vi.fn(),
-}));
+const {mockHandleLogin, mockPasswordSignup, mockSendAdminEmailVerification, mockRequestAdminPasswordReset, mockResetAdminPassword} =
+    vi.hoisted(() => ({
+        mockHandleLogin: vi.fn(),
+        mockPasswordSignup: vi.fn(),
+        mockSendAdminEmailVerification: vi.fn(),
+        mockRequestAdminPasswordReset: vi.fn(),
+        mockResetAdminPassword: vi.fn(),
+    }));
 
 vi.mock('react-responsive-carousel', () => ({
     Carousel: ({children}: {children: ReactNode}) => <div>{children}</div>,
@@ -29,6 +32,8 @@ vi.mock('@/shared/api', () => ({
         passwordLogin: vi.fn(),
         passwordSignup: mockPasswordSignup,
         sendAdminEmailVerification: mockSendAdminEmailVerification,
+        requestAdminPasswordReset: mockRequestAdminPasswordReset,
+        resetAdminPassword: mockResetAdminPassword,
     },
 }));
 
@@ -55,6 +60,7 @@ describe('LoginPage', () => {
         expect(screen.getByRole('heading', {name: '로그인'})).toBeInTheDocument();
         expect(screen.queryByLabelText('병원명 또는 기관명')).not.toBeInTheDocument();
         expect(screen.getByRole('link', {name: '회원가입'})).toHaveAttribute('href', ROUTE.SIGN_UP);
+        expect(screen.getByRole('link', {name: '비밀번호 찾기'})).toHaveAttribute('href', `${ROUTE.SIGN_IN}?mode=password-reset`);
         expect(screen.getByRole('link', {name: '카카오로 계속하기'})).toHaveAttribute(
             'href',
             'https://api.dutying.net/oauth2/authorization/admin/kakao?nextPageUrl=https%3A%2F%2Fapp.dutying.net%2Fmake',
@@ -115,5 +121,42 @@ describe('LoginPage', () => {
             password: 'password1234',
         });
         expect(mockHandleLogin).toHaveBeenCalledWith('admin-token', ROUTE.REGISTER);
+    });
+
+    it('requests a password reset code and submits a new password', async () => {
+        const user = userEvent.setup();
+
+        mockRequestAdminPasswordReset.mockResolvedValueOnce({email: 'admin@example.com', debugResetToken: 'reset-token'});
+        mockResetAdminPassword.mockResolvedValueOnce(undefined);
+
+        render(
+            <MemoryRouter initialEntries={[`${ROUTE.SIGN_IN}?mode=password-reset`]}>
+                <Routes>
+                    <Route path={ROUTE.SIGN_IN} element={<LoginPage />} />
+                </Routes>
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByRole('heading', {name: '비밀번호 재설정'})).toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: '카카오로 계속하기'})).not.toBeInTheDocument();
+
+        await user.type(screen.getByLabelText('이메일'), 'admin@example.com');
+        await user.click(screen.getByRole('button', {name: '메일 보내기'}));
+
+        const resetCodeInput = await screen.findByLabelText('재설정 코드');
+
+        expect(resetCodeInput).toHaveValue('reset-token');
+
+        await user.type(screen.getByLabelText('새 비밀번호'), 'new-password123');
+        await user.type(screen.getByLabelText('새 비밀번호 확인'), 'new-password123');
+        await user.click(screen.getByRole('button', {name: '비밀번호 변경'}));
+
+        expect(mockRequestAdminPasswordReset).toHaveBeenCalledWith({email: 'admin@example.com'});
+        expect(mockResetAdminPassword).toHaveBeenCalledWith({
+            email: 'admin@example.com',
+            resetToken: 'reset-token',
+            newPassword: 'new-password123',
+        });
+        expect(await screen.findByText('비밀번호가 변경됐어요. 새 비밀번호로 로그인해 주세요.')).toBeInTheDocument();
     });
 });
