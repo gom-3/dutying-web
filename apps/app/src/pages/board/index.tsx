@@ -35,7 +35,7 @@ import {
 } from '@/shared/api/board';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
 import PageState from '@/shared/ui/PageState';
-import {NotificationBell} from '@/widgets/notifications/notification-bell';
+import {Skeleton} from '@/shared/ui/primitives/skeleton';
 import {BoardTutorial, type TBoardTutorialMode} from './ui/board-tutorial';
 
 const POST_PAGE_SIZE = 40;
@@ -420,6 +420,46 @@ function DeadlineBadge({deadlineDate, forceDday = false}: {deadlineDate?: string
     );
 }
 
+function PostListSkeleton({count = 5}: {count?: number}) {
+    return (
+        <div
+            role="status"
+            aria-busy="true"
+            aria-label={boardT('list.loading')}
+            data-testid="board-post-list-skeleton"
+            className="min-h-0 flex-1 overflow-hidden pr-1"
+        >
+            {Array.from({length: count}).map((_, index) => (
+                <div key={index} className="flex w-full flex-col border-b border-gray-6 px-4 py-3 last:border-b-0">
+                    <div className="flex min-w-0 gap-3">
+                        <div className="min-w-0 flex-1">
+                            <div className="mt-1 flex items-center justify-between gap-3">
+                                <Skeleton className="h-4 w-7/12 rounded-full bg-gray-6" />
+                                {index % 3 === 0 ? <Skeleton className="h-6 w-12 shrink-0 rounded-full bg-gray-6" /> : null}
+                            </div>
+                            <div className="mt-3 grid gap-2">
+                                <Skeleton className="h-3.5 w-full rounded-full bg-gray-6/80" />
+                                <Skeleton className="h-3.5 w-9/12 rounded-full bg-gray-6/80" />
+                            </div>
+                            <div className="mt-4 flex items-center justify-between gap-3">
+                                <Skeleton className="h-3.5 w-5/12 rounded-full bg-gray-6" />
+                                <div className="flex shrink-0 items-center gap-2.5">
+                                    <Skeleton className="h-3.5 w-7 rounded-full bg-gray-6" />
+                                    <Skeleton className="h-3.5 w-7 rounded-full bg-gray-6" />
+                                    <Skeleton className="h-3.5 w-7 rounded-full bg-gray-6" />
+                                </div>
+                            </div>
+                        </div>
+                        {index % 2 === 0 ? (
+                            <Skeleton className="mt-1 h-[72px] w-[72px] shrink-0 rounded-[8px] bg-gray-6 sm:h-[86px] sm:w-[86px]" />
+                        ) : null}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 function PostListItem({post, selected, onSelect}: {post: TWardBoardPost; selected: boolean; onSelect: () => void}) {
     const title = truncateText(post.title, POST_LIST_TITLE_MAX_LENGTH);
     const preview = truncateText(makePreview(post.content), POST_LIST_CONTENT_MAX_LENGTH);
@@ -466,6 +506,77 @@ function PostListItem({post, selected, onSelect}: {post: TWardBoardPost; selecte
                 ) : null}
             </div>
         </button>
+    );
+}
+
+function BoardDetailSkeleton() {
+    return (
+        <div
+            role="status"
+            aria-busy="true"
+            aria-label={boardT('state.loadingTitle')}
+            data-testid="board-detail-skeleton"
+            className="flex h-full min-h-0 flex-col"
+        >
+            <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                    <Skeleton className="h-6 w-16 rounded-full bg-gray-6" />
+                    <Skeleton className="mt-4 h-7 w-8/12 rounded-full bg-gray-6" />
+                    <Skeleton className="mt-3 h-3.5 w-4/12 rounded-full bg-gray-6/80" />
+                </div>
+                <Skeleton className="h-9 w-28 shrink-0 rounded-[8px] bg-gray-6" />
+            </div>
+            <div className="mt-5 flex items-center gap-4">
+                <Skeleton className="h-5 w-10 rounded-full bg-gray-6" />
+                <Skeleton className="h-5 w-10 rounded-full bg-gray-6" />
+                <Skeleton className="h-5 w-10 rounded-full bg-gray-6" />
+            </div>
+            <div className="mt-6 min-h-0 flex-1 overflow-hidden pr-1">
+                <div className="grid gap-3">
+                    <Skeleton className="h-4 w-full rounded-full bg-gray-6/80" />
+                    <Skeleton className="h-4 w-11/12 rounded-full bg-gray-6/80" />
+                    <Skeleton className="h-4 w-10/12 rounded-full bg-gray-6/80" />
+                    <Skeleton className="h-4 w-7/12 rounded-full bg-gray-6/80" />
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-2">
+                    <Skeleton className="aspect-video rounded-[8px] bg-gray-6" />
+                    <Skeleton className="aspect-video rounded-[8px] bg-gray-6" />
+                </div>
+                <div className="mt-6">
+                    <Skeleton className="h-4 w-24 rounded-full bg-gray-6" />
+                    <div className="mt-3 flex items-start gap-1.5">
+                        <Skeleton className="h-12 min-w-0 flex-1 rounded-[8px] bg-gray-6/80" />
+                        <Skeleton className="h-12 w-12 rounded-[8px] bg-gray-6" />
+                    </div>
+                    <CommentThreadSkeleton className="mt-3" count={2} />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function CommentThreadSkeleton({count = 3, className}: {count?: number; className?: string}) {
+    return (
+        <div
+            role="status"
+            aria-busy="true"
+            aria-label={boardT('comment.loading')}
+            data-testid="board-comment-skeleton"
+            className={cn('space-y-2', className)}
+        >
+            {Array.from({length: count}).map((_, index) => (
+                <div key={index} className="rounded-[8px] bg-gray-7 px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                        <Skeleton className="h-3.5 w-24 rounded-full bg-gray-6" />
+                        <Skeleton className="h-3 w-14 rounded-full bg-gray-6" />
+                    </div>
+                    <div className="mt-2 grid gap-1.5">
+                        <Skeleton className="h-3.5 w-full rounded-full bg-gray-6/80" />
+                        <Skeleton className="h-3.5 w-7/12 rounded-full bg-gray-6/80" />
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }
 
@@ -1719,6 +1830,72 @@ function DeadlineCalendar({
     );
 }
 
+function DeadlineCalendarSkeleton() {
+    const calendarCells = Array.from({length: 35});
+    const weekdayLabels = getWeekdayLabels();
+
+    return (
+        <aside
+            role="status"
+            aria-busy="true"
+            aria-label={boardT('state.loadingTitle')}
+            data-testid="board-deadline-calendar-skeleton"
+            className="min-w-0 rounded-[8px] bg-white p-3"
+        >
+            <div className="grid gap-4">
+                <div className="min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                        <div>
+                            <Skeleton className="h-3 w-20 rounded-full bg-gray-6" />
+                            <Skeleton className="mt-2 h-5 w-28 rounded-full bg-gray-6" />
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Skeleton className="h-7 w-7 rounded-[7px] bg-main-4" />
+                            <Skeleton className="h-7 w-7 rounded-[7px] bg-gray-6" />
+                            <Skeleton className="h-7 w-7 rounded-[7px] bg-gray-6" />
+                        </div>
+                    </div>
+
+                    <div className="mt-3 grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-gray-4">
+                        {weekdayLabels.map((dayLabel) => (
+                            <span key={dayLabel} className="h-5 leading-5">
+                                {dayLabel}
+                            </span>
+                        ))}
+                    </div>
+                    <div className="mt-1 grid grid-cols-7 gap-0.5">
+                        {calendarCells.map((_, index) => (
+                            <div key={index} className="grid aspect-square place-items-center rounded-[7px] bg-gray-7">
+                                <Skeleton
+                                    className={cn('size-5 rounded-full', index % 7 === 2 || index % 11 === 0 ? 'bg-main-4' : 'bg-gray-6')}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="min-w-0">
+                    <div className="flex items-center justify-between">
+                        <Skeleton className="h-4 w-24 rounded-full bg-gray-6" />
+                        <Skeleton className="h-3 w-9 rounded-full bg-gray-6" />
+                    </div>
+                    <div className="mt-2.5 space-y-1.5">
+                        {Array.from({length: 3}).map((_, index) => (
+                            <div key={index} className="flex w-full items-center gap-2 rounded-[8px] bg-gray-7 px-2.5 py-2">
+                                <Skeleton className="h-8 w-8 shrink-0 rounded-[7px] bg-white" />
+                                <span className="min-w-0 flex-1">
+                                    <Skeleton className="h-3.5 w-8/12 rounded-full bg-gray-6" />
+                                    <Skeleton className="mt-2 h-2.5 w-6/12 rounded-full bg-gray-6/80" />
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </aside>
+    );
+}
+
 function BoardPage() {
     useTypedTranslation();
 
@@ -2357,7 +2534,6 @@ function BoardPage() {
                 <div className="mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                     <p className="min-w-0 text-[14px] leading-6 text-gray-3">{boardT('description')}</p>
                     <div className="flex shrink-0 items-center gap-2">
-                        <NotificationBell />
                         <button
                             id="board_create_button"
                             type="button"
@@ -2423,7 +2599,7 @@ function BoardPage() {
                         </form>
                     ) : null}
                     {postsQuery.isPending ? (
-                        <PageState tone="loading" title={boardT('list.loading')} className="py-0" />
+                        <PostListSkeleton />
                     ) : postsQuery.isError ? (
                         <PageState
                             tone="error"
@@ -2609,6 +2785,8 @@ function BoardPage() {
                                 </button>
                             </div>
                         </form>
+                    ) : selectedPostQuery.isPending && selectedPostId && !selectedPost ? (
+                        <BoardDetailSkeleton />
                     ) : selectedPost ? (
                         <div id="board_detail_panel" className="flex h-full min-h-0 flex-col">
                             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -2787,7 +2965,7 @@ function BoardPage() {
 
                                     <div className="mt-3">
                                         {commentsQuery.isPending ? (
-                                            <PageState tone="loading" title={boardT('comment.loading')} className="py-0" />
+                                            <CommentThreadSkeleton />
                                         ) : comments.length > 0 ? (
                                             <CommentThread
                                                 comments={comments}
@@ -2833,20 +3011,24 @@ function BoardPage() {
                 </section>
 
                 <div id="board_deadline_calendar" className="min-w-0">
-                    <DeadlineCalendar
-                        year={calendarMonth.year}
-                        month={calendarMonth.month}
-                        selectedDateKey={notificationCalendarDate}
-                        deadlines={deadlinesQuery.data ?? []}
-                        schedules={schedules}
-                        onMoveMonth={moveCalendarMonth}
-                        onSelectPost={(postId) => {
-                            setIsComposerOpen(false);
-                            setSelectedPostId(postId);
-                        }}
-                        onCreateSchedule={openCreateSchedule}
-                        onOpenSchedule={openSchedule}
-                    />
+                    {deadlinesQuery.isPending || schedulesQuery.isPending ? (
+                        <DeadlineCalendarSkeleton />
+                    ) : (
+                        <DeadlineCalendar
+                            year={calendarMonth.year}
+                            month={calendarMonth.month}
+                            selectedDateKey={notificationCalendarDate}
+                            deadlines={deadlinesQuery.data ?? []}
+                            schedules={schedules}
+                            onMoveMonth={moveCalendarMonth}
+                            onSelectPost={(postId) => {
+                                setIsComposerOpen(false);
+                                setSelectedPostId(postId);
+                            }}
+                            onCreateSchedule={openCreateSchedule}
+                            onOpenSchedule={openSchedule}
+                        />
+                    )}
                 </div>
             </div>
             {scheduleModalMode ? (

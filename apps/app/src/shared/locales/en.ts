@@ -761,6 +761,10 @@ export const en: TLocale = {
                     allDays: 'All days',
                     allPeople: 'Everyone',
                     dayLabel: 'Day {{day}}',
+                    weekdays: 'Weekdays',
+                    weekendsAndHolidays: 'Weekends/holidays',
+                    preceptorBadge: 'Preceptor',
+                    precepteeBadge: 'Preceptee',
                 },
                 important: {
                     label: 'Important',
@@ -852,6 +856,10 @@ export const en: TLocale = {
                         label: 'Staffing constraint',
                         sentence: 'On day {date} each month, {shift} needs at least {count} staff',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: 'Staffing constraint',
+                        sentence: 'On {date}, {shift} needs at least {count} staff',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: 'Staffing constraint',
                         sentence: 'On weekends and holidays, {shift} needs at least {count} staff',
@@ -875,6 +883,10 @@ export const en: TLocale = {
                     NURSE_FORBID_WEEKEND: {
                         label: 'Personal constraint',
                         sentence: '{nurse} cannot work weekends',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: 'Skill constraint',
+                        sentence: '{nurse} cannot work N alone',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: 'Skill constraint',
@@ -1470,6 +1482,8 @@ export const en: TLocale = {
             hospitalNamePlaceholder: 'Enter hospital name',
             wardName: 'Ward name',
             wardNamePlaceholder: 'Enter ward name',
+            wardCode: 'Ward code',
+            quitWard: 'Leave ward',
             save: 'Save changes',
             saving: 'Saving...',
             state: {

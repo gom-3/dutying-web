@@ -17,6 +17,7 @@ type TRequestCalendarGridCellProps = {
     day: number;
     isSampleCell: boolean;
     dayType: TRequestShift['days'][number]['dayType'];
+    isFocusedRow: boolean;
     shiftNurseId: number;
     shiftNurseName: string;
     currentShiftTypeId: number | null;
@@ -33,6 +34,7 @@ export default function RequestCalendarGridCell({
     day,
     isSampleCell,
     dayType,
+    isFocusedRow,
     shiftNurseId,
     shiftNurseName,
     currentShiftTypeId,
@@ -54,6 +56,7 @@ export default function RequestCalendarGridCell({
         wardShiftTypeMap,
     });
     const hasAcceptedRequest = requestDutyRequest?.isAccepted === true;
+    const isHighlightedCell = isFocusedRow || day === focus?.day;
 
     return (
         <button
@@ -65,7 +68,7 @@ export default function RequestCalendarGridCell({
             }}
             className={cn(
                 'group relative flex h-full min-w-0 flex-1 cursor-pointer items-center justify-center border-0 bg-transparent px-px text-inherit',
-                getDayCellClass(dayType, day === focus?.day, separateWeekendColor),
+                getDayCellClass(dayType, isHighlightedCell, separateWeekendColor),
             )}
         >
             <span className="relative z-10 flex min-w-0 items-center justify-center">

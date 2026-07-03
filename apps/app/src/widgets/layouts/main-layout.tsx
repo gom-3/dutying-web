@@ -4,10 +4,12 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {Outlet, useLocation, useNavigate} from 'react-router';
 import {getWardDisplayCode, getWardDisplayTitle, wardQueryOptions} from '@/entities/ward';
 import useAuth from '@/features/auth';
+import {isWardAdminAccessToken} from '@/features/auth/model/admin-token';
 import ROUTE from '@/shared/constant/path';
 import {useTypedTranslation} from '@/shared/hook/use-typed-translation';
 import NavigationBar from '@/widgets/navigation-bar';
 import {useNavigationBarFoldStore} from '@/widgets/navigation-bar/navigation-bar-fold-store';
+import {NotificationBell} from '@/widgets/notifications/notification-bell';
 import WardChatWidget from '@/widgets/ward-chat';
 import WardCodeGuideModal from '@/widgets/ward-code-guide-modal';
 
@@ -55,7 +57,7 @@ const shouldAutoFoldNavigation = (pathname: string, viewportWidth: number) =>
 export const MainLayout = () => {
     const {t} = useTypedTranslation();
     const {
-        state: {wardId},
+        state: {accessToken, wardId},
     } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -79,6 +81,7 @@ export const MainLayout = () => {
     const shouldFoldNavigation = shouldAutoFoldNavigation(location.pathname, viewportWidth);
     const shouldUseCompactNavigation = shouldFoldNavigation || (viewportWidth < WORKSPACE_NAV_AUTO_FOLD_WIDTH && isNavigationFolded);
     const shouldKeepStableVerticalScroll = location.pathname === ROUTE.WARD_SETTINGS;
+    const shouldShowNotificationBell = isWardAdminAccessToken(accessToken);
 
     useEffect(() => {
         const guidePayload = locationGuidePayload ?? readStoredWardCreatedGuidePayload();
@@ -158,6 +161,7 @@ export const MainLayout = () => {
             <main className={cn('min-w-0 flex-1 overflow-x-auto', shouldKeepStableVerticalScroll && 'overflow-y-scroll')}>
                 <Outlet />
             </main>
+            {shouldShowNotificationBell ? <NotificationBell /> : null}
             <WardChatWidget />
         </div>
     );

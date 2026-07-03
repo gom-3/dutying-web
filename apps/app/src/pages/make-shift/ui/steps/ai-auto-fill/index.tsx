@@ -36,6 +36,7 @@ import {
     useInvalidateScheduleSnapshots,
     useScheduleSnapshots,
 } from '../../../model/use-schedule-snapshots';
+import {useFlowTransitionFeedback} from '../../use-flow-transition-feedback';
 import {RestLeavePolicySummaryButton} from '../rest-leave-policy-summary-card';
 import {MakeShiftCalendar} from '../shared/make-shift-calendar';
 import {MakeShiftCalendarSkeleton} from '../shared/make-shift-calendar-skeleton';
@@ -141,6 +142,7 @@ export function AiAutofill() {
     const draftRevision = useShiftEditorStore((s) => s.draftRevision);
     const rulesHash = useShiftEditorStore((s) => s.rulesHash);
     const useCase = useMakeShiftUseCase();
+    const {runTransition, transitioning} = useFlowTransitionFeedback();
     const setStepNavigationBusy = useMakeShiftStore((s) => s.setStepNavigationBusy);
     const [showFixedShifts, setShowFixedShifts] = useState(true);
     const [showRequestShifts, setShowRequestShifts] = useState(true);
@@ -173,6 +175,21 @@ export function AiAutofill() {
         collapseNavigationBar();
         setIsSnapshotSidebarOpen(true);
     }, [collapseNavigationBar]);
+    const isBackspaceNavigationBusy =
+        isWorking ||
+        isSavingSnapshot ||
+        isAiGenerating ||
+        loadingSnapshotId !== null ||
+        deletingSnapshotId !== null ||
+        transitioning !== null;
+    const handleClearSelectionCells = useCallback(
+        ({key}: {key: 'Backspace' | 'Delete'}) => {
+            if (key !== 'Backspace' || isBackspaceNavigationBusy) return;
+
+            runTransition('prev', useCase.prev);
+        },
+        [isBackspaceNavigationBusy, runTransition, useCase.prev],
+    );
     const {
         dutyQuery,
         editorRef,
@@ -187,6 +204,7 @@ export function AiAutofill() {
         onContextChanged: resetAiStatus,
         hydratePreviousLastShifts: true,
         editorInputDisabled: isAiGenerating,
+        onClearSelectionCells: handleClearSelectionCells,
     });
     const skillColumn = useMakeShiftSkillColumn(dutyQuery.data);
     const {policy} = useRestLeavePolicy(wardId);

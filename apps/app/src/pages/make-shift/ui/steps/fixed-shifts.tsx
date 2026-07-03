@@ -70,8 +70,17 @@ export function FixedShifts() {
 
     const canPrev = useMakeShiftStore((s) => canGoPrev(s));
     const canNext = useMakeShiftStore((s) => canGoNext(s));
+    const handleClearSelectionCells = useCallback(
+        ({key}: {key: 'Backspace' | 'Delete'}) => {
+            if (key !== 'Backspace' || !canPrev || isSaving || transitioning !== null) return;
+
+            runTransition('prev', useCase.prev);
+        },
+        [canPrev, isSaving, runTransition, transitioning, useCase.prev],
+    );
     const {dutyQuery, editorDoc, editorRef, onKeyDown, onPasteCapture, focusEditor, isHydratingEditor} = useDutyEditorStep({
         hydratePreviousLastShifts: true,
+        onClearSelectionCells: handleClearSelectionCells,
     });
     const skillColumn = useMakeShiftSkillColumn(dutyQuery.data);
     const {policy} = useRestLeavePolicy(wardId);

@@ -100,6 +100,7 @@ export default function RequestCalendarGridRow({
                             day={day}
                             isSampleCell={rowIndex === 0 && day === 0}
                             dayType={requestShift.days[day].dayType}
+                            isFocusedRow={isFocusedRow}
                             shiftNurseId={row.shiftNurse.shiftNurseId}
                             shiftNurseName={row.shiftNurse.name}
                             currentShiftTypeId={currentShiftTypeId}

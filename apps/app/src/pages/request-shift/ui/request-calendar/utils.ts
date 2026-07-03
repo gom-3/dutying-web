@@ -137,8 +137,8 @@ export const getRequestCalendarDivisionAction = ({
     return null;
 };
 
-export const getRequestCalendarRowClassName = ({isFocusedRow}: {isFocusedRow: boolean}) =>
-    `relative flex h-[clamp(28px,2.4cqw,40px)] w-full items-center gap-2 transition-colors ${isFocusedRow ? 'bg-main-light' : 'bg-white'}`;
+export const getRequestCalendarRowClassName = (_params: {isFocusedRow: boolean}) =>
+    'relative flex h-[clamp(28px,2.4cqw,40px)] w-full items-center gap-2 bg-white transition-colors';
 
 export const getDayBadgeClass = (dayType: TRequestShift['days'][number]['dayType'], isFocused: boolean, _separateWeekendColor: boolean) => {
     if (dayType === 'saturday') {

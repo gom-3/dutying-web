@@ -35,6 +35,9 @@ type TSelectOption = {
     color?: string;
     classification?: TShiftTypeLike['classification'];
     isOff?: boolean;
+    proficiency?: number;
+    isPreceptor?: boolean;
+    isPreceptee?: boolean;
     raw?: TShiftConstraintOption;
 };
 type TTemplateCategory = string;
@@ -77,7 +80,7 @@ type TShiftTypeLike = {
     classification?: string;
     isActive?: boolean;
 };
-type TNurseLike = {nurseId?: number; name?: string; isPreceptor?: boolean};
+type TNurseLike = {nurseId?: number; name?: string; proficiency?: number; isPreceptor?: boolean; isPreceptee?: boolean};
 
 const EMPTY_NURSES: TNurseLike[] = [];
 const EMPTY_SHIFT_TYPES: TShiftTypeLike[] = [];
@@ -168,6 +171,31 @@ function DutyPatternBadge({options}: {options: TSelectOption[]}) {
     );
 }
 
+function NurseOptionContent({option, compact = false}: {option: TSelectOption; compact?: boolean}) {
+    const {t} = useTypedTranslation();
+    const badges = [
+        option.proficiency != null ? `LV${option.proficiency}` : null,
+        option.isPreceptor ? t('page.makeShift.constraints.option.preceptorBadge') : null,
+        option.isPreceptee ? t('page.makeShift.constraints.option.precepteeBadge') : null,
+    ].filter(Boolean);
+
+    return (
+        <span className="flex min-w-0 items-center gap-1.5">
+            <span className={compact ? 'max-w-[120px] truncate' : 'truncate'}>{option.label}</span>
+            {!compact
+                ? badges.map((badge) => (
+                      <span
+                          key={badge}
+                          className="inline-flex h-5 shrink-0 items-center rounded-full bg-gray-7 px-1.5 text-[11px] font-semibold text-gray-2 ring-1 ring-gray-6"
+                      >
+                          {badge}
+                      </span>
+                  ))
+                : null}
+        </span>
+    );
+}
+
 const ALL_CONSTRAINT_TARGET_OPTION: TShiftConstraintOption = {type: 'ALL'};
 const RECOMMENDED_DEFAULT_RULE_CODES = [
     'CORE_MAX_CONTINUOUS_WORK',
@@ -184,6 +212,8 @@ const HIDDEN_RECOMMENDED_RULE_IDS = new Set<string>([
     'CORE_EXCLUDE_CERTAIN_WORK_TYPES',
     'CORE_FORBIDDEN_DUTY_PATTERNS',
     'IMPORTANT_FORBIDDEN_DUTY_PATTERNS',
+    'NEW_NURSE_NOT_ALONE_N',
+    'PRECEPTEE_NOT_ALONE_N',
 ]);
 const MODAL_CATEGORY_BY_TEMPLATE_CODE: Record<string, TTemplateCategory> = {
     CORE_MAX_CONTINUOUS_WORK: 'WORK_REST',
@@ -289,6 +319,15 @@ const SOFT_RULE_TEMPLATE_DEFINITIONS: TSoftRuleTemplateDefinition[] = [
         ],
     },
     {
+        id: 'MIN_STAFF_BY_DAY_TYPE_SHIFT',
+        category: 'STAFFING',
+        controls: [
+            {key: 'date', kind: 'select', optionsKey: 'dayType'},
+            {key: 'shift', kind: 'select', optionsKey: 'duty'},
+            {key: 'count', kind: 'number', min: 1, max: 100},
+        ],
+    },
+    {
         id: 'MIN_STAFF_WEEKEND_HOLIDAY_SHIFT',
         category: 'STAFFING',
         controls: [
@@ -331,6 +370,11 @@ const SOFT_RULE_TEMPLATE_DEFINITIONS: TSoftRuleTemplateDefinition[] = [
     {
         id: 'NURSE_FORBID_WEEKEND',
         category: 'PERSONAL',
+        controls: [{key: 'nurse', kind: 'select', optionsKey: 'nurse'}],
+    },
+    {
+        id: 'NURSE_NOT_ALONE_N',
+        category: 'SKILL',
         controls: [{key: 'nurse', kind: 'select', optionsKey: 'nurse'}],
     },
     {
@@ -537,6 +581,7 @@ const DEFAULT_PARAMS_BY_TEMPLATE_CODE: Record<string, Record<string, unknown>> =
     MIN_STAFF_BY_SHIFT: {count: '1'},
     MAX_STAFF_BY_SHIFT: {count: '1'},
     MIN_STAFF_BY_DATE_SHIFT: {count: '1'},
+    MIN_STAFF_BY_DAY_TYPE_SHIFT: {count: '1'},
     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {count: '1'},
     MAX_CONSECUTIVE_N: {count: '2'},
     MAX_CONSECUTIVE_WORK_DAYS: {count: '3'},
@@ -572,8 +617,10 @@ const OPTION_GROUP_TO_OPTION_MAP_KEY: Record<string, string> = {
     LEVELS: 'level',
     date: 'date',
     dates: 'date',
+    dayTypes: 'dayType',
     DATE: 'date',
     DATES: 'date',
+    DAY_TYPES: 'dayType',
     day: 'date',
     days: 'date',
     DAY: 'date',
@@ -1111,7 +1158,7 @@ function isAllCandidateOption(option: TShiftConstraintOption) {
 function getLocalizedAllOptionLabel(t: TTypedT, optionMapKey: string) {
     if (optionMapKey === 'target') return t('page.makeShift.constraints.option.allPeople');
 
-    if (optionMapKey === 'date') return t('page.makeShift.constraints.option.allDays');
+    if (optionMapKey === 'date' || optionMapKey === 'dayType') return t('page.makeShift.constraints.option.allDays');
 
     return t('page.makeShift.constraints.option.all');
 }
@@ -1144,6 +1191,9 @@ function toSelectOption(option: TShiftConstraintOption, optionMapKey: string, sh
         return {
             value: getCandidateOptionValue(option),
             label,
+            proficiency: option.proficiency,
+            isPreceptor: option.isPreceptor,
+            isPreceptee: option.isPreceptee,
             raw: option,
         };
     }
@@ -1203,6 +1253,7 @@ function mergeCandidateOptionMap(
         target: getCandidateOptions(candidates, 'target', ['targets', 'TARGETS'], fallback.target, shiftTypes, t),
         duty,
         date: getCandidateOptions(candidates, 'date', ['dates', 'DATES'], fallback.date, shiftTypes, t),
+        dayType: getCandidateOptions(candidates, 'dayType', ['dayTypes', 'DAY_TYPES'], fallback.dayType, shiftTypes, t),
         nurse,
         preceptor: getCandidateOptions(candidates, 'preceptor', ['preceptors', 'PRECEPTORS'], fallback.preceptor, shiftTypes, t),
         preceptee: getCandidateOptions(candidates, 'preceptee', ['preceptees', 'PRECEPTEES'], fallback.preceptee ?? nurse, shiftTypes, t),
@@ -1478,6 +1529,8 @@ function InlineDropdown({value, options, minWidth = 72, onChange}: TInlineDropdo
             >
                 {selected?.kind === 'duty' ? (
                     <DutyTypeBadge option={selected} />
+                ) : selected?.raw?.nurseId != null ? (
+                    <NurseOptionContent option={selected} compact />
                 ) : (
                     <span className="max-w-[120px] truncate">{selected?.label ?? value}</span>
                 )}
@@ -1511,7 +1564,13 @@ function InlineDropdown({value, options, minWidth = 72, onChange}: TInlineDropdo
                                           setOpen(false);
                                       }}
                                   >
-                                      {option.kind === 'duty' ? <DutyTypeBadge option={option} /> : option.label}
+                                      {option.kind === 'duty' ? (
+                                          <DutyTypeBadge option={option} />
+                                      ) : option.raw?.nurseId != null ? (
+                                          <NurseOptionContent option={option} />
+                                      ) : (
+                                          option.label
+                                      )}
                                   </button>
                               );
                           })}
@@ -2228,9 +2287,31 @@ export function Constraints({
                 raw: {type: 'DAY_OF_MONTH', day: idx + 1},
             })),
         );
+        const dayTypeOptions = [
+            {value: 'ALL_DATE', label: t('page.makeShift.constraints.option.allDays'), raw: {type: 'ALL'}},
+            {value: 'WEEKDAY', label: t('page.makeShift.constraints.option.weekdays'), raw: {type: 'WEEKDAY'}},
+            {
+                value: 'WEEKEND_OR_HOLIDAY',
+                label: t('page.makeShift.constraints.option.weekendsAndHolidays'),
+                raw: {type: 'WEEKEND_OR_HOLIDAY'},
+            },
+        ];
         const nurseOptions = nurses
             .filter((nurse) => nurse.nurseId != null && nurse.name)
-            .map((nurse) => ({value: String(nurse.nurseId), label: String(nurse.name), raw: {type: 'NURSE', nurseId: nurse.nurseId}}));
+            .map((nurse) => ({
+                value: String(nurse.nurseId),
+                label: String(nurse.name),
+                proficiency: nurse.proficiency,
+                isPreceptor: nurse.isPreceptor,
+                isPreceptee: nurse.isPreceptee,
+                raw: {
+                    type: 'NURSE',
+                    nurseId: nurse.nurseId,
+                    proficiency: nurse.proficiency,
+                    isPreceptor: nurse.isPreceptor,
+                    isPreceptee: nurse.isPreceptee,
+                },
+            }));
         const preceptorOptions = nurses
             .filter((nurse) => nurse.nurseId != null && nurse.name && nurse.isPreceptor)
             .map((nurse) => ({value: String(nurse.nurseId), label: String(nurse.name), raw: {type: 'NURSE', nurseId: nurse.nurseId}}));
@@ -2241,6 +2322,7 @@ export function Constraints({
             ],
             duty: dutyOptions,
             date: dateOptions,
+            dayType: dayTypeOptions,
             nurse: nurseOptions,
             preceptor: preceptorOptions.length ? preceptorOptions : nurseOptions,
             preceptee: nurseOptions,

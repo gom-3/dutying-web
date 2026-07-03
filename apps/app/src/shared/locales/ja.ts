@@ -1391,6 +1391,10 @@ export const ja: TLocale = {
                     allDays: '全日',
                     allPeople: '全員',
                     dayLabel: '{{day}}日',
+                    weekdays: '平日',
+                    weekendsAndHolidays: '週末・祝日',
+                    preceptorBadge: 'プリセプター',
+                    precepteeBadge: 'プリセプティ',
                 },
                 important: {
                     label: '重要',
@@ -1482,6 +1486,10 @@ export const ja: TLocale = {
                         label: '人数条件',
                         sentence: '毎月{date}日は{shift}勤務に最低{count}名が必要です',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: '人数条件',
+                        sentence: '{date}は{shift}勤務に最低{count}名が必要です',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: '人数条件',
                         sentence: '週末・祝日は{shift}勤務に最低{count}名が必要です',
@@ -1505,6 +1513,10 @@ export const ja: TLocale = {
                     NURSE_FORBID_WEEKEND: {
                         label: '個人条件',
                         sentence: '{nurse}は週末勤務をしてはいけません',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: '熟練度条件',
+                        sentence: '{nurse}は単独でN勤務をしてはいけません',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: '熟練度条件',

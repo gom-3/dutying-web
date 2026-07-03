@@ -213,6 +213,84 @@ describe('Constraints', () => {
         expect(screen.queryByText('CORE')).not.toBeInTheDocument();
     });
 
+    it('uses a single not-alone night template and shows nurse role badges', async () => {
+        saveWardSkillSettings(1, {
+            config: {
+                enabled: true,
+                levelCount: 2,
+                paletteId: 'warm',
+                autoAssign: false,
+                levelLabels: {1: '전담', 2: '리더'},
+            },
+            frozenLevelsByNurseId: {},
+        });
+        wardApiMocks.getShiftConstraintRuleCandidates.mockResolvedValueOnce({
+            schemaVersion: 1,
+            wardId: 1,
+            shiftTeamId: 10,
+            options: {
+                nurses: [{type: 'NURSE', nurseId: 1, label: '오지현', name: '오지현', proficiency: 1, isPreceptor: true, isPreceptee: true}],
+                preceptees: [{type: 'NURSE', nurseId: 1, label: '오지현', name: '오지현', proficiency: 1, isPreceptee: true}],
+            },
+            templates: [
+                {
+                    templateCode: 'NURSE_NOT_ALONE_N',
+                    category: 'PROFICIENCY',
+                    displayTemplate: '{nurse}는 혼자 N나이트 근무를 하면 안 돼요',
+                    severity: 'SOFT',
+                    allowedSeverities: ['SOFT'],
+                    supportedInGenerator: true,
+                    supportedInValidator: true,
+                    slots: [{key: 'nurse', label: 'Nurse', inputType: 'SELECT', optionGroup: 'NURSES'}],
+                },
+                {
+                    templateCode: 'NEW_NURSE_NOT_ALONE_N',
+                    category: 'PROFICIENCY',
+                    displayTemplate: '{nurse}는 혼자 N나이트 근무를 하면 안 돼요',
+                    severity: 'SOFT',
+                    allowedSeverities: ['SOFT'],
+                    supportedInGenerator: true,
+                    supportedInValidator: true,
+                    slots: [{key: 'nurse', label: 'Nurse', inputType: 'SELECT', optionGroup: 'NURSES'}],
+                },
+                {
+                    templateCode: 'PRECEPTEE_NOT_ALONE_N',
+                    category: 'PROFICIENCY',
+                    displayTemplate: '{preceptee}는 혼자 N나이트 근무를 하면 안 돼요',
+                    severity: 'SOFT',
+                    allowedSeverities: ['SOFT'],
+                    supportedInGenerator: true,
+                    supportedInValidator: true,
+                    slots: [{key: 'preceptee', label: 'Preceptee', inputType: 'SELECT', optionGroup: 'PRECEPTEES'}],
+                },
+            ],
+        });
+
+        render(<Constraints wardId={1} shiftTeamId={10} shiftTeams={[]} year={2026} month={6} variant="settings" />);
+
+        const addButton = await waitFor(() => {
+            const button = document.getElementById('make_constraint_add_button');
+
+            expect(button).toBeInTheDocument();
+
+            return button as HTMLButtonElement;
+        });
+
+        await userEvent.click(addButton);
+        await userEvent.click(screen.getByRole('button', {name: '숙련도'}));
+
+        await waitFor(() => {
+            expect((document.body.textContent?.match(/혼자/g) ?? [])).toHaveLength(1);
+        });
+        expect(document.body.textContent).toContain('오지현');
+
+        await userEvent.click(screen.getByRole('button', {name: /오지현/}));
+
+        expect(document.body.textContent).toContain('LV1');
+        expect(document.body.textContent).toContain('프리셉터');
+        expect(document.body.textContent).toContain('프리셉티');
+    });
+
     it('shows a toast instead of silently removing a duplicate added constraint', async () => {
         wardApiMocks.getShiftConstraintRuleCandidates.mockResolvedValueOnce({
             schemaVersion: 1,

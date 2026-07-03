@@ -104,6 +104,20 @@ describe('useShiftEditorKeyBindings', () => {
         expect(commands.clearSelectionCells).toHaveBeenCalledTimes(2);
     });
 
+    it('runs the clear callback after Backspace and Delete clear the selected cells', async () => {
+        const onClearSelectionCells = vi.fn();
+        const {result} = renderHook(() => useShiftEditorKeyBindings({onClearSelectionCells}));
+        const backspaceEvent = createKeyboardEvent('Backspace');
+        const deleteEvent = createKeyboardEvent('Delete');
+
+        await result.current.onKeyDown(backspaceEvent);
+        await result.current.onKeyDown(deleteEvent);
+
+        expect(commands.clearSelectionCells).toHaveBeenCalledTimes(2);
+        expect(onClearSelectionCells).toHaveBeenNthCalledWith(1, {key: 'Backspace', event: backspaceEvent.nativeEvent});
+        expect(onClearSelectionCells).toHaveBeenNthCalledWith(2, {key: 'Delete', event: deleteEvent.nativeEvent});
+    });
+
     it('moves the selection with Tab / Shift+Tab like spreadsheet column navigation', async () => {
         const {result} = renderHook(() => useShiftEditorKeyBindings());
 

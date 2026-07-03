@@ -27,6 +27,13 @@ export const vi = {
             },
             constraints: {
                 ...generatedVi.page.makeShift.constraints,
+                option: {
+                    ...generatedVi.page.makeShift.constraints.option,
+                    weekdays: 'Ngày trong tuần',
+                    weekendsAndHolidays: 'Cuối tuần/ngày lễ',
+                    preceptorBadge: 'Preceptor',
+                    precepteeBadge: 'Preceptee',
+                },
                 templates: {
                     CORE_MAX_CONTINUOUS_WORK: {
                         label: 'Điều kiện cơ bản quan trọng',
@@ -60,6 +67,10 @@ export const vi = {
                         label: 'Điều kiện nhân sự',
                         sentence: 'Ngày {date} hằng tháng, ca {shift} cần ít nhất {count} người',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: 'Điều kiện nhân sự',
+                        sentence: '{date}, ca {shift} cần ít nhất {count} người',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: 'Điều kiện nhân sự',
                         sentence: 'Cuối tuần và ngày lễ, ca {shift} cần ít nhất {count} người',
@@ -83,6 +94,10 @@ export const vi = {
                     NURSE_FORBID_WEEKEND: {
                         label: 'Điều kiện cá nhân',
                         sentence: '{nurse} không được làm việc cuối tuần',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: 'Điều kiện kỹ năng',
+                        sentence: '{nurse} không được làm ca N một mình',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: 'Điều kiện kỹ năng',

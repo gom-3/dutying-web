@@ -2,6 +2,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {ReactNode} from 'react';
+import {MemoryRouter} from 'react-router';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import BoardPage from '..';
 
@@ -84,7 +85,7 @@ vi.mock('../ui/board-tutorial', () => ({
     BoardTutorial: () => null,
 }));
 
-function renderPage(children: ReactNode) {
+function renderPage(children: ReactNode, initialEntry = '/') {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
@@ -93,7 +94,11 @@ function renderPage(children: ReactNode) {
         },
     });
 
-    return render(<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>);
+    return render(
+        <MemoryRouter initialEntries={[initialEntry]}>
+            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </MemoryRouter>,
+    );
 }
 
 describe('BoardPage', () => {
@@ -119,6 +124,17 @@ describe('BoardPage', () => {
         mockGetCheckers.mockResolvedValue({checkers: [], checkedUserNames: []});
         mockGetPostId.mockImplementation((post: {postId?: number; id?: number}) => post.postId ?? post.id ?? 0);
         mockGetScheduleId.mockImplementation((schedule: {scheduleId?: number; id?: number}) => schedule.scheduleId ?? schedule.id ?? 0);
+    });
+
+    it('shows common board skeletons while the board data is loading', () => {
+        mockGetPosts.mockReturnValue(new Promise(() => undefined));
+        mockGetDeadlines.mockReturnValue(new Promise(() => undefined));
+        mockGetSchedules.mockReturnValue(new Promise(() => undefined));
+
+        renderPage(<BoardPage />);
+
+        expect(screen.getByTestId('board-post-list-skeleton')).toBeInTheDocument();
+        expect(screen.getByTestId('board-deadline-calendar-skeleton')).toBeInTheDocument();
     });
 
     it('matches the backend post content length contract in the composer', async () => {
@@ -185,9 +201,7 @@ describe('BoardPage', () => {
 
         renderPage(<BoardPage />);
 
-        await waitFor(() => expect(mockGetSchedules).toHaveBeenCalled());
-
-        const todayCell = screen.getByRole('button', {name: todayLabel});
+        const todayCell = await screen.findByRole('button', {name: todayLabel});
         const todayBadge = within(todayCell).getByText(String(today.getDate()));
 
         expect(todayCell).toHaveAttribute('aria-current', 'date');
@@ -221,10 +235,9 @@ describe('BoardPage', () => {
             allDay: true,
         });
 
-        const {container} = renderPage(<BoardPage />);
+        renderPage(<BoardPage />);
 
-        await waitFor(() => expect(mockGetSchedules).toHaveBeenCalled());
-        await user.click(container.querySelector<HTMLButtonElement>('#board_schedule_create_button')!);
+        await user.click(await screen.findByRole('button', {name: '병동 일정 등록'}));
 
         const dialog = await screen.findByRole('dialog', {name: '병동 일정 등록'});
 
@@ -252,10 +265,10 @@ describe('BoardPage', () => {
 
     it('keeps only the latest opened schedule date picker visible', async () => {
         const user = userEvent.setup();
-        const {container} = renderPage(<BoardPage />);
 
-        await waitFor(() => expect(mockGetSchedules).toHaveBeenCalled());
-        await user.click(container.querySelector<HTMLButtonElement>('#board_schedule_create_button')!);
+        renderPage(<BoardPage />);
+
+        await user.click(await screen.findByRole('button', {name: '병동 일정 등록'}));
 
         const dialog = await screen.findByRole('dialog', {name: '병동 일정 등록'});
 
@@ -284,10 +297,9 @@ describe('BoardPage', () => {
             endTime: '10:00',
         });
 
-        const {container} = renderPage(<BoardPage />);
+        renderPage(<BoardPage />);
 
-        await waitFor(() => expect(mockGetSchedules).toHaveBeenCalled());
-        await user.click(container.querySelector<HTMLButtonElement>('#board_schedule_create_button')!);
+        await user.click(await screen.findByRole('button', {name: '병동 일정 등록'}));
 
         const dialog = await screen.findByRole('dialog', {name: '병동 일정 등록'});
 

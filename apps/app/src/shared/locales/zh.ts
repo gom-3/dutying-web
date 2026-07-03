@@ -27,6 +27,13 @@ export const zh = {
             },
             constraints: {
                 ...generatedZh.page.makeShift.constraints,
+                option: {
+                    ...generatedZh.page.makeShift.constraints.option,
+                    weekdays: '工作日',
+                    weekendsAndHolidays: '周末/节假日',
+                    preceptorBadge: '带教老师',
+                    precepteeBadge: '被带教',
+                },
                 templates: {
                     CORE_MAX_CONTINUOUS_WORK: {
                         label: '重要基础条件',
@@ -60,6 +67,10 @@ export const zh = {
                         label: '人数条件',
                         sentence: '每月{date}日的{shift}班至少需要{count}人',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: '人数条件',
+                        sentence: '{date}的{shift}班至少需要{count}人',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: '人数条件',
                         sentence: '周末和节假日的{shift}班至少需要{count}人',
@@ -83,6 +94,10 @@ export const zh = {
                     NURSE_FORBID_WEEKEND: {
                         label: '个人条件',
                         sentence: '{nurse}不能在周末工作',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: '熟练度条件',
+                        sentence: '{nurse}不能单独上N班',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: '熟练度条件',

@@ -13,6 +13,7 @@ import {
     workspaceCellsToFixedCells,
     type TCellValue,
     type TDutyDoc,
+    type TShiftEditorKeyBindingsOptions,
     useShiftEditorCommands,
     useShiftEditorKeyBindings,
     useShiftEditorStore,
@@ -55,25 +56,26 @@ function rebasePersistedCell(cell: TCellValue, baseCell: TCellValue, currentShor
 
 function rebaseDocRowsToCurrentShiftTypes(doc: TDutyDoc, baseDoc: TDutyDoc, currentShortNames: Set<string>): TDutyDoc | null {
     let changed = false;
+
     const rows = doc.rows.map((row, rowIdx) => {
-            const baseRow = baseDoc.rows[rowIdx];
-            const cells = row.cells.map((cell, colIdx) => {
-                const nextCell = rebasePersistedCell(cell, baseRow?.cells[colIdx] ?? null, currentShortNames);
+        const baseRow = baseDoc.rows[rowIdx];
+        const cells = row.cells.map((cell, colIdx) => {
+            const nextCell = rebasePersistedCell(cell, baseRow?.cells[colIdx] ?? null, currentShortNames);
 
-                if (nextCell !== cell) changed = true;
+            if (nextCell !== cell) changed = true;
 
-                return nextCell;
-            });
-
-            return changed ? {...row, cells} : row;
+            return nextCell;
         });
+
+        return changed ? {...row, cells} : row;
+    });
 
     if (!changed) return null;
 
     return {
         ...doc,
         rows,
-            };
+    };
 }
 
 function deriveRequestCells(
@@ -120,6 +122,7 @@ type TUseDutyEditorStepOptions = {
     onContextChanged?: () => void;
     hydratePreviousLastShifts?: boolean;
     editorInputDisabled?: boolean;
+    onClearSelectionCells?: TShiftEditorKeyBindingsOptions['onClearSelectionCells'];
 };
 
 export function focusEditorWithoutScrolling(editor: HTMLDivElement | null) {
@@ -130,6 +133,7 @@ export function useDutyEditorStep({
     onContextChanged,
     hydratePreviousLastShifts = false,
     editorInputDisabled = false,
+    onClearSelectionCells,
 }: TUseDutyEditorStepOptions = {}) {
     const {
         state: {wardId},
@@ -164,7 +168,11 @@ export function useDutyEditorStep({
     const commands = useShiftEditorCommands();
     const editorRef = useRef<HTMLDivElement>(null);
     const workKeyMap = useMemo(() => buildWorkKeyMap(dutyQuery.data), [dutyQuery.data]);
-    const {onKeyDown, onPasteCapture} = useShiftEditorKeyBindings({workKeyMap, disabled: editorInputDisabled});
+    const {onKeyDown, onPasteCapture} = useShiftEditorKeyBindings({
+        workKeyMap,
+        disabled: editorInputDisabled,
+        onClearSelectionCells,
+    });
     const {violationMap, teamViolations} = useViolationMap(editorDoc);
     const hydratedContextKeyRef = useRef<string | null>(null);
     const initialHydrationDoneRef = useRef(false);
@@ -203,7 +211,6 @@ export function useDutyEditorStep({
             initialHydrationDoneRef.current &&
             hydratedDraftRevisionRef.current !== null &&
             useShiftEditorStore.getState().draftRevision > hydratedDraftRevisionRef.current;
-
         const baseDoc = shiftToDoc(dutyQuery.data, year, month, {previousConfirmedShift});
         const currentShortNames = new Set(buildWardShiftTypeMaps(dutyQuery.data).shortNameToType.keys());
 

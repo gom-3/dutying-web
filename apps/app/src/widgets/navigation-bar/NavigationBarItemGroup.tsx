@@ -5,6 +5,8 @@ import {useState} from 'react';
 import {Link} from 'react-router';
 import {notificationQueryOptions} from '@/entities/notification';
 import {getWardDisplayCode, getWardDisplayIdentity, getWardDisplayTitle} from '@/entities/ward';
+import useAuth from '@/features/auth';
+import {isWardAdminAccessToken} from '@/features/auth/model/admin-token';
 import useEditWard from '@/features/edit-ward';
 import {useTotalPendingRequestCount} from '@/features/request-shift/model/use-total-pending-request-count';
 import {HomeIcon, HomeIconSelected} from '@/shared/assets/svg';
@@ -193,16 +195,21 @@ const WardIdentity = ({collapsed, onItemNavigate, ward}: TWardIdentityProps) => 
 const NavigationBarItemGroups = ({collapsed = false, stableCollapsedLayout = false, onItemNavigate}: TNavigationBarItemGroupsProps) => {
     const {t} = useTypedTranslation();
     const {
+        state: {accessToken},
+    } = useAuth();
+    const {
         state: {ward, watingNurses},
     } = useEditWard();
     const waitingCount = watingNurses?.length ?? 0;
     const pendingRequestCount = useTotalPendingRequestCount();
+    const isWardAdmin = isWardAdminAccessToken(accessToken);
     const boardUnreadCountQuery = useQuery({
         ...notificationQueryOptions.unreadCount('BOARD'),
+        enabled: isWardAdmin,
         refetchInterval: 30_000,
         retry: 1,
     });
-    const hasBoardUnreadNotification = (boardUnreadCountQuery.data ?? 0) > 0;
+    const hasBoardUnreadNotification = isWardAdmin && (boardUnreadCountQuery.data ?? 0) > 0;
 
     return (
         <nav

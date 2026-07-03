@@ -27,6 +27,13 @@ export const th = {
             },
             constraints: {
                 ...generatedTh.page.makeShift.constraints,
+                option: {
+                    ...generatedTh.page.makeShift.constraints.option,
+                    weekdays: 'วันธรรมดา',
+                    weekendsAndHolidays: 'วันหยุดสุดสัปดาห์/วันหยุด',
+                    preceptorBadge: 'พี่เลี้ยง',
+                    precepteeBadge: 'ผู้รับการสอน',
+                },
                 templates: {
                     CORE_MAX_CONTINUOUS_WORK: {
                         label: 'เงื่อนไขพื้นฐานสำคัญ',
@@ -60,6 +67,10 @@ export const th = {
                         label: 'เงื่อนไขจำนวนคน',
                         sentence: 'วันที่ {date} ของทุกเดือน เวร{shift}ต้องมีอย่างน้อย{count}คน',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: 'เงื่อนไขจำนวนคน',
+                        sentence: '{date} เวร{shift}ต้องมีอย่างน้อย{count}คน',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: 'เงื่อนไขจำนวนคน',
                         sentence: 'วันหยุดสุดสัปดาห์และวันหยุด เวร{shift}ต้องมีอย่างน้อย{count}คน',
@@ -83,6 +94,10 @@ export const th = {
                     NURSE_FORBID_WEEKEND: {
                         label: 'เงื่อนไขรายบุคคล',
                         sentence: '{nurse}ห้ามทำงานวันหยุดสุดสัปดาห์',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: 'เงื่อนไขทักษะ',
+                        sentence: '{nurse}ห้ามทำเวร N คนเดียว',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: 'เงื่อนไขทักษะ',

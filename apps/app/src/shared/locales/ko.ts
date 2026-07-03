@@ -758,6 +758,10 @@ export const ko = {
                     allDays: '모든날',
                     allPeople: '모든사람',
                     dayLabel: '{{day}}일',
+                    weekdays: '평일',
+                    weekendsAndHolidays: '주말/공휴일',
+                    preceptorBadge: '프리셉터',
+                    precepteeBadge: '프리셉티',
                 },
                 important: {
                     label: '중요',
@@ -849,6 +853,10 @@ export const ko = {
                         label: '인원 조건',
                         sentence: '매월 {date}일에는 {shift} 근무에 최소 {count}명이 필요해요',
                     },
+                    MIN_STAFF_BY_DAY_TYPE_SHIFT: {
+                        label: '인원 조건',
+                        sentence: '{date}에는 {shift} 근무에 최소 {count}명이 필요해요',
+                    },
                     MIN_STAFF_WEEKEND_HOLIDAY_SHIFT: {
                         label: '인원 조건',
                         sentence: '주말/공휴일에는 {shift} 근무에 최소 {count}명이 필요해요',
@@ -872,6 +880,10 @@ export const ko = {
                     NURSE_FORBID_WEEKEND: {
                         label: '개인 조건',
                         sentence: '{nurse}는 주말 근무를 하면 안 돼요',
+                    },
+                    NURSE_NOT_ALONE_N: {
+                        label: '숙련도 조건',
+                        sentence: '{nurse}는 혼자 N 근무를 하면 안 돼요',
                     },
                     NEW_NURSE_NOT_ALONE_N: {
                         label: '숙련도 조건',
@@ -1467,6 +1479,8 @@ export const ko = {
             hospitalNamePlaceholder: '병원명을 입력하세요',
             wardName: '병동명',
             wardNamePlaceholder: '병동명을 입력하세요',
+            wardCode: '병동 코드',
+            quitWard: '병동 나가기',
             save: '변경사항 저장',
             saving: '저장 중...',
             state: {

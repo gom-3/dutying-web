@@ -3,14 +3,17 @@ import {wardQueryKeys} from '@/entities/ward';
 import {render, screen, userEvent, waitFor} from '@/shared/util/test-utils';
 import WardInfoSettingsPage from '..';
 
-const {mockEditWard, mockInvalidateQueries, mockSetQueryData, mockToastSuccess, mockToastError, mockUseQuery} = vi.hoisted(() => ({
-    mockEditWard: vi.fn(),
-    mockInvalidateQueries: vi.fn(),
-    mockSetQueryData: vi.fn(),
-    mockToastSuccess: vi.fn(),
-    mockToastError: vi.fn(),
-    mockUseQuery: vi.fn(),
-}));
+const {mockEditWard, mockInvalidateQueries, mockQuitWard, mockSetQueryData, mockToastSuccess, mockToastError, mockUseQuery} = vi.hoisted(
+    () => ({
+        mockEditWard: vi.fn(),
+        mockInvalidateQueries: vi.fn(),
+        mockQuitWard: vi.fn(),
+        mockSetQueryData: vi.fn(),
+        mockToastSuccess: vi.fn(),
+        mockToastError: vi.fn(),
+        mockUseQuery: vi.fn(),
+    }),
+);
 
 vi.mock('@tanstack/react-query', async () => {
     const actual = await vi.importActual('@tanstack/react-query');
@@ -30,6 +33,12 @@ vi.mock('@/features/auth', () => ({
         state: {
             wardId: 1,
         },
+    }),
+}));
+
+vi.mock('@/features/account/model', () => ({
+    useEditAccount: () => ({
+        quitWard: mockQuitWard,
     }),
 }));
 
@@ -63,6 +72,7 @@ describe('WardInfoSettingsPage', () => {
     beforeEach(() => {
         mockEditWard.mockReset();
         mockInvalidateQueries.mockReset();
+        mockQuitWard.mockReset();
         mockSetQueryData.mockReset();
         mockToastSuccess.mockReset();
         mockToastError.mockReset();
@@ -81,11 +91,21 @@ describe('WardInfoSettingsPage', () => {
         expect(screen.getByRole('heading', {name: '병동 설정'})).toBeInTheDocument();
         expect(screen.getByLabelText('병원명')).toHaveValue('듀팅병원');
         expect(screen.getByLabelText('병동명')).toHaveValue('중환자실');
+        expect(screen.getByText('병동 코드')).toBeInTheDocument();
+        expect(screen.getByText('ABC123')).toBeInTheDocument();
         expect(screen.queryByText('현재 병동')).not.toBeInTheDocument();
-        expect(screen.queryByText('병동 코드')).not.toBeInTheDocument();
         expect(screen.queryByRole('button', {name: '관리자'})).not.toBeInTheDocument();
         expect(screen.getByText('ward admins panel')).toBeInTheDocument();
+        expect(screen.getByRole('button', {name: '병동 나가기'})).toBeInTheDocument();
         expect(screen.getByRole('button', {name: '변경사항 저장'})).toBeDisabled();
+    });
+
+    it('lets the user leave the ward from the ward info settings page', async () => {
+        render(<WardInfoSettingsPage />);
+
+        await userEvent.click(screen.getByRole('button', {name: '병동 나가기'}));
+
+        expect(mockQuitWard).toHaveBeenCalledTimes(1);
     });
 
     it('saves changed ward identity through the ward edit API', async () => {
@@ -117,5 +137,4 @@ describe('WardInfoSettingsPage', () => {
         expect(mockInvalidateQueries).toHaveBeenCalledWith({queryKey: wardQueryKeys.id(1)});
         expect(mockToastSuccess).toHaveBeenCalledWith('병동 정보를 저장했어요.');
     });
-
 });

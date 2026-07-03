@@ -24,6 +24,10 @@ export type TShiftEditorKeyBindingsOptions = {
      * true를 리턴하면 이벤트를 소비(handled)한 것으로 간주.
      */
     beforeHandlers?: Array<(e: KeyboardEvent) => boolean>;
+    /**
+     * 선택 지우기 처리가 끝난 뒤 실행된다.
+     */
+    onClearSelectionCells?: (context: {key: 'Backspace' | 'Delete'; event: KeyboardEvent}) => void;
 };
 
 function isMetaOrCtrl(e: KeyboardEvent): boolean {
@@ -69,6 +73,7 @@ function tsvToPayload(text: string): TClipboardPayload {
 
         for (let i = 0; i < width; i++) {
             const raw = r[i];
+
             row.push(raw !== undefined && raw !== '' ? raw : null);
         }
 
@@ -93,6 +98,7 @@ export function useShiftEditorKeyBindings(opts: TShiftEditorKeyBindingsOptions =
     const disabled = opts.disabled ?? false;
     const allowUnmodifiedClipboardShortcuts = opts.allowUnmodifiedClipboardShortcuts ?? false;
     const beforeHandlers = opts.beforeHandlers ?? [];
+    const onClearSelectionCells = opts.onClearSelectionCells;
     const onKeyDown = useCallback(
         async (e: React.KeyboardEvent) => {
             if (disabled) {
@@ -159,6 +165,7 @@ export function useShiftEditorKeyBindings(opts: TShiftEditorKeyBindingsOptions =
             if (key === 'Backspace' || key === 'Delete') {
                 e.preventDefault();
                 commands.clearSelectionCells();
+                onClearSelectionCells?.({key, event: native});
 
                 return;
             }
@@ -220,6 +227,7 @@ export function useShiftEditorKeyBindings(opts: TShiftEditorKeyBindingsOptions =
 
                 if (value !== undefined) {
                     e.preventDefault();
+
                     const selBefore = useShiftEditorStore.getState().selection;
 
                     commands.setSelectionValue(value);
@@ -234,7 +242,7 @@ export function useShiftEditorKeyBindings(opts: TShiftEditorKeyBindingsOptions =
             // eslint용: doc 참조 (keybinding은 bounds가 필요할 때 확장 대비)
             void doc;
         },
-        [allowUnmodifiedClipboardShortcuts, beforeHandlers, commands, disabled, doc, workKeyMap],
+        [allowUnmodifiedClipboardShortcuts, beforeHandlers, commands, disabled, doc, onClearSelectionCells, workKeyMap],
     );
     const onPaste = useCallback(
         (e: React.ClipboardEvent) => {
@@ -253,7 +261,6 @@ export function useShiftEditorKeyBindings(opts: TShiftEditorKeyBindingsOptions =
         },
         [commands, disabled],
     );
-
     /** 포커스가 에디터 자식(일자 셀 버튼 등)에 있어도 먼저 가로채기 위해 컨테이너에 연결한다. */
     const onPasteCapture = onPaste;
 
