@@ -1,3 +1,4 @@
+import ServiceMovedModal from '@components/ServiceMovedModal';
 import useAuth from '@hooks/auth/useAuth';
 import { Router } from '@pages/Router';
 import { useEffect } from 'react';
@@ -15,7 +16,12 @@ function App() {
     return () => window.removeEventListener('resize', setScreenHeight);
   }, []);
 
-  return <Router />;
+  return (
+    <>
+      <ServiceMovedModal />
+      <Router />
+    </>
+  );
 }
 
 export default App;
