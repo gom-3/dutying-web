@@ -1,7 +1,7 @@
 {
     "name": "@dutying/config",
     "private": true,
-    "version": "1.0.2",
+    "version": "1.1.0",
     "type": "module",
     "exports": {
         "./eslint/react-app": "./eslint/react-app.mjs",
