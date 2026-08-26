@@ -1,6 +1,7 @@
 import useAuth from '@hooks/auth/useAuth';
 import { Router } from '@pages/Router';
 import { useEffect } from 'react';
+import RenewalNotice from '@components/RenewalNotice';
 
 function App() {
   useAuth(true);
@@ -15,7 +16,12 @@ function App() {
     return () => window.removeEventListener('resize', setScreenHeight);
   }, []);
 
-  return <Router />;
+  return (
+    <>
+      <Router />
+      <RenewalNotice />
+    </>
+  );
 }
 
 export default App;

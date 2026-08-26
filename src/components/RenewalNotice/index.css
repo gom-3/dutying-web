@@ -1,0 +1,226 @@
+.renewal-notice__backdrop {
+  --notice-purple: #663dfa;
+  --notice-deep-purple: #321f70;
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: rgb(20 17 34 / 88%);
+  animation: renewal-notice-backdrop-in 160ms ease-out both;
+}
+
+.renewal-notice__dialog {
+  width: 80%;
+  max-width: min(896px, calc(114.64vh - 119.2px));
+  max-width: min(896px, calc(114.64dvh - 119.2px));
+  max-width: 100%;
+  overflow: hidden;
+  color: #241c39;
+  background: #f7f5fc;
+  border-radius: clamp(16px, 2.2vw, 32px);
+  animation: renewal-notice-dialog-in 180ms ease-out both;
+}
+
+.renewal-notice__artwork {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 460 / 321;
+}
+
+.renewal-notice__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.renewal-notice__close {
+  position: absolute;
+  top: clamp(8px, 1.5vw, 16px);
+  right: clamp(8px, 1.5vw, 16px);
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 4.2vw, 52px);
+  height: clamp(44px, 4.2vw, 52px);
+  padding: 0 0 0.16em;
+  color: var(--notice-deep-purple);
+  font-family: Arial, sans-serif;
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+  background: #e9e4ff;
+  border: 0;
+  border-radius: 14px;
+  outline: none;
+  transition: color 120ms ease, background-color 120ms ease, transform 120ms ease;
+}
+
+.renewal-notice__close:hover {
+  color: #ffffff;
+  background: var(--notice-purple);
+}
+
+.renewal-notice__close:focus-visible {
+  color: #ffffff;
+  background: var(--notice-deep-purple);
+  transform: scale(1.06);
+}
+
+.renewal-notice__close:active {
+  transform: scale(0.94);
+}
+
+.renewal-notice__cta {
+  position: absolute;
+  top: 83.8%;
+  left: 6.74%;
+  display: block;
+  width: 86.52%;
+  height: max(8.1%, 44px);
+  overflow: hidden;
+  cursor: pointer;
+  background: transparent;
+  border-radius: clamp(10px, 1.2vw, 20px);
+  outline: none;
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+
+.renewal-notice__cta::after {
+  position: absolute;
+  bottom: 12%;
+  left: 41%;
+  width: 18%;
+  height: 4px;
+  content: '';
+  background: transparent;
+  border-radius: 4px;
+  transition: background-color 120ms ease;
+}
+
+.renewal-notice__cta:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.renewal-notice__cta:focus-visible {
+  background: rgb(12 3 47 / 20%);
+  transform: scale(0.985);
+}
+
+.renewal-notice__cta:focus-visible::after {
+  background: #ffffff;
+}
+
+.renewal-notice__cta:active {
+  background: rgb(12 3 47 / 26%);
+  transform: scale(0.98);
+}
+
+.renewal-notice__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 52px;
+  padding: 4px clamp(12px, 3vw, 32px);
+  background: #f7f5fc;
+}
+
+.renewal-notice__dismiss-today {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: #595268;
+  font-family: 'Apple-SDG', sans-serif;
+  font-size: clamp(14px, 1.4vw, 16px);
+  font-weight: 500;
+  line-height: 1.35;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  outline: none;
+  transition: color 120ms ease, background-color 120ms ease, transform 120ms ease;
+}
+
+.renewal-notice__dismiss-today:hover {
+  color: var(--notice-deep-purple);
+  background: #e9e4f6;
+}
+
+.renewal-notice__dismiss-today:focus-visible {
+  color: #ffffff;
+  font-weight: 700;
+  background: var(--notice-deep-purple);
+  transform: translateY(-2px);
+}
+
+.renewal-notice__dismiss-today:active {
+  transform: scale(0.97);
+}
+
+@keyframes renewal-notice-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes renewal-notice-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 40rem) {
+  .renewal-notice__backdrop {
+    padding: 12px;
+  }
+
+  .renewal-notice__dialog {
+    max-width: calc(114.64vh - 87.2px);
+    max-width: calc(114.64dvh - 87.2px);
+  }
+
+  .renewal-notice__actions {
+    min-height: 52px;
+    padding-right: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renewal-notice__backdrop,
+  .renewal-notice__dialog {
+    animation: none;
+  }
+
+  .renewal-notice__close,
+  .renewal-notice__cta,
+  .renewal-notice__cta::after,
+  .renewal-notice__dismiss-today {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .renewal-notice__close,
+  .renewal-notice__cta,
+  .renewal-notice__dismiss-today {
+    outline: 0.125rem solid ButtonText;
+  }
+}
