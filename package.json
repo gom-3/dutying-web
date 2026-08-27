@@ -90,5 +90,14 @@
     "vite": "^4.5.5",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^0.31.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "core-js",
+      "cypress",
+      "esbuild",
+      "puppeteer"
+    ]
   }
 }
