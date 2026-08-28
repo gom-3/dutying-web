@@ -18,7 +18,17 @@ function keyDownEvent(key: string, count: number, ctrl?: boolean, shift?: boolea
 }
 describe('근무 제작 페이지', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('host'));
+    cy.visit(Cypress.env('host'), {
+      onBeforeLoad(win) {
+        // 서비스 이전 안내 팝업(RenewalNotice)이 화면을 덮으면 클릭이 막히므로
+        // 오늘 날짜로 "오늘 하루 보지 않기" 상태를 미리 만들어 둔다.
+        const now = new Date();
+        const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+          now.getDate()
+        ).padStart(2, '0')}`;
+        win.localStorage.setItem('dutying:renewal-notice:dismissed-date:v1', key);
+      },
+    });
   });
 
   it('근무표 작성', () => {
