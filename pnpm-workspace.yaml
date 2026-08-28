@@ -1,0 +1,6 @@
+allowBuilds:
+  '@swc/core': true
+  core-js: true
+  cypress: true
+  esbuild: true
+  puppeteer: true
