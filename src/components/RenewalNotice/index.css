@@ -17,9 +17,8 @@
 }
 
 .renewal-notice__dialog {
-  width: 80%;
-  max-width: min(896px, calc(114.64vh - 119.2px));
-  max-width: min(896px, calc(114.64dvh - 119.2px));
+  width: min(70%, 784px, calc(114.64vh - 119.2px));
+  width: min(70%, 784px, calc(114.64dvh - 119.2px));
   max-width: 100%;
   overflow: hidden;
   color: #241c39;
@@ -193,8 +192,8 @@
   }
 
   .renewal-notice__dialog {
-    max-width: calc(114.64vh - 87.2px);
-    max-width: calc(114.64dvh - 87.2px);
+    width: min(70%, calc(114.64vh - 87.2px));
+    width: min(70%, calc(114.64dvh - 87.2px));
   }
 
   .renewal-notice__actions {
