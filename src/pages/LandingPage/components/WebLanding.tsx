@@ -6,6 +6,7 @@ import {
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
+import AppStoreComingSoonButton from '@components/AppStoreComingSoonButton';
 import Event from '@components/Event';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
@@ -168,14 +169,10 @@ function WebLanding({ open, onClose }: WebLandingProps) {
               <PlaystoreIcon className="w-7" />
               Google Play
             </a>
-            <a
-              href="https://abr.ge/bv13wa"
-              target="_blank"
-              className="flex w-[15.3125rem] cursor-pointer items-center justify-center gap-[9px] rounded-[.9375rem] bg-white font-apple text-[1.5rem] font-semibold shadow-shadow-3"
-            >
+            <AppStoreComingSoonButton className="flex w-[15.3125rem] cursor-pointer items-center justify-center gap-[9px] rounded-[.9375rem] bg-white font-apple text-[1.5rem] font-semibold shadow-shadow-3">
               <AppstoreIcon className="w-[1.9375rem]" />
               App Store
-            </a>
+            </AppStoreComingSoonButton>
           </div>
 
           <div className="mt-[2.8125rem] flex items-center gap-[8px]">
@@ -351,14 +348,10 @@ function WebLanding({ open, onClose }: WebLandingProps) {
                   <PlaystoreGrayIcon className="w-[17px]" />
                   Google Play
                 </a>
-                <a
-                  href="https://abr.ge/bv13wa"
-                  target="_blank"
-                  className="flex w-[10.625rem] cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-base font-semibold"
-                >
+                <AppStoreComingSoonButton className="flex w-[10.625rem] cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-base font-semibold">
                   <AppstoreGrayIcon className="w-[19px]" />
                   App Store
-                </a>
+                </AppStoreComingSoonButton>
               </div>
             </div>
 

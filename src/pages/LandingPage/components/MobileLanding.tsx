@@ -6,11 +6,11 @@ import {
   PlaystoreGrayIcon,
   PlaystoreIcon,
 } from '@assets/svg';
+import AppStoreComingSoonButton from '@components/AppStoreComingSoonButton';
 import Event from '@components/Event';
 import useAuth from '@hooks/auth/useAuth';
 import ROUTE from '@libs/constant/path';
 import { events, sendEvent } from 'analytics';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 interface MobileLandingProps {
@@ -20,8 +20,8 @@ interface MobileLandingProps {
 
 function MobileLanding({ open, onClose }: MobileLandingProps) {
   const {
-    state: { isAuth, accountMe },
-    actions: { handleLogout, demoTry },
+    state: { accountMe },
+    actions: { demoTry },
   } = useAuth();
   const navigate = useNavigate();
 
@@ -72,14 +72,10 @@ function MobileLanding({ open, onClose }: MobileLandingProps) {
               <PlaystoreIcon className="w-[17px]" />
               Google Play
             </a>
-            <a
-              href="https://abr.ge/bv13wa"
-              target="_blank"
-              className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold"
-            >
+            <AppStoreComingSoonButton className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-white font-apple text-[16px] font-semibold">
               <AppstoreIcon className="w-[17px]" />
               App Store
-            </a>
+            </AppStoreComingSoonButton>
           </div>
         </div>
       </div>
@@ -194,14 +190,10 @@ function MobileLanding({ open, onClose }: MobileLandingProps) {
                 <PlaystoreGrayIcon className="w-[17px]" />
                 Google Play
               </a>
-              <a
-                href="https://abr.ge/bv13wa"
-                target="_blank"
-                className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold"
-              >
+              <AppStoreComingSoonButton className="flex flex-1 cursor-pointer items-center justify-center gap-[9px] rounded-[8px] bg-sub-5 font-apple text-[16px] font-semibold">
                 <AppstoreGrayIcon className="w-[19px]" />
                 App Store
-              </a>
+              </AppStoreComingSoonButton>
             </div>
 
             <div className="mt-[32px] font-apple text-[14px] font-medium text-sub-2.5">웹</div>
