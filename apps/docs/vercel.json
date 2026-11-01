@@ -1,0 +1,95 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "",
+  "outputDirectory": "retired",
+  "routes": [
+    {
+      "src": "/",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=home"
+    },
+    {
+      "src": "/index\\.html",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=home"
+    },
+    {
+      "src": "/terms",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=terms"
+    },
+    {
+      "src": "/privacy",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=privacy"
+    },
+    {
+      "src": "/(login|register|enter-ward|register-ward|make|request|member|profile|onboarding)/?",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=login"
+    },
+    {
+      "src": "/robots\\.txt",
+      "dest": "/robots.txt",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      }
+    },
+    {
+      "src": "/sitemap\\.xml",
+      "headers": {
+        "Referrer-Policy": "no-referrer"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "dest": "/api/retire?retirementTarget=sitemap"
+    },
+    {
+      "src": "/.*",
+      "dest": "/index.html",
+      "status": 410,
+      "headers": {
+        "Cache-Control": "public, max-age=300",
+        "Referrer-Policy": "no-referrer"
+      }
+    }
+  ]
+}
